@@ -50,6 +50,9 @@
         button:hover {
             background-color: #45a049;
         }
+        .error {
+			color: red;
+		}
     </style>
 </head>
 <body>
@@ -61,7 +64,7 @@
         <h2>Establishment Registration</h2>
         <form action="${pageContext.servletContext.contextPath}/establishmentReg" method="post">
             <label>Establishment Name:</label>
-            <input type="text" name="establishment" size="12" value="${game.establishmentName}">
+            <input type="text" name="establishmentName" size="12" value="${game.establishmentName}">
 
             <label for="email">Email:</label>
             <input type="text" name="email" size="12" value="${game.email}">

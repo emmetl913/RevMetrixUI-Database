@@ -24,7 +24,10 @@
     <servlet-name>StartBowlingServlet</servlet-name>
     <servlet-class>edu.ycp.cs320.lab02.servlet.StartBowlingServlet</servlet-class>
   </servlet>
-  
+  <servlet>
+  	<servlet-name>EstablishmentRegServlet</servlet-name>
+  	<servlet-class>edu.ycp.cs320.lab02.servlet.EstablishmentRegServlet</servlet-class></servlet>
+
   <!-- AJAX servlets. -->
   <servlet>
     <servlet-name>AddNumbersAjaxServlet</servlet-name>
@@ -54,7 +57,10 @@
     <servlet-name>StartBowlingServlet</servlet-name>
     <url-pattern>/startBowling</url-pattern>
   </servlet-mapping>
-  
+  <servlet-mapping>
+  	<servlet-name>EstablishmentRegServlet</servlet-name>
+  	<url-pattern>/establishmentReg</url-pattern></servlet-mapping>
+
   <!--  AJAX servlet mappings. -->
   <servlet-mapping>
     <servlet-name>AddNumbersAjaxServlet</servlet-name>

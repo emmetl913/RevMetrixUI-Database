@@ -1,11 +1,14 @@
 package edu.ycp.cs320.lab02.model;
 
 
-public class EstablishmentReg {
+public class Establishment {
 	private String establishmentName, email, address;
 
 	
-	public EstablishmentReg() {
+	public Establishment(String establishmentName, String email, String address) {
+		this.establishmentName = establishmentName;
+		this.email = email;
+		this.address = address;
 	}
 	
 	public void setEstablishmentName(String establishmentName) {

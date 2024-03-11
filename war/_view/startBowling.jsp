@@ -103,7 +103,7 @@
         	font-weight: bold;
         }
         .row {
-        	diplay: flex;
+        	display: flex;
         	justify-content: center;
         }
         .pin {

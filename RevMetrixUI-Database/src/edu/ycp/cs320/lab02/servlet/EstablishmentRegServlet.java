@@ -7,7 +7,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import edu.ycp.cs320.lab02.controller.EstablishmentRegController;
-import edu.ycp.cs320.lab02.model.EstablishmentReg;
+import edu.ycp.cs320.lab02.model.Establishment;
 
 public class EstablishmentRegServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
@@ -16,22 +16,22 @@ public class EstablishmentRegServlet extends HttpServlet {
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException {
 
-		System.out.println("establishmentReq Servlet: doGet");	
+		System.out.println("establishmentReg Servlet: doGet");	
 		
 		// call JSP to generate empty form
-		req.getRequestDispatcher("/_view/establishmentReq.jsp").forward(req, resp);
+		req.getRequestDispatcher("/_view/establishmentReg.jsp").forward(req, resp);
 	}
 	
 	@Override
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException {
 		
-		System.out.println("establishmentReq Servlet: doPost");
+		System.out.println("establishmentReg Servlet: doPost");
 		
 		
 		// holds the error message text, if there is any
 		String errorMessage = null;
-		EstablishmentReg model = new EstablishmentReg();
+		Establishment model = new Establishment(req.getParameter("establishmentName"),req.getParameter("email"),req.getParameter("address") );
 		EstablishmentRegController controller = new EstablishmentRegController();
 		controller.setModel(model);
 		// result of calculation goes here
@@ -41,7 +41,7 @@ public class EstablishmentRegServlet extends HttpServlet {
 			String second = req.getParameter("email");
 			String third = req.getParameter("address");
 			// check for errors in the form data before using is in a calculation
-			if (first == null || second == null || third == null) {
+			if (first.equals("") || second.equals("") || third.equals("")) {
 				errorMessage = "Please fill out all fields";
 			}
 			// otherwise, data is good, do the calculation
@@ -50,6 +50,7 @@ public class EstablishmentRegServlet extends HttpServlet {
 			// thus, always call a controller method to operate on the data
 			else {
 				controller.setStrings(first, second, third);
+				errorMessage = "Submitted";
 			}
 		} catch (NumberFormatException e) {
 			errorMessage = "Invalid String";
@@ -66,7 +67,7 @@ public class EstablishmentRegServlet extends HttpServlet {
 		req.setAttribute("game", model);
 
 		// Forward to view to render the result HTML document
-		req.getRequestDispatcher("/_view/establishmentReq.jsp").forward(req, resp);
+		req.getRequestDispatcher("/_view/establishmentReg.jsp").forward(req, resp);
 	}
 
 	

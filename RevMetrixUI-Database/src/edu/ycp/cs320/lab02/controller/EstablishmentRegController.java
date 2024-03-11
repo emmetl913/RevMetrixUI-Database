@@ -1,10 +1,10 @@
 package edu.ycp.cs320.lab02.controller;
-import edu.ycp.cs320.lab02.model.EstablishmentReg;
+import edu.ycp.cs320.lab02.model.Establishment;
 
 public class EstablishmentRegController {
-	private EstablishmentReg model;
+	private Establishment model;
 	
-	public void setModel(EstablishmentReg model) {
+	public void setModel(Establishment model) {
 		this.model = model;
 	}
 	
