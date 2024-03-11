@@ -37,6 +37,8 @@ public class IndexServlet extends HttpServlet {
 			req.getRequestDispatcher("/_view/guessingGame.jsp").forward(req, resp);
 		else if("Start Bowling!".equals(action))
 			req.getRequestDispatcher("/_view/startBowling.jsp").forward(req, resp);
+		else if("EstablishmentReg".equals(action))
+			req.getRequestDispatcher("/_view/establishmentReg.jsp").forward(req, resp);
 	}
 	
 }

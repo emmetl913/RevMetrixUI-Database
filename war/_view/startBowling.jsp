@@ -147,7 +147,7 @@
 			<p>Nothing to event here yet!</p>
 			<tr>
 				<td class="label">Enter Event Name:</td>
-				<td><input type="text" name="eventName" value="${model.Estab} }"/> <input type="Submit" name="eventName" value="Submit" onclick="nextStep(2)"></td>
+				<td><input type="text" name="eventName" value="${model.Estab}"/> <input type="Submit" name="eventName" value="Submit" onclick="nextStep(2)"></td>
 			</tr>
 		</div>
 		<div id="step3">

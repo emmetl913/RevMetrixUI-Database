@@ -27,16 +27,19 @@
 		</c:if>
 
 		<form action="${pageContext.servletContext.contextPath}/addNumbers" method="get">
-    		<input type="submit" name="addNumbers" size="12" value="Add Numbers" />
+    		<input type="submit" name="addNumbers" size="12" value="AddNumbers" />
 		</form>
 		<form action="${pageContext.servletContext.contextPath}/multiplyNumbers" method="get">
-    		<input type="submit" name="multiplyNumbers" size="12" value="Multiply Numbers" />
+    		<input type="submit" name="multiplyNumbers" size="12" value="MultiplyNumbers" />
 		</form> 
 		<form action="${pageContext.servletContext.contextPath}/guessingGame" method="get">
-    		<input type="submit" name="guessingGame" size="12" value="Guessing Game" />
+    		<input type="submit" name="guessingGame" size="12" value="GuessingGame" />
 		</form>
 		<form action="${pageContext.servletContext.contextPath}/startBowling" method="get">
-    		<input type="submit" name="startBowling" size="12" value="Start Bowling!" />
+    		<input type="submit" name="startBowling" size="12" value="StartBowling!" />
+		</form>
+		<form action="${pageContext.servletContext.contextPath}/establishmentReg" method="get">
+    		<input type="submit" name="establishmentReg" size="12" value="EstablishmentReg" />
 		</form>
 	</body>
 </html>
