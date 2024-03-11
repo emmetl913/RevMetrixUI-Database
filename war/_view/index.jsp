@@ -5,7 +5,7 @@
 
 <html>
 	<head>
-		<title>Index page:lab02a_zcox</title>
+		<title>Index page</title>
 		<style type="text/css">
 		.error {
 			color: red;
@@ -14,6 +14,10 @@
 		td.label {
 			text-align: right;
 		}
+		form {
+            display: inline-block;
+            margin-right: 10px; /* Add some margin between forms */
+        }
 		</style>
 	</head>
 
@@ -22,10 +26,17 @@
 			<div class="error">${errorMessage}</div>
 		</c:if>
 
-		<form action="${pageContext.servletContext.contextPath}/index" method="post">
-			<input type="submit" name="action" value="AddNumbers">
-			<input type="submit" name="action" value="MultiplyNumbers">
-			<input type="submit" name="action" value="GuessingGame">
+		<form action="${pageContext.servletContext.contextPath}/addNumbers" method="get">
+    		<input type="submit" name="addNumbers" size="12" value="Add Numbers" />
+		</form>
+		<form action="${pageContext.servletContext.contextPath}/multiplyNumbers" method="get">
+    		<input type="submit" name="multiplyNumbers" size="12" value="Multiply Numbers" />
+		</form> 
+		<form action="${pageContext.servletContext.contextPath}/guessingGame" method="get">
+    		<input type="submit" name="guessingGame" size="12" value="Guessing Game" />
+		</form>
+		<form action="${pageContext.servletContext.contextPath}/startBowling" method="get">
+    		<input type="submit" name="startBowling" size="12" value="Start Bowling!" />
 		</form>
 	</body>
 </html>
