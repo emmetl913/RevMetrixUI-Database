@@ -36,6 +36,9 @@ public class StartBowlingServlet extends HttpServlet {
 		
 		String errorMessage = null;
 		
+		req.setAttribute("errorMessage", errorMessage);
+		req.setAttribute("model", model);	
+		
 		req.getRequestDispatcher("/_view/startBowling.jsp").forward(req, resp);
 	}
 	
