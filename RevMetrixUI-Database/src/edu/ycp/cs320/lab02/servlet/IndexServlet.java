@@ -7,8 +7,6 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import edu.ycp.cs320.lab02.controller.NumbersController;
-
 public class IndexServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	
@@ -36,6 +34,8 @@ public class IndexServlet extends HttpServlet {
 			req.getRequestDispatcher("/_view/MultiplyNumbers.jsp").forward(req, resp);
 		else if("GuessingGame".equals(action))
 			req.getRequestDispatcher("/_view/guessingGame.jsp").forward(req, resp);
+		else if("BallArsenal".equals(action))
+			req.getRequestDispatcher("/_view/ballArsenal.jsp").forward(req, resp);
 	}
 	
 }
