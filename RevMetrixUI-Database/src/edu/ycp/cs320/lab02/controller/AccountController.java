@@ -8,7 +8,7 @@ public class AccountController {
 		this.model = model;
 	}
 	
-	public boolean Login(String enteredUsername, String enteredPassword) {
+	public boolean getValidLogin(String enteredUsername, String enteredPassword) {
 		if(enteredUsername != model.getUsername() || enteredPassword != model.getPassword()) {
 			return false;
 		}

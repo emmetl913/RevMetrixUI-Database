@@ -17,7 +17,7 @@ public class AccountServlet extends HttpServlet {
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException {
 
-		System.out.println("AddNumbers Servlet: doGet");	
+		System.out.println("Account Servlet: doGet");	
 		
 		// call JSP to generate empty form
 		req.getRequestDispatcher("/_view/logIn.jsp").forward(req, resp);
@@ -27,7 +27,7 @@ public class AccountServlet extends HttpServlet {
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException {
 		
-		System.out.println("AddNumbers Servlet: doPost");
+		System.out.println("Account Servlet: doPost");
 		
 
 		// holds the error message text, if there is any
@@ -35,16 +35,17 @@ public class AccountServlet extends HttpServlet {
 		Account model = new Account(null, null);
 		AccountController controller = new AccountController();
 		controller.setModel(model);
+		model.setUsername("Kevin");
+		model.setPassword("Kevin1");
 		// result of calculation goes here
 		// decode POSTed form parameters and dispatch to controller
 		try {
 			
-			Double first = getDoubleFromParameter(req.getParameter("first"));
-			Double second = getDoubleFromParameter(req.getParameter("second"));
-			Double third = getDoubleFromParameter(req.getParameter("third"));
+			String username = req.getParameter("username");
+			String password = req.getParameter("password");
 			// check for errors in the form data before using is in a calculation
-			if (first == null || second == null || third == null) {
-				errorMessage = "Please specify three numbers";
+			if (username.length() < 5 || password.length()<5) {
+				errorMessage = "Please enter a username and/or password that are both logner than 5 characters";
 			}
 			// otherwise, data is good, do the log in
 			// must create the controller each time, since it doesn't persist between POSTs
@@ -68,15 +69,5 @@ public class AccountServlet extends HttpServlet {
 		req.setAttribute("game", model);
 		// Forward to view to render the result HTML document
 		req.getRequestDispatcher("/_view/logIn.jsp").forward(req, resp);
-	}
-
-	
-	// gets double from the request with attribute named s
-	private Double getDoubleFromParameter(String s) {
-		if (s == null || s.equals("")) {
-			return null;
-		} else {
-			return Double.parseDouble(s);
-		}
 	}
 }

@@ -24,23 +24,25 @@
 		<form action="${pageContext.servletContext.contextPath}/logIn" method="post">
 			<table>
 				<tr>
-					<td class="label">First number:</td>
-					<td><input type="text" name="first" size="12" value="${game.stringFirst}" /></td>
+					<td class="label">Username</td>
+					<td><input type="text" name="username" size="12" value="${game.username}" /></td>
 				</tr>
 				<tr>
-					<td class="label">Second number:</td>
-					<td><input type="text" name="second" size="12" value="${game.stringSecond}" /></td>
-				</tr>
-				<tr>
-					<td class="label">Third number:</td>
-					<td><input type="text" name="third" size="12" value="${game.stringThird}" /></td>
+					<td class="label">Password</td>
+					<td><input type="password" name="password" size="12" value="${game.password}" /></td>
 				</tr>
 				<tr>
 					<td class="label">Result:</td>
-					<td>${game.resultAdd}</td>
+					<c:if test="${game.validLogin}">
+					<td>Success!</td>
+					</c:if>
+					<c:if test="${! game.validLogin}">
+					<td>Failure!</td>
+					</c:if>
 				</tr>
 			</table>
-			<input type="Submit" name="submit" value="Add Numbers!">
+			<input type="Submit" name="submit" value="Sign In!">
+			<input type="Submit" name="submit" value="Register Here!">
 		</form>
 	</body>
 </html>

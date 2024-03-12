@@ -12,10 +12,7 @@
     <servlet-name>IndexServlet</servlet-name>
     <servlet-class>edu.ycp.cs320.lab02.servlet.IndexServlet</servlet-class>
   </servlet>
-  	<servlet>
-    <servlet-name>AccountServlet</servlet-name>
-    <servlet-class>edu.ycp.cs320.lab02.servlet.AccountServlet</servlet-class>
-  </servlet>
+  	
   
   <servlet>
     <servlet-name>AddNumbersServlet</servlet-name>
@@ -33,7 +30,10 @@
   	<servlet-name>EstablishmentRegServlet</servlet-name>
   	<servlet-class>edu.ycp.cs320.lab02.servlet.EstablishmentRegServlet</servlet-class></servlet>
 
-  <!-- AJAX servlets. -->
+  <servlet>
+    <servlet-name>AccountServlet</servlet-name>
+    <servlet-class>edu.ycp.cs320.lab02.servlet.AccountServlet</servlet-class>
+  </servlet><!-- AJAX servlets. -->
   <servlet>
     <servlet-name>AddNumbersAjaxServlet</servlet-name>
     <servlet-class>edu.ycp.cs320.lab02.servlet.ajax.AddNumbersAjaxServlet</servlet-class>
@@ -65,6 +65,9 @@
   <servlet-mapping>
   	<servlet-name>EstablishmentRegServlet</servlet-name>
   	<url-pattern>/establishmentReg</url-pattern></servlet-mapping>
+  <servlet-mapping>
+  	<servlet-name>AccountServlet</servlet-name>
+  	<url-pattern>/logIn</url-pattern></servlet-mapping>
 
   <!--  AJAX servlet mappings. -->
   <servlet-mapping>
