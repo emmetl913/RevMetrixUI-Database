@@ -35,8 +35,8 @@ public class AccountServlet extends HttpServlet {
 		Account model = new Account(null, null);
 		AccountController controller = new AccountController();
 		controller.setModel(model);
-		model.setUsername("Kevin");
-		model.setPassword("Kevin1");
+		//model.setUsername("Kevin");
+		//model.setPassword("Kevin1");
 		// result of calculation goes here
 		// decode POSTed form parameters and dispatch to controller
 		try {
@@ -51,13 +51,26 @@ public class AccountServlet extends HttpServlet {
 			// must create the controller each time, since it doesn't persist between POSTs
 			// the view does not alter data, only controller methods should be used for that
 			// thus, always call a controller method to operate on the data
+			else if(model.getUsername() != username || model.getPassword() != password) {
+					errorMessage = "Username or password is incorrect.";
+				}
 			else {
-				
-			}
+				errorMessage = "I (Sir RevMetrix III) will register this username to this password";
+				model.setUsername(username);
+				model.setPassword(password);
+				}
+
+			
 		} catch (NumberFormatException e) {
 			errorMessage = "Invalid double";
 		}
 		
+		if (req.getParameter("gotIt") != null) {
+			errorMessage = "peepee";
+			System.out.println("penis poo poo face");
+
+			
+		}
 		// Add parameters as request attributes
 		// this creates attributes named "first" and "second for the response, and grabs the
 		// values that were originally assigned to the request attributes, also named "first" and "second"
