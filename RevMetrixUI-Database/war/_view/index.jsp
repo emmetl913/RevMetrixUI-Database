@@ -5,7 +5,7 @@
 
 <html>
 	<head>
-		<title>Index page:lab02a_zcox</title>
+		<title>Home</title>
 		<style type="text/css">
 		.error {
 			color: red;
