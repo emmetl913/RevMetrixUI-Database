@@ -7,28 +7,40 @@
 
   <!-- Servlets --><servlet>
 	<servlet-name>MultiplyNumbersServlet</servlet-name>
-	<servlet-class>edu.ycp.cs320.RevMetrixUI-Database.servlet.MultiplyNumbersServlet</servlet-class></servlet>
+	<servlet-class>edu.ycp.cs320.lab02.servlet.MultiplyNumbersServlet</servlet-class></servlet>
 	<servlet>
     <servlet-name>IndexServlet</servlet-name>
-    <servlet-class>edu.ycp.cs320.RevMetrixUI-Database.servlet.IndexServlet</servlet-class>
+    <servlet-class>edu.ycp.cs320.lab02.servlet.IndexServlet</servlet-class>
   </servlet>
+  	<servlet>
+    <servlet-name>AccountServlet</servlet-name>
+    <servlet-class>edu.ycp.cs320.lab02.servlet.AccountServlet</servlet-class>
+  </servlet>
+  
   <servlet>
     <servlet-name>AddNumbersServlet</servlet-name>
-    <servlet-class>edu.ycp.cs320.RevMetrixUI-Database.servlet.AddNumbersServlet</servlet-class>
+    <servlet-class>edu.ycp.cs320.lab02.servlet.AddNumbersServlet</servlet-class>
   </servlet>
   <servlet>
     <servlet-name>GuessingGameServlet</servlet-name>
-    <servlet-class>edu.ycp.cs320.RevMetrixUI-Database.servlet.GuessingGameServlet</servlet-class>
+    <servlet-class>edu.ycp.cs320.lab02.servlet.GuessingGameServlet</servlet-class>
   </servlet>
-  
+  <servlet>
+    <servlet-name>StartBowlingServlet</servlet-name>
+    <servlet-class>edu.ycp.cs320.lab02.servlet.StartBowlingServlet</servlet-class>
+  </servlet>
+  <servlet>
+  	<servlet-name>EstablishmentRegServlet</servlet-name>
+  	<servlet-class>edu.ycp.cs320.lab02.servlet.EstablishmentRegServlet</servlet-class></servlet>
+
   <!-- AJAX servlets. -->
   <servlet>
     <servlet-name>AddNumbersAjaxServlet</servlet-name>
-    <servlet-class>edu.ycp.cs320.RevMetrixUI-Database.servlet.ajax.AddNumbersAjaxServlet</servlet-class>
+    <servlet-class>edu.ycp.cs320.lab02.servlet.ajax.AddNumbersAjaxServlet</servlet-class>
   </servlet>
   <servlet>
     <servlet-name>NextGuessAjaxServlet</servlet-name>
-    <servlet-class>edu.ycp.cs320.RevMetrixUI-Database.servlet.ajax.NextGuessAjaxServlet</servlet-class>
+    <servlet-class>edu.ycp.cs320.lab02.servlet.ajax.NextGuessAjaxServlet</servlet-class>
   </servlet>
 
   <!-- Servlet mappings --><servlet-mapping>
@@ -46,7 +58,14 @@
     <servlet-name>GuessingGameServlet</servlet-name>
     <url-pattern>/guessingGame</url-pattern>
   </servlet-mapping>
-  
+  <servlet-mapping>
+    <servlet-name>StartBowlingServlet</servlet-name>
+    <url-pattern>/startBowling</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+  	<servlet-name>EstablishmentRegServlet</servlet-name>
+  	<url-pattern>/establishmentReg</url-pattern></servlet-mapping>
+
   <!--  AJAX servlet mappings. -->
   <servlet-mapping>
     <servlet-name>AddNumbersAjaxServlet</servlet-name>
