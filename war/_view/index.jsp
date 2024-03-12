@@ -22,10 +22,29 @@
 			<div class="error">${errorMessage}</div>
 		</c:if>
 
-		<form action="${pageContext.servletContext.contextPath}/index" method="post">
-			<input type="submit" name="action" value="AddNumbers">
-			<input type="submit" name="action" value="MultiplyNumbers">
-			<input type="submit" name="action" value="GuessingGame">
-		</form>
+		<table>
+				<form action="${pageContext.servletContext.contextPath}/addNumbers" method="get">
+					<tr><input type="Submit" name="submit" value="Add Numbers!">
+					</tr>
+					&nbsp
+				</form>
+				<form action="${pageContext.servletContext.contextPath}/multiplyNumbers" method="get">
+					<tr><input type="Submit" name="submit" value="Multiply Numbers!">
+					</tr>
+					&nbsp
+				</form>
+				<form action="${pageContext.servletContext.contextPath}/guessingGame" method="get">
+					<tr><input type="Submit" name="submit" value="Play Guessing Game!">
+					</tr>
+					&nbsp
+				</form>
+				<form action="${pageContext.servletContext.contextPath}/logIn" method="get">
+					<tr><input type="submit" name="action" value="Log In Page!">
+					</tr>
+				</form>
+			</table>
+
+
+			
 	</body>
 </html>
