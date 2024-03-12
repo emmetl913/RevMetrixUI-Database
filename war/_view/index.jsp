@@ -26,6 +26,7 @@
 			<div class="error">${errorMessage}</div>
 		</c:if>
 
+
 		<form action="${pageContext.servletContext.contextPath}/addNumbers" method="get">
     		<input type="submit" name="addNumbers" size="12" value="AddNumbers" />
 		</form>
@@ -40,6 +41,9 @@
 		</form>
 		<form action="${pageContext.servletContext.contextPath}/establishmentReg" method="get">
     		<input type="submit" name="establishmentReg" size="12" value="EstablishmentReg" />
+		</form>
+			<form action="${pageContext.servletContext.contextPath}/logIn" method="get">
+					<input type="submit" name="action" value="Log In Page!">
 		</form>
 	</body>
 </html>
