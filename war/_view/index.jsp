@@ -25,16 +25,6 @@
 		<c:if test="${! empty errorMessage}">
 			<div class="error">${errorMessage}</div>
 		</c:if>
-
-		<form action="${pageContext.servletContext.contextPath}/addNumbers" method="get">
-    		<input type="submit" name="addNumbers" size="12" value="Add Numbers" />
-		</form>
-		<form action="${pageContext.servletContext.contextPath}/multiplyNumbers" method="get">
-    		<input type="submit" name="multiplyNumbers" size="12" value="Multiply Numbers" />
-		</form> 
-		<form action="${pageContext.servletContext.contextPath}/guessingGame" method="get">
-    		<input type="submit" name="guessingGame" size="12" value="Guessing Game" />
-		</form>
 		<form action="${pageContext.servletContext.contextPath}/startBowling" method="get">
     		<input type="submit" name="startBowling" size="12" value="Start Bowling!" />
 		</form>

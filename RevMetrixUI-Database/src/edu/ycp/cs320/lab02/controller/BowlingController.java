@@ -10,8 +10,12 @@ public class BowlingController {
 		this.model = model;
 	}
 	
-	public void setInfo(String est)
+	public void setInfo(String est, String session, String game, String frame)
 	{
 		model.setEstab(est);
+		model.setSession(session);
+		model.setGame(game);
+		model.setFrame(frame);
+		
 	}
 }
