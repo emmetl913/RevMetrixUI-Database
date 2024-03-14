@@ -5,7 +5,7 @@
 
 <html>
 	<head>
-		<title>Index page</title>
+		<title>Index page:lab02a_eculp</title>
 		<style type="text/css">
 		body {
             font-family: Arial, sans-serif;
@@ -102,6 +102,7 @@
   div.content {margin-left: 0;}
 }
 		
+
 		</style>
 	</head>
 
@@ -109,7 +110,6 @@
 		<c:if test="${! empty errorMessage}">
 			<div class="error">${errorMessage}</div>
 		</c:if>
-
 		<div class="sidebar">
 			<a href="${pageContext.servletContext.contextPath}/index">
 				<img src="${pageContext.request.contextPath}/_view/BowlingBall.png"width="100" height="100">
