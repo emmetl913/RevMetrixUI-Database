@@ -3,13 +3,22 @@ import java.util.ArrayList;
 
 
 public class BallArsenal {
+	//Represents individual bowling balls
 	public class Ball{
+		private String name;
 		private String color;
-		private double size;
 		
-		public Ball(String color, double size) {
+		public Ball(String name, String color) {
+			this.name = name;
 			this.color = color;
-			this.size = size;
+		}
+		
+		public String getName() {
+			return name;
+		}
+		
+		public void setName(String name) {
+			this.name = name;
 		}
 		
 		public String getColor() {
@@ -19,16 +28,9 @@ public class BallArsenal {
 		public void setColor(String color) {
 			this.color = color;
 		}
-		
-		public double getSize() {
-			return size;
-		}
-		
-		public void setSize(double size) {
-			this.size = size;
-		}
 	}
 	
+	//Manages a collection of bowling balls
 	public class Arsenal{
 		private ArrayList<Ball> balls;
 		
@@ -47,5 +49,5 @@ public class BallArsenal {
 		public ArrayList<Ball> getBalls(){
 			return balls;
 		}
-	}	
+	}
 }
