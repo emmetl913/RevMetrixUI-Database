@@ -69,10 +69,10 @@
 			<div class="error">${errorMessage}</div>
 		</c:if>
 	
-		<form action="${pageContext.servletContext.contextPath}/logIn" method="post">
+		<form action="${pageContext.servletContext.contextPath}/signUp" method="post">
 			<table>
 				<tr>
-					<td class="label">Username</td>
+					<td class="label">Sign Up!</td>
 					<td><input type="text" name="username" size="12" value="${game.username}" /></td>
 				</tr>
 				<tr>
@@ -80,12 +80,11 @@
 					<td><input type="password" name="password" size="12" value="${game.password}" /></td>
 				</tr>
 				<tr>
-					<td class="label">Result:</td>
-					
+					<td class="label">Confirm Password</td>
+					<td><input type="password" name="password2" size="12" value="${game.password}" /></td>
 				</tr>
 			</table>
-			<input name="logIn" type="submit" value="Log In!" />
-			<input type="submit" name="registerButton" value="Register Here!">
+			<input name="signUp" type="submit" value="Sign Up!" />
 		</form>
 		</div>
 	</body>

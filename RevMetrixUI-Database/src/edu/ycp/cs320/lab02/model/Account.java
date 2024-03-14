@@ -24,11 +24,6 @@ public class Account {
 	public void setPassword(String Password) {
 		this.password = Password;
 	}
-	public boolean getValidLogin(String enteredUsername, String enteredPassword) {
-		if(enteredUsername != this.getUsername() || enteredPassword != this.getPassword()) {
-			return false;
-		}
-		return true;
-	}
+
 	
 }

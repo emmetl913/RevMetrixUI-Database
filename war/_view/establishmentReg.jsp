@@ -109,6 +109,8 @@
           </a>
         <a href="${pageContext.servletContext.contextPath}/startBowling">Start Bowling</a>
         <a href="${pageContext.servletContext.contextPath}/establishmentReg">Establishment Registration</a>
+        <a href="${pageContext.servletContext.contextPath}/logIn">Sign Out!</a>
+	        
       </div>
     
     <div class="container">

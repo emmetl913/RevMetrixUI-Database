@@ -31,7 +31,12 @@
   <servlet>
     <servlet-name>AccountServlet</servlet-name>
     <servlet-class>edu.ycp.cs320.lab02.servlet.AccountServlet</servlet-class>
-  </servlet><!-- AJAX servlets. -->
+  </servlet>
+  
+  <servlet>
+    <servlet-name>AccountSignUpServlet</servlet-name>
+    <servlet-class>edu.ycp.cs320.lab02.servlet.AccountSignUpServlet</servlet-class>
+  </servlet>
   
   <!-- AJAX servlets. -->
   <servlet>
@@ -68,6 +73,10 @@
   <servlet-mapping>
   	<servlet-name>AccountServlet</servlet-name>
   	<url-pattern>/logIn</url-pattern></servlet-mapping>
+  	
+  	  <servlet-mapping>
+  	<servlet-name>AccountSignUpServlet</servlet-name>
+  	<url-pattern>/signUp</url-pattern></servlet-mapping>
 
   <!--  AJAX servlet mappings. -->
   <servlet-mapping>

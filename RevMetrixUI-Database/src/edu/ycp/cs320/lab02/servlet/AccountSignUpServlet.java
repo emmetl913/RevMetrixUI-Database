@@ -10,39 +10,36 @@ import javax.servlet.http.HttpServletResponse;
 import edu.ycp.cs320.lab02.controller.AccountController;
 import edu.ycp.cs320.lab02.model.Account;
 
-public class AccountServlet extends HttpServlet {
+public class AccountSignUpServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException {
 
-		System.out.println("Account Servlet: doGet");	
+		System.out.println("Account SignUp Servlet: doGet");	
 		
 		// call JSP to generate empty form
-		req.getRequestDispatcher("/_view/logIn.jsp").forward(req, resp);
+		req.getRequestDispatcher("/_view/signUp.jsp").forward(req, resp);
 	}
 	
 	@Override
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException {
 		
-		System.out.println("Account Servlet: doPost");
+		System.out.println("Account SignUp Servlet: doPost");
 		
-		boolean validLogin = false;
-
 		// holds the error message text, if there is any
 		String errorMessage = null;
 		Account model = new Account(null, null);
 		AccountController controller = new AccountController();
 		controller.setModel(model);
-		model.setUsername("Kevin");
-		model.setPassword("Kevin1");
 		// result of calculation goes here
 		// decode POSTed form parameters and dispatch to controller
-			
+		boolean signedUp = false;
 		String username = req.getParameter("username");
 		String password = req.getParameter("password");
+		String password2 = req.getParameter("password2");
 		// check for errors in the form data before using is in a calculation
 		if (username.length() < 5 || password.length()<5) {
 			errorMessage = "Please enter a username and/or password that are both longer than 5 characters";
@@ -51,21 +48,14 @@ public class AccountServlet extends HttpServlet {
 		// must create the controller each time, since it doesn't persist between POSTs
 		// the view does not alter data, only controller methods should be used for that
 		// thus, always call a controller method to operate on the data
-		else if(!model.getUsername().equals(username) || !model.getPassword().equals(password)) {
-				errorMessage = "Username or password is incorrect.";
+		if(errorMessage.equals(null) && !signedUp) {
+			if(password.equals(password2)) {
+				controller.SignUp(username, password); //create an account with SignUp
 			}
-		else {
-			errorMessage = "I (Sir RevMetrix III) will register this username to this password";
-			model.setUsername(username);
-			model.setPassword(password);
-			validLogin = true;
-			}
-
-		if (req.getParameter("logIn") != null && validLogin) {
-			req.getRequestDispatcher("/_view/index.jsp").forward(req, resp);
 		}
-		if (req.getParameter("registerButton") != null) {
-			req.getRequestDispatcher("/_view/signUp.jsp").forward(req, resp);
+		
+		if (req.getParameter("signUp") != null && signedUp) {
+			req.getRequestDispatcher("/_view/logIn.jsp").forward(req, resp);
 		}
 		// Add parameters as request attributes
 		// this creates attributes named "first" and "second for the response, and grabs the
@@ -77,6 +67,6 @@ public class AccountServlet extends HttpServlet {
 		req.setAttribute("errorMessage", errorMessage);
 		req.setAttribute("game", model);
 		// Forward to view to render the result HTML document
-		req.getRequestDispatcher("/_view/logIn.jsp").forward(req, resp);
+		req.getRequestDispatcher("/_view/signUp.jsp").forward(req, resp);
 	}
 }
