@@ -89,8 +89,36 @@
         .content div.active {
         	display: block;
         }
-        .container{
-            text-align: center;
+        /* Styling for the shot level */
+        .shotHeader{
+        	margin-right: 20px;
+        	display: flex;
+        	align-items: center;
+        	justify-content: center;
+        	position: relative;
+        	font-size: 28px;
+        	font-weight: bold;
+        }
+        .shotHeader label{
+        	margin-right: 10px;
+        	text-align: center;
+        }
+        .shotHeader input {
+        	border: 2px #000000;
+        	text-align: center;
+        	font-weight: bold;
+        }
+        .row {
+        	diplay: flex;
+        	justify-content: center;
+        }
+        .pin {
+            width: 30px;
+            height: 30px;
+            border: 2px #000000;
+            border-radius: 50%;
+            margin: 5px;
+            display: flex;
             align-items: center;
             margin-top: 50px;
         }
@@ -282,16 +310,35 @@
 		</div>
 		<!-- Frame Page -->
 		<div id="step5">
-			<h1>Nothing to Frame here yet!</h1>
-			<p>Nothing to Frame here yet!</p>
+			<h1>Nothing to frame here yet!</h1>
+			<p>Nothing to frame here yet!</p>
+			<p>i forgot how frames work so i didn't do anything yet :3</p>
 			<input type="Submit" name="nextFrame" id="frameStatus" value="Continue" onclick="nextStep(5)">
 		</div>
 		<!-- Shot Input Level -->
-		<div id="step6">
-			<a href="${pageContext.servletContext.contextPath}/shot">Shot</a>
+		<div id="step6" style=display:flex;flex-direction:column;align-items:center;>
+			<div class="row">
+				<div class="pin"><span>7</span></div>
+				<div class="pin"><span>8</span></div>
+				<div class="pin"><span>9</span></div>
+				<div class="pin"><span>10</span></div>
+			</div>
+			<div class="row">
+				<div class="pin"><span>4</span></div>
+				<div class="pin"><span>5</span></div>
+				<div class="pin"><span>6</span></div>
+			</div>
+			<div class="row">
+				<div class="pin"><span>2</span></div>
+				<div class="pin"><span>3</span></div>
+			</div>
+			<div class="row">
+				<div class="pin"><span>1</span></div>
+			</div>
 		</div>
 	</div>
-
+	
+	
 	<script>
 		var currentStep = 1;
 		// Display current step
