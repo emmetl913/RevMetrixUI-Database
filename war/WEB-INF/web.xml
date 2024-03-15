@@ -23,7 +23,22 @@
     <servlet-class>edu.ycp.cs320.lab02.servlet.AccountSignUpServlet</servlet-class>
   </servlet>
   	
-  	<servlet><servlet-name>StartBowlingServlet</servlet-name><servlet-class>edu.ycp.cs320.lab02.servlet.StartBowlingServlet</servlet-class></servlet><!-- AJAX servlets. -->
+  	<servlet>
+  	<servlet-name>StartBowlingServlet</servlet-name>
+  	<servlet-class>edu.ycp.cs320.lab02.servlet.StartBowlingServlet</servlet-class>
+  	</servlet>
+  	
+  	<servlet>
+  	<servlet-name>ShotServlet</servlet-name>
+  	<servlet-class>edu.ycp.cs320.lab02.servlet.ShotServlet</servlet-class>
+  	</servlet>
+  	
+  	<servlet>
+  	<servlet-name>BallArsenalServlet</servlet-name>
+  	<servlet-class>edu.ycp.cs320.lab02.servlet.BallArsenalServlet</servlet-class>
+  	</servlet>
+  	
+  	<!-- AJAX servlets. -->
   
   <!-- AJAX servlets. -->
 
@@ -43,7 +58,17 @@
   	<servlet-name>AccountSignUpServlet</servlet-name>
   	<url-pattern>/signUp</url-pattern></servlet-mapping>
   	
-  	<servlet-mapping><servlet-name>StartBowlingServlet</servlet-name><url-pattern>/startBowling</url-pattern></servlet-mapping>
+  	<servlet-mapping>
+  	<servlet-name>StartBowlingServlet</servlet-name>
+  	<url-pattern>/startBowling</url-pattern></servlet-mapping>
+  	
+  	<servlet-mapping>
+  	<servlet-name>ShotServlet</servlet-name>
+  	<url-pattern>/shot</url-pattern></servlet-mapping>
+  	
+  	<servlet-mapping>
+  	<servlet-name>BallArsenalServlet</servlet-name>
+  	<url-pattern>/ballArsenal</url-pattern></servlet-mapping>
 
   <!--  AJAX servlet mappings. -->
   
