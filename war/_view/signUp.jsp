@@ -72,16 +72,20 @@
 		<form action="${pageContext.servletContext.contextPath}/signUp" method="post">
 			<table>
 				<tr>
-					<td class="label">Sign Up!</td>
-					<td><input type="text" name="username" size="12" value="${game.username}" /></td>
+					<td class="label">Email: </td>
+					<td><input type="text" name="email" size="12" value="" /></td>
 				</tr>
 				<tr>
-					<td class="label">Password</td>
-					<td><input type="password" name="password" size="12" value="${game.password}" /></td>
+					<td class="label">Username: </td>
+					<td><input type="text" name="username" size="12" value="" /></td>
 				</tr>
 				<tr>
-					<td class="label">Confirm Password</td>
-					<td><input type="password" name="password2" size="12" value="${game.password}" /></td>
+					<td class="label">Password: </td>
+					<td><input type="password" name="password" size="12" value="" /></td>
+				</tr>
+				<tr>
+					<td class="label">Confirm Password: </td>
+					<td><input type="password" name="password2" size="12" value="" /></td>
 				</tr>
 			</table>
 			<input name="signUp" type="submit" value="Sign Up!" />

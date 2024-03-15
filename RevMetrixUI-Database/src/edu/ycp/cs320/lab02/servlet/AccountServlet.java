@@ -33,7 +33,7 @@ public class AccountServlet extends HttpServlet {
 
 		// holds the error message text, if there is any
 		String errorMessage = null;
-		Account model = new Account(null, null);
+		Account model = new Account(null, null, null);
 		AccountController controller = new AccountController();
 		controller.setModel(model);
 		model.setUsername("Kevin");
@@ -58,7 +58,7 @@ public class AccountServlet extends HttpServlet {
 			errorMessage = "I (Sir RevMetrix III) will register this username to this password";
 			model.setUsername(username);
 			model.setPassword(password);
-			validLogin = true;
+			validLogin = controller.getValidLogin(username, password);
 			}
 
 		if (req.getParameter("logIn") != null && validLogin) {

@@ -2,12 +2,13 @@ package edu.ycp.cs320.lab02.model;
 
 
 public class Account {
-	private String userName, password;
+	private String userName, password, email;
 
 	
-	public Account(String Username, String Password) {
+	public Account(String Username, String Password, String Email) {
 		this.userName = Username;
 		this.password = Password;
+		this.email = Email;
 	}
 	
 	public String getUsername() {
@@ -24,6 +25,15 @@ public class Account {
 	public void setPassword(String Password) {
 		this.password = Password;
 	}
+	
+	public String getEmail() {
+		return email;
+	}
+	
+	public void setEmail(String Email) {
+		this.email = Email;
+	}
+	
 
 	
 }

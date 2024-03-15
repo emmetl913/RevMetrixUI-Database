@@ -9,15 +9,16 @@ public class AccountController {
 	}
 	
 	public boolean getValidLogin(String enteredUsername, String enteredPassword) {
-		if(enteredUsername != model.getUsername() || enteredPassword != model.getPassword()) {
-			return false;
+		if(enteredUsername.equals(model.getUsername()) && enteredPassword.equals(model.getPassword())) {
+			return true;
 		}
-		return true;
+		return false;
 	}
-	public void SignUp(String enteredUsername, String enteredPassword) {
+	public void signUp(String enteredUsername, String enteredPassword, String enteredEmail) {
 		//check for invalid strings in Servlet
 		model.setPassword(enteredPassword);
-		model.setUsername(enteredPassword);
+		model.setUsername(enteredUsername);
+		model.setEmail(enteredEmail);
 	}
 	
 }

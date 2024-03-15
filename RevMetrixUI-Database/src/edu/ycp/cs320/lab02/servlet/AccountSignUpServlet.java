@@ -31,26 +31,32 @@ public class AccountSignUpServlet extends HttpServlet {
 		
 		// holds the error message text, if there is any
 		String errorMessage = null;
-		Account model = new Account(null, null);
+		Account model = new Account(null, null, null);
 		AccountController controller = new AccountController();
 		controller.setModel(model);
 		// result of calculation goes here
 		// decode POSTed form parameters and dispatch to controller
 		boolean signedUp = false;
 		String username = req.getParameter("username");
+		String email = req.getParameter("email");
 		String password = req.getParameter("password");
 		String password2 = req.getParameter("password2");
 		// check for errors in the form data before using is in a calculation
-		if (username.length() < 5 || password.length()<5) {
+		if (username.length() < 5 || password.length()<5 || password2.length() < 5) {
 			errorMessage = "Please enter a username and/or password that are both longer than 5 characters";
 		}
+		
 		// otherwise, data is good, do the log in
 		// must create the controller each time, since it doesn't persist between POSTs
 		// the view does not alter data, only controller methods should be used for that
 		// thus, always call a controller method to operate on the data
-		if(errorMessage.equals(null) && !signedUp) {
+		if(errorMessage == null && !signedUp) {
 			if(password.equals(password2)) {
-				controller.SignUp(username, password); //create an account with SignUp
+				controller.signUp(username, password, email); //create an account with SignUp
+				signedUp = true;
+			}
+			else {
+				errorMessage = "Passwords do not match.";
 			}
 		}
 		

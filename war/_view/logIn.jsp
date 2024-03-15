@@ -72,18 +72,14 @@
 		<form action="${pageContext.servletContext.contextPath}/logIn" method="post">
 			<table>
 				<tr>
-					<td class="label">Username</td>
-					<td><input type="text" name="username" size="12" value="${game.username}" /></td>
+					<td class="label">Username: </td>
+					<td><input type="text" name="username" size="12" value="" autocomplete="off" /></td>
 				</tr>
 				<tr>
-					<td class="label">Password</td>
-					<td><input type="password" name="password" size="12" value="${game.password}" /></td>
+					<td class="label">Password: </td>
+					<td><input type="password" name="password" size="12" value="" autocomplete="off" /></td>
 				</tr>
-				<tr>
-					<td class="label">Result:</td>
-					
-				</tr>
-			</table>
+				</table>
 			<input name="logIn" type="submit" value="Log In!" />
 			<input type="submit" name="registerButton" value="Register Here!">
 		</form>
