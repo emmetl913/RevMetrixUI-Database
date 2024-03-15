@@ -7,6 +7,48 @@
 	<head>
 		<title>Index page</title>
 		<style type="text/css">
+		body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 50px auto;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+        }
+
+        input {
+            width: 100%;
+            padding: 8px;
+            margin-bottom: 16px;
+            box-sizing: border-box;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+
+        button {
+            background-color: #4caf50;
+            color: #fff;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
 		.error {
 			color: red;
 		}
@@ -18,6 +60,49 @@
             display: inline-block;
             margin-right: 10px; /* Add some margin between forms */
         }
+
+		/* Style for the black sidebar */
+.sidebar {
+  height: 100%;
+  width: 250px;
+  position: fixed;
+  top: 0;
+  left: 0;
+  background-color: black;
+  padding-top: 20px;
+}
+
+/* Links in the sidebar */
+.sidebar a {
+  padding: 10px 20px;
+  text-decoration: none;
+  color: white;
+  display: block;
+}
+
+/* Change color of links on hover */
+.sidebar a:hover {
+  background-color: #333;
+}
+
+/* Style the main content */
+.main-content {
+  margin-left: 250px; /* Same width as the sidebar */
+  padding: 20px;
+}
+
+/* Responsive layout - when the screen is less than 600px wide, make the sidebar and the main content stack on top of each other */
+@media screen and (max-width: 600px) {
+  .sidebar {
+    width: 100%;
+    height: auto;
+    position: relative;
+  }
+  .sidebar a {float: left;}
+  div.content {margin-left: 0;}
+}
+		
+
 		</style>
 	</head>
 
@@ -25,31 +110,25 @@
 		<c:if test="${! empty errorMessage}">
 			<div class="error">${errorMessage}</div>
 		</c:if>
-
-
-		<form action="${pageContext.servletContext.contextPath}/addNumbers" method="get">
-    		<input type="submit" name="addNumbers" size="12" value="AddNumbers" />
-		</form>
-		<form action="${pageContext.servletContext.contextPath}/multiplyNumbers" method="get">
-    		<input type="submit" name="multiplyNumbers" size="12" value="MultiplyNumbers" />
-		</form> 
-		<form action="${pageContext.servletContext.contextPath}/guessingGame" method="get">
-    		<input type="submit" name="guessingGame" size="12" value="GuessingGame" />
-		</form>
-		<form action="${pageContext.servletContext.contextPath}/startBowling" method="get">
-    		<input type="submit" name="startBowling" size="12" value="StartBowling!" />
-		</form>
-		<form action="${pageContext.servletContext.contextPath}/establishmentReg" method="get">
-    		<input type="submit" name="establishmentReg" size="12" value="EstablishmentReg" />
-		</form>
-		<form action="${pageContext.servletContext.contextPath}/logIn" method="get">
-					<input type="submit" name="action" value="Log In Page!">
-		</form>
-		<form action="${pageContext.servletContext.contextPath}/ballArsenal" method="get">
-    		<input type="submit" name="BallArsenal" size="12" value="BallArsenal" />
-		</form>
-		<form action="${pageContext.servletContext.contextPath}/shot" method="get">
-    		<input type="submit" name="Shot" size="12" value="Shot" />
-		</form>
+		<div class="sidebar">
+			<a href="${pageContext.servletContext.contextPath}/index">
+				<img src="${pageContext.request.contextPath}/_view/BowlingBall.png"width="100" height="100">
+			  </a>
+			<a href="${pageContext.servletContext.contextPath}/startBowling">Start Bowling</a>
+			<a href="${pageContext.servletContext.contextPath}/establishmentReg">Establishment Registration</a>
+		  </div>
+		  
+		  <div class="container">
+			<h2>Account Page</h2>
+			<form action="${pageContext.servletContext.contextPath}/index" method="post">
+				<label>Username: XXBowler69420XX </label>
+	
+				<label>Email: XXBowler69420XX@ycp.edu </label>
+	
+				<label>Events up soon:</label>
+				<p>Event1 = 3/3/2025</p>
+				<p>Event2 = 3/3/2026</p>
+				<p>Event3 = 3/3/2027</p>
+		</div>
 	</body>
 </html>

@@ -5,7 +5,7 @@
 
 <html>
 	<head>
-		<title>Index page:lab02a_eculp</title>
+		<title>Index page</title>
 		<style type="text/css">
 		body {
             font-family: Arial, sans-serif;
@@ -116,6 +116,8 @@
 			  </a>
 			<a href="${pageContext.servletContext.contextPath}/startBowling">Start Bowling</a>
 			<a href="${pageContext.servletContext.contextPath}/establishmentReg">Establishment Registration</a>
+		    <a href="${pageContext.servletContext.contextPath}/logIn">Sign Out!</a>
+		    
 		  </div>
 		  
 		  <div class="container">
