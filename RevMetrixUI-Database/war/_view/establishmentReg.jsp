@@ -2,12 +2,14 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
 
-
 <html>
-	<head>
-		<title>Index page</title>
-		<style type="text/css">
-		body {
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Establishment Registration</title>
+    <style>
+
+        body {
             font-family: Arial, sans-serif;
             background-color: #f4f4f4;
             margin: 0;
@@ -49,20 +51,11 @@
         button:hover {
             background-color: #45a049;
         }
-		.error {
+        .error {
 			color: red;
 		}
-		
-		td.label {
-			text-align: right;
-		}
-		form {
-            display: inline-block;
-            margin-right: 10px; /* Add some margin between forms */
-        }
-
 		/* Style for the black sidebar */
-.sidebar {
+        .sidebar {
   height: 100%;
   width: 250px;
   position: fixed;
@@ -101,34 +94,36 @@
   .sidebar a {float: left;}
   div.content {margin-left: 0;}
 }
-		
 
-		</style>
-	</head>
 
-	<body>
-		<c:if test="${! empty errorMessage}">
-			<div class="error">${errorMessage}</div>
-		</c:if>
-		<div class="sidebar">
-			<a href="${pageContext.servletContext.contextPath}/index">
-				<img src="${pageContext.request.contextPath}/_view/BowlingBall.png"width="100" height="100">
-			  </a>
-			<a href="${pageContext.servletContext.contextPath}/startBowling">Start Bowling</a>
-			<a href="${pageContext.servletContext.contextPath}/establishmentReg">Establishment Registration</a>
-		  </div>
-		  
-		  <div class="container">
-			<h2>Account Page</h2>
-			<form action="${pageContext.servletContext.contextPath}/index" method="post">
-				<label>Username: XXBowler69420XX </label>
-	
-				<label>Email: XXBowler69420XX@ycp.edu </label>
-	
-				<label>Events up soon:</label>
-				<p>Event1 = 3/3/2025</p>
-				<p>Event2 = 3/3/2026</p>
-				<p>Event3 = 3/3/2027</p>
-		</div>
-	</body>
+    </style>
+</head>
+<body>
+    <c:if test="${! empty errorMessage}">
+        <div class="error">${errorMessage}</div>
+    </c:if>
+
+    <div class="sidebar">
+        <a href="${pageContext.servletContext.contextPath}/index">
+            <img src="${pageContext.request.contextPath}/_view/BowlingBall.png"width="100" height="100">
+          </a>
+        <a href="${pageContext.servletContext.contextPath}/startBowling">Start Bowling</a>
+        <a href="${pageContext.servletContext.contextPath}/establishmentReg">Establishment Registration</a>
+      </div>
+    
+    <div class="container">
+        <h2>Establishment Registration</h2>
+        <form action="${pageContext.servletContext.contextPath}/establishmentReg" method="post">
+            <label>Establishment Name:</label>
+            <input type="text" name="establishmentName" size="12" value="${game.establishmentName}">
+
+            <label for="email">Email:</label>
+            <input type="text" name="email" size="12" value="${game.email}">
+
+            <label for="address">Address:</label>
+            <input type="text" name="address" size="12" value="${game.address}">
+
+            <button type="submit">Register</button>
+    </div>
+</body>
 </html>
