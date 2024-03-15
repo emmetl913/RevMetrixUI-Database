@@ -14,6 +14,14 @@
   	<servlet-name>EstablishmentRegServlet</servlet-name>
   	<servlet-class>edu.ycp.cs320.lab02.servlet.EstablishmentRegServlet</servlet-class></servlet>
   <servlet>
+    <servlet-name>AccountServlet</servlet-name>
+    <servlet-class>edu.ycp.cs320.lab02.servlet.AccountServlet</servlet-class>
+  </servlet>
+  
+  <servlet>
+    <servlet-name>AccountSignUpServlet</servlet-name>
+    <servlet-class>edu.ycp.cs320.lab02.servlet.AccountSignUpServlet</servlet-class>
+  </servlet>
   	<servlet-name>StartBowlingServlet</servlet-name>
   	<servlet-class>edu.ycp.cs320.lab02.servlet.StartBowlingServlet</servlet-class></servlet><!-- AJAX servlets. -->
   
@@ -28,6 +36,12 @@
   	<servlet-name>EstablishmentRegServlet</servlet-name>
   	<url-pattern>/establishmentReg</url-pattern></servlet-mapping>
   <servlet-mapping>
+  	<servlet-name>AccountServlet</servlet-name>
+  	<url-pattern>/logIn</url-pattern></servlet-mapping>
+  	
+  	  <servlet-mapping>
+  	<servlet-name>AccountSignUpServlet</servlet-name>
+  	<url-pattern>/signUp</url-pattern></servlet-mapping>
   	<servlet-name>StartBowlingServlet</servlet-name>
   	<url-pattern>/startBowling</url-pattern></servlet-mapping>
 
