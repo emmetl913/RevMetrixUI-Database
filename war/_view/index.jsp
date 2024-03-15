@@ -5,7 +5,7 @@
 
 <html>
 	<head>
-		<title>Index page:lab02a_eculp</title>
+		<title>Index page</title>
 		<style type="text/css">
 		body {
             font-family: Arial, sans-serif;
