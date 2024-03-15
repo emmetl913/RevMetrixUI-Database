@@ -73,7 +73,6 @@
 			<div class="ball-box">
 				<div id="add-ball-form">
 					<input type="text" id="ball-name" placeholder="Ball Name">
-					<input type="text" id="ball-color" placeholder="Ball Color">
 					<button onclick="addBall()">Register Ball</button>
 				</div>
 				<div id="remove-ball-form">
@@ -82,16 +81,13 @@
 				</div>
 			</div>
 
-			<img class="bowling-ball-img" id="bowling-ball" src="" alt="Bowling Ball">
-
 			<script>
 				//Function to add the ball
 				function addBallToArsenal(){
 					var name = document.getElementById("ball-name").value;
-					var color = document.getElementById("ball-color").value;
 
 					//call Java method to add ball
-					addBall(name, color);
+					addBall(name);
 
 					//update the ball list
 					updateBallList();
@@ -121,18 +117,6 @@
 						listItem.textContent = ball.name = " - " + ball.color;
 						ballsList.appendChild(listItem);
 					});
-				}
-
-				function changeBallImage(){
-					var color = document.getElementById("ball-color").value;
-					var img = document.getElementById("ball-img");
-
-					//update image soource based on color input
-					img.src = "bowlingBall-" + color.toLowerCase() + ".jpg";
-
-					//show the bowling ball image below the register ball box
-					var bowlingBallImg = document.getElementById("bowling-ball");
-					bowlingBallImg.src = img.src;
 				}
 			</script>
 		</form>

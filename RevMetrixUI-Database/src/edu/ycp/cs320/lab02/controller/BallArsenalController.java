@@ -9,8 +9,8 @@ public class BallArsenalController {
 	}
 	
 	//adds a ball to the arsenal with the name and color
-	public void addBall(String name, String color) {
-		BallArsenal.Ball ball = arsenal.new Ball(name, color);
+	public void addBall(String name) {
+		BallArsenal.Ball ball = arsenal.new Ball(name);
 		arsenal.new Arsenal().addBall(ball);
 	}
 	

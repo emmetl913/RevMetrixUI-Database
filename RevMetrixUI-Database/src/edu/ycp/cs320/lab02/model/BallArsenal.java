@@ -6,11 +6,9 @@ public class BallArsenal {
 	//Represents individual bowling balls
 	public class Ball{
 		private String name;
-		private String color;
 		
-		public Ball(String name, String color) {
+		public Ball(String name) {
 			this.name = name;
-			this.color = color;
 		}
 		
 		public String getName() {
@@ -19,14 +17,6 @@ public class BallArsenal {
 		
 		public void setName(String name) {
 			this.name = name;
-		}
-		
-		public String getColor() {
-			return color;
-		}
-		
-		public void setColor(String color) {
-			this.color = color;
 		}
 	}
 	
