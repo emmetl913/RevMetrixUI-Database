@@ -80,7 +80,7 @@
 					<td><input type="password" name="password" size="12" value="" autocomplete="off" /></td>
 				</tr>
 				</table>
-			<input name="logIn" type="submit" value="Log In!" />
+			<input name="logIn" type="submit" value="Log In!">
 			<input type="submit" name="registerButton" value="Register Here!">
 		</form>
 		</div>
