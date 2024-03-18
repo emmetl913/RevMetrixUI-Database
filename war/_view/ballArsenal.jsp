@@ -14,7 +14,12 @@
 				font-family: Arial, Helvetica, sans-serif;
 			}
 
-			
+			header {
+    text-align: center;
+    position: absolute;
+    top: 10px; /* Adjust the top position as needed */
+    width: 100%; /* Ensure the header spans the full width */
+}
 			h1{
 				font-size: 50px;
 				color: black;
@@ -33,29 +38,20 @@
 		
 			}
 
-			header {
-    text-align: center;
-    position: fixed; /* Change to fixed positioning */
-    top: 0; /* Place the header at the top of the viewport */
-    width: 100%; /* Ensure the header spans the full width */
-    background-color: white; /* Ensure the header remains visible */
-    z-index: 1000; /* Ensure the header appears above other elements */
-}
-
-.ball-box {
+			.ball-box {
     width: 500px;
     align-items: center;
     text-align: center;
-    position: relative; /* Change to relative positioning */
-    top: 100px; /* Add some top margin to create space for the header */
+    position: absolute;
+    top: 50%;
     left: 50%;
-    transform: translateX(-50%);
+    transform: translate(-50%, -50%);
     padding: 10px;
     border: 1px solid #ccc;
     border-radius: 5px;
+    margin-bottom: 10px;
     background-color: white;
     box-shadow: 2px;
-    z-index: 1; /* Ensure the ball box appears below the header */
 }
 
 			.bowling-ball-img{
