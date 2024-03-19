@@ -13,7 +13,7 @@ public class BallArsenal {
 			
 			Ball b1 = new Ball("Kevin's ball");
 			Ball b2 = new Ball("12PoundMagentaMary");
-			Ball b3 = new Ball("Tenpin Smasher 420");
+			Ball b3 = new Ball("Tenpin Smasher");
 			balls.add(b1);
 			balls.add(b2);
 			balls.add(b3);
