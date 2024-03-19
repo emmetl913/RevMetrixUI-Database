@@ -18,7 +18,6 @@ import edu.ycp.cs320.lab02.model.BallArsenal;
 
 public class BallArsenalServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-	String ballArsenalKey = new String("ballArsenalKey");
 
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp)
@@ -26,7 +25,7 @@ public class BallArsenalServlet extends HttpServlet {
 
 		System.out.println("BallArsenal Servlet: doGet");	
 		
-		BallArsenal model = new BallArsenal();
+		//BallArsenalController controller = new BallArsenalController();
 		// Get session creation time.
 		HttpSession session = req.getSession();
 	    long createTime = session.getCreationTime();
@@ -37,15 +36,27 @@ public class BallArsenalServlet extends HttpServlet {
 		String userID = new String("ABCD");
 
 		   // Check if this is new comer on your Webpage.
+		String ballArsenalKey = new String("ballArsenalKey");
+		BallArsenal model = new BallArsenal();
+
+		// If first visit: new session id
 		if (session.isNew() ){
 	      session.setAttribute(userIDKey, userID);
 		  session.setAttribute(ballArsenalKey,  model);
 		} 
-		model = (BallArsenal)session.getAttribute(ballArsenalKey);
+		//Get model and userID from jsp
 		userID = (String)session.getAttribute(userIDKey);
 
 		//controller.setModel(model);
-        ArrayList<Ball> balls = model.getBalls();
+		
+		ArrayList<Ball> balls = model.getBalls();
+        if(model.getBalls() == null) {
+			balls = new ArrayList<Ball>();
+			balls.add(new Ball("FirstBall"));
+		}
+        else {
+        	balls = model.getBalls();
+        }
         
 		// Set the ArrayList as a request attribute
 		req.setAttribute("balls", balls);
@@ -75,6 +86,8 @@ public class BallArsenalServlet extends HttpServlet {
 				long lastAccessTime = session.getLastAccessedTime();
 				String userIDKey = new String("userID");
 				String userID = new String("ABCD");
+
+				String ballArsenalKey = new String("ballArsenalKey");
 
 				   // Check if this is new comer on your Webpage.
 				if (session.isNew() ){

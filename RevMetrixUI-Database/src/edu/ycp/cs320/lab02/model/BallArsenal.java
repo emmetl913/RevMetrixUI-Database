@@ -11,9 +11,9 @@ public class BallArsenal {
 		public BallArsenal() {
 			balls = new ArrayList<>();
 			
-			Ball b1 = new Ball("ball1");
-			Ball b2 = new Ball("ball2");
-			Ball b3 = new Ball("ball3");
+			Ball b1 = new Ball("Kevin's ball");
+			Ball b2 = new Ball("12PoundMagentaMary");
+			Ball b3 = new Ball("Tenpin Smasher 420");
 			balls.add(b1);
 			balls.add(b2);
 			balls.add(b3);
