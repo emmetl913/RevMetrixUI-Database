@@ -22,14 +22,14 @@
             position: fixed;
             top: 0;
             left: 0;
-            background-color: #111;
+            background-color: #000;
             padding-top: 20px;
         }
 
         .sidebar a {
-            padding: 10px 15px;
+            padding: 10px 20px;
             text-decoration: none;
-            font-size: 18px;
+            /*font-size: 18px;*/
             color: white;
             display: block;
         }
@@ -89,134 +89,6 @@
         .content div.active {
         	display: block;
         }
-        .container{
-            text-align: center;
-            align-items: center;
-            margin-top: 50px;
-        }
-
-        .row{
-            display: flex;
-            justify-content: center;
-        }
-
-        .circle{
-            width: 45px;
-            height: 45px;
-            border-radius: 50%;
-            border: 1px solid black;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            margin: 5px;
-            cursor: pointer;
-            font-weight: 900;
-        }
-
-        .circle.selected{
-            background-color: black;
-            color: white;
-        }
-
-        .shot-buttons{
-            margin-top: 20px;
-        }
-
-        .shot-button{
-            margin: 5px;
-            padding: 10px 20px;
-            font-size: 16px;
-            cursor: pointer;
-            font-weight: 900;
-        }
-
-        #game-info{
-            display: inline-block;
-            justify-content: center;
-            align-items: center;
-            margin-bottom: 20px;
-            margin-top: 10px;
-            margin-right: 15px;
-            font-size: 24px;
-            font-weight: 900;
-        }
-
-        .frame-buttons{
-            margin-top: 5px;
-        }
-
-        .frame-buttons button{
-            margin: 25px;
-        }
-
-        .game-number{
-            margin-right: 30px;
-            border: 1px solid black;
-            padding: 5px;
-            padding-left: 25px;
-            padding-right: 25px;
-        }
-
-        .frame-number{
-            border: 1px solid black;
-            padding: 5px;
-            padding-left: 25px;
-            padding-right: 25px;
-        }
-
-        .color-box{
-            width: 40px;
-            height: 40px;
-            background-color: gray;
-            border: 2px solid black;
-            cursor: pointer;
-            margin: 20px;
-        }
-
-        .selected{
-            background-color: orange;
-        }
-
-        		/* Style for the black sidebar */
-	.sidebar {
-	height: 100%;
-	width: 250px;
-	position: fixed;
-	top: 0;
-	left: 0;
-	background-color: black;
-	padding-top: 20px;
-	}
-
-	/* Links in the sidebar */
-	.sidebar a {
-	padding: 10px 20px;
-	text-decoration: none;
-	color: white;
-	display: block;
-	}
-
-	/* Change color of links on hover */
-	.sidebar a:hover {
-	background-color: #333;
-	}
-
-	/* Style the main content */
-	.main-content {
-	margin-left: 250px; /* Same width as the sidebar */
-	padding: 20px;
-	}
-
-	/* Responsive layout - when the screen is less than 600px wide, make the sidebar and the main content stack on top of each other */
-	@media screen and (max-width: 600px) {
-	.sidebar {
-		width: 100%;
-		height: auto;
-		position: relative;
-	}
-	.sidebar a {float: left;}
-	div.content {margin-left: 0;}
-	}
     </style>
 </head>
 <body>
@@ -227,6 +99,14 @@
 	<input type="hidden" name="step" id="step" value="1">
 	<!-- Side bar, duh -->
 	<div class="sidebar">
+		 <a href="${pageContext.servletContext.contextPath}/index">
+			<img src="${pageContext.request.contextPath}/_view/BowlingBall.png"width="100" height="100">
+		  </a>
+	      <a href="${pageContext.servletContext.contextPath}/establishmentReg">Establishment Registration</a>
+		  <a href="${pageContext.servletContext.contextPath}/logIn">Sign Out</a>
+          <a href="${pageContext.servletContext.contextPath}/shot">Shot</a>
+          <a href="${pageContext.servletContext.contextPath}/ballArsenal">Ball Arsenal</a>
+          <a href="https://github.com/emmetl913/RevMetrixUI-Database">GitHub</a>
 		 <a class="dropbtn" href="#" onclick="toggleDropdown(), nextStep(1)">Start Bowling!</a>
 		 <div class="dropdown-content" id="myDropdown">
 	        <a href="#" onclick="showContent('event')">Event</a>
@@ -235,14 +115,6 @@
 			<a href="#" onclick="showContent('frame')">Frame</a>
 	        <a href="#" onclick="showContent('shot')">Shot</a>
 	   	 </div>
-		 <a href="${pageContext.servletContext.contextPath}/index">
-				<img src="${pageContext.request.contextPath}/_view/BowlingBall.png"width="100" height="100">
-			  </a>
-			<a href="${pageContext.servletContext.contextPath}/establishmentReg">Establishment Registration</a>
-			<a href="${pageContext.servletContext.contextPath}/logIn">Sign Out</a>
-		<a href="${pageContext.servletContext.contextPath}/shot">Shot</a>
-		<a href="${pageContext.servletContext.contextPath}/ballArsenal">Ball Arsenal</a>
-		<a href="https://github.com/emmetl913/RevMetrixUI-Database">GitHub</a>
 	</div>
 	<div class="content">
 		<!-- Home Page -->

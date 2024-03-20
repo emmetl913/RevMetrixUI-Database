@@ -1,8 +1,8 @@
 package edu.ycp.cs320.lab02.model;
 
 public class Bowling {
-	private int dataState, frame, game;
-	private String estab, session;
+	private int dataState, frame;
+	private String estab, session, game;
 	
 	public Bowling()
 	{
@@ -28,9 +28,9 @@ public class Bowling {
 	// Getter and Setter for Game
 	public void setGame(String game)
 	{
-		this.game = Integer.parseInt(game);
+		this.game = game;
 	}
-	public int getGame()
+	public String getGame()
 	{
 		return this.game;
 	}
