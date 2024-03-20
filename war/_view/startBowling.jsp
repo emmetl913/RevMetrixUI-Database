@@ -89,6 +89,162 @@
         .content div.active {
         	display: block;
         }
+        /* Styling for the shot level */
+        .shotHeader{
+        	margin-right: 20px;
+        	display: flex;
+        	align-items: center;
+        	justify-content: center;
+        	position: relative;
+        	font-size: 28px;
+        	font-weight: bold;
+        }
+        .shotHeader label{
+        	margin-right: 10px;
+        	text-align: center;
+        }
+        .shotHeader input {
+        	border: 2px #000000;
+        	text-align: center;
+        	font-weight: bold;
+        }
+        .row {
+        	diplay: flex;
+        	justify-content: center;
+        }
+        .pin {
+            width: 30px;
+            height: 30px;
+            border: 2px #000000;
+            border-radius: 50%;
+            margin: 5px;
+            display: flex;
+            align-items: center;
+            margin-top: 50px;
+        }
+
+        .row{
+            display: flex;
+            justify-content: center;
+        }
+
+        .circle{
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            border: 1px solid black;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 5px;
+            cursor: pointer;
+            font-weight: 900;
+        }
+
+        .circle.selected{
+            background-color: black;
+            color: white;
+        }
+
+        .shot-buttons{
+            margin-top: 20px;
+        }
+
+        .shot-button{
+            margin: 5px;
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            font-weight: 900;
+        }
+
+        #game-info{
+            display: inline-block;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 20px;
+            margin-top: 10px;
+            margin-right: 15px;
+            font-size: 24px;
+            font-weight: 900;
+        }
+
+        .frame-buttons{
+            margin-top: 5px;
+        }
+
+        .frame-buttons button{
+            margin: 25px;
+        }
+
+        .game-number{
+            margin-right: 30px;
+            border: 1px solid black;
+            padding: 5px;
+            padding-left: 25px;
+            padding-right: 25px;
+        }
+
+        .frame-number{
+            border: 1px solid black;
+            padding: 5px;
+            padding-left: 25px;
+            padding-right: 25px;
+        }
+
+        .color-box{
+            width: 40px;
+            height: 40px;
+            background-color: gray;
+            border: 2px solid black;
+            cursor: pointer;
+            margin: 20px;
+        }
+
+        .selected{
+            background-color: orange;
+        }
+
+        		/* Style for the black sidebar */
+	.sidebar {
+	height: 100%;
+	width: 250px;
+	position: fixed;
+	top: 0;
+	left: 0;
+	background-color: black;
+	padding-top: 20px;
+	}
+
+	/* Links in the sidebar */
+	.sidebar a {
+	padding: 10px 20px;
+	text-decoration: none;
+	color: white;
+	display: block;
+	}
+
+	/* Change color of links on hover */
+	.sidebar a:hover {
+	background-color: #333;
+	}
+
+	/* Style the main content */
+	.main-content {
+	margin-left: 250px; /* Same width as the sidebar */
+	padding: 20px;
+	}
+
+	/* Responsive layout - when the screen is less than 600px wide, make the sidebar and the main content stack on top of each other */
+	@media screen and (max-width: 600px) {
+	.sidebar {
+		width: 100%;
+		height: auto;
+		position: relative;
+	}
+	.sidebar a {float: left;}
+	div.content {margin-left: 0;}
+	}
     </style>
 </head>
 <body>
@@ -154,16 +310,35 @@
 		</div>
 		<!-- Frame Page -->
 		<div id="step5">
-			<h1>Nothing to Frame here yet!</h1>
-			<p>Nothing to Frame here yet!</p>
+			<h1>Nothing to frame here yet!</h1>
+			<p>Nothing to frame here yet!</p>
+			<p>i forgot how frames work so i didn't do anything yet :3</p>
 			<input type="Submit" name="nextFrame" id="frameStatus" value="Continue" onclick="nextStep(5)">
 		</div>
 		<!-- Shot Input Level -->
-		<div id="step6">
-			<a href="${pageContext.servletContext.contextPath}/shot">Shot</a>
+		<div id="step6" style=display:flex;flex-direction:column;align-items:center;>
+			<div class="row">
+				<div class="pin"><span>7</span></div>
+				<div class="pin"><span>8</span></div>
+				<div class="pin"><span>9</span></div>
+				<div class="pin"><span>10</span></div>
+			</div>
+			<div class="row">
+				<div class="pin"><span>4</span></div>
+				<div class="pin"><span>5</span></div>
+				<div class="pin"><span>6</span></div>
+			</div>
+			<div class="row">
+				<div class="pin"><span>2</span></div>
+				<div class="pin"><span>3</span></div>
+			</div>
+			<div class="row">
+				<div class="pin"><span>1</span></div>
+			</div>
 		</div>
 	</div>
-
+	
+	
 	<script>
 		var currentStep = 1;
 		// Display current step
