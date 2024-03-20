@@ -2,30 +2,25 @@ package edu.ycp.cs320.lab02.model;
 import java.util.ArrayList;
 
 
+
 public class BallArsenal {
-	//Represents individual bowling balls
-	public class Ball{
-		private String name;
-		
-		public Ball(String name) {
-			this.name = name;
-		}
-		
-		public String getName() {
-			return name;
-		}
-		
-		public void setName(String name) {
-			this.name = name;
-		}
-	}
-	
+
 	//Manages a collection of bowling balls
-	public class Arsenal{
 		private ArrayList<Ball> balls;
 		
-		public Arsenal() {
+		public BallArsenal() {
 			balls = new ArrayList<>();
+			
+			Ball b1 = new Ball("Kevin's ball");
+			Ball b2 = new Ball("12PoundMagentaMary");
+			Ball b3 = new Ball("Tenpin Smasher");
+			balls.add(b1);
+			balls.add(b2);
+			balls.add(b3);
+
+		}
+		public Ball getBallFirst() {
+			return balls.get(0);
 		}
 		
 		public void addBall(Ball ball) {
@@ -35,9 +30,14 @@ public class BallArsenal {
 		public void removeBall(Ball ball) {
 			balls.remove(ball);
 		}
-		
+		public Ball getBallAtIndex(int index) {
+			return balls.get(index);
+		}
 		public ArrayList<Ball> getBalls(){
 			return balls;
 		}
-	}
+		public int getNumberOfBalls() {
+			return balls.size();
+		}
+	
 }
