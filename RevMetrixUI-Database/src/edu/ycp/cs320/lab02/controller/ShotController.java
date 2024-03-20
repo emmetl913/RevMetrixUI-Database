@@ -9,7 +9,5 @@ public class ShotController {
 		shot = new Shot(0);
 	}
 	
-	public void processShotInput() {
-		
-	}
+	
 }
