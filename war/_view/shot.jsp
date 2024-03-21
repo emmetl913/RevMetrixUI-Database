@@ -183,7 +183,7 @@
 
                 <!-- Score Boxes -->
                 <div class="row">
-                    <div class="color-box" id="score-box1" onclick="highlightScoreBox(1)"></div>
+                    <div class="color-box selected" id="score-box1" onclick="highlightScoreBox(1)"></div>
                     <div class="color-box" id="score-box2" onclick="highlightScoreBox(2)"></div>
                 </div>
 
@@ -247,21 +247,15 @@
                     });
                 }
 
-                function toggleColer(){
-                    var box = document.querySelector('.color-box');
-                    box.classList.toggle('selected');
-                }
-
+                //highlights the first box when page first booted up
+                //switches color when the other box is clicked
                 function highlightScoreBox(boxNumber){
-                    //reset all score boxes
-                    var scoreBoxes = document.querySelectorAll('.color-box');
-                    scoreBoxes.forEach(function(box){
-                        box.classList.remove('selected');
-                    });
 
-                    //highlight the clicked score box
-                    var selectedBox = document.getElementById('score-box' + boxNumber);
-                    selectedBox.classList.add('selected');
+                    var currentBox = document.getElementById('score-box' + boxNumber);
+                    var otherBox = boxNumber === 1 ? document.getElementById('score-box2') : document.getElementById('score-box1');
+
+                    currentBox.classList.add('selected');
+                    otherBox.classList.remove('selected');
                 }
 
                 function updateScoreBoxes(){
