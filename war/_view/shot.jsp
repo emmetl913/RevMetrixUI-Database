@@ -84,10 +84,18 @@
         .color-box{
             width: 40px;
             height: 40px;
-            background-color: gray;
+            background-color: rgb(187, 185, 185);
             border: 2px solid black;
             cursor: pointer;
             margin: 20px;
+
+            display: flex;
+            justify-content: center;
+            align-items: center;
+
+            text-align: center;
+            font-size: 16px;
+            font-weight: 900;
         }
 
         .selected{
@@ -183,8 +191,8 @@
 
                 <!-- Score Boxes -->
                 <div class="row">
-                    <div class="color-box selected" id="score-box1" onclick="highlightScoreBox(1)"></div>
-                    <div class="color-box" id="score-box2" onclick="highlightScoreBox(2)"></div>
+                    <div class="color-box selected" id="score-box1" onclick="highlightScoreBox(1); updateScoreBoxes()"></div>
+                    <div class="color-box" id="score-box2" onclick="highlightScoreBox(2); updateScoreBoxes()"></div>
                 </div>
 
                 <div class="shot-buttons">
@@ -198,12 +206,21 @@
                     <button onclick="previousFrame()">Previous Frame</button>
                     <button onclick="nextFrame()">Next Frame</button>
                 </div>
+
+                <!-- dropdown menu -->
+                <div class="dropdown">
+                    <select id="dropdownMenu" name="dropdownOption">
+                        <option value="" disabled selected>Select an Option</option>
+
+                    </select>
+                </div>
             </div>
 
             <script>
                 var selectedPins = [];
                 var gameNumber = 1;
                 var frameNumber = 1;
+                var score = 0;
 
                 function togglePin(pinNumber){
                     var pin = document.getElementById("pin" + pinNumber);
@@ -212,10 +229,13 @@
                     if(selectedPins.includes(pinNumber)){
                         //remove pines from selectedPins array
                         selectedPins.splice(selectedPins.indexOf(pinNumber), 1);
+                        score--;
                     }else{
                         //add pin to the array
                         selectedPins.push(pinNumber);
+                        score++;
                     }
+                    updateScoreBoxes();
                 }
 
                 function nextFrame(){
@@ -249,6 +269,7 @@
 
                 //highlights the first box when page first booted up
                 //switches color when the other box is clicked
+
                 function highlightScoreBox(boxNumber){
 
                     var currentBox = document.getElementById('score-box' + boxNumber);
@@ -260,13 +281,15 @@
 
                 function updateScoreBoxes(){
                     //calculates the score based on selected pins
-                    var pinsRemaining = 10 - selectedPins.length;
+                    var highlightedBox = document.querySelector('.color-box.selected');
 
                     //update the content of each score box
-                    var scoreBoxes = document.querySelectorAll('.color-box');
-                    scoreBoxes.forEach(function(box){
-                        box.textContent = pinsRemaining;
-                    });
+                    if(highlightedBox){ 
+                        highlightedBox.textContent = score;
+                    }
+                    // scoreBoxes.forEach(function(box){
+                    //     box.textContent = pinsRemaining;
+                    // });
                 }
             </script>
 		</form>
