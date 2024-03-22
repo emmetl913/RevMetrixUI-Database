@@ -1,8 +1,6 @@
 <!DOCTYPE html>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
-<%@ page import= "edu.ycp.cs320.lab02.model.Game" %>
-<%@ page import = "java.io.*,java.util.*" %>
 
 <html>
 <head>
@@ -247,31 +245,6 @@
 	.sidebar a {float: left;}
 	div.content {margin-left: 0;}
 	}
-	.game-section {
-        border: 1px solid black; /* Add border around each ball section */
-        margin-bottom: 10px; /* Add some space between ball sections */
-        padding: 10px; /* Add padding inside each ball section */
-    }
-	.game-box {
-        width: 800px;
-        align-items: center;
-        text-align: center;
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-        padding: 10px;
-        border: 1px solid #ccc;
-        border-radius: 5px;
-        margin-bottom: 10px;
-        background-color: white;
-        box-shadow: 2px;
-        /* Set fixed height for the container */
-        height: 330px;
-        /* Add scrollbar when content overflows */
-        overflow: auto;            
-    }
-
     </style>
 </head>
 <body>
@@ -326,26 +299,14 @@
 			</tr>
 		</div>
 		<!-- Game Page -->
-		<div id="step4" class="game-box">
-			<h1>Its Game Time Baby!</h1>
-			 <% 
-     		// Retrieve ArrayList from request attribute
-     		ArrayList<Game> games = (ArrayList<Game>)session.getAttribute("gameArrayListKey");
-				if (games != null) {
-				for (Game game : games) { //Now we have grabbed the most recent version of 
-			%>		<div class="game-section">
-    				<p>Game: <%= game.getLane() %></p>
-    				</div>
-    			
-			<% }
-			}%>
-			
+		<div id="step4">
+			<h1>Nothing to game here yet!</h1>
+			<p>Nothing to game here yet!</p>
 			<tr>
 				<td><input type="Submit" id="gameStatus" name="continue" value="Continue from last game" onclick="nextStep(4)"></td>
 				<td><input type="Submit" id="gameStatus" name="select" value="Select a Game" onclick="nextStep(4)"></td>
 				<td><input type="Submit" id="gameStatus" name="new" value="Start a New Game" onclick="nextStep(4)"></td>
 			</tr>
-	
 		</div>
 		<!-- Frame Page -->
 		<div id="step5">

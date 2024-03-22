@@ -6,7 +6,6 @@ public class Game {
 	private int score;
 	private int frameCount;
 	
-	
 	public Game(int newLane) {
 		this.lane = newLane;
 		//set game number by referencing session
