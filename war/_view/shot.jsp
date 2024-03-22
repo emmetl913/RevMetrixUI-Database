@@ -1,6 +1,10 @@
 <!DOCTYPE html>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ page import="edu.ycp.cs320.lab02.model.BallArsenal" %>
+<%@ page import="edu.ycp.cs320.lab02.model.Ball" %>
+<%@ page import="java.util.ArrayList" %>
 
 <html>
 	<head>
@@ -195,11 +199,11 @@
                     <div class="color-box" id="score-box2" onclick="highlightScoreBox(2); updateScoreBoxes()"></div>
                 </div>
 
-                <div class="shot-buttons">
-                    <button class="shot-button" onclick="selectShotType('F')">F</button>
-                    <button class="shot-button" onclick="selectShotType('-')">-</button>
-                    <button class="shot-button" onclick="selectShotType('X')">X</button>
-                    <button class="shot-button" onclick="selectShotType('/')">/</button>
+                <div class="shot-buttons" onclick="handleButtonClick(event)">
+                    <button class="shot-button" data-score="foul">F</button>
+                    <button class="shot-button" data-score="no-pins">-</button>
+                    <button class="shot-button" data-score="strike">X</button>
+                    <button class="shot-button" data-score="spare">/</button>
                 </div>
 
                 <div class="frame-buttons">
@@ -211,7 +215,17 @@
                 <div class="dropdown">
                     <select id="dropdownMenu" name="dropdownOption">
                         <option value="" disabled selected>Select an Option</option>
+                        <% 
+                            BallArsenal ballArsenal = (BallArsenal) request.getAttribute("ballArsenal");
 
+                            if(ballArsenal != null){
+                                for(Ball ball : ballArsenal.getBalls()){
+                                    %>
+                                    <option value="<%= ball.getName() %>"><%= ball.getName() %></option>
+                                    <%
+                                }
+                            }
+                        %>
                     </select>
                 </div>
             </div>
@@ -219,8 +233,26 @@
             <script>
                 var selectedPins = [];
                 var gameNumber = 1;
-                var frameNumber = 1;
+                var frames = [];
+                var currentFrameIndex = 0;
+                var currentFrame = [];
                 var score = 0;
+
+                function initializeFrame(){
+                    for(let i = 0; i<10; i++){
+                        frames.push([]);
+                    }
+                }
+
+                function handleButtonClick(event){
+                    var target = event.target;
+                    if(target.classList.contains('shot-button')){
+                        var scoreType = target.getAttribute('data-score');
+                        updateScoreAndDisplay(scoreType);
+                        event.preventDefault();
+                    }
+                }
+
 
                 function togglePin(pinNumber){
                     var pin = document.getElementById("pin" + pinNumber);
@@ -270,27 +302,84 @@
                 //highlights the first box when page first booted up
                 //switches color when the other box is clicked
 
-                function highlightScoreBox(boxNumber){
-
-                    var currentBox = document.getElementById('score-box' + boxNumber);
-                    var otherBox = boxNumber === 1 ? document.getElementById('score-box2') : document.getElementById('score-box1');
+                function highlightScoreBox(frameNumber){
+                    var currentBox = document.getElementById('score-box' + frameNumber);
+                    var otherBox = frameNumber === 1 ? document.getElementById('score-box2') : document.getElementById('score-box1');
 
                     currentBox.classList.add('selected');
                     otherBox.classList.remove('selected');
+
+                    currentFrameIndex = frameNumber - 1;
+                    currentFrame = frames[currentFrameIndex];
+
+                    updateScoreBoxes();
                 }
 
                 function updateScoreBoxes(){
                     //calculates the score based on selected pins
                     var highlightedBox = document.querySelector('.color-box.selected');
+                    //var score = calculateTotalScore();
 
                     //update the content of each score box
                     if(highlightedBox){ 
+                        //score = calculateTotalScore();
                         highlightedBox.textContent = score;
                     }
-                    // scoreBoxes.forEach(function(box){
-                    //     box.textContent = pinsRemaining;
-                    // });
                 }
+
+                function calculateTotalScore(){
+                    var totalScore = 0;
+                    
+                    for(let i = 0; i < frames.length; i++){
+                        var frame = frames[i];
+
+                        if(frame.length === 0) continue;    //frame not played
+
+                        var frameScore = frame.reduce((a,b) => a+b, 0);
+                        totalScore += frameScore;
+                    }
+                    return totalScore;
+                }
+
+                function updateScoreAndDisplay(scoreType){
+                    updateScore(scoreType); //updates score based on type
+                    updateScoreBoxes(); //updates via pins
+                }
+
+                // function isSpareFrame(frame){
+                //     return frame.length === 2 && frame[0] + frame[1] === 10;
+                // }
+
+                function updateScore(scoreType, event){
+                    event.preventDefault();
+
+                    var currentFrame = frames[currentFrameIndex];
+
+                    //update score based on score type
+                    switch(scoreType){
+                        case 'foul' : 
+                            currentFrame.push('F');
+                            break;
+                        case 'no-pins' : 
+                            currentFrame.push('-');
+                            break;
+                        case "strike" : 
+                            currentFrame.push('X');
+                            break;
+                        case 'spare' : 
+                            // if(currentFrame.length === 1){
+                            //     currentFrame.push(10 - currentFrame[0]);
+                            // }else{
+                            //     currentFrame.push(10);
+                            // }
+                            currentFrame.push('/');
+                            break;
+                        default : 
+                            break;
+                    }
+                }
+
+                initializeFrame();
             </script>
 		</form>
 	</body>
