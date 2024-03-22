@@ -397,7 +397,8 @@
 				  for (int i =0; i < games.size(); i++) {
 					  Game game = games.get(i);
 		   %>
-			<option><%= game.getGameNumber() %>| Lane: <%=game.getLane()%> | # of Frames: <%=game.getFrameCount()%> | Score: <%=game.getScore()%></option>
+			<option><%= game.getGameNumber() %> &nbsp&nbsp&nbsp|&nbsp&nbsp&nbsp Lane: <%=game.getLane()%> &nbsp&nbsp&nbsp|&nbsp&nbsp&nbsp # of Frames: <%=game.getFrameCount()%>
+			&nbsp&nbsp&nbsp|&nbsp&nbsp&nbsp Score: <%=game.getScore()%></option>
 		   <% 
 				 } } else {	%>
 					 <option value="${game.establishment}">No Establishments</option>
@@ -405,8 +406,9 @@
 			</select>
 			<p></p>
 			<tr>
-				<button type="submit" id="gameStatus" name="select"  onclick="nextStep(4)" value="selectCurrentGame"> Select Current Game
-			  	<button type="submit" id="gameStatus" name="new" onclick="nextStep(4)" value="startNewGame"> Start New Game
+				<button type="submit" id="gameStatus" name="select"  onclick="nextStep(4)" value="selectCurrentGame"> Select Current Game</button>
+				&nbsp
+			  	<button type="submit" id="gameStatus" name="new" onclick="nextStep(4)" value="startNewGame"> Start New Game</button>
 			</tr> 
 		</div>
 		<!-- Frame Page -->
