@@ -34,10 +34,6 @@
 				margin-bottom: 10px;
 			}
 
-			#add-ball-form input, #remove-ball-form input{
-		
-			}
-
 	.ball-box {
             width: 800px;
             align-items: center;
@@ -158,7 +154,7 @@
 			<div class="ball-box" id="ballBoxDiv">
 				<div id="add-ball-form">
 					<input type="text" name="ballName" placeholder="Ball Name">
-					<button text="Add Ball" name="addBall" type="submit" value="Register Ball" onclick ="updateBallList(${game.balls})">
+					<button text="Add Ball" name="addBall" type="submit" value="Register Ball">
 					Add Ball</button>
 					
 							
@@ -166,7 +162,7 @@
 				</div>
 				<div id="remove-ball-form">
 					<input type="text" name="removeBallName" placeholder="Ball Name to Remove">
-					<button name="removeBall" type="submit" value="Remove Ball" onclick="updateBallList(${game.balls})">
+					<button name="removeBall" type="submit" value="Remove Ball">
 					Remove Ball</button>
 				</div>
 				<div id="ballsList"> &nbsp		
@@ -182,7 +178,7 @@
    				}
    				else {
    					
-   					
+   				
    					
    				}
        				for (Ball ball : balls) {
