@@ -34,25 +34,46 @@
 				margin-bottom: 10px;
 			}
 
-			#add-ball-form input, #remove-ball-form input{
-		
-			}
-
-			.ball-box {
-    width: 500px;
-    align-items: center;
-    text-align: center;
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    padding: 10px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    margin-bottom: 10px;
-    background-color: white;
-    box-shadow: 2px;
-}
+	.ball-box {
+            width: 800px;
+            align-items: center;
+            text-align: center;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            margin-bottom: 10px;
+            background-color: white;
+            box-shadow: 2px;
+            /* Set fixed height for the container */
+            height: 330px;
+            /* Add scrollbar when content overflows */
+            overflow: auto;            
+        }
+        .ball-box2 {
+            width: 800px;
+            align-items: center;
+            text-align: center;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            margin-bottom: 10px;
+            background-color: white;
+            box-shadow: 2px;
+            /* Set fixed height for the container */
+            height: 350px;
+            /* Add scrollbar when content overflows */
+            overflow: auto;
+			background-color: green;
+            
+        }
 
 			.bowling-ball-img{
 				width: 150px;	/*Adjust the size of the image*/
@@ -130,10 +151,10 @@
 		<form action="${pageContext.servletContext.contextPath}/ballArsenal" method="post">
 			<header><h1>Bowling Ball Arsenal</h1></header>	
 
-			<div class="ball-box">
+			<div class="ball-box" id="ballBoxDiv">
 				<div id="add-ball-form">
 					<input type="text" name="ballName" placeholder="Ball Name">
-					<button text="Add Ball" name="addBall" type="submit" value="Register Ball" onclick ="updateBallList(${game.balls})">
+					<button text="Add Ball" name="addBall" type="submit" value="Register Ball">
 					Add Ball</button>
 					
 							
@@ -141,14 +162,25 @@
 				</div>
 				<div id="remove-ball-form">
 					<input type="text" name="removeBallName" placeholder="Ball Name to Remove">
-					<button name="removeBall" type="submit" value="Remove Ball" onclick="updateBallList(${game.balls})">
+					<button name="removeBall" type="submit" value="Remove Ball">
 					Remove Ball</button>
 				</div>
-				<div id="ballsList"> &nbsp				
+				<div id="ballsList"> &nbsp		
+				
+			
 				 <% 
             		// Retrieve ArrayList from request attribute
             		ArrayList<Ball> balls = (ArrayList<Ball>) request.getAttribute("balls");
    					if (balls != null) {
+   					if(balls.size() >= 4){
+   					
+   					
+   				}
+   				else {
+   					
+   				
+   					
+   				}
        				for (Ball ball : balls) {
 				%>
         			<div class="ball-section">

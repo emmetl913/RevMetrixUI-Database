@@ -1,6 +1,13 @@
 <!DOCTYPE html>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
+<%@ page import= "edu.ycp.cs320.lab02.model.Event" %>
+<%@ page import="edu.ycp.cs320.lab02.model.EventArray" %>
+
+<%@ page import= "edu.ycp.cs320.lab02.model.Establishment" %>
+<%@ page import="edu.ycp.cs320.lab02.model.EstablishmentArray" %>
+
+<%@ page import = "java.io.*,java.util.*"%>
 
 
 <html>
@@ -9,7 +16,16 @@
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@500&display=swap" rel="stylesheet">
 
 <head>
+<<<<<<< HEAD
+=======
+
+<script 
+	src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"
+	type="text/javascript">
+</script>
+>>>>>>> refs/remotes/origin/main
     <style>
+<<<<<<< HEAD
     #datetime {
         display: none;
     }
@@ -43,6 +59,45 @@
 	  font-size: 1.75em;
 	}
 	
+=======
+
+.container {
+            max-width: 600px;
+            margin: 50px auto;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+        }
+
+        input {
+            width: 100%;
+            padding: 8px;
+            margin-bottom: 16px;
+            box-sizing: border-box;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+
+        button {
+            background-color: #4caf50;
+            color: #fff;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+
+>>>>>>> refs/remotes/origin/main
         .sidebar {
             height: 100%;
             width: 250px;
@@ -116,6 +171,7 @@
         .content div.active {
         	display: block;
         }
+<<<<<<< HEAD
 	.container {
             max-width: 600px;
             margin: 50px auto;
@@ -123,6 +179,46 @@
             padding: 20px;
             border-radius: 8px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+=======
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+		}
+        /* Styling for the shot level */
+        .shotHeader{
+        	margin-right: 20px;
+        	display: flex;
+        	align-items: center;
+        	justify-content: center;
+        	position: relative;
+        	font-size: 28px;
+        	font-weight: bold;
+        }
+        .shotHeader label{
+        	margin-right: 10px;
+        	text-align: center;
+        }
+        .shotHeader input {
+        	border: 2px #000000;
+        	text-align: center;
+        	font-weight: bold;
+        }
+        .row {
+        	display: flex;
+        	justify-content: center;
+        }
+        .pin {
+            width: 30px;
+            height: 30px;
+            border: 2px #000000;
+            border-radius: 50%;
+            margin: 5px;
+            display: flex;
+            align-items: center;
+            margin-top: 50px;
+>>>>>>> refs/remotes/origin/main
         }
 
         label {
@@ -244,13 +340,42 @@
 			<p>Nothing to see here yet!</p>
 		</div>
 		<!-- Event Page -->
-		<div id="step2">
-			<h1>Nothing to event here yet!</h1>
-			<p>Nothing to event here yet!</p>
+		
+		<div class = "container" id="step2">
+			<h2>Event Page</h2>
+
+			<label for="eventName">Event Name:</label>
+			<input type="text" name="eventName" size="12" value="${game.eventName}">
+
+			<label for="eventType">Event Type:</label>
+            <button text="Practice" name="practice" type="submit" value="Practice">Practice</button>
+			<button text="Tournament" name="tournament" type="submit" value="Tournament">Tournament</button>
+			<button text="Leauge" name="leauge" type="submit" value="Leauge">Leauge</button>
+
+			<label for="establishment">Establishment Name/Location:</label>
+			<select name="establishment" id="establishment">
+			<%
+			ArrayList<Event> events = (ArrayList<Event>) request.getAttribute("event");
+				if (events != null) {
+				  for (Event event : events) {
+		   %>
+			<option value="${game.establishment}"><%= event.getEstablishment().getEstablishmentName()%></option>
+		   <% 
+				 } } else {	%>
+					 <option value="${game.establishment}">No Establishments</option>
+		   <% } %>
+			</select>
+
+            <label for="standing">Standing:</label>
+            <input type="text" name="standing" size="12" value="${game.standing}">
+
+            <label for="stats">Stats?:</label>
+            <input type="text" name="stats" size="12" value="${game.stats}">
+
 			<tr>
-				<td class="label">Enter Event Name:</td>
-				<td><input id="eventName" type="text" name="eventName" value=""/><input type="Submit" name="eventName" value="Submit" onclick="nextStep(2)"> </td>
+				<td><input type="Submit" id="sessionType" name="Submit" value="Submit" onclick="nextStep(2)"></td>
 			</tr>
+		   	
 		</div>
 		<!-- Session Page -->
 		<div id="step3" class="container">
