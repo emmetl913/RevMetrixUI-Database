@@ -55,6 +55,10 @@ public class ShotServlet extends HttpServlet {
 				}
 			}
 			
+			if(ball == null) {
+				req.getRequestDispatcher("/_view/ballArsenal.jsp").forward(req, resp);
+			}
+			
 		}catch(NumberFormatException e) {
 			errorMessage = "Invaid";
 		}

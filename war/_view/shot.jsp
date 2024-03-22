@@ -16,6 +16,12 @@
             margin-top: 50px;
         }
 
+        .dropdown{
+            margin-top: 10px;
+            margin-bottom: 20px;
+            font-size: 16px;
+        }
+
         .row{
             display: flex;
             justify-content: center;
@@ -173,6 +179,30 @@
                     <span>Game:  </span><span class="game-number">1</span>
                     <span>Frame:  </span><span class="frame-number">1</span>
                 </div>
+
+                <!-- dropdown menu -->
+                <div class="dropdown">
+                    <%
+                    BallArsenal ballArsenal = (BallArsenal) request.getAttribute("ballArsenal");
+
+                    if(ballArsenal == null || ballArsenal.getBalls().isEmpty()){
+                        response.sendRedirect("ballArsenal.jsp");
+                    }else{
+                        %>
+
+                        <select id="dropdownMenu" name="dropdownOption">
+                            <option value="" disabled selected>Select an Option</option>
+                            <% 
+                                for(Ball ball : ballArsenal.getBalls()){
+                                    %>
+                                    <option value="<%= ball.getName() %>"><%= ball.getName() %></option>
+                                    <%
+                                }
+                                %>
+                        </select>
+                    <% } %>
+                </div>
+
                 <!-- Invereted equilateral triangle -->
                 <div class="row">
                     <div class="circle" id="pin7" onclick="togglePin(7)">7</div>
@@ -209,24 +239,6 @@
                 <div class="frame-buttons">
                     <button onclick="previousFrame()">Previous Frame</button>
                     <button onclick="nextFrame()">Next Frame</button>
-                </div>
-
-                <!-- dropdown menu -->
-                <div class="dropdown">
-                    <select id="dropdownMenu" name="dropdownOption">
-                        <option value="" disabled selected>Select an Option</option>
-                        <% 
-                            BallArsenal ballArsenal = (BallArsenal) request.getAttribute("ballArsenal");
-
-                            if(ballArsenal != null){
-                                for(Ball ball : ballArsenal.getBalls()){
-                                    %>
-                                    <option value="<%= ball.getName() %>"><%= ball.getName() %></option>
-                                    <%
-                                }
-                            }
-                        %>
-                    </select>
                 </div>
             </div>
 
