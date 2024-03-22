@@ -10,12 +10,7 @@
 
 <%@ page import = "java.io.*,java.util.*"%>
 
-
 <html>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@500&display=swap" rel="stylesheet">
-
 <head>
 
 <script 
@@ -109,7 +104,7 @@
         .dropdown-content {
             display: none;
             position: absolute;
-            background-color: #00000;
+            background-color: #f1f1f1;
             min-width: 210px;
             z-index: 1;
         }
@@ -186,35 +181,88 @@
             margin-top: 50px;
         }
 
-        label {
-            display: block;
-            margin-bottom: 8px;
+        .row{
+            display: flex;
+            justify-content: center;
         }
 
-        input {
-            width: 100%;
-            padding: 8px;
-            margin-bottom: 16px;
-            box-sizing: border-box;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-        }
-
-        button {
-            background-color: #4caf50;
-            color: #fff;
-            padding: 10px 20px;
-            border: none;
-            border-radius: 4px;
+        .circle{
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            border: 1px solid black;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 5px;
             cursor: pointer;
+            font-weight: 900;
         }
 
-        button:hover {
-            background-color: #45a049;
+        .circle.selected{
+            background-color: black;
+            color: white;
         }
-        .error {
-			color: red;
-		}
+
+        .shot-buttons{
+            margin-top: 20px;
+        }
+
+        .shot-button{
+            margin: 5px;
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            font-weight: 900;
+        }
+
+        #game-info{
+            display: inline-block;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 20px;
+            margin-top: 10px;
+            margin-right: 15px;
+            font-size: 24px;
+            font-weight: 900;
+        }
+
+        .frame-buttons{
+            margin-top: 5px;
+        }
+
+        .frame-buttons button{
+            margin: 25px;
+        }
+
+        .game-number{
+            margin-right: 30px;
+            border: 1px solid black;
+            padding: 5px;
+            padding-left: 25px;
+            padding-right: 25px;
+        }
+
+        .frame-number{
+            border: 1px solid black;
+            padding: 5px;
+            padding-left: 25px;
+            padding-right: 25px;
+        }
+
+        .color-box{
+            width: 40px;
+            height: 40px;
+            background-color: gray;
+            border: 2px solid black;
+            cursor: pointer;
+            margin: 20px;
+        }
+
+        .selected{
+            background-color: orange;
+        }
+
         		/* Style for the black sidebar */
 	.sidebar {
 	height: 100%;
@@ -253,22 +301,8 @@
 		position: relative;
 	}
 	.sidebar a {float: left;}
-		div.content {margin-left: 0;}
+	div.content {margin-left: 0;}
 	}
-	table {
-            border-collapse: collapse;
-            border: 0px;
-        }
-
-        td, th {
-            border: none;
-            padding: 8px;
-            text-align: center;
-        }
-
-        #opponentInputRow {
-            display: none;
-        }
     </style>
 </head>
 <body>
@@ -289,15 +323,13 @@
           <a href="https://github.com/emmetl913/RevMetrixUI-Database">GitHub</a>
 		 <a class="dropbtn" href="#" onclick="toggleDropdown(), nextStep(1)">Start Bowling!</a>
 		 <div class="dropdown-content" id="myDropdown">
-	        <a href="#" onclick="showContent('event')">>Event</a>
-	        <a href="#" onclick="showContent('session')">>Session</a>
-	        <a href="#" onclick="showContent('game')">>Game</a>
-			<a href="#" onclick="showContent('frame')">>Frame</a>
-	        <a href="#" onclick="showContent('shot')">>Shot</a>
+	        <a href="#" onclick="showContent('event')">Event</a>
+	        <a href="#" onclick="showContent('session')">Session</a>
+	        <a href="#" onclick="showContent('game')">Game</a>
+			<a href="#" onclick="showContent('frame')">Frame</a>
+	        <a href="#" onclick="showContent('shot')">Shot</a>
 	   	 </div>
-	   	 
 	</div>
-	
 	<div class="content">
 		<!-- Home Page -->
 		<div id="step1" class="active">
@@ -343,37 +375,15 @@
 		   	
 		</div>
 		<!-- Session Page -->
-		<div id="step3" class="container">
-			
-			<p class="label">Establishment Name:</p>
-			
-			<table>
-		        <tr>
-		            <th>Time</th>
-		        </tr>
-		        <tr>
-	            <td><button type="Submit" id="currentTime" value="currentTime">Use Current Time</button></td>
-	            <td><button type="Submit" id="otherTime" value="anotherTime">Use Another Time</button></td>
-	        </tr>
-	        <tr id="timeInputRow">
-	            <td colspan="3"><input type="text" id="otherTime" placeholder="Enter Time of Session"></td>
-	        	<td><button type="Submit" id="submitSession">Submit</button></td>
-	        </tr>
-    		</table>
-			<table>
-		        <tr>
-		            <th>Opponent</th>
-		        </tr>
-		        <tr>
-	            <td><button type="Submit" id="teamBtn" value="Team Opponent">Team Opponent</button></td>
-	            <td><button type="Submit" id="indvBtn" value="Individual Opponent">Individual Opponent</button></td>
-	            <td><button type="Submit" id="soloBtn" value="Solo">Solo</button></td>
-	        </tr>
-	        <tr id="opponentInputRow">
-	            <td colspan="3"><input type="text" id="opponentName" placeholder="Enter opponent name"></td>
-	            <td><button type="Submit" id="submitSession">Submit</button></td>
-	        </tr>
-    		</table>
+		<div id="step3">
+			<h1>Nothing to session here yet!</h1>
+			<p>Nothing to session here yet!</p>
+			<p class="label">What kind of session?</p>
+			<tr>
+				<input type="Submit" id="sessionType" name="practice" value="Practice" onclick="nextStep(3)">
+				<input type="Submit" id="sessionType" name="tournament" value="Tournament" onclick="nextStep(3)">
+				<input type="Submit" id="sessionType" name="leauge" value="Leauge" onclick="nextStep(3)">
+			</tr>
 		</div>
 		<!-- Game Page -->
 		<div class = "container" id="step4">
@@ -408,86 +418,28 @@
 		</div>
 		<!-- Shot Input Level -->
 		<div id="step6" style=display:flex;flex-direction:column;align-items:center;>
-			
+			<div class="row">
+				<div class="pin"><span>7</span></div>
+				<div class="pin"><span>8</span></div>
+				<div class="pin"><span>9</span></div>
+				<div class="pin"><span>10</span></div>
+			</div>
+			<div class="row">
+				<div class="pin"><span>4</span></div>
+				<div class="pin"><span>5</span></div>
+				<div class="pin"><span>6</span></div>
+			</div>
+			<div class="row">
+				<div class="pin"><span>2</span></div>
+				<div class="pin"><span>3</span></div>
+			</div>
+			<div class="row">
+				<div class="pin"><span>1</span></div>
+			</div>
 		</div>
 	</div>
-	<script>
-	const timeElement = document.querySelector(".time");
-	const dateElement = document.querySelector(".date");
-
-	/**
-	 * @param {Date} date
-	 */
-	function formatTime(date) {
-	  const hours12 = date.getHours() % 12 || 12;
-	  const minutes = date.getMinutes();
-	  const isAm = date.getHours() < 12;
-
-	  return `${hours12.toString().padStart(2, "0")}:${minutes
-	    .toString()
-	    .padStart(2, "0")} ${isAm ? "AM" : "PM"}`;
-	}
-
-	/**
-	 * @param {Date} date
-	 */
-	function formatDate(date) {
-	  const DAYS = [
-	    "Sunday",
-	    "Monday",
-	    "Tuesday",
-	    "Wednesday",
-	    "Thursday",
-	    "Friday",
-	    "Saturday"
-	  ];
-	  const MONTHS = [
-	    "January",
-	    "February",
-	    "March",
-	    "April",
-	    "May",
-	    "June",
-	    "July",
-	    "August",
-	    "September",
-	    "October",
-	    "November",
-	    "December"
-	  ];
-
-	  return `${DAYS[date.getDay()]}, ${
-	    MONTHS[date.getMonth()]
-	  } ${date.getDate()} ${date.getFullYear()}`;
-	}
-
-	setInterval(() => {
-	  const now = new Date();
-
-	  timeElement.textContent = formatTime(now);
-	  dateElement.textContent = formatDate(now);
-	}, 200);
-	</script>
-	 <script>
-        document.getElementById("teamBtn").addEventListener("click", function() {
-            document.getElementById("opponentInputRow").style.display = "table-row";
-        });
-        document.getElementById("indvBtn").addEventListener("click", function() {
-            document.getElementById("opponentInputRow").style.display = "table-row";
-        });
-        document.getElementById("soloBtn").addEventListener("click", function() {
-            document.getElementById("opponentInputRow").style.display = "none";
-        });
-    </script>
-    <script>
-        document.getElementById("otherTime").addEventListener("click", function() {
-            document.getElementById("timeInputRow").style.display = "table-row";
-        });
-        document.getElementById("currentTime").addEventListener("click", function() {
-            document.getElementById("timeInputRow").style.display = "none";
-        });
-        
-    </script>
+	
+	
 	<script>
 		var currentStep = 1;
 		// Display current step
@@ -512,8 +464,6 @@
 				showStep(step+1);
 			}
 		}
-		
-		
 		// Toggle Method for Dropdown button
 	    function toggleDropdown() 
 	    {
@@ -524,14 +474,46 @@
 	            dropdownContent.style.display = "block";
 	        }
 	    }
-    	
-		// Clock
-    	let time = document.getElementById("datetime");
-		setInterval(() => {
-			let d = new Date();
-			time.innerHTML = d.toLocaleTimeString();
-		},1000);
+	    
     </script>
-    
+    <script type="text/javascript">
+    //Initialize button fields for input 
+		$(document).ready(function() {
+			//Pull event name from the submit
+			$("#eventName").click(function() {
+				//call ajax and post information back to the servlet
+				$.ajax({
+					type: 'POST',
+					url: 'lab02/servlet/startBowling',
+					data: { name: $("eventName")},
+				});
+			});
+			//Pull session type from the submit
+			$("#sessionType").click(function() {
+				$.ajax({
+					type: 'POST',
+					url: 'lab02/servlet/startBowling',
+					data: { sType: $("sessionType")},
+				});
+			});
+			//Pull game type from the submit
+			$("#gameStatus").click(function(){
+				$.ajax({
+					type: 'POST',
+					url: 'lab02/servlet/startBowling',
+					data: { gStatus: $("gameStatus")},
+				});
+			});
+			//Pull frame info from the submit
+			$("#nextFrame").click(function(){
+				$.ajax({
+					type: 'POST',
+					url: 'lab02/servlet/startBowling',
+					data: { frame: $("nextFrame")},
+				});
+			});
+			
+		});
+	</script>
 </body>
 </html>

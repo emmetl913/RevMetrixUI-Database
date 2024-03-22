@@ -8,34 +8,34 @@
   <!-- Servlets -->
 	<servlet>
     <servlet-name>IndexServlet</servlet-name>
-    <servlet-class>edu.ycp.cs320.RevMetrix.servlet.IndexServlet</servlet-class>
+    <servlet-class>edu.ycp.cs320.lab02.servlet.IndexServlet</servlet-class>
   </servlet>
   <servlet>
   	<servlet-name>EstablishmentRegServlet</servlet-name>
-  	<servlet-class>edu.ycp.cs320.RevMetrix.servlet.EstablishmentRegServlet</servlet-class></servlet>
+  	<servlet-class>edu.ycp.cs320.lab02.servlet.EstablishmentRegServlet</servlet-class></servlet>
   <servlet>
     <servlet-name>AccountServlet</servlet-name>
-    <servlet-class>edu.ycp.cs320.RevMetrix.servlet.AccountServlet</servlet-class>
+    <servlet-class>edu.ycp.cs320.lab02.servlet.AccountServlet</servlet-class>
   </servlet>
   
   <servlet>
     <servlet-name>AccountSignUpServlet</servlet-name>
-    <servlet-class>edu.ycp.cs320.RevMetrix.servlet.AccountSignUpServlet</servlet-class>
+    <servlet-class>edu.ycp.cs320.lab02.servlet.AccountSignUpServlet</servlet-class>
   </servlet>
   	
   	<servlet>
   	<servlet-name>StartBowlingServlet</servlet-name>
-  	<servlet-class>edu.ycp.cs320.RevMetrix.servlet.StartBowlingServlet</servlet-class>
+  	<servlet-class>edu.ycp.cs320.lab02.servlet.StartBowlingServlet</servlet-class>
   	</servlet>
   	
   	<servlet>
   	<servlet-name>ShotServlet</servlet-name>
-  	<servlet-class>edu.ycp.cs320.RevMetrix.servlet.ShotServlet</servlet-class>
+  	<servlet-class>edu.ycp.cs320.lab02.servlet.ShotServlet</servlet-class>
   	</servlet>
   	
   	<servlet>
   	<servlet-name>BallArsenalServlet</servlet-name>
-  	<servlet-class>edu.ycp.cs320.RevMetrix.servlet.BallArsenalServlet</servlet-class>
+  	<servlet-class>edu.ycp.cs320.lab02.servlet.BallArsenalServlet</servlet-class>
   	</servlet>
   	
   	<!-- AJAX servlets. -->
