@@ -6,11 +6,12 @@ public class Game {
 	private int score;
 	private int frameCount;
 	
-	public Game(int newLane) {
+	public Game(int newGameNumber, int newLane) {
 		this.lane = newLane;
+		this.gameNumber = newGameNumber;
 		//set game number by referencing session
 		//score can be initialized if shot[0] != null
-		
+		score = 10;
 		//When game is initialized should have only the first frame
 		frameCount = 1; //frame count should increase on submitting the shot page
 	}

@@ -4,6 +4,7 @@
 <%@ page import= "edu.ycp.cs320.lab02.model.Event" %>
 <%@ page import="edu.ycp.cs320.lab02.model.EventArray" %>
 
+<%@ page import= "edu.ycp.cs320.lab02.model.Game" %>
 <%@ page import= "edu.ycp.cs320.lab02.model.Establishment" %>
 <%@ page import="edu.ycp.cs320.lab02.model.EstablishmentArray" %>
 
@@ -39,6 +40,19 @@
             box-sizing: border-box;
             border: 1px solid #ccc;
             border-radius: 4px;
+        }
+
+        input[type=submit] {
+            background-color: #4caf50;
+            color: #fff;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        input[type=submit]:hover {
+            background-color: #45a049;
         }
 
         button {
@@ -366,20 +380,34 @@
 			<p>Nothing to session here yet!</p>
 			<p class="label">What kind of session?</p>
 			<tr>
-				<td><input type="Submit" id="sessionType" name="practice" value="Practice" onclick="nextStep(3)"></td>
-				<td><input type="Submit" id="sessionType" name="tournament" value="Tournament" onclick="nextStep(3)"></td>
-				<td><input type="Submit" id="sessionType" name="leauge" value="Leauge" onclick="nextStep(3)"></td>
+				<input type="Submit" id="sessionType" name="practice" value="Practice" onclick="nextStep(3)">
+				<input type="Submit" id="sessionType" name="tournament" value="Tournament" onclick="nextStep(3)">
+				<input type="Submit" id="sessionType" name="leauge" value="Leauge" onclick="nextStep(3)">
 			</tr>
 		</div>
 		<!-- Game Page -->
-		<div id="step4">
-			<h1>Nothing to game here yet!</h1>
-			<p>Nothing to game here yet!</p>
+		<div class = "container" id="step4">
+			<h1>Game Page!</h1>
+			<p> Select game by index: </p>
+
+			<select name="establishment" id="establishment">
+			<%
+			ArrayList<Game> games = (ArrayList<Game>)request.getAttribute("gameObjArr");
+				if (games != null) {
+				  for (int i =0; i < games.size(); i++) {
+					  Game game = games.get(i);
+		   %>
+			<option><%= game.getGameNumber() %>| Lane: <%=game.getLane()%> | # of Frames: <%=game.getFrameCount()%> | Score: <%=game.getScore()%></option>
+		   <% 
+				 } } else {	%>
+					 <option value="${game.establishment}">No Establishments</option>
+		   <% } %>
+			</select>
+			<p></p>
 			<tr>
-				<td><input type="Submit" id="gameStatus" name="continue" value="Continue from last game" onclick="nextStep(4)"></td>
-				<td><input type="Submit" id="gameStatus" name="select" value="Select a Game" onclick="nextStep(4)"></td>
-				<td><input type="Submit" id="gameStatus" name="new" value="Start a New Game" onclick="nextStep(4)"></td>
-			</tr>
+				<button type="submit" id="gameStatus" name="select"  onclick="nextStep(4)" value="selectCurrentGame"> Select Current Game
+			  	<button type="submit" id="gameStatus" name="new" onclick="nextStep(4)" value="Start New Game"> Start New Game
+			</tr> 
 		</div>
 		<!-- Frame Page -->
 		<div id="step5">

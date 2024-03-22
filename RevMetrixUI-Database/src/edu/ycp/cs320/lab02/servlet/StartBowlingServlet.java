@@ -14,6 +14,8 @@ import edu.ycp.cs320.lab02.model.Ball;
 import edu.ycp.cs320.lab02.model.Bowling;
 import edu.ycp.cs320.lab02.model.Establishment;
 import edu.ycp.cs320.lab02.model.EstablishmentArray;
+import edu.ycp.cs320.lab02.model.Game;
+
 import edu.ycp.cs320.lab02.controller.EventController;
 import edu.ycp.cs320.lab02.model.Event;
 import edu.ycp.cs320.lab02.model.EventArray;
@@ -38,19 +40,34 @@ public class StartBowlingServlet extends HttpServlet {
 		String startBowlingKey = new String("startBowlingKey");
 		EventArray model = new EventArray();
 		
+		String gamesListKey = new String("gamesListKey");
+		ArrayList<Game> games = new ArrayList<Game>();
+		
 		// If first visit: new session id
 		if (session.isNew() ){
 	      session.setAttribute(userIDKey, userID);
 		  session.setAttribute(startBowlingKey,  model);
+		  
+		  //initialize the games list with 3 games
+		  games.add(new Game(1,14));
+		  games.add(new Game(2,22));
+		  games.add(new Game(3,4));
+		  session.setAttribute(gamesListKey, games);
+		  
 		} 
 		//Get model and userID from jsp
 		userID = (String)session.getAttribute(userIDKey);
-
+		games = (ArrayList<Game>)session.getAttribute(gamesListKey);
 		//controller.setModel(model);
+		if(games != null) {
+			for(Game g: games) {
+				System.out.println(g.getLane());
+			}
+		}
+		
 		
 		ArrayList<Establishment> establishment = new ArrayList<>();
 		Establishment e1 = new Establishment("Colony Park Lanes & Games", "1900 Pennsylvania Ave, York, PA 17404");
-
 		
 		ArrayList<Event> events = model.getEvents();
         if(model.getEvents() == null) {
@@ -61,9 +78,27 @@ public class StartBowlingServlet extends HttpServlet {
         	events = model.getEvents();
         }
         
+        
+        //Initialize a Game that will be sent out to other portions of the website (currentGame)
+        Game currentGame = null;
+        
+        //Make a new game and add it to game list
+        if(req.getAttribute("Start New Game") != null) {
+        	Game g = new Game(games.size()+1,1);
+        	games.add(g); //game gets added to the end of the list //dont worry that the gameNumber will repeat.
+        	//Eventually it won't because it will take database values
+        	currentGame = g;
+        	System.out.println(g.getGameNumber());
+        }
+        if(req.getAttribute("Selet Current Game") != null) {
+        	//currentGame = selected game from dropdown
+        }
 		// Set the ArrayList as a request attribute
 		req.setAttribute("event", events);
 		session.setAttribute(startBowlingKey, model); //update session model
+		
+		req.setAttribute("gameObjArr", games);
+		session.setAttribute(gamesListKey, games);
 		
 		// call JSP to generate empty form
 		req.getRequestDispatcher("/_view/startBowling.jsp").forward(req, resp);
