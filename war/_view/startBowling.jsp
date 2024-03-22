@@ -4,6 +4,7 @@
 <%@ page import= "edu.ycp.cs320.lab02.model.Event" %>
 <%@ page import="edu.ycp.cs320.lab02.model.EventArray" %>
 
+<%@ page import= "edu.ycp.cs320.lab02.model.Game" %>
 <%@ page import= "edu.ycp.cs320.lab02.model.Establishment" %>
 <%@ page import="edu.ycp.cs320.lab02.model.EstablishmentArray" %>
 
@@ -16,50 +17,12 @@
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@500&display=swap" rel="stylesheet">
 
 <head>
-<<<<<<< HEAD
-=======
 
 <script 
 	src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"
 	type="text/javascript">
 </script>
->>>>>>> refs/remotes/origin/main
     <style>
-<<<<<<< HEAD
-    #datetime {
-        display: none;
-    }
-    body {
-            margin: 0;
-            font-family: Arial, sans-serif;
-    }
-	.datetime {
-	  margin-left: 250px;
-	  font-size: 16px;
-	  padding: 24px;
-	  color: #ffffff;
-	  background: #444444;
-	  box-shadow: 0 0 10px rgba(0, 0, 0, 0.25);
-	  border-radius: 4px;
-	  border-right: 10px #009578 solid;
-	  width: 400px;
-	  font-weight: 500;
-	  font-family: "Inter", sans-serif;
-	}
-	
-	.time {
-	  margin-left: 250px;
-	  font-size: 3em;
-	  color: #00ffcc;
-	}
-	
-	.date { 
-	  margin-left: 250px;
-	  margin-top: 12px;
-	  font-size: 1.75em;
-	}
-	
-=======
 
 .container {
             max-width: 600px;
@@ -84,6 +47,19 @@
             border-radius: 4px;
         }
 
+        input[type=submit] {
+            background-color: #4caf50;
+            color: #fff;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        input[type=submit]:hover {
+            background-color: #45a049;
+        }
+
         button {
             background-color: #4caf50;
             color: #fff;
@@ -97,7 +73,6 @@
             background-color: #45a049;
         }
 
->>>>>>> refs/remotes/origin/main
         .sidebar {
             height: 100%;
             width: 250px;
@@ -171,15 +146,6 @@
         .content div.active {
         	display: block;
         }
-<<<<<<< HEAD
-	.container {
-            max-width: 600px;
-            margin: 50px auto;
-            background-color: #fff;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-=======
         body {
             font-family: Arial, sans-serif;
             background-color: #f4f4f4;
@@ -218,7 +184,6 @@
             display: flex;
             align-items: center;
             margin-top: 50px;
->>>>>>> refs/remotes/origin/main
         }
 
         label {
@@ -411,14 +376,28 @@
     		</table>
 		</div>
 		<!-- Game Page -->
-		<div id="step4">
-			<h1>Nothing to game here yet!</h1>
-			<p>Nothing to game here yet!</p>
+		<div class = "container" id="step4">
+			<h1>Game Page!</h1>
+			<p> Select game by index: </p>
+
+			<select name="establishment" id="establishment">
+			<%
+			ArrayList<Game> games = (ArrayList<Game>)request.getAttribute("gameObjArr");
+				if (games != null) {
+				  for (int i =0; i < games.size(); i++) {
+					  Game game = games.get(i);
+		   %>
+			<option><%= game.getGameNumber() %>| Lane: <%=game.getLane()%> | # of Frames: <%=game.getFrameCount()%> | Score: <%=game.getScore()%></option>
+		   <% 
+				 } } else {	%>
+					 <option value="${game.establishment}">No Establishments</option>
+		   <% } %>
+			</select>
+			<p></p>
 			<tr>
-				<td><input type="Submit" id="gameStatus" name="continue" value="Continue from last game" onclick="nextStep(4)"></td>
-				<td><input type="Submit" id="gameStatus" name="select" value="Select a Game" onclick="nextStep(4)"></td>
-				<td><input type="Submit" id="gameStatus" name="new" value="Start a New Game" onclick="nextStep(4)"></td>
-			</tr>
+				<button type="submit" id="gameStatus" name="select"  onclick="nextStep(4)" value="selectCurrentGame"> Select Current Game
+			  	<button type="submit" id="gameStatus" name="new" onclick="nextStep(4)" value="startNewGame"> Start New Game
+			</tr> 
 		</div>
 		<!-- Frame Page -->
 		<div id="step5">
