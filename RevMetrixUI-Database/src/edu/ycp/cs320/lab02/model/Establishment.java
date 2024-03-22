@@ -4,6 +4,9 @@ package edu.ycp.cs320.lab02.model;
 public class Establishment {
 	private String establishmentName, address;
 
+	public Establishment() {
+		
+	}
 	
 	public Establishment(String establishmentName, String address) {
 		this.establishmentName = establishmentName;

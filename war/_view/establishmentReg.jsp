@@ -19,6 +19,12 @@
             padding: 0;
         }
 
+        .ball-section {
+        border: 1px solid black; /* Add border around each ball section */
+        margin-bottom: 10px; /* Add some space between ball sections */
+        padding: 10px; /* Add padding inside each ball section */
+    }
+
         .container {
             max-width: 600px;
             margin: 50px auto;
@@ -119,20 +125,26 @@
 		  </div>
       
     <div class="container">
-        <h2>Establishment Registration</h2>
+        <h2>Add Establishment Registration</h2>
         <form action="${pageContext.servletContext.contextPath}/establishmentReg" method="post">
             <label>Establishment Name:</label>
-            <input type="text" name="establishmentName" size="12" value="">
+            <input type="text" name="establishmentName" size="12">
 
             <label for="address">Address:</label>
-            <input type="text" name="address" size="12" value="">
+            <input type="text" name="address" size="12">
 
-            <button type="submit">Register</button>
+            <button name="submitEstab" type="submit">Add Establishment</button>
+
+            <h2>Remove Establishment Registration</h2>
+            <label>Establishment Name:</label>
+            <input type="text" name="removeEstablishmentName" size="12">
+
+            <button name="submitRemoveEstab" type="submit">Remove Establishment</button>
 
             <div id="ballsList"> &nbsp				
               <% 
                      // Retrieve ArrayList from request attribute
-                     ArrayList<Establishment> establishments = (ArrayList<Establishment>) request.getAttribute("establishments");
+                     ArrayList<Establishment> establishments = (ArrayList<Establishment>) request.getAttribute("esta");
                   if (establishments != null) {
                     for (Establishment establishment : establishments) {
              %>

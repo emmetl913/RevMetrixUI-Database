@@ -35,7 +35,7 @@ public class EstablishmentRegServlet extends HttpServlet {
 		   // Check if this is new comer on your Webpage.
 		String establishmentRegKey = new String("establishmentRegKey");
 		EstablishmentArray model = new EstablishmentArray();
-
+		
 		// If first visit: new session id
 		if (session.isNew() ){
 	      session.setAttribute(userIDKey, userID);
@@ -106,14 +106,14 @@ public class EstablishmentRegServlet extends HttpServlet {
 		}
 		//on button press
 		String newEstablishmentName = req.getParameter("establishmentName");
-		String newEstablishmentAddress = req.getParameter("establishmentAddress");
+		String newEstablishmentAddress = req.getParameter("address");
 		String removeEstablishmentName = req.getParameter("removeEstablishmentName");
 		
-		if (req.getParameter("addEstablishment") != null ) {
+		if (req.getParameter("submitEstab") != null ) {
 			//System.out.println(model.getBallAtIndex(0).getName());
 			controller.addEstablishment(newEstablishmentName, newEstablishmentAddress);
 		}
-		if(req.getParameter("removeEstablishment") != null) {
+		if(req.getParameter("submitRemoveEstab") != null) {
 			//controller.removeBall(removeBallName);
 			 Iterator<Establishment> iterator = establishments.iterator();
 			    while (iterator.hasNext()) {

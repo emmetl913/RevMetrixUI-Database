@@ -3,6 +3,10 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
 <%@ page import= "edu.ycp.cs320.lab02.model.Event" %>
 <%@ page import="edu.ycp.cs320.lab02.model.EventArray" %>
+
+<%@ page import= "edu.ycp.cs320.lab02.model.Establishment" %>
+<%@ page import="edu.ycp.cs320.lab02.model.EstablishmentArray" %>
+
 <%@ page import = "java.io.*,java.util.*"%>
 
 <html>
@@ -326,18 +330,24 @@
 			<label for="eventName">Event Name:</label>
 			<input type="text" name="eventName" size="12" value="${game.eventName}">
 
-			<label for="eventType">Event Type: <%= event.getType() %></label>
+			<label for="eventType">Event Type:</label>
             <button text="Practice" name="practice" type="submit" value="Practice">Practice</button>
 			<button text="Tournament" name="tournament" type="submit" value="Tournament">Tournament</button>
 			<button text="Leauge" name="leauge" type="submit" value="Leauge">Leauge</button>
 
-            <label for="establishment">Establishment Name/Location:</label>
-  			 <select name="establishment" id="establishment">
-    			<option value="${game.establishment}">Establishment</option>
-    			<option value="${game.establishment}">Establishment</option>
-    			<option value="${game.establishment}">Establishment</option>
-    			<option value="${game.establishment}">Establishment</option>
-  			 </select>
+			<label for="establishment">Establishment Name/Location:</label>
+			<select name="establishment" id="establishment">
+			<%
+			ArrayList<Event> events = (ArrayList<Event>) request.getAttribute("event");
+				if (events != null) {
+				  for (Event event : events) {
+		   %>
+			<option value="${game.establishment}"><%= event.getEstablishment().getEstablishmentName()%></option>
+		   <% 
+				 } } else {	%>
+					 <option value="${game.establishment}">No Establishments</option>
+		   <% } %>
+			</select>
 
             <label for="standing">Standing:</label>
             <input type="text" name="standing" size="12" value="${game.standing}">
