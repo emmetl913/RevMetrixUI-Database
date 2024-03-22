@@ -2,20 +2,47 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
 
+
 <html>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@500&display=swap" rel="stylesheet">
+
 <head>
-
-<script 
-	src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"
-	type="text/javascript">
-</script>
-
     <style>
+    #datetime {
+        display: none;
+    }
     body {
             margin: 0;
             font-family: Arial, sans-serif;
-        }
-
+    }
+	.datetime {
+	  margin-left: 250px;
+	  font-size: 16px;
+	  padding: 24px;
+	  color: #ffffff;
+	  background: #444444;
+	  box-shadow: 0 0 10px rgba(0, 0, 0, 0.25);
+	  border-radius: 4px;
+	  border-right: 10px #009578 solid;
+	  width: 400px;
+	  font-weight: 500;
+	  font-family: "Inter", sans-serif;
+	}
+	
+	.time {
+	  margin-left: 250px;
+	  font-size: 3em;
+	  color: #00ffcc;
+	}
+	
+	.date { 
+	  margin-left: 250px;
+	  margin-top: 12px;
+	  font-size: 1.75em;
+	}
+	
         .sidebar {
             height: 100%;
             width: 250px;
@@ -52,7 +79,7 @@
         .dropdown-content {
             display: none;
             position: absolute;
-            background-color: #f1f1f1;
+            background-color: #00000;
             min-width: 210px;
             z-index: 1;
         }
@@ -89,122 +116,44 @@
         .content div.active {
         	display: block;
         }
-        /* Styling for the shot level */
-        .shotHeader{
-        	margin-right: 20px;
-        	display: flex;
-        	align-items: center;
-        	justify-content: center;
-        	position: relative;
-        	font-size: 28px;
-        	font-weight: bold;
-        }
-        .shotHeader label{
-        	margin-right: 10px;
-        	text-align: center;
-        }
-        .shotHeader input {
-        	border: 2px #000000;
-        	text-align: center;
-        	font-weight: bold;
-        }
-        .row {
-        	diplay: flex;
-        	justify-content: center;
-        }
-        .pin {
-            width: 30px;
-            height: 30px;
-            border: 2px #000000;
-            border-radius: 50%;
-            margin: 5px;
-            display: flex;
-            align-items: center;
-            margin-top: 50px;
+	.container {
+            max-width: 600px;
+            margin: 50px auto;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
         }
 
-        .row{
-            display: flex;
-            justify-content: center;
+        label {
+            display: block;
+            margin-bottom: 8px;
         }
 
-        .circle{
-            width: 45px;
-            height: 45px;
-            border-radius: 50%;
-            border: 1px solid black;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            margin: 5px;
-            cursor: pointer;
-            font-weight: 900;
+        input {
+            width: 100%;
+            padding: 8px;
+            margin-bottom: 16px;
+            box-sizing: border-box;
+            border: 1px solid #ccc;
+            border-radius: 4px;
         }
 
-        .circle.selected{
-            background-color: black;
-            color: white;
-        }
-
-        .shot-buttons{
-            margin-top: 20px;
-        }
-
-        .shot-button{
-            margin: 5px;
+        button {
+            background-color: #4caf50;
+            color: #fff;
             padding: 10px 20px;
-            font-size: 16px;
+            border: none;
+            border-radius: 4px;
             cursor: pointer;
-            font-weight: 900;
         }
 
-        #game-info{
-            display: inline-block;
-            justify-content: center;
-            align-items: center;
-            margin-bottom: 20px;
-            margin-top: 10px;
-            margin-right: 15px;
-            font-size: 24px;
-            font-weight: 900;
+        button:hover {
+            background-color: #45a049;
         }
-
-        .frame-buttons{
-            margin-top: 5px;
-        }
-
-        .frame-buttons button{
-            margin: 25px;
-        }
-
-        .game-number{
-            margin-right: 30px;
-            border: 1px solid black;
-            padding: 5px;
-            padding-left: 25px;
-            padding-right: 25px;
-        }
-
-        .frame-number{
-            border: 1px solid black;
-            padding: 5px;
-            padding-left: 25px;
-            padding-right: 25px;
-        }
-
-        .color-box{
-            width: 40px;
-            height: 40px;
-            background-color: gray;
-            border: 2px solid black;
-            cursor: pointer;
-            margin: 20px;
-        }
-
-        .selected{
-            background-color: orange;
-        }
-
+        .error {
+			color: red;
+		}
         		/* Style for the black sidebar */
 	.sidebar {
 	height: 100%;
@@ -243,8 +192,22 @@
 		position: relative;
 	}
 	.sidebar a {float: left;}
-	div.content {margin-left: 0;}
+		div.content {margin-left: 0;}
 	}
+	table {
+            border-collapse: collapse;
+            border: 0px;
+        }
+
+        td, th {
+            border: none;
+            padding: 8px;
+            text-align: center;
+        }
+
+        #opponentInputRow {
+            display: none;
+        }
     </style>
 </head>
 <body>
@@ -265,13 +228,15 @@
           <a href="https://github.com/emmetl913/RevMetrixUI-Database">GitHub</a>
 		 <a class="dropbtn" href="#" onclick="toggleDropdown(), nextStep(1)">Start Bowling!</a>
 		 <div class="dropdown-content" id="myDropdown">
-	        <a href="#" onclick="showContent('event')">Event</a>
-	        <a href="#" onclick="showContent('session')">Session</a>
-	        <a href="#" onclick="showContent('game')">Game</a>
-			<a href="#" onclick="showContent('frame')">Frame</a>
-	        <a href="#" onclick="showContent('shot')">Shot</a>
+	        <a href="#" onclick="showContent('event')">>Event</a>
+	        <a href="#" onclick="showContent('session')">>Session</a>
+	        <a href="#" onclick="showContent('game')">>Game</a>
+			<a href="#" onclick="showContent('frame')">>Frame</a>
+	        <a href="#" onclick="showContent('shot')">>Shot</a>
 	   	 </div>
+	   	 
 	</div>
+	
 	<div class="content">
 		<!-- Home Page -->
 		<div id="step1" class="active">
@@ -288,15 +253,37 @@
 			</tr>
 		</div>
 		<!-- Session Page -->
-		<div id="step3">
-			<h1>Nothing to session here yet!</h1>
-			<p>Nothing to session here yet!</p>
-			<p class="label">What kind of session?</p>
-			<tr>
-				<td><input type="Submit" id="sessionType" name="practice" value="Practice" onclick="nextStep(3)"></td>
-				<td><input type="Submit" id="sessionType" name="tournament" value="Tournament" onclick="nextStep(3)"></td>
-				<td><input type="Submit" id="sessionType" name="leauge" value="Leauge" onclick="nextStep(3)"></td>
-			</tr>
+		<div id="step3" class="container">
+			
+			<p class="label">Establishment Name:</p>
+			
+			<table>
+		        <tr>
+		            <th>Time</th>
+		        </tr>
+		        <tr>
+	            <td><button type="Submit" id="currentTime" value="currentTime">Use Current Time</button></td>
+	            <td><button type="Submit" id="otherTime" value="anotherTime">Use Another Time</button></td>
+	        </tr>
+	        <tr id="timeInputRow">
+	            <td colspan="3"><input type="text" id="otherTime" placeholder="Enter Time of Session"></td>
+	        	<td><button type="Submit" id="submitSession">Submit</button></td>
+	        </tr>
+    		</table>
+			<table>
+		        <tr>
+		            <th>Opponent</th>
+		        </tr>
+		        <tr>
+	            <td><button type="Submit" id="teamBtn" value="Team Opponent">Team Opponent</button></td>
+	            <td><button type="Submit" id="indvBtn" value="Individual Opponent">Individual Opponent</button></td>
+	            <td><button type="Submit" id="soloBtn" value="Solo">Solo</button></td>
+	        </tr>
+	        <tr id="opponentInputRow">
+	            <td colspan="3"><input type="text" id="opponentName" placeholder="Enter opponent name"></td>
+	            <td><button type="Submit" id="submitSession">Submit</button></td>
+	        </tr>
+    		</table>
 		</div>
 		<!-- Game Page -->
 		<div id="step4">
@@ -317,28 +304,86 @@
 		</div>
 		<!-- Shot Input Level -->
 		<div id="step6" style=display:flex;flex-direction:column;align-items:center;>
-			<div class="row">
-				<div class="pin"><span>7</span></div>
-				<div class="pin"><span>8</span></div>
-				<div class="pin"><span>9</span></div>
-				<div class="pin"><span>10</span></div>
-			</div>
-			<div class="row">
-				<div class="pin"><span>4</span></div>
-				<div class="pin"><span>5</span></div>
-				<div class="pin"><span>6</span></div>
-			</div>
-			<div class="row">
-				<div class="pin"><span>2</span></div>
-				<div class="pin"><span>3</span></div>
-			</div>
-			<div class="row">
-				<div class="pin"><span>1</span></div>
-			</div>
+			
 		</div>
 	</div>
-	
-	
+	<script>
+	const timeElement = document.querySelector(".time");
+	const dateElement = document.querySelector(".date");
+
+	/**
+	 * @param {Date} date
+	 */
+	function formatTime(date) {
+	  const hours12 = date.getHours() % 12 || 12;
+	  const minutes = date.getMinutes();
+	  const isAm = date.getHours() < 12;
+
+	  return `${hours12.toString().padStart(2, "0")}:${minutes
+	    .toString()
+	    .padStart(2, "0")} ${isAm ? "AM" : "PM"}`;
+	}
+
+	/**
+	 * @param {Date} date
+	 */
+	function formatDate(date) {
+	  const DAYS = [
+	    "Sunday",
+	    "Monday",
+	    "Tuesday",
+	    "Wednesday",
+	    "Thursday",
+	    "Friday",
+	    "Saturday"
+	  ];
+	  const MONTHS = [
+	    "January",
+	    "February",
+	    "March",
+	    "April",
+	    "May",
+	    "June",
+	    "July",
+	    "August",
+	    "September",
+	    "October",
+	    "November",
+	    "December"
+	  ];
+
+	  return `${DAYS[date.getDay()]}, ${
+	    MONTHS[date.getMonth()]
+	  } ${date.getDate()} ${date.getFullYear()}`;
+	}
+
+	setInterval(() => {
+	  const now = new Date();
+
+	  timeElement.textContent = formatTime(now);
+	  dateElement.textContent = formatDate(now);
+	}, 200);
+	</script>
+	 <script>
+        document.getElementById("teamBtn").addEventListener("click", function() {
+            document.getElementById("opponentInputRow").style.display = "table-row";
+        });
+        document.getElementById("indvBtn").addEventListener("click", function() {
+            document.getElementById("opponentInputRow").style.display = "table-row";
+        });
+        document.getElementById("soloBtn").addEventListener("click", function() {
+            document.getElementById("opponentInputRow").style.display = "none";
+        });
+    </script>
+    <script>
+        document.getElementById("otherTime").addEventListener("click", function() {
+            document.getElementById("timeInputRow").style.display = "table-row";
+        });
+        document.getElementById("currentTime").addEventListener("click", function() {
+            document.getElementById("timeInputRow").style.display = "none";
+        });
+        
+    </script>
 	<script>
 		var currentStep = 1;
 		// Display current step
@@ -363,6 +408,8 @@
 				showStep(step+1);
 			}
 		}
+		
+		
 		// Toggle Method for Dropdown button
 	    function toggleDropdown() 
 	    {
@@ -373,46 +420,14 @@
 	            dropdownContent.style.display = "block";
 	        }
 	    }
-	    
+    	
+		// Clock
+    	let time = document.getElementById("datetime");
+		setInterval(() => {
+			let d = new Date();
+			time.innerHTML = d.toLocaleTimeString();
+		},1000);
     </script>
-    <script type="text/javascript">
-    //Initialize button fields for input 
-		$(document).ready(function() {
-			//Pull event name from the submit
-			$("#eventName").click(function() {
-				//call ajax and post information back to the servlet
-				$.ajax({
-					type: 'POST',
-					url: 'lab02/servlet/startBowling',
-					data: { name: $("eventName")},
-				});
-			});
-			//Pull session type from the submit
-			$("#sessionType").click(function() {
-				$.ajax({
-					type: 'POST',
-					url: 'lab02/servlet/startBowling',
-					data: { sType: $("sessionType")},
-				});
-			});
-			//Pull game type from the submit
-			$("#gameStatus").click(function(){
-				$.ajax({
-					type: 'POST',
-					url: 'lab02/servlet/startBowling',
-					data: { gStatus: $("gameStatus")},
-				});
-			});
-			//Pull frame info from the submit
-			$("#nextFrame").click(function(){
-				$.ajax({
-					type: 'POST',
-					url: 'lab02/servlet/startBowling',
-					data: { frame: $("nextFrame")},
-				});
-			});
-			
-		});
-	</script>
+    
 </body>
 </html>
