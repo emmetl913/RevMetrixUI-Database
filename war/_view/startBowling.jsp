@@ -56,14 +56,14 @@
             position: fixed;
             top: 0;
             left: 0;
-            background-color: #111;
+            background-color: #000;
             padding-top: 20px;
         }
 
         .sidebar a {
-            padding: 10px 15px;
+            padding: 10px 20px;
             text-decoration: none;
-            font-size: 18px;
+            /*font-size: 18px;*/
             color: white;
             display: block;
         }
@@ -128,6 +128,39 @@
             background-color: #f4f4f4;
             margin: 0;
             padding: 0;
+		}
+        /* Styling for the shot level */
+        .shotHeader{
+        	margin-right: 20px;
+        	display: flex;
+        	align-items: center;
+        	justify-content: center;
+        	position: relative;
+        	font-size: 28px;
+        	font-weight: bold;
+        }
+        .shotHeader label{
+        	margin-right: 10px;
+        	text-align: center;
+        }
+        .shotHeader input {
+        	border: 2px #000000;
+        	text-align: center;
+        	font-weight: bold;
+        }
+        .row {
+        	display: flex;
+        	justify-content: center;
+        }
+        .pin {
+            width: 30px;
+            height: 30px;
+            border: 2px #000000;
+            border-radius: 50%;
+            margin: 5px;
+            display: flex;
+            align-items: center;
+            margin-top: 50px;
         }
 
         .row{
@@ -262,6 +295,14 @@
 	<input type="hidden" name="step" id="step" value="1">
 	<!-- Side bar, duh -->
 	<div class="sidebar">
+		 <a href="${pageContext.servletContext.contextPath}/index">
+			<img src="${pageContext.request.contextPath}/_view/BowlingBall.png"width="100" height="100">
+		  </a>
+	      <a href="${pageContext.servletContext.contextPath}/establishmentReg">Establishment Registration</a>
+		  <a href="${pageContext.servletContext.contextPath}/logIn">Sign Out</a>
+          <a href="${pageContext.servletContext.contextPath}/shot">Shot</a>
+          <a href="${pageContext.servletContext.contextPath}/ballArsenal">Ball Arsenal</a>
+          <a href="https://github.com/emmetl913/RevMetrixUI-Database">GitHub</a>
 		 <a class="dropbtn" href="#" onclick="toggleDropdown(), nextStep(1)">Start Bowling!</a>
 		 <div class="dropdown-content" id="myDropdown">
 	        <a href="#" onclick="showContent('event')">Event</a>
@@ -270,14 +311,6 @@
 			<a href="#" onclick="showContent('frame')">Frame</a>
 	        <a href="#" onclick="showContent('shot')">Shot</a>
 	   	 </div>
-		 <a href="${pageContext.servletContext.contextPath}/index">
-				<img src="${pageContext.request.contextPath}/_view/BowlingBall.png"width="100" height="100">
-			  </a>
-			<a href="${pageContext.servletContext.contextPath}/establishmentReg">Establishment Registration</a>
-			<a href="${pageContext.servletContext.contextPath}/logIn">Sign Out</a>
-		<a href="${pageContext.servletContext.contextPath}/shot">Shot</a>
-		<a href="${pageContext.servletContext.contextPath}/ballArsenal">Ball Arsenal</a>
-		<a href="https://github.com/emmetl913/RevMetrixUI-Database">GitHub</a>
 	</div>
 	<div class="content">
 		<!-- Home Page -->
@@ -340,16 +373,35 @@
 		</div>
 		<!-- Frame Page -->
 		<div id="step5">
-			<h1>Nothing to Frame here yet!</h1>
-			<p>Nothing to Frame here yet!</p>
+			<h1>Nothing to frame here yet!</h1>
+			<p>Nothing to frame here yet!</p>
+			<p>i forgot how frames work so i didn't do anything yet :3</p>
 			<input type="Submit" name="nextFrame" id="frameStatus" value="Continue" onclick="nextStep(5)">
 		</div>
 		<!-- Shot Input Level -->
-		<div id="step6">
-			<a href="${pageContext.servletContext.contextPath}/shot">Shot</a>
+		<div id="step6" style=display:flex;flex-direction:column;align-items:center;>
+			<div class="row">
+				<div class="pin"><span>7</span></div>
+				<div class="pin"><span>8</span></div>
+				<div class="pin"><span>9</span></div>
+				<div class="pin"><span>10</span></div>
+			</div>
+			<div class="row">
+				<div class="pin"><span>4</span></div>
+				<div class="pin"><span>5</span></div>
+				<div class="pin"><span>6</span></div>
+			</div>
+			<div class="row">
+				<div class="pin"><span>2</span></div>
+				<div class="pin"><span>3</span></div>
+			</div>
+			<div class="row">
+				<div class="pin"><span>1</span></div>
+			</div>
 		</div>
 	</div>
-
+	
+	
 	<script>
 		var currentStep = 1;
 		// Display current step

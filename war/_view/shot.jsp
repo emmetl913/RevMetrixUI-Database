@@ -6,6 +6,9 @@
 	<head>
 		<title>Shot</title>
 		<style type="text/css">
+		body {
+			font-family: Arial, sans-serif;
+		}
 		.container{
             text-align: center;
             align-items: center;
@@ -144,14 +147,14 @@
 
         <div class="sidebar">
 			<a href="${pageContext.servletContext.contextPath}/index">
-				<img src="${pageContext.request.contextPath}/_view/BowlingBall.png"width="100" height="100">
-			  </a>
-			<a href="${pageContext.servletContext.contextPath}/startBowling">Start Bowling</a>
-			<a href="${pageContext.servletContext.contextPath}/establishmentReg">Establishment Registration</a>
-		    <a href="${pageContext.servletContext.contextPath}/logIn">Sign Out</a>
-        <a href="${pageContext.servletContext.contextPath}/shot">Shot</a>
-        <a href="${pageContext.servletContext.contextPath}/ballArsenal">Ball Arsenal</a>
-        <a href="https://github.com/emmetl913/RevMetrixUI-Database">GitHub</a>
+			<img src="${pageContext.request.contextPath}/_view/BowlingBall.png"width="100" height="100">
+		  </a>
+	      <a href="${pageContext.servletContext.contextPath}/establishmentReg">Establishment Registration</a>
+		  <a href="${pageContext.servletContext.contextPath}/logIn">Sign Out</a>
+          <a href="${pageContext.servletContext.contextPath}/shot">Shot</a>
+          <a href="${pageContext.servletContext.contextPath}/ballArsenal">Ball Arsenal</a>
+          <a href="https://github.com/emmetl913/RevMetrixUI-Database">GitHub</a>
+          <a href="${pageContext.servletContext.contextPath}/startBowling">Start Bowling</a>
 		  </div>
 	
 		<form action="${pageContext.servletContext.contextPath}/shot" method="post">
