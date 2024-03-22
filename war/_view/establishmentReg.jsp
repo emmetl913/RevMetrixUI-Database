@@ -1,6 +1,9 @@
 <!DOCTYPE html>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
+<%@ page import= "edu.ycp.cs320.lab02.model.Establishment" %>
+<%@ page import="edu.ycp.cs320.lab02.model.EstablishmentArray" %>
+<%@ page import = "java.io.*,java.util.*"%>
 
 <html>
 <head>
@@ -119,15 +122,30 @@
         <h2>Establishment Registration</h2>
         <form action="${pageContext.servletContext.contextPath}/establishmentReg" method="post">
             <label>Establishment Name:</label>
-            <input type="text" name="establishmentName" size="12" value="${game.establishmentName}">
-
-            <label for="email">Email:</label>
-            <input type="text" name="email" size="12" value="${game.email}">
+            <input type="text" name="establishmentName" size="12" value="">
 
             <label for="address">Address:</label>
-            <input type="text" name="address" size="12" value="${game.address}">
+            <input type="text" name="address" size="12" value="">
 
             <button type="submit">Register</button>
+
+            <div id="ballsList"> &nbsp				
+              <% 
+                     // Retrieve ArrayList from request attribute
+                     ArrayList<Establishment> establishments = (ArrayList<Establishment>) request.getAttribute("establishments");
+                  if (establishments != null) {
+                    for (Establishment establishment : establishments) {
+             %>
+                   <div class="ball-section">
+                     <p>Name: <%= establishment.getEstablishmentName() %></p>
+                     <p>Address: <%= establishment.getAddress() %></p>
+                 </div>
+             <% 
+                   } } else {	%>
+                   <p>No establishments available.</p>
+             <% } %>
+             
+             </div>
     </div>
 </body>
 </html>

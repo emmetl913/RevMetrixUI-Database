@@ -1,13 +1,19 @@
 package edu.ycp.cs320.lab02.servlet;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Iterator;
+
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import edu.ycp.cs320.lab02.controller.EstablishmentRegController;
 import edu.ycp.cs320.lab02.model.Establishment;
+import edu.ycp.cs320.lab02.model.EstablishmentArray;
+
 
 public class EstablishmentRegServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
@@ -17,6 +23,43 @@ public class EstablishmentRegServlet extends HttpServlet {
 			throws ServletException, IOException {
 
 		System.out.println("establishmentReg Servlet: doGet");	
+		
+		HttpSession session = req.getSession();
+	    long createTime = session.getCreationTime();
+		   
+		// Get last access time of this Webpage.
+		long lastAccessTime = session.getLastAccessedTime();
+		String userIDKey = new String("userID");
+		String userID = new String("ABCD");
+
+		   // Check if this is new comer on your Webpage.
+		String establishmentRegKey = new String("establishmentRegKey");
+		EstablishmentArray model = new EstablishmentArray();
+
+		// If first visit: new session id
+		if (session.isNew() ){
+	      session.setAttribute(userIDKey, userID);
+		  session.setAttribute(establishmentRegKey,  model);
+		} 
+		//Get model and userID from jsp
+		userID = (String)session.getAttribute(userIDKey);
+
+		//controller.setModel(model);
+		
+		ArrayList<Establishment> establishments = model.getEstablishments();
+        if(model.getEstablishments() == null) {
+        	establishments = new ArrayList<Establishment>();
+        	establishments.add(new Establishment("FirstBall", "FirstAddress"));
+		}
+        else {
+        	establishments = model.getEstablishments();
+        }
+        
+		// Set the ArrayList as a request attribute
+		req.setAttribute("esta", establishments);
+		session.setAttribute(establishmentRegKey, model); //update session model
+
+		
 		
 		// call JSP to generate empty form
 		req.getRequestDispatcher("/_view/establishmentReg.jsp").forward(req, resp);
@@ -31,42 +74,61 @@ public class EstablishmentRegServlet extends HttpServlet {
 		
 		// holds the error message text, if there is any
 		String errorMessage = null;
-		Establishment model = new Establishment(req.getParameter("establishmentName"),req.getParameter("email"),req.getParameter("address") );
+
+		EstablishmentArray model = new EstablishmentArray();
 		EstablishmentRegController controller = new EstablishmentRegController();
+				
+		// Get session creation time.
+				HttpSession session = req.getSession();
+			    long createTime = session.getCreationTime();
+				   
+				// Get last access time of this Webpage.
+				long lastAccessTime = session.getLastAccessedTime();
+				String userIDKey = new String("userID");
+				String userID = new String("ABCD");
+
+				String establishmentRegKey = new String("establishmentRegKey");
+				
+				   // Check if this is new comer on your Webpage.
+				if (session.isNew() ){
+			      session.setAttribute(userIDKey, userID);
+				  session.setAttribute(establishmentRegKey,  model);
+				} 
+				model = (EstablishmentArray)session.getAttribute(establishmentRegKey);
+				userID = (String)session.getAttribute(userIDKey);
+				//end session shenanigans
+		
 		controller.setModel(model);
-		// result of calculation goes here
-		// decode POSTed form parameters and dispatch to controller
-		try {
-			String first = req.getParameter("establishmentName");
-			String second = req.getParameter("email");
-			String third = req.getParameter("address");
-			// check for errors in the form data before using is in a calculation
-			if (first.equals("") || second.equals("") || third.equals("")) {
-				errorMessage = "Please fill out all fields";
-			}
-			// otherwise, data is good, do the calculation
-			// must create the controller each time, since it doesn't persist between POSTs
-			// the view does not alter data, only controller methods should be used for that
-			// thus, always call a controller method to operate on the data
-			else {
-				controller.setStrings(first, second, third);
-				errorMessage = "Submitted";
-			}
-		} catch (NumberFormatException e) {
-			errorMessage = "Invalid String";
+        ArrayList<Establishment> establishments = model.getEstablishments(); //get ball ArrayList from session updated model
+		if(establishments == null) {
+			establishments = new ArrayList<Establishment>();
+			establishments.add(new Establishment("FirstBall", "FirstAddress"));
+		}
+		//on button press
+		String newEstablishmentName = req.getParameter("establishmentName");
+		String newEstablishmentAddress = req.getParameter("establishmentAddress");
+		String removeEstablishmentName = req.getParameter("removeEstablishmentName");
+		
+		if (req.getParameter("addEstablishment") != null ) {
+			//System.out.println(model.getBallAtIndex(0).getName());
+			controller.addEstablishment(newEstablishmentName, newEstablishmentAddress);
+		}
+		if(req.getParameter("removeEstablishment") != null) {
+			//controller.removeBall(removeBallName);
+			 Iterator<Establishment> iterator = establishments.iterator();
+			    while (iterator.hasNext()) {
+			    	Establishment establishment = iterator.next();
+			        if (establishment.getEstablishmentName().equals(removeEstablishmentName)) {
+			            iterator.remove(); // Remove the ball from the ArrayList
+			            break; // Exit the loop after removing the ball
+			        }
+			    }
 		}
 		
-		// Add parameters as request attributes
-		// this creates attributes named "first" and "second for the response, and grabs the
-		// values that were originally assigned to the request attributes, also named "first" and "second"
-		// they don't have to be named the same, but in this case, since we are passing them back
-		// and forth, it's a good idea
-		// add result objects as attributes
-		// this adds the errorMessage text and the result to the response
 		req.setAttribute("errorMessage", errorMessage);
-		req.setAttribute("game", model);
-
-		// Forward to view to render the result HTML document
+		req.setAttribute("esta", establishments);
+		session.setAttribute(establishmentRegKey, model); //update session model
+		
 		req.getRequestDispatcher("/_view/establishmentReg.jsp").forward(req, resp);
 	}
 

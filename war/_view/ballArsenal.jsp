@@ -144,6 +144,7 @@
 					<button name="removeBall" type="submit" value="Remove Ball" onclick="updateBallList(${game.balls})">
 					Remove Ball</button>
 				</div>
+				
 				<div id="ballsList"> &nbsp				
 				 <% 
             		// Retrieve ArrayList from request attribute
