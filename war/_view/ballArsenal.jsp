@@ -170,13 +170,6 @@
 					Remove Ball</button>
 				</div>
 				<div id="ballsList"> &nbsp		
-				<script>  
-			//	function switchBallBox(boxToSwitchClass, newClass, oldClass) {
-	         //	   	 	boxToShow = document.getElementById(boxToSwitchClass);
-	           //   		boxToShow.classList.remove(oldClass);
-	             //  		boxToShow.classList.add(newClass);
-	           		// }
-            </script>
 				
 			
 				 <% 
