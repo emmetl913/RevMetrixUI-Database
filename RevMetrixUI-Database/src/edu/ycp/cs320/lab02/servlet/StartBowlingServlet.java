@@ -82,13 +82,20 @@ public class StartBowlingServlet extends HttpServlet {
         //Initialize a Game that will be sent out to other portions of the website (currentGame)
         Game currentGame = null;
         
-        //Make a new game and add it to game list
-        if(req.getAttribute("Start New Game") != null) {
+        // Retrieve the value of the button clicked
+        String buttonValue = req.getParameter("gameStatus");
+        
+        // Check which button was clicked
+        if ("startNewGame".equals(buttonValue)) {
         	Game g = new Game(games.size()+1,1);
         	games.add(g); //game gets added to the end of the list //dont worry that the gameNumber will repeat.
         	//Eventually it won't because it will take database values
         	currentGame = g;
         	System.out.println(g.getGameNumber());
+        }
+        //Make a new game and add it to game list
+        if(req.getAttribute("Start New Game") != null) {
+        	
         }
         if(req.getAttribute("Selet Current Game") != null) {
         	//currentGame = selected game from dropdown

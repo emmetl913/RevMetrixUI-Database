@@ -406,7 +406,7 @@
 			<p></p>
 			<tr>
 				<button type="submit" id="gameStatus" name="select"  onclick="nextStep(4)" value="selectCurrentGame"> Select Current Game
-			  	<button type="submit" id="gameStatus" name="new" onclick="nextStep(4)" value="Start New Game"> Start New Game
+			  	<button type="submit" id="gameStatus" name="new" onclick="nextStep(4)" value="startNewGame"> Start New Game
 			</tr> 
 		</div>
 		<!-- Frame Page -->
