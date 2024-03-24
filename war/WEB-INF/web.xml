@@ -17,7 +17,10 @@
     <servlet-name>AccountServlet</servlet-name>
     <servlet-class>edu.ycp.cs320.lab02.servlet.AccountServlet</servlet-class>
   </servlet>
-  
+  <servlet>
+    <servlet-name>GameServlet</servlet-name>
+    <servlet-class>edu.ycp.cs320.lab02.servlet.GameServlet</servlet-class>
+  </servlet>
   <servlet>
     <servlet-name>AccountSignUpServlet</servlet-name>
     <servlet-class>edu.ycp.cs320.lab02.servlet.AccountSignUpServlet</servlet-class>
@@ -61,6 +64,9 @@
   	<servlet-mapping>
   	<servlet-name>StartBowlingServlet</servlet-name>
   	<url-pattern>/startBowling</url-pattern></servlet-mapping>
+  	  	<servlet-mapping>
+  	<servlet-name>GameServlet</servlet-name>
+  	<url-pattern>/game</url-pattern></servlet-mapping>
   	
   	<servlet-mapping>
   	<servlet-name>ShotServlet</servlet-name>

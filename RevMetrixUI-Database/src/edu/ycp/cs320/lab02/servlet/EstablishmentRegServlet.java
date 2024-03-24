@@ -30,7 +30,7 @@ public class EstablishmentRegServlet extends HttpServlet {
 		// Get last access time of this Webpage.
 		long lastAccessTime = session.getLastAccessedTime();
 		String userIDKey = new String("userID");
-		String userID = new String("ABCD");
+		String userID = new String("ABD");
 
 		   // Check if this is new comer on your Webpage.
 		String establishmentRegKey = new String("establishmentRegKey");

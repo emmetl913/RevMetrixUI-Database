@@ -325,7 +325,7 @@
 		 <div class="dropdown-content" id="myDropdown">
 	        <a href="#" onclick="showContent('event')">Event</a>
 	        <a href="#" onclick="showContent('session')">Session</a>
-	        <a href="#" onclick="showContent('game')">Game</a>
+	        <a href="${pageContext.servletContext.contextPath}/game">Game</a>
 			<a href="#" onclick="showContent('frame')">Frame</a>
 	        <a href="#" onclick="showContent('shot')">Shot</a>
 	   	 </div>
@@ -396,7 +396,7 @@
 				if (games != null) {
 				  for (int i =0; i < games.size(); i++) {
 					  Game game = games.get(i);
-		   %>
+			%>
 			<option><%= game.getGameNumber() %> &nbsp&nbsp&nbsp|&nbsp&nbsp&nbsp Lane: <%=game.getLane()%> &nbsp&nbsp&nbsp|&nbsp&nbsp&nbsp # of Frames: <%=game.getFrameCount()%>
 			&nbsp&nbsp&nbsp|&nbsp&nbsp&nbsp Score: <%=game.getScore()%></option>
 		   <% 
