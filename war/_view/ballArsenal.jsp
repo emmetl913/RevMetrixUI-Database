@@ -5,6 +5,13 @@
 <%@ page import= "edu.ycp.cs320.lab02.model.Ball" %>
 <%@ page import="edu.ycp.cs320.lab02.model.BallArsenal" %>
 <%@ page import = "java.io.*,java.util.*" %>
+<%@ page import="javax.servlet.http.HttpSession" %>
+<%
+// Retrieve ArrayList from session attribute
+	//HttpSession session = request.getSession();
+	BallArsenal model = (BallArsenal) session.getAttribute("ballArsenalKey");
+	ArrayList<Ball> balls = (model != null) ? model.getBalls() : null;
+%>
 
 <html>
 	<head>
@@ -168,28 +175,20 @@
 				<div id="ballsList"> &nbsp		
 				
 			
-				 <% 
-            		// Retrieve ArrayList from request attribute
-            		ArrayList<Ball> balls = (ArrayList<Ball>) request.getAttribute("balls");
-   					if (balls != null) {
-   					if(balls.size() >= 4){
-   					
-   					
-   				}
-   				else {
-   					
-   				
-   					
-   				}
-       				for (Ball ball : balls) {
-				%>
-        			<div class="ball-section">
-            		<p>Name: <%= ball.getName() %></p>
-        		</div>
-				<% 
-       			 } } else {	%>
-   					 <p>No balls available.</p>
-				<% } %>
+						<% 
+			            if (balls != null && !balls.isEmpty()) {
+			                for (Ball ball : balls) {
+			        %>
+			        <div class="ball-section">
+			            <p>Name: <%= ball.getName() %></p>
+			        </div>
+			        <% 
+			                }
+			            } else { 
+			        %>
+			        <p>No balls available.</p>
+			        <% } 		session.setAttribute("ballArsenalKey", model); //update session model
+%>
 				
 				</div>
 				
