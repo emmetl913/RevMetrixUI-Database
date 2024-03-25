@@ -23,6 +23,11 @@ import edu.ycp.cs320.lab02.model.EventArray;
 public class GameServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	
+	
+	//Important information: 
+	//		currentGame is not being used by other functions
+	//		This will be main data to implement into the database
+	
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException {
@@ -39,7 +44,7 @@ public class GameServlet extends HttpServlet {
 		   // Check if this is new comer on your Webpage.
 		
 		String gamesListKey = new String("gamesListKey");
-		ArrayList<Game> games = new ArrayList<Game>();
+		ArrayList<Game> games = (ArrayList<Game>)session.getAttribute(gamesListKey);
 		
 		// If first visit: new session id
 		if (session.isNew() ){
@@ -51,6 +56,14 @@ public class GameServlet extends HttpServlet {
 		  session.setAttribute(gamesListKey, games);
 		  
 		} 
+		if(games == null) {
+			games = new ArrayList<Game>();
+			
+			games.add(new Game(1,14));
+			games.add(new Game(2,22));
+			games.add(new Game(3,4));
+			session.setAttribute(gamesListKey, games);
+		}
 		//Get model and userID from jsp
 		userID = (String)session.getAttribute(userIDKey);
 		games = (ArrayList<Game>)session.getAttribute(gamesListKey);
@@ -68,21 +81,7 @@ public class GameServlet extends HttpServlet {
         // Retrieve the value of the button clicked
         String buttonValue = req.getParameter("gameStatus");
         
-        // Check which button was clicked
-        if ("startNewGame".equals(buttonValue)) {
-        	Game g = new Game(games.size()+1,1);
-        	games.add(g); //game gets added to the end of the list //dont worry that the gameNumber will repeat.
-        	//Eventually it won't because it will take database values
-        	currentGame = g;
-        	System.out.println(g.getGameNumber());
-        }
-        //Make a new game and add it to game list
-        if(req.getAttribute("Start New Game") != null) {
-        	
-        }
-        if(req.getAttribute("Selet Current Game") != null) {
-        	//currentGame = selected game from dropdown
-        }
+        
 		req.setAttribute("gameObjArr", games);
 		session.setAttribute(gamesListKey, games);
 		
@@ -145,11 +144,13 @@ public class GameServlet extends HttpServlet {
         	System.out.println(g.getGameNumber());
         }
         //Make a new game and add it to game list
-        if(req.getAttribute("Start New Game") != null) {
-        	
+        if(req.getParameter("select") != null) {
+        	currentGame = games.get(0);
         }
-        if(req.getAttribute("Selet Current Game") != null) {
+        if(req.getParameter("new") != null) {
         	//currentGame = selected game from dropdown
+        	games.add(new Game(4,4));
+        	currentGame = games.get(games.size()-1);
         }
 		req.setAttribute("gameObjArr", games);
 		session.setAttribute(gamesListKey, games);

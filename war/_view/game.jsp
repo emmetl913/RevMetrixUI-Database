@@ -3,7 +3,12 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
 <%@ page import= "edu.ycp.cs320.lab02.model.Game" %>
 <%@ page import = "java.io.*,java.util.*"%>
+<%@ page import="javax.servlet.http.HttpSession" %>
+<%
+	ArrayList<Game> games = (ArrayList<Game>)session.getAttribute("gamesListKey");
+	//ArrayList<Ball> games = (model != null) ? model.getBalls() : null;
 
+%>
 <html>
 <head>
 
@@ -132,6 +137,7 @@ button {
 	        <a href="#" onclick="showContent('shot')">Shot</a>
 	   	 </div>
 	</div>
+	<form action="${pageContext.servletContext.contextPath}/game" method="post">
 	<div class="container">
 	
 		<!-- Game Page -->
@@ -140,10 +146,10 @@ button {
 
 			<select name="establishment" id="establishment">
 			<%
-			ArrayList<Game> games = (ArrayList<Game>)request.getAttribute("gameObjArr");
 				if (games != null) {
 				  for (int i =0; i < games.size(); i++) {
 					  Game game = games.get(i);
+					  
 			%>
 			<option><%= game.getGameNumber() %> &nbsp&nbsp&nbsp|&nbsp&nbsp&nbsp Lane: <%=game.getLane()%> &nbsp&nbsp&nbsp|&nbsp&nbsp&nbsp # of Frames: <%=game.getFrameCount()%>
 			&nbsp&nbsp&nbsp|&nbsp&nbsp&nbsp Score: <%=game.getScore()%></option>
@@ -154,10 +160,11 @@ button {
 			</select>
 			<p></p>
 			<tr>
-				<button type="submit" id="gameStatus" name="select"  onclick="nextStep(4)" value="selectCurrentGame"> Select Current Game</button>
+				<button type="submit" id="gameStatus" name="select" value="selectCurrentGame"> Select Current Game</button>
 				&nbsp
-			  	<button type="submit" id="gameStatus" name="new" onclick="nextStep(4)" value="startNewGame"> Start New Game</button>
+			  	<button type="submit" id="gameStatus" name="new" value="startNewGame"> Start New Game</button>
 			</tr> 
 		</div>
+		</form>
 </body>
 </html>
