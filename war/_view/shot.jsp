@@ -3,396 +3,438 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ page import="edu.ycp.cs320.lab02.model.BallArsenal" %>
+<%@ page import="edu.ycp.cs320.lab02.controller.ShotController" %>
 <%@ page import="edu.ycp.cs320.lab02.model.Ball" %>
 <%@ page import="java.util.ArrayList" %>
 
 <html>
-	<head>
-		<title>Shot</title>
-		<style type="text/css">
-		.container{
-            text-align: center;
-            align-items: center;
-            margin-top: 50px;
-        }
+    <head>
+        <title>Shot</title>
+        <style type="text/css">
+            .container{
+                text-align: center;
+                align-items: center;
+                margin-top: 50px;
+                position: relative;
+            }
 
-        .dropdown{
-            margin-top: 10px;
-            margin-bottom: 20px;
-            font-size: 16px;
-        }
+            #game-info{
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                position: relative;
+                margin-right: 20px;
+                font-size: 24px;
+                font-weight: 900;
+            }
 
-        .row{
-            display: flex;
-            justify-content: center;
-        }
+            .game-box{
+                border: 1px solid black;
+                padding: 5px;
+                padding-left: 25px;
+                padding-right: 25px;
+            }
 
-        .circle{
-            width: 45px;
-            height: 45px;
-            border-radius: 50%;
-            border: 1px solid black;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            margin: 5px;
-            cursor: pointer;
-            font-weight: 900;
-        }
+            .frame-box{
+                border: 1px solid black;
+                padding: 5px;
+                padding-left: 25px;
+                padding-right: 25px;
+            }
 
-        .circle.selected{
-            background-color: black;
-            color: white;
-        }
+            .dropdown{
+                margin-top: 10px;
+                margin-bottom: 20px;
+                font-size: 16px;
+            }
 
-        .shot-buttons{
-            margin-top: 20px;
-        }
+            .row{
+                display: flex;
+                justify-content: center;
+            }
 
-        .shot-button{
-            margin: 5px;
-            padding: 10px 20px;
-            font-size: 16px;
-            cursor: pointer;
-            font-weight: 900;
-        }
+            .circle{
+                width: 45px;
+                height: 45px;
+                border-radius: 50%;
+                border: 1px solid black;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                margin: 5px;
+                cursor: pointer;
+                font-weight: 900;
+            }
 
-        #game-info{
-            display: inline-block;
-            justify-content: center;
-            align-items: center;
-            margin-bottom: 20px;
-            margin-top: 10px;
-            margin-right: 15px;
-            font-size: 24px;
-            font-weight: 900;
-        }
+            .circle-inner {
+                font-size: 18px;
+            }
 
-        .frame-buttons{
-            margin-top: 5px;
-        }
+            .circle.selected {
+                background-color: gray;
+            }
 
-        .frame-buttons button{
-            margin: 25px;
-        }
+            .circle.selected{
+                background-color: black;
+                color: white;
+            }
 
-        .game-number{
-            margin-right: 30px;
-            border: 1px solid black;
-            padding: 5px;
-            padding-left: 25px;
-            padding-right: 25px;
-        }
+            .firstShot{
+                width: 40px;
+                height: 40px;
+                background-color: rgb(187, 185, 185);
+                border: 2px solid black;
+                cursor: pointer;
+                margin: 20px;
 
-        .frame-number{
-            border: 1px solid black;
-            padding: 5px;
-            padding-left: 25px;
-            padding-right: 25px;
-        }
+                display: flex;
+                justify-content: center;
+                align-items: center;
 
-        .color-box{
-            width: 40px;
-            height: 40px;
-            background-color: rgb(187, 185, 185);
-            border: 2px solid black;
-            cursor: pointer;
-            margin: 20px;
+                text-align: center;
+                font-size: 16px;
+                font-weight: 900;
+            }
 
-            display: flex;
-            justify-content: center;
-            align-items: center;
+            .secondShot{
+                width: 40px;
+                height: 40px;
+                background-color: rgb(187, 185, 185);
+                border: 2px solid black;
+                cursor: pointer;
+                margin: 20px;
 
-            text-align: center;
-            font-size: 16px;
-            font-weight: 900;
-        }
+                display: flex;
+                justify-content: center;
+                align-items: center;
 
-        .selected{
-            background-color: orange;
-        }
+                text-align: center;
+                font-size: 16px;
+                font-weight: 900;
+            }
 
-        		/* Style for the black sidebar */
-.sidebar {
-  height: 100%;
-  width: 250px;
-  position: fixed;
-  top: 0;
-  left: 0;
-  background-color: black;
-  padding-top: 20px;
-}
+            .shot-buttons{
+                margin-top: 20px;
+            }
 
-/* Links in the sidebar */
-.sidebar a {
-  padding: 10px 20px;
-  text-decoration: none;
-  color: white;
-  display: block;
-}
+            .shot-button{
+                margin: 5px;
+                margin-right: 10px;
+                padding: 10px 20px;
+                font-size: 16px;
+                cursor: pointer;
+                font-weight: 900;
+            }
 
-/* Change color of links on hover */
-.sidebar a:hover {
-  background-color: #333;
-}
+            .frame-buttons{
+                margin-top: 5px;
+            }
 
-/* Style the main content */
-.main-content {
-  margin-left: 250px; /* Same width as the sidebar */
-  padding: 20px;
-}
+            .frame-buttons button{
+                margin: 25px;
+            }
 
-/* Responsive layout - when the screen is less than 600px wide, make the sidebar and the main content stack on top of each other */
-@media screen and (max-width: 600px) {
-  .sidebar {
-    width: 100%;
-    height: auto;
-    position: relative;
-  }
-  .sidebar a {float: left;}
-  div.content {margin-left: 0;}
-}
-		</style>
-	</head>
+            /* Style for the black sidebar */
+            .sidebar {
+                height: 100%;
+                width: 250px;
+                position: fixed;
+                top: 0;
+                left: 0;
+                background-color: black;
+                padding-top: 20px;
+            }
 
-	<body>
-		<c:if test="${! empty errorMessage}">
+            /* Links in the sidebar */
+            .sidebar a {
+                padding: 10px 20px;
+                text-decoration: none;
+                color: white;
+                display: block;
+            }
+
+            /* Change color of links on hover */
+            .sidebar a:hover {
+                background-color: #333;
+            }
+
+            /* Style the main content */
+            .main-content {
+                margin-left: 250px; /* Same width as the sidebar */
+                padding: 20px;
+            }
+
+            /* Responsive layout - when the screen is less than 600px wide, make the sidebar and the main content stack on top of each other */
+            @media screen and (max-width: 800px) {
+                .sidebar {
+                    width: 100%;
+                    height: auto;
+                    position: relative;
+                }
+                .sidebar a {float: left;}
+                div.content {margin-left: 0;}
+                .container{
+                    flex-direction: column;
+                    margin-top: 100px;
+                    margin-right: 50px;
+                    float: left;
+                }
+            }
+        </style>
+    </head>
+    <body>
+        <c:if test="${! empty errorMessage}">
 			<div class="error">${errorMessage}</div>
 		</c:if>
 
         <div class="sidebar">
 			<a href="${pageContext.servletContext.contextPath}/index">
 				<img src="${pageContext.request.contextPath}/_view/BowlingBall.png"width="100" height="100">
-			  </a>
+			</a>
 			<a href="${pageContext.servletContext.contextPath}/startBowling">Start Bowling</a>
 			<a href="${pageContext.servletContext.contextPath}/establishmentReg">Establishment Registration</a>
 		    <a href="${pageContext.servletContext.contextPath}/logIn">Sign Out</a>
-        <a href="${pageContext.servletContext.contextPath}/shot">Shot</a>
-        <a href="${pageContext.servletContext.contextPath}/ballArsenal">Ball Arsenal</a>
-        <a href="https://github.com/emmetl913/RevMetrixUI-Database">GitHub</a>
-		  </div>
-	
-		<form action="${pageContext.servletContext.contextPath}/shot" method="post">
+            <a href="${pageContext.servletContext.contextPath}/shot">Shot</a>
+            <a href="${pageContext.servletContext.contextPath}/ballArsenal">Ball Arsenal</a>
+            <a href="https://github.com/emmetl913/RevMetrixUI-Database">GitHub</a>
+		</div>
+
+        <!-- gets variables from the servlet -->
+        <%
+            String errorMessage = (String) request.getAttribute("errorMessage");
+            BallArsenal ballArsenal = (BallArsenal) request.getAttribute("ballArsenal");
+            String shotType = (String) request.getAttribute("shotType");
+
+            Object shot = request.getAttribute("shot");
+
+            Object pinsKnockedDown = request.getAttribute("pinsKnockedDown");
+            int pinsKnockedOver = 0;
+            if(pinsKnockedDown != null){
+                pinsKnockedOver = (Integer) pinsKnockedDown;
+            }
+        %>
+
+        <form action="${pageContext.servletContext.contextPath}/shot" method="post">
             <div class="container">
-                <!-- The Game and Frame -->
                 <div id="game-info">
-                    <span>Game:  </span><span class="game-number">1</span>
-                    <span>Frame:  </span><span class="frame-number">1</span>
+                    <!-- no info, so it shows blank -->
+                    <div class="game-box">
+                        <span>Game:   ${session.gameNumber}</span>
+                    </div>
+                    <div class="frame-box">
+                        <span>Frame:   ${session.frameNumber}</span>
+                    </div>
                 </div>
-
-                <!-- dropdown menu -->
-                <div class="dropdown">
-                    <%
-                    BallArsenal ballArsenal = (BallArsenal) request.getAttribute("ballArsenal");
-
-                    if(ballArsenal == null || ballArsenal.getBalls().isEmpty()){
-                        response.sendRedirect("ballArsenal.jsp");
-                    }else{
-                        %>
-
-                        <select id="dropdownMenu" name="dropdownOption">
-                            <option value="" disabled selected>Select an Option</option>
-                            <% 
-                                for(Ball ball : ballArsenal.getBalls()){
-                                    %>
-                                    <option value="<%= ball.getName() %>"><%= ball.getName() %></option>
-                                    <%
-                                }
-                                %>
+        
+                <!-- drop down menu - selecting a ball -->
+                <form action="ShotServlet" method="post" id="ball-form">
+                    <div class="dropdown">
+                        <select name="ball">
+                            <option value="">Select a ball...</option>
+                            <c:forEach var="ball" items="${ballArsenal.getBalls()}">
+                                <option value="${ball.getName()}">${ball.getName()}</option>
+                            </c:forEach>
+                            <option value="add">Add Ball... </option>
                         </select>
-                    <% } %>
+                    </div>
+                </form>
+
+                <div class="row">
+                    <div class="circle" data-number="7" name="pin-7"><span class="circle-inner">7</span></div>
+                    <div class="circle" data-number="8" name="pin-8"><span class="circle-inner">8</span></div>
+                    <div class="circle" data-number="9" name="pin-9"><span class="circle-inner">9</span></div>
+                    <div class="circle" data-number="10" name="pin-10"><span class="circle-inner">10</span></div>
+                </div>
+                <div class="row">
+                    <div class="circle" data-number="4" name="pin4"><span class="circle-inner">4</span></div>
+                    <div class="circle" data-number="5" name="pin5"><span class="circle-inner">5</span></div>
+                    <div class="circle" data-number="6" name="pin6"><span class="circle-inner">6</span></div>
+                </div>
+                <div class="row">
+                    <div class="circle" data-number="2" name="pin2"><span class="circle-inner">2</span></div>
+                    <div class="circle" data-number="3" name="pin3"><span class="circle-inner">3</span></div>
+                </div>
+                <div class="row">
+                    <div class="circle" data-number="1" name="pin1"><span class="circle-inner">1</span></div>
                 </div>
 
-                <!-- Invereted equilateral triangle -->
                 <div class="row">
-                    <div class="circle" id="pin7" onclick="togglePin(7)">7</div>
-                    <div class="circle" id="pin8" onclick="togglePin(8)">8</div>
-                    <div class="circle" id="pin9" onclick="togglePin(9)">9</div>
-                    <div class="circle" id="pin10" onclick="togglePin(10)">10</div>
+                    <div class="firstShot" id="score-box1" onclick="setFirstShot()" style="background-color: orange;"></div>
+                    <div class="secondShot" id="score-box2" onclick="setSecondShot()" style="background-color: lightslategray;"></div>
                 </div>
-                <div class="row">
-                    <div class="circle" id="pin4" onclick="togglePin(4)">4</div>
-                    <div class="circle" id="pin5" onclick="togglePin(5)">5</div>
-                    <div class="circle" id="pin6" onclick="togglePin(6)">6</div>
+    
+                <div class="shot-buttons">
+                    <button class="shot-button" onclick="setFoul()">F</button>
+                    <button class="shot-button" onclick="setGutter()">-</button>
+                    <button class="shot-button" onclick="setStrike()">X</button>
+                    <button class="shot-button" onclick="setSpare()">/</button>
                 </div>
-                <div class="row">
-                    <div class="circle" id="pin2" onclick="togglePin(2)">2</div>
-                    <div class="circle" id="pin3" onclick="togglePin(3)">3</div>
-                </div>
-                <div class="row">
-                    <div class="circle" id="pin1" onclick="togglePin(1)">1</div>
-                </div>
-
-                <!-- Score Boxes -->
-                <div class="row">
-                    <div class="color-box selected" id="score-box1" onclick="highlightScoreBox(1); updateScoreBoxes()"></div>
-                    <div class="color-box" id="score-box2" onclick="highlightScoreBox(2); updateScoreBoxes()"></div>
-                </div>
-
-                <div class="shot-buttons" onclick="handleButtonClick(event)">
-                    <button class="shot-button" data-score="foul">F</button>
-                    <button class="shot-button" data-score="no-pins">-</button>
-                    <button class="shot-button" data-score="strike">X</button>
-                    <button class="shot-button" data-score="spare">/</button>
-                </div>
-
+    
                 <div class="frame-buttons">
                     <button onclick="previousFrame()">Previous Frame</button>
                     <button onclick="nextFrame()">Next Frame</button>
                 </div>
             </div>
+        </form>
 
-            <script>
-                var selectedPins = [];
-                var gameNumber = 1;
-                var frames = [];
-                var currentFrameIndex = 0;
-                var currentFrame = [];
-                var score = 0;
-
-                function initializeFrame(){
-                    for(let i = 0; i<10; i++){
-                        frames.push([]);
-                    }
+        <script>
+            function handleSelectChange(event){
+                if(event.target.value == "add"){
+                    window.location.href = '${pageContext.servletContext.contextPath}/ballArsenal';
                 }
+            }
 
-                function handleButtonClick(event){
-                    var target = event.target;
-                    if(target.classList.contains('shot-button')){
-                        var scoreType = target.getAttribute('data-score');
-                        updateScoreAndDisplay(scoreType);
-                        event.preventDefault();
-                    }
-                }
+            const firstShot = 0;
+            const secondShot = 0;
 
+            const noPins = 0;
+            const allPins = 10;
 
-                function togglePin(pinNumber){
-                    var pin = document.getElementById("pin" + pinNumber);
-                    pin.classList.toggle("selected");
+            const minFrame = 1;
+            const maxFrame = 12;
 
-                    if(selectedPins.includes(pinNumber)){
-                        //remove pines from selectedPins array
-                        selectedPins.splice(selectedPins.indexOf(pinNumber), 1);
-                        score--;
+            let pinCount = noPins;
+            let firstShotCount = noPins;
+            let secondShotCount = noPins;
+            let shot = firstShot;
+            let frameNumber = 1;
+            let gameNumber = 1;
+
+            document.getElementById("frameNumber").innerHTML = frameNumber;
+            document.getElementById("gameNumber").innerHTML =  gameNumber;
+
+            setFirstShot();
+
+            function togglePin(pin){
+                pin.classList.toggle('leave');
+
+                const pins = documnet.querySelectorAll('.pin:not(.leave)');
+                pinCount = pins.length;
+
+                if(shot == firstShot){
+                    firstShotCount = pinCount;
+
+                    if(firstShotCount == allPins){
+                        setStrike();
                     }else{
-                        //add pin to the array
-                        selectedPins.push(pinNumber);
-                        score++;
-                    }
-                    updateScoreBoxes();
-                }
+                        document.querySelector('.firstShot span').textContent = firstShotCount;
 
-                function nextFrame(){
+                        clearSecondShot();
+                    }
+                }else{
+                    secondShotCount = pinCount-firstShotCount;
+
+                    if(pinCount == allPins){
+                        document.querySelector('.secondShot span').textContent = '/';
+                    }else if(secondShotCount == noPins){
+                        document.querySelector('.secondShot span').textContent = '-';
+                    }else{
+                        document.querySelector('.secondShot span').textContent = secondShotCount;
+                    }
+                }
+            }
+
+            function clearPins(){
+                var pins = document.querySelectorAll(".pin");
+                pins.forEach(function(pin){
+                    pin.classList.remove('leave');
+                });
+            }
+
+            function setAllPinsStanding(){
+                var pins = document.querySelectorAll('.pin');
+                pins.forEach(function(pin){
+                    pin.classList.add('leave');
+                });
+
+                resetPinCounts();
+                clearSecondShot();
+            }
+
+            function setGutter(){
+                if(shot == firstShot){
+                    setAllPinsStanding();
+                    clearSecondShot();
+                    document.querySelector('.firstShot span').textContent = '-';
+                }else{
+                    document.querySelector('.secondShot span').textContent = '-';
+                }
+            }
+
+            function setFoul(){
+                if(shot == firstShot){
+                    setAllPinsStanding();
+                    clearSecondShot();
+                    document.querySelector('.firstShot span').textContent = 'F';
+                }else{
+                    document.querySelector('.firstShot span').textContent = 'F';
+                }
+            }
+
+            function setFirstShot(){
+                shot = firstShot;
+                document.querySelector('.firstShot').style.backgroundColor = 'orange';
+                document.querySelector('.secondShot').style.backgroundColor = 'lightslategray';
+            }
+
+            function clearFirstShot(){
+                document.querySelector('.firstShot span').textContent = ' ';
+            }
+
+            function clearSecondShot(){
+                document.querySelector('.secondShot span').textContent = ' ';
+            }
+
+            function resetPinCounts(){
+                pinCount = noPins;
+                firstShotCount = noPins;
+                secondShotCount = noPins;
+            }
+
+            function setSpare(){
+                clearPins();
+                setSecondShot();
+                if(document.querySelector('.firstShot span').textContent !== '-'){
+                    if(document.querySelector('.firstShot span').textContent !== 'F'){
+                        document.querySelector('.firstShot span').textContent = firstShotCount; 
+                    }
+                }
+                document.querySelector('.secondShot span').textContent = '/';
+            }
+
+            function setStrike(){
+                clearPins();
+                setFirstShot();
+                resetPinCounts();
+                clearFirstShot();
+                document.querySelector('.secondShot span').textContent = 'X';
+            }
+
+            function getPreviousFrame(){
+                clearPins();
+                resetPinCounts();
+                document.querySelector('.firstShot span').textContent = ' ';
+                document.querySelector('.secondShot span').textContent = ' ';
+                setFirstShot();
+
+                if(frameNumber > minFrame){
+                    frameNumber--;
+                    document.getElementById('current-frame').value = frameNumber;
+                }
+            }
+
+            function getNextFrame(){
+                clearPins();
+                resetPinCounts();
+                document.querySelector('.firstShot span').textContent = ' ';
+                document.querySelector('.secondShot span').textContent = ' ';
+                setSecondShot();
+
+                if(frameNumber < maxFrame){
                     frameNumber++;
-                    updateFrameNumber();
+                    document.getElementById('frameNumber').value = frameNumber;
                 }
-
-                function previousFrame(){
-                    if(frameNumber>1){
-                        frameNumber--;
-                        updateFrameNumber();
-                    }
-                }
-
-                function updateFrameNumber(){
-                    var frameNumberElement = document.getElementById("frame-number");
-                    frameNumberElement.textContent = frameNumber
-                }
-
-                function selectShotType(shotType){
-                    //set the selected shot type
-                    document.getElementById("shot-type").value = shotType;
-                }
-
-                function resetPinSelection(){
-                    var pins = document.querySelectorAll(".circle");
-                    pins.forEach(function(pin){
-                        pin.classList.remove("selected");
-                    });
-                }
-
-                //highlights the first box when page first booted up
-                //switches color when the other box is clicked
-
-                function highlightScoreBox(frameNumber){
-                    var currentBox = document.getElementById('score-box' + frameNumber);
-                    var otherBox = frameNumber === 1 ? document.getElementById('score-box2') : document.getElementById('score-box1');
-
-                    currentBox.classList.add('selected');
-                    otherBox.classList.remove('selected');
-
-                    currentFrameIndex = frameNumber - 1;
-                    currentFrame = frames[currentFrameIndex];
-
-                    updateScoreBoxes();
-                }
-
-                function updateScoreBoxes(){
-                    //calculates the score based on selected pins
-                    var highlightedBox = document.querySelector('.color-box.selected');
-                    //var score = calculateTotalScore();
-
-                    //update the content of each score box
-                    if(highlightedBox){ 
-                        //score = calculateTotalScore();
-                        highlightedBox.textContent = score;
-                    }
-                }
-
-                function calculateTotalScore(){
-                    var totalScore = 0;
-                    
-                    for(let i = 0; i < frames.length; i++){
-                        var frame = frames[i];
-
-                        if(frame.length === 0) continue;    //frame not played
-
-                        var frameScore = frame.reduce((a,b) => a+b, 0);
-                        totalScore += frameScore;
-                    }
-                    return totalScore;
-                }
-
-                function updateScoreAndDisplay(scoreType){
-                    updateScore(scoreType); //updates score based on type
-                    updateScoreBoxes(); //updates via pins
-                }
-
-                // function isSpareFrame(frame){
-                //     return frame.length === 2 && frame[0] + frame[1] === 10;
-                // }
-
-                function updateScore(scoreType, event){
-                    event.preventDefault();
-
-                    var currentFrame = frames[currentFrameIndex];
-
-                    //update score based on score type
-                    switch(scoreType){
-                        case 'foul' : 
-                            currentFrame.push('F');
-                            break;
-                        case 'no-pins' : 
-                            currentFrame.push('-');
-                            break;
-                        case "strike" : 
-                            currentFrame.push('X');
-                            break;
-                        case 'spare' : 
-                            // if(currentFrame.length === 1){
-                            //     currentFrame.push(10 - currentFrame[0]);
-                            // }else{
-                            //     currentFrame.push(10);
-                            // }
-                            currentFrame.push('/');
-                            break;
-                        default : 
-                            break;
-                    }
-                }
-
-                initializeFrame();
-            </script>
-		</form>
-	</body>
+            }
+        </script>
+    </body>
 </html>

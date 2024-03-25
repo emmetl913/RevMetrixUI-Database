@@ -1,11 +1,21 @@
 package edu.ycp.cs320.lab02.model;
 
+import java.util.List;
+
 public class Shot{
 	private int pins;
 	private String type;
+	private String ballName;
 	
 	//Constructor
-	public Shot(int pins) {
+	public Shot() {
+		this.pins = 0;
+		this.type = "";
+		this.ballName = "";
+	}
+	
+	public Shot(String type, int pins) {
+		this.type = type;
 		this.pins = pins;
 	}
 	
@@ -27,4 +37,12 @@ public class Shot{
 	public void setType(String type) {
 		this.type = type;
 	}	
+	
+	public String getBallName() {
+		return ballName;
+	}
+	
+	public void setBallName(String ballName) {
+		this.ballName = ballName;
+	}
 }

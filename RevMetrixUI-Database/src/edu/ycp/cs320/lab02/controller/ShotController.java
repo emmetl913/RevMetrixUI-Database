@@ -1,25 +1,38 @@
 package edu.ycp.cs320.lab02.controller;
+
+import java.util.ArrayList;
+import java.util.List;
+
 import edu.ycp.cs320.lab02.model.Shot;
 
 public class ShotController {
-	private Shot shot;
-	
-	public void setModel(Shot shot) {
-		this.shot = shot;
+
+	private List<Shot> shots;
+
+	public ShotController() {
+		shots = new ArrayList<Shot>();
 	}
-	
-	public int KnockedOver(Shot shot) {
-		return 10-shot.getKnockedOver();
+
+	public Shot createShot(String type, int pins) {
+		Shot shot = new Shot(type, pins);
+		shots.add(shot);
+		return shot;
 	}
-	
-	public int Types() {
-		if(shot.getType().equals("X")) {
-			return 10;
-		}else if(shot.getType().equals("-")) {
-			return 0;
-		}else if(shot.getType().equals("F")) {
-			return 0;
+
+	public List<Shot> getShots() {
+		return shots;
+	}
+
+	public int getTotalPins() {
+		int totalPins = 0;
+		for (Shot shot : shots) {
+			totalPins += shot.getKnockedOver();
 		}
-		return 10-shot.getKnockedOver();	//spare
+		return totalPins;
 	}
+
+	public void reset() {
+		shots.clear();
+	}
+
 }

@@ -12,13 +12,13 @@ public class FrameTest{
 	
 	@Before
 	public void setUp() {
-		num = new Frame(0);
+		num = new Frame();
 	}
 	
 	@Test
 	public void testGetFrame() {
-		num = new Frame(4);
-		assertEquals(4, num.getFrame());
+		num = new Frame();
+		assertEquals(0, num.getFrame());
 	}
 	
 	@Test
