@@ -37,7 +37,7 @@ public class BallArsenalServlet extends HttpServlet {
 
 		   // Check if this is new comer on your Webpage.
 		String ballArsenalKey = new String("ballArsenalKey");
-		BallArsenal model = new BallArsenal();
+		BallArsenal model = (BallArsenal)session.getAttribute(ballArsenalKey);
 
 		// If first visit: new session id
 		if (session.isNew() ){
@@ -49,14 +49,12 @@ public class BallArsenalServlet extends HttpServlet {
 
 		//controller.setModel(model);
 		
-		ArrayList<Ball> balls = model.getBalls();
-        if(model.getBalls() == null) {
-			balls = new ArrayList<Ball>();
-			balls.add(new Ball("FirstBall"));
+		if(model == null) {
+			model = new BallArsenal();
+			session.setAttribute(ballArsenalKey, model);
 		}
-        else {
-        	balls = model.getBalls();
-        }
+		ArrayList<Ball> balls = model.getBalls();
+        balls = model.getBalls();
         
 		// Set the ArrayList as a request attribute
 		req.setAttribute("balls", balls);

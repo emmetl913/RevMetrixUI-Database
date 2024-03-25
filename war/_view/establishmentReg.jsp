@@ -1,6 +1,14 @@
 <!DOCTYPE html>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
+<%@ page import= "edu.ycp.cs320.lab02.model.Establishment" %>
+<%@ page import="edu.ycp.cs320.lab02.model.EstablishmentArray" %>
+<%@ page import = "java.io.*,java.util.*"%>
+<%@ page import="javax.servlet.http.HttpSession" %>
+<%
+	EstablishmentArray model = (EstablishmentArray) session.getAttribute("establishmentRegKey");
+	ArrayList<Establishment> establishments = (model != null) ? model.getEstablishments() : null;
+%>
 
 <html>
 <head>
@@ -15,6 +23,12 @@
             margin: 0;
             padding: 0;
         }
+
+        .ball-section {
+        border: 1px solid black; /* Add border around each ball section */
+        margin-bottom: 10px; /* Add some space between ball sections */
+        padding: 10px; /* Add padding inside each ball section */
+    }
 
         .container {
             max-width: 600px;
@@ -104,30 +118,50 @@
     </c:if>
 
     <div class="sidebar">
-			<a href="${pageContext.servletContext.contextPath}/index">
-				<img src="${pageContext.request.contextPath}/_view/BowlingBall.png"width="100" height="100">
-			  </a>
-			<a href="${pageContext.servletContext.contextPath}/startBowling">Start Bowling</a>
-			<a href="${pageContext.servletContext.contextPath}/establishmentReg">Establishment Registration</a>
-		    <a href="${pageContext.servletContext.contextPath}/logIn">Sign Out</a>
-        <a href="${pageContext.servletContext.contextPath}/shot">Shot</a>
-        <a href="${pageContext.servletContext.contextPath}/ballArsenal">Ball Arsenal</a>
-        <a href="https://github.com/emmetl913/RevMetrixUI-Database">GitHub</a>
+		<a href="${pageContext.servletContext.contextPath}/index">
+			<img src="${pageContext.request.contextPath}/_view/BowlingBall.png"width="100" height="100">
+		  </a>
+	      <a href="${pageContext.servletContext.contextPath}/establishmentReg">Establishment Registration</a>
+		  <a href="${pageContext.servletContext.contextPath}/logIn">Sign Out</a>
+          <a href="${pageContext.servletContext.contextPath}/shot">Shot</a>
+          <a href="${pageContext.servletContext.contextPath}/ballArsenal">Ball Arsenal</a>
+          <a href="https://github.com/emmetl913/RevMetrixUI-Database">GitHub</a>
+          <a href="${pageContext.servletContext.contextPath}/startBowling">Start Bowling</a>
 		  </div>
       
     <div class="container">
-        <h2>Establishment Registration</h2>
+        <h2>Add Establishment Registration</h2>
         <form action="${pageContext.servletContext.contextPath}/establishmentReg" method="post">
             <label>Establishment Name:</label>
-            <input type="text" name="establishmentName" size="12" value="${game.establishmentName}">
-
-            <label for="email">Email:</label>
-            <input type="text" name="email" size="12" value="${game.email}">
+            <input type="text" name="establishmentName" size="12">
 
             <label for="address">Address:</label>
-            <input type="text" name="address" size="12" value="${game.address}">
+            <input type="text" name="address" size="12">
 
-            <button type="submit">Register</button>
+            <button name="submitEstab" type="submit">Add Establishment</button>
+
+            <h2>Remove Establishment Registration</h2>
+            <label>Establishment Name:</label>
+            <input type="text" name="removeEstablishmentName" size="12">
+
+            <button name="submitRemoveEstab" type="submit">Remove Establishment</button>
+
+            <div id="ballsList"> &nbsp				
+              <% 
+                     
+                  if (establishments != null) {
+                    for (Establishment establishment : establishments) {
+             %>
+                   <div class="ball-section">
+                     <p>Name: <%= establishment.getEstablishmentName() %></p>
+                     <p>Address: <%= establishment.getAddress() %></p>
+                 </div>
+             <% 
+                   } } else {	%>
+                   <p>No establishments available.</p>
+             <% } %>
+             
+             </div>
     </div>
 </body>
 </html>

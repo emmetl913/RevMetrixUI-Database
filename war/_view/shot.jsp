@@ -213,8 +213,8 @@
                 pinsKnockedOver = (Integer) pinsKnockedDown;
             }
         %>
-
-        <form action="${pageContext.servletContext.contextPath}/shot" method="post">
+	
+		<form action="${pageContext.servletContext.contextPath}/shot" method="post">
             <div class="container">
                 <div id="game-info">
                     <!-- no info, so it shows blank -->

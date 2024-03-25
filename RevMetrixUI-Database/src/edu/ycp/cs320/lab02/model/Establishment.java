@@ -2,12 +2,14 @@ package edu.ycp.cs320.lab02.model;
 
 
 public class Establishment {
-	private String establishmentName, email, address;
+	private String establishmentName, address;
 
+	public Establishment() {
+		
+	}
 	
-	public Establishment(String establishmentName, String email, String address) {
+	public Establishment(String establishmentName, String address) {
 		this.establishmentName = establishmentName;
-		this.email = email;
 		this.address = address;
 	}
 	
@@ -19,13 +21,6 @@ public class Establishment {
 		return establishmentName;
 	}
 	
-	public void setEmail(String email) {
-		this.email = email;
-	}
-	
-	public String getEmail() {
-		return email;
-	}
 	public void setAddress(String address) {
 		this.address = address;
 	}
@@ -33,6 +28,5 @@ public class Establishment {
 	public String getAddress() {
 		return address;
 	}
-	
 	
 }

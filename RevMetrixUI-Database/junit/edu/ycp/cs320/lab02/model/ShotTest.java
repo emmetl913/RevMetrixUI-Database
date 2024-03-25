@@ -11,12 +11,12 @@ public class ShotTest{
 	
 	@Before
 	public void SetUp() {
-		shot = new Shot(0);
+		shot = new Shot();
 	}
 	
 	@Test
 	public void testGetKnockedOver() {
-		shot = new Shot(4);
+		shot = new Shot(null, 4);
 		
 		assertEquals(4, shot.getKnockedOver());
 	}
@@ -41,5 +41,12 @@ public class ShotTest{
 		
 		shot.setType("/");
 		assertEquals("/", shot.getType());
+	}
+	
+	@Test
+	public void testSetBallName() {
+		shot.setBallName("ball");
+		
+		assertEquals("ball", shot.getBallName());
 	}
 }

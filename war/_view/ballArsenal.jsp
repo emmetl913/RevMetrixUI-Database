@@ -5,6 +5,13 @@
 <%@ page import= "edu.ycp.cs320.lab02.model.Ball" %>
 <%@ page import="edu.ycp.cs320.lab02.model.BallArsenal" %>
 <%@ page import = "java.io.*,java.util.*" %>
+<%@ page import="javax.servlet.http.HttpSession" %>
+<%
+// Retrieve ArrayList from session attribute
+	//HttpSession session = request.getSession();
+	BallArsenal model = (BallArsenal) session.getAttribute("ballArsenalKey");
+	ArrayList<Ball> balls = (model != null) ? model.getBalls() : null;
+%>
 
 <html>
 	<head>
@@ -32,10 +39,6 @@
 
 			#add-ball-form, #remove-ball-form{
 				margin-bottom: 10px;
-			}
-
-			#add-ball-form input, #remove-ball-form input{
-		
 			}
 
 	.ball-box {
@@ -141,15 +144,15 @@
 		</c:if>
 
 		<div class="sidebar">
-			<a href="${pageContext.servletContext.contextPath}/index">
-				<img src="${pageContext.request.contextPath}/_view/BowlingBall.png"width="100" height="100">
-			  </a>
-			<a href="${pageContext.servletContext.contextPath}/startBowling">Start Bowling</a>
-			<a href="${pageContext.servletContext.contextPath}/establishmentReg">Establishment Registration</a>
-		    <a href="${pageContext.servletContext.contextPath}/logIn">Sign Out</a>
-        <a href="${pageContext.servletContext.contextPath}/shot">Shot</a>
-        <a href="${pageContext.servletContext.contextPath}/ballArsenal">Ball Arsenal</a>
-        <a href="https://github.com/emmetl913/RevMetrixUI-Database">GitHub</a>
+		 <a href="${pageContext.servletContext.contextPath}/index">
+			<img src="${pageContext.request.contextPath}/_view/BowlingBall.png"width="100" height="100">
+		  </a>
+	      <a href="${pageContext.servletContext.contextPath}/establishmentReg">Establishment Registration</a>
+		  <a href="${pageContext.servletContext.contextPath}/logIn">Sign Out</a>
+          <a href="${pageContext.servletContext.contextPath}/shot">Shot</a>
+          <a href="${pageContext.servletContext.contextPath}/ballArsenal">Ball Arsenal</a>
+          <a href="https://github.com/emmetl913/RevMetrixUI-Database">GitHub</a>
+          <a href="${pageContext.servletContext.contextPath}/startBowling">Start Bowling</a>
 		  </div>
 	
 		<form action="${pageContext.servletContext.contextPath}/ballArsenal" method="post">
@@ -158,7 +161,7 @@
 			<div class="ball-box" id="ballBoxDiv">
 				<div id="add-ball-form">
 					<input type="text" name="ballName" placeholder="Ball Name">
-					<button text="Add Ball" name="addBall" type="submit" value="Register Ball" onclick ="updateBallList(${game.balls})">
+					<button text="Add Ball" name="addBall" type="submit" value="Register Ball">
 					Add Ball</button>
 					
 							
@@ -166,41 +169,26 @@
 				</div>
 				<div id="remove-ball-form">
 					<input type="text" name="removeBallName" placeholder="Ball Name to Remove">
-					<button name="removeBall" type="submit" value="Remove Ball" onclick="updateBallList(${game.balls})">
+					<button name="removeBall" type="submit" value="Remove Ball">
 					Remove Ball</button>
 				</div>
 				<div id="ballsList"> &nbsp		
-				<script>  
-			//	function switchBallBox(boxToSwitchClass, newClass, oldClass) {
-	         //	   	 	boxToShow = document.getElementById(boxToSwitchClass);
-	           //   		boxToShow.classList.remove(oldClass);
-	             //  		boxToShow.classList.add(newClass);
-	           		// }
-            </script>
 				
 			
-				 <% 
-            		// Retrieve ArrayList from request attribute
-            		ArrayList<Ball> balls = (ArrayList<Ball>) request.getAttribute("balls");
-   					if (balls != null) {
-   					if(balls.size() >= 4){
-   					
-   					
-   				}
-   				else {
-   					
-   					
-   					
-   				}
-       				for (Ball ball : balls) {
-				%>
-        			<div class="ball-section">
-            		<p>Name: <%= ball.getName() %></p>
-        		</div>
-				<% 
-       			 } } else {	%>
-   					 <p>No balls available.</p>
-				<% } %>
+						<% 
+			            if (balls != null && !balls.isEmpty()) {
+			                for (Ball ball : balls) {
+			        %>
+			        <div class="ball-section">
+			            <p>Name: <%= ball.getName() %></p>
+			        </div>
+			        <% 
+			                }
+			            } else { 
+			        %>
+			        <p>No balls available.</p>
+			        <% } 		session.setAttribute("ballArsenalKey", model); //update session model
+%>
 				
 				</div>
 				

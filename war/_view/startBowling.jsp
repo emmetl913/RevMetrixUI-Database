@@ -1,6 +1,14 @@
 <!DOCTYPE html>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
+<%@ page import= "edu.ycp.cs320.lab02.model.Event" %>
+<%@ page import="edu.ycp.cs320.lab02.model.EventArray" %>
+
+<%@ page import= "edu.ycp.cs320.lab02.model.Game" %>
+<%@ page import= "edu.ycp.cs320.lab02.model.Establishment" %>
+<%@ page import="edu.ycp.cs320.lab02.model.EstablishmentArray" %>
+
+<%@ page import = "java.io.*,java.util.*"%>
 
 <html>
 <head>
@@ -9,11 +17,55 @@
 	src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"
 	type="text/javascript">
 </script>
-
     <style>
-    body {
-            margin: 0;
-            font-family: Arial, sans-serif;
+
+.container {
+            max-width: 600px;
+            margin: 50px auto;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+        }
+
+        input {
+            width: 100%;
+            padding: 8px;
+            margin-bottom: 16px;
+            box-sizing: border-box;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+
+        input[type=submit] {
+            background-color: #4caf50;
+            color: #fff;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        input[type=submit]:hover {
+            background-color: #45a049;
+        }
+
+        button {
+            background-color: #4caf50;
+            color: #fff;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #45a049;
         }
 
         .sidebar {
@@ -22,14 +74,14 @@
             position: fixed;
             top: 0;
             left: 0;
-            background-color: #111;
+            background-color: #000;
             padding-top: 20px;
         }
 
         .sidebar a {
-            padding: 10px 15px;
+            padding: 10px 20px;
             text-decoration: none;
-            font-size: 18px;
+            /*font-size: 18px;*/
             color: white;
             display: block;
         }
@@ -89,8 +141,42 @@
         .content div.active {
         	display: block;
         }
-        .container{
-            text-align: center;
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+		}
+        /* Styling for the shot level */
+        .shotHeader{
+        	margin-right: 20px;
+        	display: flex;
+        	align-items: center;
+        	justify-content: center;
+        	position: relative;
+        	font-size: 28px;
+        	font-weight: bold;
+        }
+        .shotHeader label{
+        	margin-right: 10px;
+        	text-align: center;
+        }
+        .shotHeader input {
+        	border: 2px #000000;
+        	text-align: center;
+        	font-weight: bold;
+        }
+        .row {
+        	display: flex;
+        	justify-content: center;
+        }
+        .pin {
+            width: 30px;
+            height: 30px;
+            border: 2px #000000;
+            border-radius: 50%;
+            margin: 5px;
+            display: flex;
             align-items: center;
             margin-top: 50px;
         }
@@ -227,22 +313,22 @@
 	<input type="hidden" name="step" id="step" value="1">
 	<!-- Side bar, duh -->
 	<div class="sidebar">
+		 <a href="${pageContext.servletContext.contextPath}/index">
+			<img src="${pageContext.request.contextPath}/_view/BowlingBall.png"width="100" height="100">
+		  </a>
+	      <a href="${pageContext.servletContext.contextPath}/establishmentReg">Establishment Registration</a>
+		  <a href="${pageContext.servletContext.contextPath}/logIn">Sign Out</a>
+          <a href="${pageContext.servletContext.contextPath}/shot">Shot</a>
+          <a href="${pageContext.servletContext.contextPath}/ballArsenal">Ball Arsenal</a>
+          <a href="https://github.com/emmetl913/RevMetrixUI-Database">GitHub</a>
 		 <a class="dropbtn" href="#" onclick="toggleDropdown(), nextStep(1)">Start Bowling!</a>
 		 <div class="dropdown-content" id="myDropdown">
 	        <a href="#" onclick="showContent('event')">Event</a>
 	        <a href="#" onclick="showContent('session')">Session</a>
-	        <a href="#" onclick="showContent('game')">Game</a>
+	        <a href="${pageContext.servletContext.contextPath}/game">Game</a>
 			<a href="#" onclick="showContent('frame')">Frame</a>
 	        <a href="#" onclick="showContent('shot')">Shot</a>
 	   	 </div>
-		 <a href="${pageContext.servletContext.contextPath}/index">
-				<img src="${pageContext.request.contextPath}/_view/BowlingBall.png"width="100" height="100">
-			  </a>
-			<a href="${pageContext.servletContext.contextPath}/establishmentReg">Establishment Registration</a>
-			<a href="${pageContext.servletContext.contextPath}/logIn">Sign Out</a>
-		<a href="${pageContext.servletContext.contextPath}/shot">Shot</a>
-		<a href="${pageContext.servletContext.contextPath}/ballArsenal">Ball Arsenal</a>
-		<a href="https://github.com/emmetl913/RevMetrixUI-Database">GitHub</a>
 	</div>
 	<div class="content">
 		<!-- Home Page -->
@@ -251,13 +337,42 @@
 			<p>Nothing to see here yet!</p>
 		</div>
 		<!-- Event Page -->
-		<div id="step2">
-			<h1>Nothing to event here yet!</h1>
-			<p>Nothing to event here yet!</p>
+		
+		<div class = "container" id="step2">
+			<h2>Event Page</h2>
+
+			<label for="eventName">Event Name:</label>
+			<input type="text" name="eventName" size="12" value="${game.eventName}">
+
+			<label for="eventType">Event Type:</label>
+            <button text="Practice" name="practice" type="submit" value="Practice">Practice</button>
+			<button text="Tournament" name="tournament" type="submit" value="Tournament">Tournament</button>
+			<button text="Leauge" name="leauge" type="submit" value="Leauge">Leauge</button>
+
+			<label for="establishment">Establishment Name/Location:</label>
+			<select name="establishment" id="establishment">
+			<%
+			ArrayList<Event> events = (ArrayList<Event>) request.getAttribute("event");
+				if (events != null) {
+				  for (Event event : events) {
+		   %>
+			<option value="${game.establishment}"><%= event.getEstablishment().getEstablishmentName()%></option>
+		   <% 
+				 } } else {	%>
+					 <option value="${game.establishment}">No Establishments</option>
+		   <% } %>
+			</select>
+
+            <label for="standing">Standing:</label>
+            <input type="text" name="standing" size="12" value="${game.standing}">
+
+            <label for="stats">Stats?:</label>
+            <input type="text" name="stats" size="12" value="${game.stats}">
+
 			<tr>
-				<td class="label">Enter Event Name:</td>
-				<td><input id="eventName" type="text" name="eventName" value=""/><input type="Submit" name="eventName" value="Submit" onclick="nextStep(2)"> </td>
+				<td><input type="Submit" id="sessionType" name="Submit" value="Submit" onclick="nextStep(2)"></td>
 			</tr>
+		   	
 		</div>
 		<!-- Session Page -->
 		<div id="step3">
@@ -265,33 +380,68 @@
 			<p>Nothing to session here yet!</p>
 			<p class="label">What kind of session?</p>
 			<tr>
-				<td><input type="Submit" id="sessionType" name="practice" value="Practice" onclick="nextStep(3)"></td>
-				<td><input type="Submit" id="sessionType" name="tournament" value="Tournament" onclick="nextStep(3)"></td>
-				<td><input type="Submit" id="sessionType" name="leauge" value="Leauge" onclick="nextStep(3)"></td>
+				<input type="Submit" id="sessionType" name="practice" value="Practice" onclick="nextStep(3)">
+				<input type="Submit" id="sessionType" name="tournament" value="Tournament" onclick="nextStep(3)">
+				<input type="Submit" id="sessionType" name="leauge" value="Leauge" onclick="nextStep(3)">
 			</tr>
 		</div>
 		<!-- Game Page -->
-		<div id="step4">
-			<h1>Nothing to game here yet!</h1>
-			<p>Nothing to game here yet!</p>
+		<div class = "container" id="step4">
+			<h1>Game Page!</h1>
+			<p> Select game by index: </p>
+
+			<select name="establishment" id="establishment">
+			<%
+			ArrayList<Game> games = (ArrayList<Game>)request.getAttribute("gameObjArr");
+				if (games != null) {
+				  for (int i =0; i < games.size(); i++) {
+					  Game game = games.get(i);
+			%>
+			<option><%= game.getGameNumber() %> &nbsp&nbsp&nbsp|&nbsp&nbsp&nbsp Lane: <%=game.getLane()%> &nbsp&nbsp&nbsp|&nbsp&nbsp&nbsp # of Frames: <%=game.getFrameCount()%>
+			&nbsp&nbsp&nbsp|&nbsp&nbsp&nbsp Score: <%=game.getScore()%></option>
+		   <% 
+				 } } else {	%>
+					 <option value="${game.establishment}">No Establishments</option>
+		   <% } %>
+			</select>
+			<p></p>
 			<tr>
-				<td><input type="Submit" id="gameStatus" name="continue" value="Continue from last game" onclick="nextStep(4)"></td>
-				<td><input type="Submit" id="gameStatus" name="select" value="Select a Game" onclick="nextStep(4)"></td>
-				<td><input type="Submit" id="gameStatus" name="new" value="Start a New Game" onclick="nextStep(4)"></td>
-			</tr>
+				<button type="submit" id="gameStatus" name="select"  onclick="nextStep(4)" value="selectCurrentGame"> Select Current Game</button>
+				&nbsp
+			  	<button type="submit" id="gameStatus" name="new" onclick="nextStep(4)" value="startNewGame"> Start New Game</button>
+			</tr> 
 		</div>
 		<!-- Frame Page -->
 		<div id="step5">
-			<h1>Nothing to Frame here yet!</h1>
-			<p>Nothing to Frame here yet!</p>
+			<h1>Nothing to frame here yet!</h1>
+			<p>Nothing to frame here yet!</p>
+			<p>i forgot how frames work so i didn't do anything yet :3</p>
 			<input type="Submit" name="nextFrame" id="frameStatus" value="Continue" onclick="nextStep(5)">
 		</div>
 		<!-- Shot Input Level -->
-		<div id="step6">
-			<a href="${pageContext.servletContext.contextPath}/shot">Shot</a>
+		<div id="step6" style=display:flex;flex-direction:column;align-items:center;>
+			<div class="row">
+				<div class="pin"><span>7</span></div>
+				<div class="pin"><span>8</span></div>
+				<div class="pin"><span>9</span></div>
+				<div class="pin"><span>10</span></div>
+			</div>
+			<div class="row">
+				<div class="pin"><span>4</span></div>
+				<div class="pin"><span>5</span></div>
+				<div class="pin"><span>6</span></div>
+			</div>
+			<div class="row">
+				<div class="pin"><span>2</span></div>
+				<div class="pin"><span>3</span></div>
+			</div>
+			<div class="row">
+				<div class="pin"><span>1</span></div>
+			</div>
 		</div>
 	</div>
-
+	
+	
 	<script>
 		var currentStep = 1;
 		// Display current step
