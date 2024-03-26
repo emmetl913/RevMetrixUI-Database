@@ -5,6 +5,13 @@
 <%@ page import= "edu.ycp.cs320.lab02.model.Ball" %>
 <%@ page import="edu.ycp.cs320.lab02.model.BallArsenal" %>
 <%@ page import = "java.io.*,java.util.*" %>
+<%@ page import="javax.servlet.http.HttpSession" %>
+<%
+// Retrieve ArrayList from session attribute
+	//HttpSession session = request.getSession();
+	BallArsenal model = (BallArsenal) session.getAttribute("ballArsenalKey");
+	ArrayList<Ball> balls = (model != null) ? model.getBalls() : null;
+%>
 
 <html>
 	<head>
@@ -20,6 +27,14 @@
     top: 10px; /* Adjust the top position as needed */
     width: 100%; /* Ensure the header spans the full width */
 }
+			input {
+	            width: 70%;
+	            padding: 8px;
+	            margin-bottom: 16px;
+	            box-sizing: border-box;
+	            border: 1px solid #ccc;
+	            border-radius: 4px;
+	        }
 			h1{
 				font-size: 50px;
 				color: black;
@@ -49,7 +64,7 @@
             background-color: white;
             box-shadow: 2px;
             /* Set fixed height for the container */
-            height: 330px;
+            height: 360px;
             /* Add scrollbar when content overflows */
             overflow: auto;            
         }
@@ -128,6 +143,18 @@
         margin-bottom: 10px; /* Add some space between ball sections */
         padding: 10px; /* Add padding inside each ball section */
     }
+button {
+    background-color: #4caf50;
+    color: #fff;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #45a049;
+}
 		</style>
 	</head>
 
@@ -168,28 +195,20 @@
 				<div id="ballsList"> &nbsp		
 				
 			
-				 <% 
-            		// Retrieve ArrayList from request attribute
-            		ArrayList<Ball> balls = (ArrayList<Ball>) request.getAttribute("balls");
-   					if (balls != null) {
-   					if(balls.size() >= 4){
-   					
-   					
-   				}
-   				else {
-   					
-   				
-   					
-   				}
-       				for (Ball ball : balls) {
-				%>
-        			<div class="ball-section">
-            		<p>Name: <%= ball.getName() %></p>
-        		</div>
-				<% 
-       			 } } else {	%>
-   					 <p>No balls available.</p>
-				<% } %>
+						<% 
+			            if (balls != null && !balls.isEmpty()) {
+			                for (Ball ball : balls) {
+			        %>
+			        <div class="ball-section">
+			            <p>Name: <%= ball.getName() %></p>
+			        </div>
+			        <% 
+			                }
+			            } else { 
+			        %>
+			        <p>No balls available.</p>
+			        <% } 		session.setAttribute("ballArsenalKey", model); //update session model
+%>
 				
 				</div>
 				

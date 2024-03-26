@@ -4,6 +4,11 @@
 <%@ page import= "edu.ycp.cs320.lab02.model.Establishment" %>
 <%@ page import="edu.ycp.cs320.lab02.model.EstablishmentArray" %>
 <%@ page import = "java.io.*,java.util.*"%>
+<%@ page import="javax.servlet.http.HttpSession" %>
+<%
+	EstablishmentArray model = (EstablishmentArray) session.getAttribute("establishmentRegKey");
+	ArrayList<Establishment> establishments = (model != null) ? model.getEstablishments() : null;
+%>
 
 <html>
 <head>
@@ -143,8 +148,7 @@
 
             <div id="ballsList"> &nbsp				
               <% 
-                     // Retrieve ArrayList from request attribute
-                     ArrayList<Establishment> establishments = (ArrayList<Establishment>) request.getAttribute("esta");
+                     
                   if (establishments != null) {
                     for (Establishment establishment : establishments) {
              %>
