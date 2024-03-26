@@ -19,11 +19,11 @@
   </servlet>
   <servlet>
     <servlet-name>GameServlet</servlet-name>
-    <servlet-class>edu.ycp.cs320.lab02.servlet.GameServlet</servlet-class>
+    <servlet-class>edu.ycp.cs320.RevMetrix.servlet.GameServlet</servlet-class>
   </servlet>
   <servlet>
     <servlet-name>StatsServlet</servlet-name>
-    <servlet-class>edu.ycp.cs320.lab02.servlet.StatsServlet</servlet-class>
+    <servlet-class>edu.ycp.cs320.RevMetrix.servlet.StatsServlet</servlet-class>
   </servlet>
   <servlet>
     <servlet-name>AccountSignUpServlet</servlet-name>

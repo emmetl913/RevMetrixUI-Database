@@ -12,10 +12,10 @@ import javax.servlet.http.HttpSession;
 
 import org.eclipse.jetty.server.session.Session;
 
-import edu.ycp.cs320.lab02.controller.BallArsenalController;
-import edu.ycp.cs320.lab02.model.Ball;
-import edu.ycp.cs320.lab02.model.BallArsenal;
-import edu.ycp.cs320.lab02.model.Game;
+import edu.ycp.cs320.RevMetrix.controller.BallArsenalController;
+import edu.ycp.cs320.RevMetrix.model.Ball;
+import edu.ycp.cs320.RevMetrix.model.BallArsenal;
+import edu.ycp.cs320.RevMetrix.model.Game;
 
 public class BallArsenalServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
