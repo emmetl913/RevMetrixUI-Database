@@ -30,30 +30,31 @@ public class EstablishmentRegServlet extends HttpServlet {
 		// Get last access time of this Webpage.
 		long lastAccessTime = session.getLastAccessedTime();
 		String userIDKey = new String("userID");
-		String userID = new String("ABCD");
+		String userID = new String("ABD");
 
 		   // Check if this is new comer on your Webpage.
 		String establishmentRegKey = new String("establishmentRegKey");
-		EstablishmentArray model = new EstablishmentArray();
-		
+		EstablishmentArray model = (EstablishmentArray) session.getAttribute(establishmentRegKey);
+
 		// If first visit: new session id
 		if (session.isNew() ){
 	      session.setAttribute(userIDKey, userID);
 		  session.setAttribute(establishmentRegKey,  model);
 		} 
 		//Get model and userID from jsp
+		//model = (EstablishmentArray)session.getAttribute(establishmentRegKey);
+
 		userID = (String)session.getAttribute(userIDKey);
 
 		//controller.setModel(model);
 		
-		ArrayList<Establishment> establishments = model.getEstablishments();
-        if(model.getEstablishments() == null) {
-        	establishments = new ArrayList<Establishment>();
-        	establishments.add(new Establishment("FirstBall", "FirstAddress"));
+		if (model == null) {
+		    model = new EstablishmentArray();
+		    session.setAttribute(establishmentRegKey, model);
 		}
-        else {
-        	establishments = model.getEstablishments();
-        }
+		ArrayList<Establishment> establishments = model.getEstablishments();
+		establishments = model.getEstablishments();
+
         
 		// Set the ArrayList as a request attribute
 		req.setAttribute("esta", establishments);

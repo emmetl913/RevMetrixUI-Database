@@ -12,9 +12,10 @@ import javax.servlet.http.HttpSession;
 
 import org.eclipse.jetty.server.session.Session;
 
-import edu.ycp.cs320.RevMetrix.controller.BallArsenalController;
-import edu.ycp.cs320.RevMetrix.model.Ball;
-import edu.ycp.cs320.RevMetrix.model.BallArsenal;
+import edu.ycp.cs320.lab02.controller.BallArsenalController;
+import edu.ycp.cs320.lab02.model.Ball;
+import edu.ycp.cs320.lab02.model.BallArsenal;
+import edu.ycp.cs320.lab02.model.Game;
 
 public class BallArsenalServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
@@ -37,7 +38,7 @@ public class BallArsenalServlet extends HttpServlet {
 
 		   // Check if this is new comer on your Webpage.
 		String ballArsenalKey = new String("ballArsenalKey");
-		BallArsenal model = new BallArsenal();
+		BallArsenal model = (BallArsenal)session.getAttribute(ballArsenalKey);
 
 		// If first visit: new session id
 		if (session.isNew() ){
@@ -49,14 +50,12 @@ public class BallArsenalServlet extends HttpServlet {
 
 		//controller.setModel(model);
 		
-		ArrayList<Ball> balls = model.getBalls();
-        if(model.getBalls() == null) {
-			balls = new ArrayList<Ball>();
-			balls.add(new Ball("FirstBall"));
+		if(model == null) {
+			model = new BallArsenal();
+			session.setAttribute(ballArsenalKey, model);
 		}
-        else {
-        	balls = model.getBalls();
-        }
+		ArrayList<Ball> balls = model.getBalls();
+        balls = model.getBalls();
         
 		// Set the ArrayList as a request attribute
 		req.setAttribute("balls", balls);
@@ -123,6 +122,11 @@ public class BallArsenalServlet extends HttpServlet {
 			        }
 			    }
 		}
+		if (session.getAttribute("currentGame") != null ) {
+			Game g = (Game)session.getAttribute("currentGame");
+			System.out.println(g.getLane());
+		}
+
 		
 		req.setAttribute("errorMessage", errorMessage);
 		req.setAttribute("balls", balls);

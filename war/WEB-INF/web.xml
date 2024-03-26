@@ -17,7 +17,14 @@
     <servlet-name>AccountServlet</servlet-name>
     <servlet-class>edu.ycp.cs320.RevMetrix.servlet.AccountServlet</servlet-class>
   </servlet>
-  
+  <servlet>
+    <servlet-name>GameServlet</servlet-name>
+    <servlet-class>edu.ycp.cs320.lab02.servlet.GameServlet</servlet-class>
+  </servlet>
+  <servlet>
+    <servlet-name>StatsServlet</servlet-name>
+    <servlet-class>edu.ycp.cs320.lab02.servlet.StatsServlet</servlet-class>
+  </servlet>
   <servlet>
     <servlet-name>AccountSignUpServlet</servlet-name>
     <servlet-class>edu.ycp.cs320.RevMetrix.servlet.AccountSignUpServlet</servlet-class>
@@ -58,9 +65,16 @@
   	<servlet-name>AccountSignUpServlet</servlet-name>
   	<url-pattern>/signUp</url-pattern></servlet-mapping>
   	
+  	 <servlet-mapping>
+  	<servlet-name>StatsServlet</servlet-name>
+  	<url-pattern>/stats</url-pattern></servlet-mapping>
+  	
   	<servlet-mapping>
   	<servlet-name>StartBowlingServlet</servlet-name>
   	<url-pattern>/startBowling</url-pattern></servlet-mapping>
+  	  	<servlet-mapping>
+  	<servlet-name>GameServlet</servlet-name>
+  	<url-pattern>/game</url-pattern></servlet-mapping>
   	
   	<servlet-mapping>
   	<servlet-name>ShotServlet</servlet-name>
