@@ -139,22 +139,21 @@ button {
 	        <a href="#" onclick="showContent('shot')">Shot</a>
 	   	 </div>
 	</div>
-	<form id = "gameForm" action="${pageContext.servletContext.contextPath}/game" method="post">
+	<form id = "gameForm" action="${pageContext.servletContext.contextPath}/stats" method="post">
 	<div class="container">
 	
 		<!-- Game Page -->
 			<h1>Game Page!</h1>
 			<p> Select game by index: </p>
 
-			<select name="gameDropDown" id="establishment">
+			<select name="establishment" id="establishment">
 			<%
 				if (games != null) {
 				  for (int i =0; i < games.size(); i++) {
 					  Game game = games.get(i);
 					  
-					  String is = ""+i;
 			%>
-			<option value=<%=is%>><%= game.getGameNumber() %> &nbsp&nbsp&nbsp|&nbsp&nbsp&nbsp Lane: <%=game.getLane()%> &nbsp&nbsp&nbsp|&nbsp&nbsp&nbsp # of Frames: <%=game.getFrameCount()%>
+			<option><%= game.getGameNumber() %> &nbsp&nbsp&nbsp|&nbsp&nbsp&nbsp Lane: <%=game.getLane()%> &nbsp&nbsp&nbsp|&nbsp&nbsp&nbsp # of Frames: <%=game.getFrameCount()%>
 			&nbsp&nbsp&nbsp|&nbsp&nbsp&nbsp Score: <%=game.getScore()%></option>
 		   <% 
 				 } } else {	%>
@@ -174,6 +173,11 @@ button {
 			</tr> 
 		</div>
 		</form>
+		<script>
+			document.getElementById("submitButton1").addEventListener("click", function(){
+			document.getElementById("laneInput").value = ""
+			}
 		
+		</script>
 </body>
 </html>

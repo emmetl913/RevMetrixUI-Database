@@ -11,7 +11,7 @@ import javax.servlet.http.HttpSession;
 
 import edu.ycp.cs320.lab02.model.Game;
 
-public class GameServlet extends HttpServlet {
+public class StatsServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	
 	
@@ -23,7 +23,7 @@ public class GameServlet extends HttpServlet {
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException {
 
-		System.out.println("Game Servlet: doGet");	
+		System.out.println("Stat Servlet: doGet");	
 		HttpSession session = req.getSession();
 	    long createTime = session.getCreationTime();
 		   
@@ -57,14 +57,7 @@ public class GameServlet extends HttpServlet {
 		}
 		//Get model and userID from jsp
 		userID = (String)session.getAttribute(userIDKey);
-		games = (ArrayList<Game>)session.getAttribute(gamesListKey);
-		//controller.setModel(model);
-		if(games != null) {
-			for(Game g: games) {
-				System.out.println(g.getLane());
-			}
-		}
-		
+		//games = (ArrayList<Game>)session.getAttribute(gamesListKey);
         
         //Initialize a Game that will be sent out to other portions of the website (currentGame)
         Game currentGame = null;
@@ -77,14 +70,14 @@ public class GameServlet extends HttpServlet {
 		session.setAttribute(gamesListKey, games);
 		
 		// call JSP to generate empty form
-		req.getRequestDispatcher("/_view/game.jsp").forward(req, resp);
+		req.getRequestDispatcher("/_view/stats.jsp").forward(req, resp);
 	}
 	
 	
 	@Override
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException {
-		System.out.println("Game Servlet: doPost");
+		System.out.println("Stat Servlet: doPost");
 		
 		HttpSession session = req.getSession();
 	    long createTime = session.getCreationTime();
@@ -113,11 +106,11 @@ public class GameServlet extends HttpServlet {
 		userID = (String)session.getAttribute(userIDKey);
 		games = (ArrayList<Game>)session.getAttribute(gamesListKey);
 		//controller.setModel(model);
-//		if(games != null) {
-//			for(Game g: games) {
-//				System.out.println(g.getLane());
-//			}
-//		}
+		if(games != null) {
+			for(Game g: games) {
+				System.out.println(g.getLane());
+			}
+		}
 		
         
         //Initialize a Game that will be sent out to other portions of the website (currentGame)
@@ -139,15 +132,9 @@ public class GameServlet extends HttpServlet {
         if(laneInput == null) {
         	laneInput = 0;
         }
-        String dropDownValue = req.getParameter("gameDropDown");
-      //  Integer selectedIndex = Integer.parseInt(dropdownValue);
         //Make a new game and add it to game list
         if(req.getParameter("select") != null) {
-        	//currentGame = games.get(selectedIndex);
-
-        	currentGame = games.get(Integer.parseInt(dropDownValue));
-           // System.out.println("Game at index: x" +" selected: " + dropDownValue);
-        	System.out.println(currentGame.getLane());
+        	currentGame = games.get(0);
         }
         if(req.getParameter("new") != null) {
         	//currentGame = selected game from dropdown
@@ -160,7 +147,7 @@ public class GameServlet extends HttpServlet {
 		session.setAttribute(gamesListKey, games);
 		session.setAttribute("currentGame", currentGame);
 		// call JSP to generate empty form
-		req.getRequestDispatcher("/_view/game.jsp").forward(req, resp);
+		req.getRequestDispatcher("/_view/stats.jsp").forward(req, resp);
 	}
 	
 	private Integer getIntegerFromParameter(String s) {
