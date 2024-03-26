@@ -137,7 +137,7 @@ button {
 	        <a href="#" onclick="showContent('shot')">Shot</a>
 	   	 </div>
 	</div>
-	<form action="${pageContext.servletContext.contextPath}/game" method="post">
+	<form id = "gameForm" action="${pageContext.servletContext.contextPath}/game" method="post">
 	<div class="container">
 	
 		<!-- Game Page -->
@@ -160,11 +160,20 @@ button {
 			</select>
 			<p></p>
 			<tr>
-				<button type="submit" id="gameStatus" name="select" value="selectCurrentGame"> Select Current Game</button>
+				Enter Lane: <br> 
+				<input type="text" id="laneInput">
+			<tr>
+				<button id="submitButton" type="submit" id="gameStatus" name="select" value="selectCurrentGame"> Select Current Game</button>
 				&nbsp
-			  	<button type="submit" id="gameStatus" name="new" value="startNewGame"> Start New Game</button>
+			  	<button id="submitButton1"type="submit" id="gameStatus" name="new" value="startNewGame"> Start New Game</button>
 			</tr> 
 		</div>
 		</form>
+		<script>
+			document.getElementById("submitButton1").addEventListener("click", function(){
+			
+			}
+		
+		</script>
 </body>
 </html>

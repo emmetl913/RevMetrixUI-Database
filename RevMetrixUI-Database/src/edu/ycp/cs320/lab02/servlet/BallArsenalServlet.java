@@ -15,6 +15,7 @@ import org.eclipse.jetty.server.session.Session;
 import edu.ycp.cs320.lab02.controller.BallArsenalController;
 import edu.ycp.cs320.lab02.model.Ball;
 import edu.ycp.cs320.lab02.model.BallArsenal;
+import edu.ycp.cs320.lab02.model.Game;
 
 public class BallArsenalServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
@@ -121,6 +122,11 @@ public class BallArsenalServlet extends HttpServlet {
 			        }
 			    }
 		}
+		if (session.getAttribute("currentGame") != null ) {
+			Game g = (Game)session.getAttribute("currentGame");
+			System.out.println(g.getLane());
+		}
+
 		
 		req.setAttribute("errorMessage", errorMessage);
 		req.setAttribute("balls", balls);

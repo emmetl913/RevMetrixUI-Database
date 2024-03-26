@@ -9,16 +9,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import edu.ycp.cs320.lab02.controller.BowlingController;
-import edu.ycp.cs320.lab02.model.Ball;
-import edu.ycp.cs320.lab02.model.Bowling;
-import edu.ycp.cs320.lab02.model.Establishment;
-import edu.ycp.cs320.lab02.model.EstablishmentArray;
 import edu.ycp.cs320.lab02.model.Game;
-
-import edu.ycp.cs320.lab02.controller.EventController;
-import edu.ycp.cs320.lab02.model.Event;
-import edu.ycp.cs320.lab02.model.EventArray;
 
 public class GameServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
@@ -149,12 +140,12 @@ public class GameServlet extends HttpServlet {
         }
         if(req.getParameter("new") != null) {
         	//currentGame = selected game from dropdown
-        	games.add(new Game(4,4));
+        	games.add(new Game(games.size(),69));
         	currentGame = games.get(games.size()-1);
         }
 		req.setAttribute("gameObjArr", games);
 		session.setAttribute(gamesListKey, games);
-		
+		session.setAttribute("currentGame", currentGame);
 		// call JSP to generate empty form
 		req.getRequestDispatcher("/_view/game.jsp").forward(req, resp);
 	}
