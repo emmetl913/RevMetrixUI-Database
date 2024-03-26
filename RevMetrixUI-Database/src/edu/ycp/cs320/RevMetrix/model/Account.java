@@ -7,7 +7,7 @@ public class Account {
 	private Event currentEvent;
 	private Session currentSession;
 	private Game currentGame;
-	private Frame currentFrame;
+	//private Frame currentFrame;
 	private Shot currentShot;
 	
 	
