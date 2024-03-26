@@ -2,8 +2,8 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
 <%@ page import="java.util.ArrayList" %>
-<%@ page import= "edu.ycp.cs320.lab02.model.Ball" %>
-<%@ page import="edu.ycp.cs320.lab02.model.BallArsenal" %>
+<%@ page import= "edu.ycp.cs320.RevMetrix.model.Ball" %>
+<%@ page import="edu.ycp.cs320.RevMetrix.model.BallArsenal" %>
 <%@ page import = "java.io.*,java.util.*" %>
 
 <html>
@@ -166,8 +166,6 @@
 					Remove Ball</button>
 				</div>
 				<div id="ballsList"> &nbsp		
-				
-			
 				 <% 
             		// Retrieve ArrayList from request attribute
             		ArrayList<Ball> balls = (ArrayList<Ball>) request.getAttribute("balls");
