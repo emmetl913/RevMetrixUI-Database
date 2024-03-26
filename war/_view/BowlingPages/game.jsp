@@ -161,15 +161,13 @@ button {
 					 <option value="${game.establishment}">No Establishments</option>
 		   <% } %>
 			</select>
-			<p></p>
+			<p><button id="submitButton" type="submit" id="gameStatus" name="select" value="selectCurrentGame"> Select Current Game</button></p>
 			<tr>
-				Enter Lane: <br> 
+				Enter Lane for a new game: <br> 
 				<input type="text" id="laneInput" name="laneInput" class="number-input">
 			</tr>
 				<br> 
 			<tr>
-				<button id="submitButton" type="submit" id="gameStatus" name="select" value="selectCurrentGame"> Select Current Game</button>
-				&nbsp
 			  	<button id="submitButton1"type="submit" id="gameStatus" name="new" value="startNewGame"> Start New Game</button>
 			</tr> 
 		</div>
