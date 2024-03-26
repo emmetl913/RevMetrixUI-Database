@@ -1,5 +1,5 @@
 package edu.ycp.cs320.RevMetrix.controller;
-import edu.ycp.cs320.RevMetrix.model.Shot;
+import edu.ycp.cs320.RevMetrix.model.BowlingModels.Shot;
 
 public class ShotController {
 	private Shot shot;

@@ -1,6 +1,8 @@
-package edu.ycp.cs320.RevMetrix.model;
+package edu.ycp.cs320.RevMetrix.model.BowlingModels;
 
 import java.util.ArrayList;
+
+import edu.ycp.cs320.RevMetrix.model.Establishment;
 
 public class EventArray {
 	private ArrayList<Event> events;

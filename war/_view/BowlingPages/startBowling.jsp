@@ -2,10 +2,10 @@
 
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
-<%@ page import= "edu.ycp.cs320.RevMetrix.model.Event" %>
-<%@ page import="edu.ycp.cs320.RevMetrix.model.EventArray" %>
+<%@ page import= "edu.ycp.cs320.RevMetrix.model.BowlingModels.Event" %>
+<%@ page import="edu.ycp.cs320.RevMetrix.model.BowlingModels.EventArray" %>
 
-<%@ page import= "edu.ycp.cs320.RevMetrix.model.Game" %>
+<%@ page import= "edu.ycp.cs320.RevMetrix.model.BowlingModels.Game" %>
 <%@ page import= "edu.ycp.cs320.RevMetrix.model.Establishment" %>
 <%@ page import="edu.ycp.cs320.RevMetrix.model.EstablishmentArray" %>
 

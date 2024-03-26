@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import org.junit.Before;
 import org.junit.Test;
 
-import edu.ycp.cs320.RevMetrix.model.Session;
+import edu.ycp.cs320.RevMetrix.model.BowlingModels.Session;
 
 public class SessionTest {
 	private Session model;

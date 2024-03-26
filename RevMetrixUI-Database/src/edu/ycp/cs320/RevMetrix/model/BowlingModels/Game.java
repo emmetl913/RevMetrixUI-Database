@@ -1,4 +1,4 @@
-package edu.ycp.cs320.RevMetrix.model;
+package edu.ycp.cs320.RevMetrix.model.BowlingModels;
 
 public class Game {
 	private int lane;

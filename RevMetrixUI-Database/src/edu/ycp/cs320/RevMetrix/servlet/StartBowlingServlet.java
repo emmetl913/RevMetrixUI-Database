@@ -11,10 +11,10 @@ import javax.servlet.http.HttpSession;
 
 import edu.ycp.cs320.RevMetrix.controller.EventController;
 import edu.ycp.cs320.RevMetrix.model.Establishment;
-import edu.ycp.cs320.RevMetrix.model.Event;
-import edu.ycp.cs320.RevMetrix.model.EventArray;
-import edu.ycp.cs320.RevMetrix.model.Game;
-import edu.ycp.cs320.RevMetrix.model.Session;
+import edu.ycp.cs320.RevMetrix.model.BowlingModels.Event;
+import edu.ycp.cs320.RevMetrix.model.BowlingModels.EventArray;
+import edu.ycp.cs320.RevMetrix.model.BowlingModels.Game;
+import edu.ycp.cs320.RevMetrix.model.BowlingModels.Session;
 
 public class StartBowlingServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;

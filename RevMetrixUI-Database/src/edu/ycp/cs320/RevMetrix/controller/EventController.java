@@ -1,7 +1,7 @@
 package edu.ycp.cs320.RevMetrix.controller;
 import edu.ycp.cs320.RevMetrix.model.Establishment;
-import edu.ycp.cs320.RevMetrix.model.Event;
-import edu.ycp.cs320.RevMetrix.model.EventArray;
+import edu.ycp.cs320.RevMetrix.model.BowlingModels.Event;
+import edu.ycp.cs320.RevMetrix.model.BowlingModels.EventArray;
 
 
 public class EventController {
