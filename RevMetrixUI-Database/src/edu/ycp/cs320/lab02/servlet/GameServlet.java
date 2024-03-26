@@ -127,12 +127,17 @@ public class GameServlet extends HttpServlet {
         String buttonValue = req.getParameter("gameStatus");
         
         // Check which button was clicked
-        if ("startNewGame".equals(buttonValue)) {
-        	Game g = new Game(games.size()+1,1);
-        	games.add(g); //game gets added to the end of the list //dont worry that the gameNumber will repeat.
-        	//Eventually it won't because it will take database values
-        	currentGame = g;
-        	System.out.println(g.getGameNumber());
+//        if ("startNewGame".equals(buttonValue)) {
+//        	Game g = new Game(games.size()+1,1);
+//        	games.add(g); //game gets added to the end of the list //dont worry that the gameNumber will repeat.
+//        	//Eventually it won't because it will take database values
+//        	currentGame = g;
+//        	System.out.println(g.getGameNumber());
+//        }
+        
+        Integer laneInput = getIntegerFromParameter(req.getParameter("laneInput"));
+        if(laneInput == null) {
+        	laneInput = 0;
         }
         //Make a new game and add it to game list
         if(req.getParameter("select") != null) {
@@ -140,10 +145,12 @@ public class GameServlet extends HttpServlet {
         }
         if(req.getParameter("new") != null) {
         	//currentGame = selected game from dropdown
-        	games.add(new Game(games.size(),69));
+        	games.add(new Game(games.size(),laneInput));
         	currentGame = games.get(games.size()-1);
         }
 		req.setAttribute("gameObjArr", games);
+		
+		
 		session.setAttribute(gamesListKey, games);
 		session.setAttribute("currentGame", currentGame);
 		// call JSP to generate empty form

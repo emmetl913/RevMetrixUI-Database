@@ -80,7 +80,9 @@ button {
 	background-color: black;
 	padding-top: 20px;
 	}
-
+	.number-input{
+		width: 100px;
+	}
 	/* Links in the sidebar */
 	.sidebar a {
 	padding: 10px 20px;
@@ -161,7 +163,9 @@ button {
 			<p></p>
 			<tr>
 				Enter Lane: <br> 
-				<input type="text" id="laneInput">
+				<input type="text" id="laneInput" name="laneInput" class="number-input">
+			</tr>
+				<br> 
 			<tr>
 				<button id="submitButton" type="submit" id="gameStatus" name="select" value="selectCurrentGame"> Select Current Game</button>
 				&nbsp
@@ -171,7 +175,7 @@ button {
 		</form>
 		<script>
 			document.getElementById("submitButton1").addEventListener("click", function(){
-			
+			document.getElementById("laneInput").value = ""
 			}
 		
 		</script>
