@@ -41,20 +41,16 @@ public class GameServlet extends HttpServlet {
 		if (session.isNew() ){
 	      session.setAttribute(userIDKey, userID);		  
 		  //initialize the games list with 3 games
-		  games.add(new Game(1,14));
-		  games.add(new Game(2,22));
-		  games.add(new Game(3,4));
-		  session.setAttribute(gamesListKey, games);
-		  
+	      if(games == null) {
+				games = new ArrayList<Game>();
+				
+				games.add(new Game(1,14));
+				games.add(new Game(2,22));
+				games.add(new Game(3,4));
+				session.setAttribute(gamesListKey, games);
+			}
 		} 
-		if(games == null) {
-			games = new ArrayList<Game>();
-			
-			games.add(new Game(1,14));
-			games.add(new Game(2,22));
-			games.add(new Game(3,4));
-			session.setAttribute(gamesListKey, games);
-		}
+		
 		//Get model and userID from jsp
 		userID = (String)session.getAttribute(userIDKey);
 		games = (ArrayList<Game>)session.getAttribute(gamesListKey);
@@ -148,15 +144,27 @@ public class GameServlet extends HttpServlet {
         	currentGame = games.get(Integer.parseInt(dropDownValue));
            // System.out.println("Game at index: x" +" selected: " + dropDownValue);
         	System.out.println(currentGame.getLane());
+        	
+        	req.setAttribute("gameObjArr", games);
+    		session.setAttribute(gamesListKey, games);
+    		session.setAttribute("currentGame", currentGame);
+    		req.getRequestDispatcher("/_view/shot.jsp").forward(req, resp);
+
         }
         if(req.getParameter("new") != null) {
         	//currentGame = selected game from dropdown
         	games.add(new Game(games.size(),laneInput));
         	currentGame = games.get(games.size()-1);
+        	
+        	req.setAttribute("gameObjArr", games);
+    		session.setAttribute(gamesListKey, games);
+    		session.setAttribute("currentGame", currentGame);
+    		req.getRequestDispatcher("/_view/shot.jsp").forward(req, resp);
+
         }
-		req.setAttribute("gameObjArr", games);
-		
-		
+        
+        
+        req.setAttribute("gameObjArr", games);
 		session.setAttribute(gamesListKey, games);
 		session.setAttribute("currentGame", currentGame);
 		// call JSP to generate empty form

@@ -140,8 +140,6 @@ public class StatsServlet extends HttpServlet {
         	currentGame = games.get(games.size()-1);
         }
 		req.setAttribute("gameObjArr", games);
-		
-		
 		session.setAttribute(gamesListKey, games);
 		session.setAttribute("currentGame", currentGame);
 		// call JSP to generate empty form

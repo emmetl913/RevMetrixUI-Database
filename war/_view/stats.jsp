@@ -158,15 +158,15 @@ button {
 						for(int i = 0; i < events.size();i++) {
 							events.get(i);
 							String is = ""+i; //for getting index of choice
-							%>
+						
 							
 						}
 					}
 				%>
 				</select>
-				<button id="submitButton" type="submit" id="gameStatus" name="select" value="leagueAverage">Get League Average</button>
+				<button id="submitButton" type="submit" id="gameStatus" name="dont" value="leagueAverage">Get League Average</button>
 				&nbsp
-			  	<button id="submitButton1"type="submit" id="gameStatus" name="new" value="startNewGame"> Start New Game</button>
+			  	<button id="submitButton1"type="submit" id="gameStatus" name="worry" value="startNewGame"> Start New Game</button>
 			</tr> 
 		</div>
 		</form>
