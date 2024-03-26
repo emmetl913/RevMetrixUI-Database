@@ -28,4 +28,5 @@ public class Establishment {
 	public String getAddress() {
 		return address;
 	}
+	
 }

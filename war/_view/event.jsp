@@ -112,6 +112,9 @@
     </style>
 </head>
 <body>
+    <c:if test="${! empty errorMessage}">
+        <div class="error">${errorMessage}</div>
+    </c:if>
 
     <div class="sidebar">
 		<a href="${pageContext.servletContext.contextPath}/index">
@@ -134,23 +137,15 @@
       
     <div class="container">
       <h2>Event Page</h2>
-
-      <c:if test="${! empty errorMessage}">
-        <div class="error">${errorMessage}</div>
-      </c:if>
-      
         <form action="${pageContext.servletContext.contextPath}/event" method="post">
 
           <label for="eventName">Event Name:</label>
-          <input type="text" name="eventName" size="12">
+          <input type="text" name="eventName" size="12" value="${game.eventName}">
     
           <label for="eventType">Event Type:</label>
-          <button text="Practice" name="practice" type="button" value="Practice">Practice</button>
-          <input type="hidden" name="eventType" value="Practice">
-          <button text="Tournament" name="tournament" type="button" value="Tournament">Tournament</button>
-          <input type="hidden" name="eventType" value="Tournament">
-          <button text="Leauge" name="leauge" type="button" value="Leauge">Leauge</button>
-          <input type="hidden" name="eventType" value="Leauge">
+                <button text="Practice" name="practice" type="submit" value="Practice">Practice</button>
+          <button text="Tournament" name="tournament" type="submit" value="Tournament">Tournament</button>
+          <button text="Leauge" name="leauge" type="submit" value="Leauge">Leauge</button>
     
           <label for="establishment">Establishment Name/Location:</label>
           <select name="establishment" id="establishment">
@@ -159,15 +154,18 @@
             if (events != null) {
               for (Event event : events) {
            %>
-          <option value ="establishment"><%= event.getEstablishment().getEstablishmentName()%></option>
+          <option value="${game.establishment}"><%= event.getEstablishment().getEstablishmentName()%></option>
            <% 
              } } else {	%>
-               <option>No Establishments</option>
+               <option value="${game.establishment}">No Establishments</option>
            <% } %>
           </select>
     
                 <label for="standing">Standing:</label>
                 <input type="text" name="standing" size="12" value="${game.standing}">
+    
+                <label for="stats">Stats?:</label>
+                <input type="text" name="stats" size="12" value="${game.stats}">
     
           <tr>
             <td><input type="Submit" id="sessionType" name="Submit" value="Submit"></td>
