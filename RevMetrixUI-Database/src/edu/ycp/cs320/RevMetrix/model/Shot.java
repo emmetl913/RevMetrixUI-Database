@@ -1,4 +1,4 @@
-package edu.ycp.cs320.RevMetrix.model.BowlingModels;
+package edu.ycp.cs320.RevMetrix.model;
 
 public class Shot{
 	private int pins;

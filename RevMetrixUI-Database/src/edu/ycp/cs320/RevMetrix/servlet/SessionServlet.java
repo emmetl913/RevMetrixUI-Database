@@ -11,7 +11,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import edu.ycp.cs320.RevMetrix.model.BallArsenal;
-import edu.ycp.cs320.RevMetrix.model.BowlingModels.Session;
+import edu.ycp.cs320.RevMetrix.model.Session;
 
 public class SessionServlet extends HttpServlet{
 	private static final long serialVersionUID = 1L;
