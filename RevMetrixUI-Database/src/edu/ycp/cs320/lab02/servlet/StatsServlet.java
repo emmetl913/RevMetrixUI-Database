@@ -34,40 +34,38 @@ public class StatsServlet extends HttpServlet {
 
 		   // Check if this is new comer on your Webpage.
 		
-		String gamesListKey = new String("gamesListKey");
-		ArrayList<Game> games = (ArrayList<Game>)session.getAttribute(gamesListKey);
+		//String gamesListKey = new String("gamesListKey");
+		//ArrayList<Game> games = (ArrayList<Game>)session.getAttribute(gamesListKey);
 		
 		// If first visit: new session id
 		if (session.isNew() ){
 	      session.setAttribute(userIDKey, userID);		  
 		  //initialize the games list with 3 games
-		  games.add(new Game(1,14));
-		  games.add(new Game(2,22));
-		  games.add(new Game(3,4));
-		  session.setAttribute(gamesListKey, games);
+
+	      //session.setAttribute(gamesListKey, games);
 		  
 		} 
-		if(games == null) {
-			games = new ArrayList<Game>();
-			
-			games.add(new Game(1,14));
-			games.add(new Game(2,22));
-			games.add(new Game(3,4));
-			session.setAttribute(gamesListKey, games);
-		}
+//		if(games == null) {
+//			games = new ArrayList<Game>();
+//			
+//			games.add(new Game(1,14));
+//			games.add(new Game(2,22));
+//			games.add(new Game(3,4));
+//			session.setAttribute(gamesListKey, games);
+//		}
 		//Get model and userID from jsp
 		userID = (String)session.getAttribute(userIDKey);
 		//games = (ArrayList<Game>)session.getAttribute(gamesListKey);
         
         //Initialize a Game that will be sent out to other portions of the website (currentGame)
-        Game currentGame = null;
+       
         
         // Retrieve the value of the button clicked
-        String buttonValue = req.getParameter("gameStatus");
         
         
-		req.setAttribute("gameObjArr", games);
-		session.setAttribute(gamesListKey, games);
+        
+//		req.setAttribute("gameObjArr", games);
+//		session.setAttribute(gamesListKey, games);
 		
 		// call JSP to generate empty form
 		req.getRequestDispatcher("/_view/stats.jsp").forward(req, resp);
