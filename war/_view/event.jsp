@@ -141,31 +141,30 @@
 
           <label for="eventName">Event Name:</label>
           <input type="text" name="eventName" size="12" value="${game.eventName}">
+
+          <input type="hidden" id="type" name="newType" value="">
     
           <label for="eventType">Event Type:</label>
-                <button text="Practice" name="practice" type="submit" value="Practice">Practice</button>
-          <button text="Tournament" name="tournament" type="submit" value="Tournament">Tournament</button>
-          <button text="Leauge" name="leauge" type="submit" value="Leauge">Leauge</button>
+          <button text="Practice" name="practice" type="button" value="Practice" onclick="setToPractive()">Practice</button>
+          <button text="Tournament" name="tournament" type="button" value="Tournament"onclick="setToTournament()">Tournament</button>
+          <button text="Leauge" name="leauge" type="button" value="Leauge"onclick="setToLeauge()">Leauge</button>
     
           <label for="establishment">Establishment Name/Location:</label>
           <select name="establishment" id="establishment">
           <%
-          ArrayList<Event> events = (ArrayList<Event>) request.getAttribute("event");
-            if (events != null) {
-              for (Event event : events) {
+          ArrayList<Establishment> estabs = (ArrayList<Establishment>) request.getAttribute("esta");
+            if (estabs != null) {
+              for (Establishment establishment : estabs) {
            %>
-          <option value="${game.establishment}"><%= event.getEstablishment().getEstablishmentName()%></option>
+          <option value="<%= establishment.getEstablishmentName()%>"><%= establishment.getEstablishmentName()%></option>
            <% 
              } } else {	%>
-               <option value="${game.establishment}">No Establishments</option>
+               <option>No Establishments</option>
            <% } %>
           </select>
     
                 <label for="standing">Standing:</label>
                 <input type="text" name="standing" size="12" value="${game.standing}">
-    
-                <label for="stats">Stats?:</label>
-                <input type="text" name="stats" size="12" value="${game.stats}">
     
           <tr>
             <td><input type="Submit" id="sessionType" name="Submit" value="Submit"></td>
@@ -205,6 +204,16 @@
             } else {
                 dropdownContent.style.display = "block";
             }
+        }
+
+        function setToPractive() {
+          document.getElementById("type").value = "Practice";
+        }
+        function setToTournament() {
+          document.getElementById("type").value = "Tournament";
+        }
+        function setToLeauge() {
+          document.getElementById("type").value = "Leauge";
         }
         
       </script>

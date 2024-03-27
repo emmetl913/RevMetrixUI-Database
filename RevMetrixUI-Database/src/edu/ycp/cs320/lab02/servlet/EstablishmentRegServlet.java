@@ -78,7 +78,8 @@ public class EstablishmentRegServlet extends HttpServlet {
 
 		EstablishmentArray model = new EstablishmentArray();
 		EstablishmentRegController controller = new EstablishmentRegController();
-				
+		controller.setModel(model);
+
 		// Get session creation time.
 				HttpSession session = req.getSession();
 			    long createTime = session.getCreationTime();

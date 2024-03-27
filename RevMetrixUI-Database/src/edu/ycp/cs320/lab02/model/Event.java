@@ -1,27 +1,18 @@
 package edu.ycp.cs320.lab02.model;
 
-import java.util.ArrayList;
 
 public class Event {
 	private String eventName, type, standingString, establishmentString;
 	private int standing;
 	private Establishment establishment;
 	
-	
-	public Event(String name, String type, String standing, String establishment) {
-		this.eventName = name;
-		this.type = type;
-		this.standingString = standing;
-		this.establishmentString = establishment;
-		
-	}
-	
 	public Event(String name, String type, int standing, Establishment establishment) {
 		this.eventName = name;
 		this.type = type;
 		this.standing = standing;
 		this.establishment = establishment;
-		
+		this.standingString = Integer.toString(standing);
+		this.establishmentString = establishment.getEstablishmentName();
 	}
 	
 	public String getEventName() {
