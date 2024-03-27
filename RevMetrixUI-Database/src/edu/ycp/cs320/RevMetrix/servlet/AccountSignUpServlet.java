@@ -18,6 +18,8 @@ public class AccountSignUpServlet extends HttpServlet {
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException {
+		String errorMessage = null;
+
 		
 		if(!AccountServlet.validLogin()) {
             req.getRequestDispatcher("/_view/logIn.jsp").forward(req, resp);
@@ -37,6 +39,7 @@ public class AccountSignUpServlet extends HttpServlet {
 			session.setAttribute("accountListKey", accList);		
 		}
 		// call JSP to generate empty form
+		req.setAttribute("errorMessage", errorMessage);
 		req.getRequestDispatcher("/_view/signUp.jsp").forward(req, resp);
 	}
 	

@@ -34,14 +34,17 @@ public class AccountServlet extends HttpServlet {
 
 		
 		if (session.isNew() ){
+		accList = new ArrayList<Account>();
 		accList.add(kevin);
 		session.setAttribute("accountListKey", accList);
 		}
 		if(accList == null) {
+			accList = new ArrayList<Account>();
 			accList.add(kevin);
 			session.setAttribute("accountListKey", accList);
 		}
 		if(accList.isEmpty()) {
+			accList = new ArrayList<Account>();
 			accList.add(kevin);
 			session.setAttribute("accountListKey", accList);		
 		}
@@ -82,11 +85,13 @@ public class AccountServlet extends HttpServlet {
 		accList.add(kevin);
 		session.setAttribute("accountListKey", accList);
 		}
-//		else if(accList == null) {
-//			accList.add(kevin);
-//			session.setAttribute("accountListKey", accList);
-//		}
+		else if(accList == null) {
+			accList = new ArrayList<Account>();
+			accList.add(kevin);
+			session.setAttribute("accountListKey", accList);
+		}
 		else if(accList.isEmpty()) {
+			accList = new ArrayList<Account>();
 			accList.add(kevin);
 			session.setAttribute("accountListKey", accList);		
 		}
@@ -116,7 +121,8 @@ public class AccountServlet extends HttpServlet {
 		
 		// check for errors in the form data before using is in a calculation
 		if (username.length() < 5 || password.length()<5) {
-			errorMessage = "Please enter a username and/or password that are both longer than 5 characters";
+			//errorMessage = "Please enter a username and/or password that are both longer than 5 characters";
+			errorMessage = " ";
 		}
 		
 
