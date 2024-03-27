@@ -51,7 +51,7 @@
 		}
     </style>
 	<head>
-		<title>RevMetrix Login</title>
+		<title>RevMetrix Registration</title>
 		<style type="text/css">
 		.error {
 			color: red;
@@ -89,6 +89,8 @@
 				</tr>
 			</table>
 			<input name="signUp" type="submit" value="Sign Up!" />
+			<input name="logIn" type="submit" value="Log In!" />
+			
 		</form>
 		</div>
 	</body>
