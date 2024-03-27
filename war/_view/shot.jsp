@@ -9,6 +9,9 @@
 
 <html>
     <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
         <title>Shot</title>
         <style type="text/css">
             .container{
@@ -238,16 +241,22 @@
 		</c:if>
 
         <div class="sidebar">
-			<a href="${pageContext.servletContext.contextPath}/index">
-				<img src="${pageContext.request.contextPath}/_view/BowlingBall.png"width="100" height="100">
-			</a>
-			<a href="${pageContext.servletContext.contextPath}/startBowling">Start Bowling</a>
-			<a href="${pageContext.servletContext.contextPath}/establishmentReg">Establishment Registration</a>
-		    <a href="${pageContext.servletContext.contextPath}/logIn">Sign Out</a>
-            <a href="${pageContext.servletContext.contextPath}/shot">Shot</a>
-            <a href="${pageContext.servletContext.contextPath}/ballArsenal">Ball Arsenal</a>
-            <a href="https://github.com/emmetl913/RevMetrixUI-Database">GitHub</a>
-		</div>
+            <a href="${pageContext.servletContext.contextPath}/index">
+               <img src="${pageContext.request.contextPath}/_view/BowlingBall.png"width="100" height="100">
+             </a>
+             <a href="${pageContext.servletContext.contextPath}/establishmentReg">Establishment Registration</a>
+             <a href="${pageContext.servletContext.contextPath}/logIn">Sign Out</a>
+             <a href="${pageContext.servletContext.contextPath}/shot">Shot</a>
+             <a href="${pageContext.servletContext.contextPath}/ballArsenal">Ball Arsenal</a>
+             <a href="https://github.com/emmetl913/RevMetrixUI-Database">GitHub</a>
+             <a class="dropbtn" href="#" onclick="toggleDropdown(), nextStep(1)">Start Bowling!</a>
+             <div class="dropdown-content" id="myDropdown">
+           <a href="${pageContext.servletContext.contextPath}/event">>Event</a>
+           <a href="${pageContext.servletContext.contextPath}/session">>Session</a>
+           <a href="${pageContext.servletContext.contextPath}/game">>Game</a>
+           <a href="#" onclick="showContent('shot')">>Shot</a>
+               </div>
+       </div>
 
         <!-- gets variables from the servlet -->
         <%

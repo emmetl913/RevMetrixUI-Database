@@ -52,23 +52,23 @@ public class ShotServlet extends HttpServlet {
 		
 		//check is new comer on webpage
 		String shotKey = new String("shotKey");
-		ArrayList<Frame> frames = (ArrayList<Frame>) session.getAttribute(shotKey);
-		
+//		ArrayList<Frame> frames = (ArrayList<Frame>) session.getAttribute(shotKey);
+//		
 		if(session.isNew()) {
 			session.setAttribute(userIDKey, userID);
 			//session.setAttribute(shotKey, model);
-			if(frames == null) {
-				frames = new ArrayList<Frame>();
-				
-				frames.add(new Frame(1,1));
-				session.setAttribute(shotKey, frames);
-			}
+//			if(frames == null) {
+//				frames = new ArrayList<Frame>();
+//				
+//				frames.add(new Frame(1,1));
+//				session.setAttribute(shotKey, frames);
+//			}
 		}
 		
 		//get model and userID from jsp
 		userID = (String)session.getAttribute(userIDKey);
-		frames = (ArrayList<Frame>) session.getAttribute(shotKey);
-		
+//		frames = (ArrayList<Frame>) session.getAttribute(shotKey);
+//		
 		if(session.getAttribute("gameNumber") == null) {
 			session.setAttribute("gameNumber", gameNumber);
 			session.setAttribute("frameNumber", frameNumber);
@@ -90,7 +90,7 @@ public class ShotServlet extends HttpServlet {
 		List<Ball> ballArsenal = (List<Ball>)session.getAttribute("ballArsenal");
 		
 		req.setAttribute("ballArsenal", ballArsenal);
-		session.setAttribute(shotKey, frames);
+//		session.setAttribute(shotKey, frames);
 		
 		// call JSP to generate empty form
 		req.getRequestDispatcher("/_view/shot.jsp").forward(req, resp);
