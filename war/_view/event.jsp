@@ -74,7 +74,7 @@
   position: fixed;
   top: 0;
   left: 0;
-  background-color: black;
+  background: linear-gradient(to bottom, rgba( 243, 0, 178, 1 ), rgba( 28, 144, 243, 1 ) 95%, rgba( 255, 255, 0, 1 ));
   padding-top: 20px;
 }
 
