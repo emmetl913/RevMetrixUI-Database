@@ -1,11 +1,13 @@
 package edu.ycp.cs320.RevMetrix.servlet;
 
 import java.io.IOException;
+import java.util.ArrayList;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import edu.ycp.cs320.RevMetrix.controller.AccountController;
 import edu.ycp.cs320.RevMetrix.model.Account;
@@ -18,7 +20,18 @@ public class AccountSignUpServlet extends HttpServlet {
 			throws ServletException, IOException {
 
 		System.out.println("Account SignUp Servlet: doGet");	
-		
+		HttpSession session = req.getSession();
+		Account kevin=  new Account("Kevin", "Kevin1","KevinsEmail@gmail.com");
+
+		ArrayList<Account> accList = new ArrayList<Account>();
+		if (session.isNew() ){
+		accList.add(kevin);
+		session.setAttribute("accountListKey", accList);
+		}
+		if(accList.isEmpty()) {
+			accList.add(kevin);
+			session.setAttribute("accountListKey", accList);		
+		}
 		// call JSP to generate empty form
 		req.getRequestDispatcher("/_view/signUp.jsp").forward(req, resp);
 	}
@@ -30,6 +43,8 @@ public class AccountSignUpServlet extends HttpServlet {
 		System.out.println("Account SignUp Servlet: doPost");
 		
 		// holds the error message text, if there is any
+		HttpSession session = req.getSession();
+
 		String errorMessage = null;
 		Account model = new Account(null, null, null);
 		AccountController controller = new AccountController();
@@ -41,6 +56,18 @@ public class AccountSignUpServlet extends HttpServlet {
 		String email = req.getParameter("email");
 		String password = req.getParameter("password");
 		String password2 = req.getParameter("password2");
+		Account kevin=  new Account("Kevin", "Kevin1","KevinsEmail@gmail.com");
+
+		ArrayList<Account> accList = new ArrayList<Account>();
+		if (session.isNew() ){
+		accList.add(kevin);
+		session.setAttribute("accountListKey", accList);
+		}
+		if(accList.isEmpty()) {
+			accList.add(kevin);
+			session.setAttribute("accountListKey", accList);		
+		}
+		
 		// check for errors in the form data before using is in a calculation
 		if (username.length() < 5 || password.length()<5 || password2.length() < 5) {
 			errorMessage = "Please enter a username and/or password that are both longer than 5 characters";
@@ -53,6 +80,8 @@ public class AccountSignUpServlet extends HttpServlet {
 		if(errorMessage == null && !signedUp) {
 			if(password.equals(password2)) {
 				controller.signUp(username, password, email); //create an account with SignUp
+				accList = (ArrayList<Account>)session.getAttribute("accountListKey");
+				accList.add(new Account(username, password, email));
 				signedUp = true;
 			}
 			else {
@@ -61,6 +90,20 @@ public class AccountSignUpServlet extends HttpServlet {
 		}
 		
 		if (req.getParameter("signUp") != null && signedUp) {
+			accList = (ArrayList<Account>)session.getAttribute("accountListKey");
+			session.setAttribute("accountListKey", accList);	
+			//System.out.println(accList.get(0).getUsername());
+			//System.out.println(accList.get(1).getUsername());
+			req.setAttribute("errorMessage", errorMessage);
+			req.setAttribute("game", model);
+
+			req.getRequestDispatcher("/_view/logIn.jsp").forward(req, resp);
+		}
+		if (req.getParameter("logIn") != null && signedUp) {
+			//System.out.println(accList.get(0).getUsername());
+			//System.out.println(accList.get(1).getUsername());
+			req.setAttribute("errorMessage", errorMessage);
+			req.setAttribute("game", model);
 			req.getRequestDispatcher("/_view/logIn.jsp").forward(req, resp);
 		}
 		// Add parameters as request attributes
@@ -72,6 +115,7 @@ public class AccountSignUpServlet extends HttpServlet {
 		// this adds the errorMessage text and the result to the response
 		req.setAttribute("errorMessage", errorMessage);
 		req.setAttribute("game", model);
+		session.setAttribute("accountListKey", accList);		
 		// Forward to view to render the result HTML document
 		req.getRequestDispatcher("/_view/signUp.jsp").forward(req, resp);
 	}
