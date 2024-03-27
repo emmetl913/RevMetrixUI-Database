@@ -1,11 +1,11 @@
 <!DOCTYPE html>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
-<%@ page import= "edu.ycp.cs320.lab02.model.Event" %>
-<%@ page import="edu.ycp.cs320.lab02.model.EventArray" %>
+<%@ page import= "edu.ycp.cs320.RevMetrix.model.Event" %>
+<%@ page import="edu.ycp.cs320.RevMetrix.model.EventArray" %>
 
-<%@ page import= "edu.ycp.cs320.lab02.model.Establishment" %>
-<%@ page import="edu.ycp.cs320.lab02.model.EstablishmentArray" %>
+<%@ page import= "edu.ycp.cs320.RevMetrix.model.Establishment" %>
+<%@ page import="edu.ycp.cs320.RevMetrix.model.EstablishmentArray" %>
 
 <%@ page import = "java.io.*,java.util.*"%>
 
@@ -125,13 +125,12 @@
           <a href="${pageContext.servletContext.contextPath}/shot">Shot</a>
           <a href="${pageContext.servletContext.contextPath}/ballArsenal">Ball Arsenal</a>
           <a href="https://github.com/emmetl913/RevMetrixUI-Database">GitHub</a>
-          <a href="${pageContext.servletContext.contextPath}/startBowling">Start Bowling</a>
           <a class="dropbtn" href="#" onclick="toggleDropdown(), nextStep(1)">Start Bowling!</a>
 		      <div class="dropdown-content" id="myDropdown">
-	        <a href="${pageContext.servletContext.contextPath}/event">Event</a>
-	        <a href="#" onclick="showContent('session')">Session</a>
-	        <a href="${pageContext.servletContext.contextPath}/game">Game</a>
-	        <a href="#" onclick="showContent('shot')">Shot</a>
+	        <a href="${pageContext.servletContext.contextPath}/event">>Event</a>
+	        <a href="${pageContext.servletContext.contextPath}/session">>Session</a>
+	        <a href="${pageContext.servletContext.contextPath}/game">>Game</a>
+	        <a href="#" onclick="showContent('shot')">>Shot</a>
 	   	 </div>
 		  </div>
       

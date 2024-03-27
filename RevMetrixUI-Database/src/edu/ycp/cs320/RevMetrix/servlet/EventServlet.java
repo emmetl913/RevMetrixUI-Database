@@ -1,6 +1,7 @@
-package edu.ycp.cs320.lab02.servlet;
+package edu.ycp.cs320.RevMetrix.servlet;
 
 import java.io.IOException;
+
 import java.util.ArrayList;
 import java.util.Iterator;
 
@@ -10,16 +11,13 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import edu.ycp.cs320.lab02.model.Ball;
-import edu.ycp.cs320.lab02.model.BallArsenal;
-import edu.ycp.cs320.lab02.model.Establishment;
-import edu.ycp.cs320.lab02.model.EstablishmentArray;
-import edu.ycp.cs320.lab02.controller.BallArsenalController;
-import edu.ycp.cs320.lab02.controller.EstablishmentRegController;
-import edu.ycp.cs320.lab02.controller.EventController;
-import edu.ycp.cs320.lab02.model.Event;
-import edu.ycp.cs320.lab02.model.EventArray;
-import edu.ycp.cs320.lab02.model.Game;
+import edu.ycp.cs320.RevMetrix.model.Establishment;
+import edu.ycp.cs320.RevMetrix.model.EstablishmentArray;
+import edu.ycp.cs320.RevMetrix.controller.BallArsenalController;
+import edu.ycp.cs320.RevMetrix.controller.EstablishmentRegController;
+import edu.ycp.cs320.RevMetrix.controller.EventController;
+import edu.ycp.cs320.RevMetrix.model.Event;
+import edu.ycp.cs320.RevMetrix.model.EventArray;
 
 public class EventServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;

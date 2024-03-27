@@ -37,7 +37,7 @@
   	
   	<servlet>
   	<servlet-name>EventServlet</servlet-name>
-  	<servlet-class>edu.ycp.cs320.lab02.servlet.EventServlet</servlet-class>
+  	<servlet-class>edu.ycp.cs320.RevMetrix.servlet.EventServlet</servlet-class>
   	</servlet>
   	
   	<servlet>
@@ -92,9 +92,8 @@
   	<servlet-mapping>
   	<servlet-name>EventServlet</servlet-name>
   	<url-pattern>/event</url-pattern></servlet-mapping>
-
-  <!--  AJAX servlet mappings. -->
   
+    <servlet-mapping>
   	<servlet-name>SessionServlet</servlet-name>
   	<url-pattern>/session</url-pattern></servlet-mapping>
 
