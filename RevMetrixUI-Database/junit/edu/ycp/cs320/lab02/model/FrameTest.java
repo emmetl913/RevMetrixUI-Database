@@ -26,4 +26,10 @@ public class FrameTest{
 		num.setFrame(8);
 		assertEquals(8, num.getFrame());
 	}
+	
+	@Test
+	public void testGetLane() {
+		num.setLaneNumber(4);
+		assertEquals(4, num.getLaneNumber());
+	}
 }

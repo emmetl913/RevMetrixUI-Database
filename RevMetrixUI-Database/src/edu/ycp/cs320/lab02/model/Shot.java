@@ -14,7 +14,8 @@ public class Shot{
 		this.ballName = "";
 	}
 	
-	public Shot(String type, int pins) {
+	public Shot(String Name, String type, int pins) {
+		this.ballName = Name;
 		this.type = type;
 		this.pins = pins;
 	}

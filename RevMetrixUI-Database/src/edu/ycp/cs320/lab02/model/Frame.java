@@ -5,21 +5,30 @@ import java.util.ArrayList;
 public class Frame{
 	private int frameNumber;
 	private int gameNumber;
-	private ArrayList<Frame> frame;
+	private ArrayList<Shot> shots;
+	private int laneNumber;
+	
+	public Frame() {
+		this.frameNumber = 1;
+		this.gameNumber = 1;
+		this.laneNumber = 1;
+		this.shots = new ArrayList<>();
+	}
 	
 	public Frame(int frameNumber) {
 		this.frameNumber = frameNumber;
-		frame = new ArrayList<>();
+		this.shots = new ArrayList<>();
 	}
 	
 	public Frame(int gameNumber, int frameNumber){
 		this.gameNumber = gameNumber;
 		this.frameNumber = frameNumber;
+		this.shots = new ArrayList<>();
 	}
 	
-	public Frame(int gameNumber, ArrayList<Frame> frames){
+	public Frame(int gameNumber, ArrayList<Shot> shots){
 		this.gameNumber = gameNumber;
-		this.frame = frames;
+		this.shots = shots;
 	}
 	
 	public int getFrame() {
@@ -30,31 +39,47 @@ public class Frame{
 		this.frameNumber = frameNumber;
 	}
 	
-	public void addFrame(Frame frame) {
-		this.frame.add(frame);
+	public void addShot(Shot shot) {
+		shots.add(shot);
 	}
 	
-	public void removeFrame(Frame frame) {
-		this.frame.remove(frame);
+	public void addFrame(Shot frame) {
+		this.shots.add(frame);
 	}
 	
-	public Frame getFrameAtIndex(int index) {
-		if(index < 0 || index >= frame.size()) {
+	public void removeFrame(Shot frame) {
+		this.shots.remove(frame);
+	}
+	
+	public Shot getShot(int index) {
+		if(index < 0 || index >= shots.size()) {
 			throw new IndexOutOfBoundsException("Index out of bounds");
 		}
 		
-		return frame.get(index);
+		return shots.get(index);
 	}
 	
-	public ArrayList<Frame> getFrames(){
-		return frame;
+	public ArrayList<Shot> getShots(){
+		return shots;
 	}
 	
-	public void setFrames(ArrayList<Frame> frames) {
-		this.frame = frames;
+	public void setFrames(ArrayList<Shot> shots) {
+		this.shots = shots;
 	}
 	
 	public int getNumberOfFrames() {
-		return frame.size();
+		return shots.size();
+	}
+	
+	public void setLaneNumber(int laneNumber) {
+		this.laneNumber = laneNumber;
+	}
+	
+	public int getLaneNumber() {
+		return laneNumber;
+	}
+	
+	public void resetShots() {
+		shots.clear();
 	}
 }

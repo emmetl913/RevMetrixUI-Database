@@ -6,7 +6,7 @@ import java.util.ArrayList;
 public class BallArsenal {
 
 	//Manages a collection of bowling balls
-		private static ArrayList<Ball> balls;
+		private ArrayList<Ball> balls;
 		
 		public BallArsenal() {
 			balls = new ArrayList<>();
@@ -33,7 +33,7 @@ public class BallArsenal {
 		public Ball getBallAtIndex(int index) {
 			return balls.get(index);
 		}
-		public static ArrayList<Ball> getBalls(){
+		public ArrayList<Ball> getBalls(){
 			return balls;
 		}
 		public int getNumberOfBalls() {
