@@ -13,6 +13,7 @@ import javax.servlet.http.HttpSession;
 import org.eclipse.jetty.server.session.Session;
 
 import edu.ycp.cs320.RevMetrix.controller.BallArsenalController;
+import edu.ycp.cs320.RevMetrix.model.Account;
 import edu.ycp.cs320.RevMetrix.model.Ball;
 import edu.ycp.cs320.RevMetrix.model.BallArsenal;
 import edu.ycp.cs320.RevMetrix.model.Game;
@@ -23,7 +24,11 @@ public class BallArsenalServlet extends HttpServlet {
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException {
-
+		
+		if(!AccountServlet.validLogin()) {
+            req.getRequestDispatcher("/_view/logIn.jsp").forward(req, resp);
+        }
+		
 		System.out.println("BallArsenal Servlet: doGet");	
 		
 		//BallArsenalController controller = new BallArsenalController();
@@ -95,8 +100,10 @@ public class BallArsenalServlet extends HttpServlet {
 				} 
 				model = (BallArsenal)session.getAttribute(ballArsenalKey);
 				userID = (String)session.getAttribute(userIDKey);
+				
 				//end session shenanigans
-		
+		Account acc =  (Account)session.getAttribute("currAccount");
+		session.setAttribute("currAccount", acc);
 		controller.setModel(model);
         ArrayList<Ball> balls = model.getBalls(); //get ball ArrayList from session updated model
 		if(balls == null) {
@@ -126,7 +133,22 @@ public class BallArsenalServlet extends HttpServlet {
 			Game g = (Game)session.getAttribute("currentGame");
 			System.out.println(g.getLane());
 		}
-
+		String selectedBall = req.getParameter("selectedBall");
+		
+		try {
+			if (selectedBall !=  null)
+			{
+				String tempBallName = selectedBall;
+				Ball tempBall = new Ball(tempBallName);
+				System.out.println(tempBallName);
+				acc.setCurrentBall(tempBall);
+			}
+			System.out.println("Account Current Ball: " + acc.getCurrentBall().getName());
+		} catch(NullPointerException e)
+		{
+			System.out.println("you are dumb you should've figured this out by now dumbass");
+		}
+		
 		
 		req.setAttribute("errorMessage", errorMessage);
 		req.setAttribute("balls", balls);

@@ -17,6 +17,16 @@ public class Account {
 		this.email = Email;
 	}
 	
+	public Ball getCurrentBall()
+	{
+		return this.currentBall;
+	}
+	
+	public void setCurrentBall(Ball ball)
+	{
+		this.currentBall = ball;
+	}
+	
 	public String getUsername() {
 		return userName;
 	}
