@@ -18,7 +18,6 @@ import edu.ycp.cs320.RevMetrix.model.Shot;
 import edu.ycp.cs320.RevMetrix.model.Frame;
 import edu.ycp.cs320.RevMetrix.model.Ball;
 import edu.ycp.cs320.RevMetrix.model.BallArsenal;
-import edu.ycp.cs320.RevMetrix.model.EstablishmentArray;
 
 import edu.ycp.cs320.RevMetrix.controller.ShotController;
 
@@ -31,8 +30,14 @@ public class ShotServlet extends HttpServlet {
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException {
+		
+//		if(!ShotServlet.validLogin()) {
+//			req.getRequestDispatcher("/_view/logIn.jsp").forward(req, resp);
+//		}
 
 		System.out.println("Shot Servlet: doGet");	
+		
+		//getSession = creates information based on the user
 		
 		HttpSession session = req.getSession();
 		long createTime = session.getCreationTime();
@@ -47,14 +52,22 @@ public class ShotServlet extends HttpServlet {
 		
 		//check is new comer on webpage
 		String shotKey = new String("shotKey");
+		ArrayList<Frame> frames = (ArrayList<Frame>) session.getAttribute(shotKey);
 		
 		if(session.isNew()) {
 			session.setAttribute(userIDKey, userID);
 			//session.setAttribute(shotKey, model);
+			if(frames == null) {
+				frames = new ArrayList<Frame>();
+				
+				frames.add(new Frame(1,1));
+				session.setAttribute(shotKey, frames);
+			}
 		}
 		
 		//get model and userID from jsp
 		userID = (String)session.getAttribute(userIDKey);
+		frames = (ArrayList<Frame>) session.getAttribute(shotKey);
 		
 		if(session.getAttribute("gameNumber") == null) {
 			session.setAttribute("gameNumber", gameNumber);
@@ -77,6 +90,7 @@ public class ShotServlet extends HttpServlet {
 		List<Ball> ballArsenal = (List<Ball>)session.getAttribute("ballArsenal");
 		
 		req.setAttribute("ballArsenal", ballArsenal);
+		session.setAttribute(shotKey, frames);
 		
 		// call JSP to generate empty form
 		req.getRequestDispatcher("/_view/shot.jsp").forward(req, resp);
@@ -85,11 +99,12 @@ public class ShotServlet extends HttpServlet {
 	@Override
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 	    
+		System.out.println("Game Servlet: doPost");
+		
 		HttpSession session = req.getSession();
 	    long createTime = session.getCreationTime();
 		
 		String errorMessage = null;
-		Shot shot = null;
 		Object sessionShot = session.getAttribute("shotKey");
 		
 //		if(sessionShot instanceof Shot) {
@@ -107,20 +122,22 @@ public class ShotServlet extends HttpServlet {
 		String userID = new String("ABCD");
 
 		String shotKey = new String("shotKey");
+		ArrayList<Frame> frames = new ArrayList<Frame>();
 		
 		   // Check if this is new comer on your Webpage.
 		if (session.isNew() ){
 	      session.setAttribute(userIDKey, userID);
-		  session.setAttribute(shotKey,  shot);
+	      
+	      frames.add(new Frame(1,1));
+		  session.setAttribute(shotKey,  frames);
 		} 
-		shot = (Shot)session.getAttribute(shotKey);
+		
 		userID = (String)session.getAttribute(userIDKey);
+		frames = (ArrayList<Frame>)session.getAttribute(shotKey);
 		
 		//retreive or create a Frame object in the session
-		Frame frames = (Frame) session.getAttribute("frame");
 		if(frames == null) {
 			frame = new Frame();
-			session.setAttribute("frame", frame);
 		}
 	    
 		//prevents null pointer exceptions
@@ -130,6 +147,7 @@ public class ShotServlet extends HttpServlet {
 	    
 	    String pinsParam = req.getParameter("pins");
 	    int pins = 0;
+	    Shot shot = new Shot();
 	    
 	    if(pinsParam != null) {
 	    	pins = Integer.parseInt(pinsParam);
@@ -144,9 +162,9 @@ public class ShotServlet extends HttpServlet {
 	    Shot shots = new Shot(ballName, shotType, pins);
 	    
 	    //add the shot to the frame
-	    if(frames != null) {
-	    	 frames.addShot(shots);
-	    }
+//	    if(frames != null) {
+//	    	 frames.add(new Frame());
+//	    }
 	    
 //	    int firstShot = Integer.parseInt(req.getParameter("firstShot"));
 //	    int secondShot = Integer.parseInt(req.getParameter("secondShot"));

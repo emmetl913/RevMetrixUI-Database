@@ -2,9 +2,9 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<%@ page import="edu.ycp.cs320.lab02.model.BallArsenal" %>
-<%@ page import="edu.ycp.cs320.lab02.controller.ShotController" %>
-<%@ page import="edu.ycp.cs320.lab02.model.Ball" %>
+<%@ page import="edu.ycp.cs320.RevMetrix.model.BallArsenal" %>
+<%@ page import="edu.ycp.cs320.RevMetrix.controller.ShotController" %>
+<%@ page import="edu.ycp.cs320.RevMetrix.model.Ball" %>
 <%@ page import="java.util.ArrayList" %>
 
 <html>
@@ -84,6 +84,10 @@
             .circle.selected{
                 background-color: white;
                 color: black;
+            }
+
+            .triangle{
+                margin-top: 50px;
             }
 
             .firstShot{
@@ -272,7 +276,7 @@
                 </div>
         
                 <!-- drop down menu - selecting a ball -->
-                <form action="ShotServlet" method="post" id="ball-form">
+                <!-- <form action="ShotServlet" method="post" id="ball-form">
                     <div class="dropdown">
                         <select name="ball">
                             <option value="">Select a ball...</option>
@@ -282,31 +286,33 @@
                             <option value="add">Add Ball... </option>
                         </select>
                     </div>
-                </form>
+                </form> -->
 
-                <div class="row">
-                    <div class="circle" onclick="togglePin(this)"><span>7</span></div>
-                    <div class="circle" onclick="togglePin(this)"><span>8</span></div>
-                    <div class="circle" onclick="togglePin(this)"><span>9</span></div>
-                    <div class="circle" onclick="togglePin(this)"><span>10</span></div>
-                </div>
-                <div class="row">
-                    <div class="circle" onclick="togglePin(this)"><span>4</span></div>
-                    <div class="circle" onclick="togglePin(this)"><span>5</span></div>
-                    <div class="circle" onclick="togglePin(this)"><span>6</span></div>
-                </div>
-                <div class="row">
-                    <div class="circle" onclick="togglePin(this)"><span>2</span></div>
-                    <div class="circle" onclick="togglePin(this)"><span>3</span></div>
-                </div>
-                <div class="row">
-                    <div class="circle" onclick="togglePin(this)"><span>1</span></div>
-                </div>
-
-                <div class="row">
-                    <div id="shot-count"></div>
-                    <div class="firstShot" id="score-box1" onclick="highlightSelectedScoreBox('score-box1')" style="background-color: lightslategray;"></div>
-                    <div class="secondShot" id="score-box2" onclick="highlightSelectedScoreBox('score-box2')" style="background-color: lightslategray;"></div>
+                <div class="triangle">
+                    <div class="row">
+                        <div class="circle" onclick="togglePin(this)"><span>7</span></div>
+                        <div class="circle" onclick="togglePin(this)"><span>8</span></div>
+                        <div class="circle" onclick="togglePin(this)"><span>9</span></div>
+                        <div class="circle" onclick="togglePin(this)"><span>10</span></div>
+                    </div>
+                    <div class="row">
+                        <div class="circle" onclick="togglePin(this)"><span>4</span></div>
+                        <div class="circle" onclick="togglePin(this)"><span>5</span></div>
+                        <div class="circle" onclick="togglePin(this)"><span>6</span></div>
+                    </div>
+                    <div class="row">
+                        <div class="circle" onclick="togglePin(this)"><span>2</span></div>
+                        <div class="circle" onclick="togglePin(this)"><span>3</span></div>
+                    </div>
+                    <div class="row">
+                        <div class="circle" onclick="togglePin(this)"><span>1</span></div>
+                    </div>
+    
+                    <div class="row">
+                        <div id="shot-count"></div>
+                        <div class="firstShot" id="score-box1" onclick="highlightSelectedScoreBox('score-box1')" style="background-color: lightslategray;"></div>
+                        <div class="secondShot" id="score-box2" style="background-color: lightslategray;"></div>
+                    </div>
                 </div>
     
                 <div class="row">
@@ -343,6 +349,15 @@
 
             document.addEventListener("DOMContentLoaded", function(){
 
+                // highlightSelectedScoreBox('score-box1');
+
+                // const scoreBox2 = document.getElementById('score-box2');
+                // if(scoreBox2){
+                //     scoreBox2.addEventListener("click", function(){
+                //         highlightSelectedScoreBox('score-box2');
+                //     });
+                // }
+
                 const noPins = 0;
                 const allPins = 10;
 
@@ -358,7 +373,15 @@
                 let gameNumber = 1;
 
                 let firstScoreBox = document.getElementById("score-box1");
-                let secondScoreBox = document.getElementById("score-box2");
+                //let secondScoreBox = document.getElementById("score-box2");
+                highlightSelectedScoreBox('score-box1');
+
+                const scoreBox2 = document.getElementById('score-box2');
+                if(scoreBox2){
+                    scoreBox2.addEventListener("click", function(){
+                        highlightSelectedScoreBox('score-box2');
+                    });
+                }
 
                 let frameShots = [];
 
@@ -391,7 +414,6 @@
                     };
                     xhr.send("action=incrementFrameNumber");
                 }
-
 
                 function handleSelectChange(event){
                     if(event.target.value == "add"){
@@ -464,8 +486,8 @@
             function highlightSelectedScoreBox(scoreBox){
                 //removes highlight from all score boxes
                 document.querySelectorAll('.firstShot, .secondShot').forEach(box =>{
-                    box.style.backgroundColor = 'lightslategray';
-                });
+                        box.style.backgroundColor = 'lightslategray';
+                    });              
 
                 //highlights selected box
                 const selectedBox = document.getElementById(scoreBox);
@@ -478,7 +500,6 @@
                 const selectedScoreBox = document.querySelector('.firstShot, .secondShot');
                 console.log("Selected Score Box: ", selectedScoreBox);
                 if(selectedScoreBox){
-                    //console.log("Selected Score Box ID: ", selectedScoreBox.id);
                     return selectedScoreBox.id;
                 }
             }
@@ -552,16 +573,10 @@
             }
 
             function setFoul(){
-                // console.log("Foul button clicked");
-
                 if(shot == firstShot){
                     setAllPinsStanding();
                     clearSecondShot();
-                    //document.querySelector(`#score-box1`).textContent = "F";
-                }//else{
-                //     document.querySelector('#score-box2').textContent = "F";
-                // }
-                // updateSelectedScoreBox(null, 'foul');
+                }
 
                 const selectedBoxId = getSelectedScoreBoxId();
                 updateSelectedScoreBox('F', selectedBoxId);
@@ -635,60 +650,6 @@
                     selectedScoreBox.textContent = score;
                 }
             }
-
-            // function updateSelectedScoreBox(pinCount, shotType) {
-            //     const selectedScoreBox = document.querySelector('.score-box.selected');
-            //     const secondScoreBox = document.getElementById('score-box2');
-
-            //     if (selectedScoreBox) {
-            //         if (shotType === 'foul') {
-            //             selectedScoreBox.textContent = 'F';
-            //             if(setFirstShot){
-            //                 setFirstShot("F");
-            //             }else{
-            //                 setSecondShot("F");
-            //             }
-            //         } else if (shotType === 'no-pins') {
-            //             selectedScoreBox.textContent = '-';
-            //         } else if (shotType === 'strike') {
-            //             selectedScoreBox.textContent = 'X';
-            //         } else if (shotType === 'spare') {
-            //             secondScoreBox.textContent = '/';
-            //         } else {
-            //             selectedScoreBox.textContent = pinCount;
-            //         }
-            //     }
-            // }
-
-
-            // function displayShotType(shotType) {
-            //     console.log("Shot type: " + shotType);
-            //     var highlightedBox = document.querySelector(".score-box.selected");
-
-            //     if (highlightedBox) {
-            //         switch (shotType) {
-            //             case 'foul':
-            //                 highlightedBox.textContent = 'F';
-            //                 break;
-            //             case 'strike':
-            //                 highlightedBox.textContent = 'X';
-            //                 break;
-            //             case 'spare':
-            //                 highlightedBox.textContent = '/';
-            //                 break;
-            //             case 'gutter':
-            //                 highlightedBox.textContent = '-';
-            //                 break;
-            //             default:
-            //                 // If it's not a predefined shot type, assume it's the number of pins
-            //                 highlightedBox.textContent = shotType;
-            //                 break;
-            //         }
-            //     }else{
-            //         console.error("No selected score box found");
-            //     }
-            // }
-
 
             function initializeFrameShots(){
                 frameShots = new Array(maxFrame);
