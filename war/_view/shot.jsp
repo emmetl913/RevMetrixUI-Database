@@ -1,283 +1,704 @@
 <!DOCTYPE html>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ page import="edu.ycp.cs320.RevMetrix.model.BallArsenal" %>
+<%@ page import="edu.ycp.cs320.RevMetrix.controller.ShotController" %>
+<%@ page import="edu.ycp.cs320.RevMetrix.model.Ball" %>
+<%@ page import="java.util.ArrayList" %>
 
 <html>
-	<head>
-		<title>Shot</title>
-		<style type="text/css">
-		body {
-			font-family: Arial, sans-serif;
-		}
-		.container{
-            text-align: center;
-            align-items: center;
-            margin-top: 50px;
-        }
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+        <title>Shot</title>
+        <style type="text/css">
+            .container{
+                text-align: center;
+                align-items: center;
+                margin-top: 50px;
+                position: relative;
+            }
 
-        .row{
-            display: flex;
-            justify-content: center;
-        }
+            #game-info{
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                position: relative;
+                margin-right: 20px;
+                font-size: 24px;
+                font-weight: 900;
+            }
 
-        .circle{
-            width: 45px;
-            height: 45px;
-            border-radius: 50%;
-            border: 1px solid black;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            margin: 5px;
-            cursor: pointer;
-            font-weight: 900;
-        }
+            .game-box{
+                border: 1px solid black;
+                padding: 5px;
+                padding-left: 25px;
+                padding-right: 50px;
+            }
 
-        .circle.selected{
-            background-color: black;
-            color: white;
-        }
+            .frame-box{
+                margin-left: 20px;
+                border: 1px solid black;
+                padding: 5px;
+                padding-left: 25px;
+                padding-right: 50px;
+            }
 
-        .shot-buttons{
-            margin-top: 20px;
-        }
+            .score-box{
+                margin-left: 20px;
+                border: 1px solid black;
+                padding: 5px;
+                padding-left: 25px;
+                padding-right: 75px;
+            }
 
-        .shot-button{
-            margin: 5px;
-            padding: 10px 20px;
-            font-size: 16px;
-            cursor: pointer;
-            font-weight: 900;
-        }
+            .dropdown{
+                margin-top: 20px;
+                margin-bottom: 20px;
+                font-size: 16px;
+            }
 
-        #game-info{
-            display: inline-block;
-            justify-content: center;
-            align-items: center;
-            margin-bottom: 20px;
-            margin-top: 10px;
-            margin-right: 15px;
-            font-size: 24px;
-            font-weight: 900;
-        }
+            .row{
+                display: flex;
+                justify-content: center;
+            }
 
-        .frame-buttons{
-            margin-top: 5px;
-        }
+            .circle{
+                width: 45px;
+                height: 45px;
+                border-radius: 50%;
+                border: 1px solid black;
+                background-color: black;
+                color: white;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                margin: 5px;
+                cursor: pointer;
+                font-weight: 900;
+            }
 
-        .frame-buttons button{
-            margin: 25px;
-        }
+            .circle-inner {
+                font-size: 18px;
+            }
 
-        .game-number{
-            margin-right: 30px;
-            border: 1px solid black;
-            padding: 5px;
-            padding-left: 25px;
-            padding-right: 25px;
-        }
+            .circle.selected{
+                background-color: white;
+                color: black;
+            }
 
-        .frame-number{
-            border: 1px solid black;
-            padding: 5px;
-            padding-left: 25px;
-            padding-right: 25px;
-        }
+            .triangle{
+                margin-top: 50px;
+            }
 
-        .color-box{
-            width: 40px;
-            height: 40px;
-            background-color: gray;
-            border: 2px solid black;
-            cursor: pointer;
-            margin: 20px;
-        }
+            .firstShot{
+                width: 40px;
+                height: 40px;
+                background-color: lightslategray;
+                border: 2px solid black;
+                cursor: pointer;
+                margin: 20px;
 
-        .selected{
-            background-color: orange;
-        }
+                display: flex;
+                justify-content: center;
+                align-items: center;
+
+                text-align: center;
+                font-size: 16px;
+                font-weight: 900;
+            }
 
         		/* Style for the black sidebar */
-.sidebar {
-  height: 100%;
-  width: 250px;
-  position: fixed;
-  top: 0;
-  left: 0;
-  background: linear-gradient(to bottom, rgba( 243, 0, 178, 1 ), rgba( 28, 144, 243, 1 ) 95%, rgba( 255, 255, 0, 1 ));
-  padding-top: 20px;
-}
+            .sidebar {
+                height: 100%;
+                width: 250px;
+                position: fixed;
+                top: 0;
+                left: 0;
+                background: linear-gradient(to bottom, rgba( 243, 0, 178, 1 ), rgba( 28, 144, 243, 1 ) 95%, rgba( 255, 255, 0, 1 ));
+                padding-top: 20px;
+            }
 
-/* Links in the sidebar */
-.sidebar a {
-  padding: 10px 20px;
-  text-decoration: none;
-  color: white;
-  display: block;
-}
+            .secondShot{
+                width: 40px;
+                height: 40px;
+                background-color: lightslategray;
+                border: 2px solid black;
+                cursor: pointer;
+                margin: 20px;
 
-/* Change color of links on hover */
-.sidebar a:hover {
-  background-color: #333;
-}
+                display: flex;
+                justify-content: center;
+                align-items: center;
 
-/* Style the main content */
-.main-content {
-  margin-left: 250px; /* Same width as the sidebar */
-  padding: 20px;
-}
+                text-align: center;
+                font-size: 16px;
+                font-weight: 900;
+            }
 
-/* Responsive layout - when the screen is less than 600px wide, make the sidebar and the main content stack on top of each other */
-@media screen and (max-width: 600px) {
-  .sidebar {
-    width: 100%;
-    height: auto;
-    position: relative;
-  }
-  .sidebar a {float: left;}
-  div.content {margin-left: 0;}
-}
-		</style>
-	</head>
+            .foul{
+                width: 40px;
+                height: 40px;
+                border: 2px solid black;
+                margin: 10px;
+                display: flex;
+                align-items: center;;
+                justify-content: center;
+                position: relative;
+                font-size: 32px;
+                font-weight: 900;
+            }
 
-	<body>
-		<c:if test="${! empty errorMessage}">
+            .miss{
+                width: 40px;
+                height: 40px;
+                border: 2px solid black;
+                margin: 10px;
+                display: flex;
+                align-items: center;;
+                justify-content: center;
+                position: relative;
+                font-size: 32px;
+                font-weight: 900;
+            }
+
+            .strike{
+                width: 40px;
+                height: 40px;
+                border: 2px solid black;
+                margin: 10px;
+                display: flex;
+                align-items: center;;
+                justify-content: center;
+                position: relative;
+                font-size: 32px;
+                font-weight: 900;
+            }
+
+            .spare{
+                width: 40px;
+                height: 40px;
+                border: 2px solid black;
+                margin: 10px;
+                display: flex;
+                align-items: center;;
+                justify-content: center;
+                position: relative;
+                font-size: 32px;
+                font-weight: 900;
+            }
+
+            .frame-buttons{
+                margin-top: 5px;
+            }
+
+            .frame-buttons button{
+                margin: 25px;
+            }
+
+            /* Style for the black sidebar */
+            .sidebar {
+                height: 100%;
+                width: 250px;
+                position: fixed;
+                top: 0;
+                left: 0;
+                background-color: black;
+                padding-top: 20px;
+            }
+
+            /* Links in the sidebar */
+            .sidebar a {
+                padding: 10px 20px;
+                text-decoration: none;
+                color: white;
+                display: block;
+            }
+
+            /* Change color of links on hover */
+            .sidebar a:hover {
+                background-color: #333;
+            }
+
+            /* Style the main content */
+            .main-content {
+                margin-left: 250px; /* Same width as the sidebar */
+                padding: 20px;
+            }
+
+            /* Responsive layout - when the screen is less than 600px wide, make the sidebar and the main content stack on top of each other */
+            @media screen and (max-width: 800px) {
+                .sidebar {
+                    width: 100%;
+                    height: auto;
+                    position: relative;
+                }
+                .sidebar a {float: left;}
+                div.content {margin-left: 0;}
+                .container{
+                    flex-direction: column;
+                    margin-top: 100px;
+                    margin-right: 50px;
+                    float: left;
+                }
+            }
+        </style>
+    </head>
+    <body>
+        <c:if test="${! empty errorMessage}">
 			<div class="error">${errorMessage}</div>
 		</c:if>
 
         <div class="sidebar">
-			<a href="${pageContext.servletContext.contextPath}/index">
-			<img src="${pageContext.request.contextPath}/_view/BowlingBall.png"width="100" height="100">
-		  </a>
-	      <a href="${pageContext.servletContext.contextPath}/establishmentReg">Establishment Registration</a>
-		  <a href="${pageContext.servletContext.contextPath}/logIn">Sign Out</a>
-          <a href="${pageContext.servletContext.contextPath}/shot">Shot</a>
-          <a href="${pageContext.servletContext.contextPath}/ballArsenal">Ball Arsenal</a>
-          <a href="https://github.com/emmetl913/RevMetrixUI-Database">GitHub</a>
-          <a href="${pageContext.servletContext.contextPath}/startBowling">Start Bowling</a>
-		  </div>
+            <a href="${pageContext.servletContext.contextPath}/index">
+               <img src="${pageContext.request.contextPath}/_view/BowlingBall.png"width="100" height="100">
+             </a>
+             <a href="${pageContext.servletContext.contextPath}/establishmentReg">Establishment Registration</a>
+             <a href="${pageContext.servletContext.contextPath}/logIn">Sign Out</a>
+             <a href="${pageContext.servletContext.contextPath}/shot">Shot</a>
+             <a href="${pageContext.servletContext.contextPath}/ballArsenal">Ball Arsenal</a>
+             <a href="https://github.com/emmetl913/RevMetrixUI-Database">GitHub</a>
+             <a class="dropbtn" href="#" onclick="toggleDropdown(), nextStep(1)">Start Bowling!</a>
+             <div class="dropdown-content" id="myDropdown">
+           <a href="${pageContext.servletContext.contextPath}/event">>Event</a>
+           <a href="${pageContext.servletContext.contextPath}/session">>Session</a>
+           <a href="${pageContext.servletContext.contextPath}/game">>Game</a>
+           <a href="#" onclick="showContent('shot')">>Shot</a>
+               </div>
+       </div>
+
+        <!-- gets variables from the servlet -->
+        <%
+            String errorMessage = (String) request.getAttribute("errorMessage");
+            BallArsenal ballArsenal = (BallArsenal) request.getAttribute("ballArsenal");
+            String shotType = (String) request.getAttribute("shotType");
+
+            Object shot = request.getAttribute("shot");
+        %>
+
+        <input type="hidden" id="selected-score-box">
 	
 		<form action="${pageContext.servletContext.contextPath}/shot" method="post">
             <div class="container">
-                <!-- The Game and Frame -->
                 <div id="game-info">
-                    <span>Game:  </span><span class="game-number">1</span>
-                    <span>Frame:  </span><span class="frame-number">1</span>
+                    <!-- no info, so it shows blank -->
+                    <div class="game-box" id="gameNumber">
+                        <span>Game:   ${sessionScope.gameNumber}</span>
+                    </div>
+                    <div class="frame-box" id="frameNumber">
+                        <span>Frame:   ${sessionScope.frameNumber}</span>
+                    </div>
+                    <div class="score-box">
+                        <span>Total Score: ${sessionScope.totalScore}</span>
+                    </div>
                 </div>
-                <!-- Invereted equilateral triangle -->
-                <div class="row">
-                    <div class="circle" id="pin7" onclick="togglePin(7)">7</div>
-                    <div class="circle" id="pin8" onclick="togglePin(8)">8</div>
-                    <div class="circle" id="pin9" onclick="togglePin(9)">9</div>
-                    <div class="circle" id="pin10" onclick="togglePin(10)">10</div>
-                </div>
-                <div class="row">
-                    <div class="circle" id="pin4" onclick="togglePin(4)">4</div>
-                    <div class="circle" id="pin5" onclick="togglePin(5)">5</div>
-                    <div class="circle" id="pin6" onclick="togglePin(6)">6</div>
-                </div>
-                <div class="row">
-                    <div class="circle" id="pin2" onclick="togglePin(2)">2</div>
-                    <div class="circle" id="pin3" onclick="togglePin(3)">3</div>
-                </div>
-                <div class="row">
-                    <div class="circle" id="pin1" onclick="togglePin(1)">1</div>
-                </div>
+        
+                <!-- drop down menu - selecting a ball -->
+                <!-- <form action="ShotServlet" method="post" id="ball-form">
+                    <div class="dropdown">
+                        <select name="ball">
+                            <option value="">Select a ball...</option>
+                            <c:forEach var="ball" items="${ballArsenal.getBalls()}">
+                                <option value="${ball.getName()}">${ball.getName()}</option>
+                            </c:forEach>
+                            <option value="add">Add Ball... </option>
+                        </select>
+                    </div>
+                </form> -->
 
-                <!-- Score Boxes -->
+                <div class="triangle">
+                    <div class="row">
+                        <div class="circle" onclick="togglePin(this)"><span>7</span></div>
+                        <div class="circle" onclick="togglePin(this)"><span>8</span></div>
+                        <div class="circle" onclick="togglePin(this)"><span>9</span></div>
+                        <div class="circle" onclick="togglePin(this)"><span>10</span></div>
+                    </div>
+                    <div class="row">
+                        <div class="circle" onclick="togglePin(this)"><span>4</span></div>
+                        <div class="circle" onclick="togglePin(this)"><span>5</span></div>
+                        <div class="circle" onclick="togglePin(this)"><span>6</span></div>
+                    </div>
+                    <div class="row">
+                        <div class="circle" onclick="togglePin(this)"><span>2</span></div>
+                        <div class="circle" onclick="togglePin(this)"><span>3</span></div>
+                    </div>
+                    <div class="row">
+                        <div class="circle" onclick="togglePin(this)"><span>1</span></div>
+                    </div>
+    
+                    <div class="row">
+                        <div id="shot-count"></div>
+                        <div class="firstShot" id="score-box1" onclick="highlightSelectedScoreBox('score-box1')" style="background-color: lightslategray;"></div>
+                        <div class="secondShot" id="score-box2" style="background-color: lightslategray;"></div>
+                    </div>
+                </div>
+    
                 <div class="row">
-                    <div class="color-box" id="score-box1" onclick="highlightScoreBox(1)"></div>
-                    <div class="color-box" id="score-box2" onclick="highlightScoreBox(2)"></div>
+                    <div class="foul" onclick="setFoul()"><span>F</span></div>
+                    <div class="miss" onclick="setGutter()"><span>-</span></div>
+                    <div class="strike" onclick="setStrike()"><span>X</span></div>
+                    <div class="spare" onclick="setSpare()"><span>/</span></div>
                 </div>
-
-                <div class="shot-buttons">
-                    <button class="shot-button" onclick="selectShotType('F')">F</button>
-                    <button class="shot-button" onclick="selectShotType('-')">-</button>
-                    <button class="shot-button" onclick="selectShotType('X')">X</button>
-                    <button class="shot-button" onclick="selectShotType('/')">/</button>
-                </div>
-
+    
                 <div class="frame-buttons">
-                    <button onclick="previousFrame()">Previous Frame</button>
-                    <button onclick="nextFrame()">Next Frame</button>
+                    <button id="previousFrameBtn" onclick="getPreviousFrame()">Previous Frame</button>
+                    <button type="submit" id="nextFrameBtn" onclick="incrementFrameNumber(event)">Next Frame</button>
                 </div>
             </div>
+        </form>
 
-            <script>
-                var selectedPins = [];
-                var gameNumber = 1;
-                var frameNumber = 1;
+        <script>
+            const firstShot = 0;
+            const secondShot = 0;
 
-                function togglePin(pinNumber){
-                    var pin = document.getElementById("pin" + pinNumber);
-                    pin.classList.toggle("selected");
+            function selectScoreBox(scoreBoxId){
+                //remove 'selected' class from all score boxes
+                document.querySelectorAll('.score-box[selected]').forEach(function(scoreBox){
+                    scoreBox.classList.remove('selected');
+                });
 
-                    if(selectedPins.includes(pinNumber)){
-                        //remove pines from selectedPins array
-                        selectedPins.splice(selectedPins.indexOf(pinNumber), 1);
-                    }else{
-                        //add pin to the array
-                        selectedPins.push(pinNumber);
+                //add 'selected' to the clicked score box
+                let clickedScoreBox = document.getElementById(scoreBoxId);
+               
+                if(clickedScoreBox){
+                    clickedScoreBox.setAttribute('selected', 'true');
+                }
+            }
+
+            document.addEventListener("DOMContentLoaded", function(){
+
+                // highlightSelectedScoreBox('score-box1');
+
+                // const scoreBox2 = document.getElementById('score-box2');
+                // if(scoreBox2){
+                //     scoreBox2.addEventListener("click", function(){
+                //         highlightSelectedScoreBox('score-box2');
+                //     });
+                // }
+
+                const noPins = 0;
+                const allPins = 10;
+
+                const minFrame = 1;
+                const maxFrame = 12;
+
+                let pinCount = noPins;
+                let firstShotCount = noPins;
+                let secondShotCount = noPins;
+                let shot = firstShot;
+
+                let frameNumber = 1;
+                let gameNumber = 1;
+
+                let firstScoreBox = document.getElementById("score-box1");
+                //let secondScoreBox = document.getElementById("score-box2");
+                highlightSelectedScoreBox('score-box1');
+
+                const scoreBox2 = document.getElementById('score-box2');
+                if(scoreBox2){
+                    scoreBox2.addEventListener("click", function(){
+                        highlightSelectedScoreBox('score-box2');
+                    });
+                }
+
+                let frameShots = [];
+
+                const frameNumberElement = document.getElementById("frameNumber");
+                if(frameNumberElement){
+                    frameNumberElement.innerHTML = "Frame: " + frameNumber;
+                }
+
+                const gameNumberElement = document.getElementById("gameNumber");
+                if(gameNumberElement){
+                    gameNumberElement.innerHTML = "Game: " + gameNumber;
+                }
+
+                function incrementFrameNumber(event) {
+                    event.preventDefault();
+                    var xhr = new XMLHttpRequest();
+                    xhr.open("POST", "${pageContext.servletContext.contextPath}/ShotServlet", true);
+                    xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+                    xhr.onreadystatechange = function() {
+                        if (xhr.readyState === XMLHttpRequest.DONE) {
+                            if (xhr.status === 200) {
+                                var newFrameNumber = xhr.responseText;
+                                // Update the frame number display on the page
+                                document.getElementById("frameNumber").textContent = "Frame: " + newFrameNumber;
+                            } else {
+                                // Handle error
+                                console.error("Error: " + xhr.status);
+                            }
+                        }
+                    };
+                    xhr.send("action=incrementFrameNumber");
+                }
+
+                function handleSelectChange(event){
+                    if(event.target.value == "add"){
+                        location.replace = '${pageContext.servletContext.contextPath}/ballArsenal';
                     }
                 }
 
-                function nextFrame(){
+                //function to toggle selection of score box
+                function toggleScoreBoxSelection(scoreBox){
+                    //remove selected class from both score boxes
+                    firstScoreBox.classList.remove('selected');
+                    secondScoreBox.classList.remove('selected');
+
+                    scoreBox.classList.add('selected');
+                }
+
+                firstScoreBox.addEventListener("click", function(){
+                    // selectScoreBoxId = 'score-box1';
+                    // highlightSelectedScoreBox(firstScoreBox);
+                    selectScoreBox('score.box1', 'selected-score-box');
+                });
+
+                setFirstShot();
+
+                secondScoreBox.addEventListener("click", function(){
+                    // selectScoreBoxId = 'score-box2';
+                    // highlightSelectedScoreBox(secondScoreBox);
+                    selectScoreBox('score.box2', 'selected-score-box');
+                });
+
+                setSecondShot();
+
+                // Add event listeners to the pins to handle selection
+                document.querySelectorAll('.pin').forEach(function(pin) {
+                    pin.addEventListener("click", function() {
+                        // Toggle the 'leave' class to select/unselect the pin
+                        togglePin(pin);
+
+                        // Calculate the total pins left standing
+                        let pinsLeftStanding = calculateTotalPinsLeftStanding();
+
+                        // Update the selected score box with the new score
+                        updateSelectedScoreBox(pinsLeftStanding);
+                    });
+                });
+            });
+
+            function togglePin(pin){
+                const isLeave = pin.classList.toggle('leave');
+
+                if(isLeave){
+                    pin.style.backgroundColor = 'white'
+                    pin.style.color = 'black';
+                }else{
+                    pin.style.backgroundColor = 'black'
+                    pin.style.color = 'white';
+                }
+
+                const selectedBoxId = getSelectedScoreBoxId();
+                console.log("Selected Score Box ID: ", selectedBoxId);
+
+                const score = calculateScore();
+                console.log("Calculated Score: ", score);
+
+                updateSelectedScoreBox(score, selectedBoxId);
+                selectScoreBox(selectedBoxId, 'selected-score-box');
+            }
+
+            //function to highlight the selected score box
+            function highlightSelectedScoreBox(scoreBox){
+                //removes highlight from all score boxes
+                document.querySelectorAll('.firstShot, .secondShot').forEach(box =>{
+                        box.style.backgroundColor = 'lightslategray';
+                    });              
+
+                //highlights selected box
+                const selectedBox = document.getElementById(scoreBox);
+                if(selectedBox){
+                    selectedBox.style.backgroundColor = 'orange';
+                }
+            }
+
+            function getSelectedScoreBoxId(){
+                const selectedScoreBox = document.querySelector('.firstShot, .secondShot');
+                console.log("Selected Score Box: ", selectedScoreBox);
+                if(selectedScoreBox){
+                    return selectedScoreBox.id;
+                }
+            }
+
+            function calculateScore(){
+                const pins = document.querySelectorAll('.pin:not(.leave)');
+                const pinsLeft = pins.length;
+                return 10-pinsLeft;
+            }
+
+            function clearPins(){
+                var pins = document.querySelectorAll(".pin");
+                pins.forEach(function(pin){
+                    pin.classList.remove('leave');
+                });
+            }
+
+            function setAllPinsStanding(){
+                var pins = document.querySelectorAll('.pin');
+                pins.forEach(function(pin){
+                    pin.classList.add('leave');
+                });
+
+                resetPinCounts();
+                clearSecondShot();
+            }
+
+            function setGutter(){
+                setAllPinsStanding();
+                if(shot === firstShot){
+                    clearSecondShot();
+                    document.querySelector('#score-box1').textContent = '-';
+                }else{
+                    document.querySelector('#score-box2').textContent = '-';
+                }
+            }
+
+            function setFirstShot(){
+                shot = firstShot;
+                document.querySelector('#score-box1').style.backgroundColor = 'orange';
+                document.querySelector('#score-box2').style.backgroundColor = 'lightslategray';
+            }
+
+            function setSecondShot(){
+                shot = secondShot;
+                document.querySelector('#score-box1').style.backgroundColor = 'lightslategray';
+                document.querySelector('#score-box2').style.backgroundColor = 'orange';
+            }
+
+            function clearFirstShot(){
+                const firstShotElement = document.querySelector('#score-box1');
+
+                if(firstShotElement !== null) {
+                    firstShotElement.textContent = ' ';
+                }
+            }
+
+            function clearSecondShot(){
+                const secondShotElement = document.querySelector('#score-box2');
+
+                if(secondShotElement !== null){
+                    secondShotElement.textContent = ' ';
+                }
+            }
+
+            function resetPinCounts(){
+                noPins = 0;
+                pinCount = noPins;
+                firstShotCount = noPins;
+                secondShotCount = noPins;
+            }
+
+            function setFoul(){
+                if(shot == firstShot){
+                    setAllPinsStanding();
+                    clearSecondShot();
+                }
+
+                const selectedBoxId = getSelectedScoreBoxId();
+                updateSelectedScoreBox('F', selectedBoxId);
+                selectScoreBox(selectedBoxId, 'selected-score-box');
+            }
+
+            function setSpare(){
+                clearPins();
+                setSecondShot();
+                if(document.querySelector('#score-box1').textContent !== '-'){
+                    if(document.querySelector('#score-box1').textContent !== 'F'){
+                        document.querySelector('#score-box1').textContent = firstShotCount; 
+                    }
+                }
+                document.querySelector('#score-box2').textContent = '/';
+            }
+
+            function setStrike(){
+                clearPins();
+                setFirstShot();
+                resetPinCounts();
+                clearFirstShot();
+                document.querySelector('#score-box2').textContent = 'X';
+            }
+
+            function getPreviousFrame(){
+                clearPins();
+                resetPinCounts();
+
+                if(frameNumber > minFrame){
+                    frameNumber--;
+                    updateFrameNumber();
+                }
+            }
+
+            function getFrameNumber(){
+                clearPins();
+                resetPinCounts();
+                clearFirstShot();
+                clearSecondShot();
+
+                if(frameNumber < maxFrame){
                     frameNumber++;
                     updateFrameNumber();
                 }
+            }
 
-                function previousFrame(){
-                    if(frameNumber>1){
-                        frameNumber--;
-                        updateFrameNumber();
-                    }
+            function updateFrameNumber(){
+                const frameNumberElement = document.getElementById('frameNumber');
+                if(frameNumberElement){
+                    frameNumberElement.innerHTML = "Frame: " + frameNumber;
                 }
+            }
 
-                function updateFrameNumber(){
-                    var frameNumberElement = document.getElementById("frame-number");
-                    frameNumberElement.textContent = frameNumber
+            function calculateTotalPinsLeftStanding(){
+                const pins = document.querySelectorAll('.pin:not(.leave)');
+
+                let totalPins = 0;
+                pins.forEach(function(pin){
+                    totalPins += parseInt(pin.textContent);
+                });
+
+                let pinsLeftStanding = 10-totalPins;
+                return pinsLeftStanding;
+            }
+
+            function updateSelectedScoreBox(score, selectedScoreBoxId){
+                const selectedScoreBox = document.getElementById(selectedScoreBoxId);
+                console.log("Selected Score Box: ", selectedScoreBox);
+                if(selectedScoreBox){
+                    selectedScoreBox.textContent = score;
                 }
+            }
 
-                function selectShotType(shotType){
-                    //set the selected shot type
-                    document.getElementById("shot-type").value = shotType;
+            function initializeFrameShots(){
+                frameShots = new Array(maxFrame);
+                for(let i = 0; i<maxFrame; i++){
+                    frameShots[i] = {
+                        firstShot: null,
+                        secondShot: null
+                    };
                 }
+            }
 
-                function resetPinSelection(){
-                    var pins = document.querySelectorAll(".circle");
-                    pins.forEach(function(pin){
-                        pin.classList.remove("selected");
-                    });
+            //function to update shot information for the current frame
+            function updateFrameShots(){
+                frameShots[frameNumber-1].firstShot = firstShotCount;
+                frameShots[frameNumber-1].secondShot = secondShotCount;
+            }
+
+            //function to restore shot information for the previous frame
+            function restorePreviousFrame(){
+                if(frameNumber > 1){
+                    //Restore shot information from the array for the previous frame
+                    firstShotCount = frameShots[frameNumber-2].firstShot;
+                    secondShotCount = frameShots[frameNumber-2].secondShot;
+
+                    //update the display with the restored shot information
+                    updateFirstShotDisplay();
+                    updateSecondShotDisplay();
                 }
-
-                function toggleColer(){
-                    var box = document.querySelector('.color-box');
-                    box.classList.toggle('selected');
-                }
-
-                function highlightScoreBox(boxNumber){
-                    //reset all score boxes
-                    var scoreBoxes = document.querySelectorAll('.color-box');
-                    scoreBoxes.forEach(function(box){
-                        box.classList.remove('selected');
-                    });
-
-                    //highlight the clicked score box
-                    var selectedBox = document.getElementById('score-box' + boxNumber);
-                    selectedBox.classList.add('selected');
-                }
-
-                function updateScoreBoxes(){
-                    //calculates the score based on selected pins
-                    var pinsRemaining = 10 - selectedPins.length;
-
-                    //update the content of each score box
-                    var scoreBoxes = document.querySelectorAll('.color-box');
-                    scoreBoxes.forEach(function(box){
-                        box.textContent = pinsRemaining;
-                    });
-                }
-            </script>
-		</form>
-	</body>
+            }
+        </script>
+    </body>
 </html>

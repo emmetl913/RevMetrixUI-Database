@@ -1,11 +1,22 @@
 package edu.ycp.cs320.RevMetrix.model;
 
+import java.util.List;
+
 public class Shot{
 	private int pins;
 	private String type;
+	private String ballName;
 	
 	//Constructor
-	public Shot(int pins) {
+	public Shot() {
+		this.pins = 0;
+		this.type = "";
+		this.ballName = "";
+	}
+	
+	public Shot(String Name, String type, int pins) {
+		this.ballName = Name;
+		this.type = type;
 		this.pins = pins;
 	}
 	
@@ -27,4 +38,12 @@ public class Shot{
 	public void setType(String type) {
 		this.type = type;
 	}	
+	
+	public String getBallName() {
+		return ballName;
+	}
+	
+	public void setBallName(String ballName) {
+		this.ballName = ballName;
+	}
 }

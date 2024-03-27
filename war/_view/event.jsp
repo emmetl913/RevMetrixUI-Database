@@ -146,7 +146,7 @@
           <label for="eventType">Event Type:</label>
           <button text="Practice" name="practice" type="button" value="Practice" onclick="setToPractive()">Practice</button>
           <button text="Tournament" name="tournament" type="button" value="Tournament"onclick="setToTournament()">Tournament</button>
-          <button text="Leauge" name="leauge" type="button" value="Leauge"onclick="setToLeauge()">Leauge</button>
+          <button text="Leauge" name="leauge" type="button" value="Leauge"onclick="setToLeauge()">League</button>
     
           <label for="establishment">Establishment Name/Location:</label>
           <select name="establishment" id="establishment">
@@ -166,10 +166,10 @@
                 <input type="text" name="standing" size="12" value="${game.standing}">
     
           <tr>
-            <td><input type="Submit" id="sessionType" name="Submit" value="Submit"></td>
+            <td><a href="${pageContext.servletContext.contextPath}/session"><input type="Submit" id="sessionType" name="Submit" value="Submit"></a></td>
           </tr>
-    </div>
-
+         </form>
+	 </div>
     <script>
       var currentStep = 1;
       // Display current step

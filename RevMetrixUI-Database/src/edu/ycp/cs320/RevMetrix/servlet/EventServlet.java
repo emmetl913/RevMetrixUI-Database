@@ -18,6 +18,7 @@ import edu.ycp.cs320.RevMetrix.controller.EstablishmentRegController;
 import edu.ycp.cs320.RevMetrix.controller.EventController;
 import edu.ycp.cs320.RevMetrix.model.Event;
 import edu.ycp.cs320.RevMetrix.model.EventArray;
+import edu.ycp.cs320.RevMetrix.model.Game;
 
 public class EventServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
@@ -165,6 +166,10 @@ public class EventServlet extends HttpServlet {
 		req.setAttribute("event", events);
 		req.setAttribute("esta", estabs);
 
+		if(req.getParameter("Submit") != null) {
+    		req.getRequestDispatcher("/_view/session.jsp").forward(req, resp);
+        }
+        
 		
 		req.getRequestDispatcher("/_view/event.jsp").forward(req, resp);
 	}
