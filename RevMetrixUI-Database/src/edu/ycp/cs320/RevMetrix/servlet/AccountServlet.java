@@ -30,10 +30,16 @@ public class AccountServlet extends HttpServlet {
 		HttpSession session = req.getSession();
 		Account kevin=  new Account("Kevin", "Kevin1","KevinsEmail@gmail.com");
 
-		ArrayList<Account> accList = new ArrayList<Account>();
+		ArrayList<Account> accList =(ArrayList<Account>)session.getAttribute("accountListKey");
+
+		
 		if (session.isNew() ){
 		accList.add(kevin);
 		session.setAttribute("accountListKey", accList);
+		}
+		if(accList == null) {
+			accList.add(kevin);
+			session.setAttribute("accountListKey", accList);
 		}
 		if(accList.isEmpty()) {
 			accList.add(kevin);
@@ -70,18 +76,22 @@ public class AccountServlet extends HttpServlet {
 
 		ArrayList<Account> accList = (ArrayList<Account>)session.getAttribute("accountListKey");
 
+
 		if (session.isNew() ){
 		accList = new ArrayList<Account>();
 		accList.add(kevin);
 		session.setAttribute("accountListKey", accList);
 		}
-		if(accList.isEmpty()) {
+//		else if(accList == null) {
+//			accList.add(kevin);
+//			session.setAttribute("accountListKey", accList);
+//		}
+		else if(accList.isEmpty()) {
 			accList.add(kevin);
 			session.setAttribute("accountListKey", accList);		
 		}
-		else {
-
-		}
+//		else {
+//		}
 		for(Account account: accList) {
 			
 			 if(!validLogin) {
