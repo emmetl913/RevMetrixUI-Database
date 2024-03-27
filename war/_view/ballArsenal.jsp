@@ -2,6 +2,7 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
 <%@ page import="java.util.ArrayList" %>
+<%@ page import= "edu.ycp.cs320.RevMetrix.model.Account" %>
 <%@ page import= "edu.ycp.cs320.RevMetrix.model.Ball" %>
 <%@ page import="edu.ycp.cs320.RevMetrix.model.BallArsenal" %>
 <%@ page import = "java.io.*,java.util.*" %>
@@ -143,6 +144,9 @@
         margin-bottom: 10px; /* Add some space between ball sections */
         padding: 10px; /* Add padding inside each ball section */
     }
+.ball-section:hover{
+	background-color: #33B5FF;
+}
 button {
     background-color: #4caf50;
     color: #fff;
@@ -175,7 +179,7 @@ button:hover {
           <a href="${pageContext.servletContext.contextPath}/startBowling">Start Bowling</a>
 		  </div>
 	
-		<form action="${pageContext.servletContext.contextPath}/ballArsenal" method="post">
+		<form id="ballArsenalForm" action="${pageContext.servletContext.contextPath}/ballArsenal" method="post">
 			<header><h1>Bowling Ball Arsenal</h1></header>	
 
 			<div class="ball-box" id="ballBoxDiv">
@@ -193,13 +197,11 @@ button:hover {
 					Remove Ball</button>
 				</div>
 				<div id="ballsList"> &nbsp		
-				
-			
-						<% 
+					<% 
 			            if (balls != null && !balls.isEmpty()) {
 			                for (Ball ball : balls) {
 			        %>
-			        <div class="ball-section">
+			        <div class="ball-section" onclick="selectBall ('<%= ball.getName() %>>')">
 			            <p>Name: <%= ball.getName() %></p>
 			        </div>
 			        <% 
@@ -207,13 +209,17 @@ button:hover {
 			            } else { 
 			        %>
 			        <p>No balls available.</p>
-			        <% } 		session.setAttribute("ballArsenalKey", model); //update session model
-%>
+			        <% } 		session.setAttribute("ballArsenalKey", model); //update session model %>
 				
 				</div>
-				
 			</div>
-		
+			<input type="hidden" name="selectedBall" id="selectedBall" value="">
 		</form>
+		<script>
+		 function selectBall(ballName) {
+		        document.getElementById('selectedBall').value = ballName;
+		        document.getElementById('ballArsenalForm').submit();
+		    }
+		</script>
 	</body>
 </html>
