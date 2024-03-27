@@ -37,6 +37,7 @@ public class Event {
 	
 	public void setStanding(int standing) {
 		this.standing = standing;
+		this.standingString = Integer.toString(standing);
 	}
 	
 	public Establishment getEstablishment() {
@@ -45,22 +46,16 @@ public class Event {
 	
 	public void setEstablishment(Establishment establishment) {
 		this.establishment = establishment;
+		this.establishmentString = establishment.getEstablishmentName();
+
 	}
 	
 	public String getStandingStringName() {
 		return standingString;
 	}
 	
-	public void setStandingString(String standingString) {
-		this.standingString = standingString;
-	}
-	
 	public String getEstablishmentStringName() {
 		return establishmentString;
-	}
-	
-	public void setEstablishmentString(String establishmentString) {
-		this.establishmentString = establishmentString;
 	}
 	
 }

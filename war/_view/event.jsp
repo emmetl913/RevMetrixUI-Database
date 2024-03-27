@@ -130,7 +130,7 @@
 		      <div class="dropdown-content" id="myDropdown">
 	        <a href="${pageContext.servletContext.contextPath}/event">Event</a>
 	        <a href="#" onclick="showContent('session')">Session</a>
-	        <a href="#" onclick="showContent('game')">Game</a>
+	        <a href="${pageContext.servletContext.contextPath}/game">Game</a>
 	        <a href="#" onclick="showContent('shot')">Shot</a>
 	   	 </div>
 		  </div>
