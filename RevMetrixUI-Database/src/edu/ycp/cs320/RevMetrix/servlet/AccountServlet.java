@@ -31,9 +31,14 @@ public class AccountServlet extends HttpServlet {
 		Account kevin=  new Account("Kevin", "Kevin1","KevinsEmail@gmail.com");
 
 		ArrayList<Account> accList = new ArrayList<Account>();
+		
 		if (session.isNew() ){
 		accList.add(kevin);
 		session.setAttribute("accountListKey", accList);
+		}
+		if(accList == null) {
+			accList.add(kevin);
+			session.setAttribute("accountListKey", accList);
 		}
 		if(accList.isEmpty()) {
 			accList.add(kevin);
@@ -68,12 +73,16 @@ public class AccountServlet extends HttpServlet {
 		String password = req.getParameter("password");
 		Account kevin=  new Account("Kevin", "Kevin1","KevinsEmail@gmail.com");
 
-		ArrayList<Account> accList = (ArrayList<Account>)session.getAttribute("accountListKey");
+		ArrayList<Account> accList =  new ArrayList<Account>();
 
 		if (session.isNew() ){
 		accList = new ArrayList<Account>();
 		accList.add(kevin);
 		session.setAttribute("accountListKey", accList);
+		}
+		if(accList == null) {
+			accList.add(kevin);
+			session.setAttribute("accountListKey", accList);
 		}
 		if(accList.isEmpty()) {
 			accList.add(kevin);

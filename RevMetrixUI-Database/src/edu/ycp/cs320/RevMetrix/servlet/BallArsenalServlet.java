@@ -133,7 +133,7 @@ public class BallArsenalServlet extends HttpServlet {
 			Game g = (Game)session.getAttribute("currentGame");
 			System.out.println(g.getLane());
 		}
-		String selectedBall = (String) session.getAttribute("selectedBall");
+		String selectedBall = req.getParameter("selectedBall");
 		
 		try {
 			if (selectedBall !=  null)

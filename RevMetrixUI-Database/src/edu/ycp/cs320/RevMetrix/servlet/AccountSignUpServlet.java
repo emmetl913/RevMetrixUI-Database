@@ -28,6 +28,10 @@ public class AccountSignUpServlet extends HttpServlet {
 		accList.add(kevin);
 		session.setAttribute("accountListKey", accList);
 		}
+		if(accList == null) {
+			accList.add(kevin);
+			session.setAttribute("accountListKey", accList);
+		}
 		if(accList.isEmpty()) {
 			accList.add(kevin);
 			session.setAttribute("accountListKey", accList);		
@@ -62,6 +66,10 @@ public class AccountSignUpServlet extends HttpServlet {
 		if (session.isNew() ){
 		accList.add(kevin);
 		session.setAttribute("accountListKey", accList);
+		}
+		if(accList == null) {
+			accList.add(kevin);
+			session.setAttribute("accountListKey", accList);
 		}
 		if(accList.isEmpty()) {
 			accList.add(kevin);
