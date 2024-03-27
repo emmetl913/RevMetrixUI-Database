@@ -1,7 +1,13 @@
 <!DOCTYPE html>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
+<%@ page import= "edu.ycp.cs320.RevMetrix.model.Account" %>
+<%@ page import = "java.io.*,java.util.*"%>
+<%@ page import="javax.servlet.http.HttpSession" %>
 
+<%
+	Account acc = (Account)session.getAttribute("currAccount");
+%>
 
 <html>
 	<head>
@@ -126,9 +132,10 @@
 		  <div class="container">
 			<h2>Account Page</h2>
 			<form action="${pageContext.servletContext.contextPath}/index" method="post">
-				<label>Username: XXBowlerkevinXX </label>
+
+				<label>Username: <%= acc.getUsername()%> </label>
 	
-				<label>Email: xxBowlerkevinxx@ycp.edu </label>
+				<label>Email: <%= acc.getEmail()%> </label>
 	
 				<label>Events up soon:</label>
 				<p>Event1 = 3/3/2025</p>

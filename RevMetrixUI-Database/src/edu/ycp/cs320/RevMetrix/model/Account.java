@@ -49,6 +49,11 @@ public class Account {
 	public void setEmail(String Email) {
 		this.email = Email;
 	}
+
+	public void setCurrentGame(Game currGame) {
+		// TODO Auto-generated method stub
+		currentGame = currGame;
+	}
 	
 
 	
