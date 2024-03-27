@@ -18,6 +18,12 @@ public class AccountSignUpServlet extends HttpServlet {
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException {
+		String errorMessage = null;
+
+		
+		if(!AccountServlet.validLogin()) {
+            req.getRequestDispatcher("/_view/logIn.jsp").forward(req, resp);
+        }
 
 		System.out.println("Account SignUp Servlet: doGet");	
 		HttpSession session = req.getSession();
@@ -33,6 +39,7 @@ public class AccountSignUpServlet extends HttpServlet {
 			session.setAttribute("accountListKey", accList);		
 		}
 		// call JSP to generate empty form
+		req.setAttribute("errorMessage", errorMessage);
 		req.getRequestDispatcher("/_view/signUp.jsp").forward(req, resp);
 	}
 	
@@ -64,7 +71,7 @@ public class AccountSignUpServlet extends HttpServlet {
 		session.setAttribute("accountListKey", accList);
 		}
 		if(accList.isEmpty()) {
-			accList.add(kevin);
+			accList.add(kevin); //kevin fooooooooooreverrrrrrrr
 			session.setAttribute("accountListKey", accList);		
 		}
 		
@@ -82,6 +89,8 @@ public class AccountSignUpServlet extends HttpServlet {
 				controller.signUp(username, password, email); //create an account with SignUp
 				accList = (ArrayList<Account>)session.getAttribute("accountListKey");
 				accList.add(new Account(username, password, email));
+				System.out.println(accList.get(1).getUsername());
+
 				signedUp = true;
 			}
 			else {
@@ -90,18 +99,19 @@ public class AccountSignUpServlet extends HttpServlet {
 		}
 		
 		if (req.getParameter("signUp") != null && signedUp) {
-			accList = (ArrayList<Account>)session.getAttribute("accountListKey");
 			session.setAttribute("accountListKey", accList);	
-			//System.out.println(accList.get(0).getUsername());
-			//System.out.println(accList.get(1).getUsername());
+			System.out.println(accList.get(0).getUsername());
+			System.out.println(accList.get(1).getUsername());
 			req.setAttribute("errorMessage", errorMessage);
 			req.setAttribute("game", model);
 
 			req.getRequestDispatcher("/_view/logIn.jsp").forward(req, resp);
 		}
-		if (req.getParameter("logIn") != null && signedUp) {
+		if (req.getParameter("logIn") != null) {
+			//accList = (ArrayList<Account>)session.getAttribute("accountListKey");
+			//session.setAttribute("accountListKey", accList);
 			//System.out.println(accList.get(0).getUsername());
-			//System.out.println(accList.get(1).getUsername());
+			System.out.println(accList.get(1).getUsername());
 			req.setAttribute("errorMessage", errorMessage);
 			req.setAttribute("game", model);
 			req.getRequestDispatcher("/_view/logIn.jsp").forward(req, resp);
@@ -115,7 +125,6 @@ public class AccountSignUpServlet extends HttpServlet {
 		// this adds the errorMessage text and the result to the response
 		req.setAttribute("errorMessage", errorMessage);
 		req.setAttribute("game", model);
-		session.setAttribute("accountListKey", accList);		
 		// Forward to view to render the result HTML document
 		req.getRequestDispatcher("/_view/signUp.jsp").forward(req, resp);
 	}

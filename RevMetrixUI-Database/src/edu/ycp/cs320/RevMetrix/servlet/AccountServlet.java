@@ -30,12 +30,21 @@ public class AccountServlet extends HttpServlet {
 		HttpSession session = req.getSession();
 		Account kevin=  new Account("Kevin", "Kevin1","KevinsEmail@gmail.com");
 
-		ArrayList<Account> accList = new ArrayList<Account>();
+		ArrayList<Account> accList =(ArrayList<Account>)session.getAttribute("accountListKey");
+
+		
 		if (session.isNew() ){
+		accList = new ArrayList<Account>();
 		accList.add(kevin);
 		session.setAttribute("accountListKey", accList);
 		}
+		if(accList == null) {
+			accList = new ArrayList<Account>();
+			accList.add(kevin);
+			session.setAttribute("accountListKey", accList);
+		}
 		if(accList.isEmpty()) {
+			accList = new ArrayList<Account>();
 			accList.add(kevin);
 			session.setAttribute("accountListKey", accList);		
 		}
@@ -70,18 +79,24 @@ public class AccountServlet extends HttpServlet {
 
 		ArrayList<Account> accList = (ArrayList<Account>)session.getAttribute("accountListKey");
 
+
 		if (session.isNew() ){
 		accList = new ArrayList<Account>();
 		accList.add(kevin);
 		session.setAttribute("accountListKey", accList);
 		}
-		if(accList.isEmpty()) {
+		else if(accList == null) {
+			accList = new ArrayList<Account>();
+			accList.add(kevin);
+			session.setAttribute("accountListKey", accList);
+		}
+		else if(accList.isEmpty()) {
+			accList = new ArrayList<Account>();
 			accList.add(kevin);
 			session.setAttribute("accountListKey", accList);		
 		}
-		else {
-
-		}
+//		else {
+//		}
 		for(Account account: accList) {
 			
 			 if(!validLogin) {
@@ -106,7 +121,8 @@ public class AccountServlet extends HttpServlet {
 		
 		// check for errors in the form data before using is in a calculation
 		if (username.length() < 5 || password.length()<5) {
-			errorMessage = "Please enter a username and/or password that are both longer than 5 characters";
+			//errorMessage = "Please enter a username and/or password that are both longer than 5 characters";
+			errorMessage = " ";
 		}
 		
 

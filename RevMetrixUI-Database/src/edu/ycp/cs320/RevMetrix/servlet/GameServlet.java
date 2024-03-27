@@ -22,18 +22,17 @@ public class GameServlet extends HttpServlet {
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException {
-
-		if(!AccountServlet.validLogin()) {
-			req.getRequestDispatcher("/_view/logIn.jsp").forward(req, resp);
-		}
+//
+//		if(!AccountServlet.validLogin()) {
+//			req.getRequestDispatcher("/_view/logIn.jsp").forward(req, resp);
+//		}
 		System.out.println("Game Servlet: doGet");	
 		HttpSession session = req.getSession();
 	    long createTime = session.getCreationTime();
 		   
 		// Get last access time of this Webpage.
 		long lastAccessTime = session.getLastAccessedTime();
-		String userIDKey = new String("userID");
-		String userID = new String("ABCD");
+
 
 		   // Check if this is new comer on your Webpage.
 		
@@ -42,7 +41,6 @@ public class GameServlet extends HttpServlet {
 		
 		// If first visit: new session id
 		if (session.isNew() ){
-	      session.setAttribute(userIDKey, userID);		  
 		  //initialize the games list with 3 games
 	      if(games == null) {
 				games = new ArrayList<Game>();
@@ -53,9 +51,15 @@ public class GameServlet extends HttpServlet {
 				session.setAttribute(gamesListKey, games);
 			}
 		} 
-		
+		if(games == null) {
+			games = new ArrayList<Game>();
+			
+			games.add(new Game(1,14));
+			games.add(new Game(2,22));
+			games.add(new Game(3,4));
+			session.setAttribute(gamesListKey, games);
+		}
 		//Get model and userID from jsp
-		userID = (String)session.getAttribute(userIDKey);
 		games = (ArrayList<Game>)session.getAttribute(gamesListKey);
 		//controller.setModel(model);
 		if(games != null) {
@@ -96,11 +100,10 @@ public class GameServlet extends HttpServlet {
 		   // Check if this is new comer on your Webpage.
 		
 		String gamesListKey = new String("gamesListKey");
-		ArrayList<Game> games = new ArrayList<Game>();
+		ArrayList<Game> games = (ArrayList<Game>)session.getAttribute(gamesListKey);
 		
 		// If first visit: new session id
 		if (session.isNew() ){
-	      session.setAttribute(userIDKey, userID);		  
 		  //initialize the games list with 3 games
 		  games.add(new Game(1,14));
 		  games.add(new Game(2,22));
@@ -108,6 +111,14 @@ public class GameServlet extends HttpServlet {
 		  session.setAttribute(gamesListKey, games);
 		  
 		} 
+		if(games == null) {
+			games = new ArrayList<Game>();
+			
+			games.add(new Game(1,14));
+			games.add(new Game(2,22));
+			games.add(new Game(3,4));
+			session.setAttribute(gamesListKey, games);
+		}
 		//Get model and userID from jsp
 		userID = (String)session.getAttribute(userIDKey);
 		games = (ArrayList<Game>)session.getAttribute(gamesListKey);

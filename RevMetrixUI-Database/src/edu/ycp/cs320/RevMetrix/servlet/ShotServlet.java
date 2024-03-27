@@ -31,9 +31,9 @@ public class ShotServlet extends HttpServlet {
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException {
 		
-//		if(!ShotServlet.validLogin()) {
-//			req.getRequestDispatcher("/_view/logIn.jsp").forward(req, resp);
-//		}
+		if(!AccountServlet.validLogin()) {
+            req.getRequestDispatcher("/_view/logIn.jsp").forward(req, resp);
+        }
 
 		System.out.println("Shot Servlet: doGet");	
 		
