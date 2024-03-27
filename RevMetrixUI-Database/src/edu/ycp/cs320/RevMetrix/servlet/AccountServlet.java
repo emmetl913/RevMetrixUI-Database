@@ -6,6 +6,8 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+
 
 import edu.ycp.cs320.RevMetrix.controller.AccountController;
 import edu.ycp.cs320.RevMetrix.model.Account;
@@ -40,7 +42,11 @@ public class AccountServlet extends HttpServlet {
 		model.setPassword("Kevin1");
 		// result of calculation goes here
 		// decode POSTed form parameters and dispatch to controller
-			
+		HttpSession session = req.getSession();
+	    long createTime = session.getCreationTime();
+		long lastAccessTime = session.getLastAccessedTime();
+		
+		
 		String username = req.getParameter("username");
 		String password = req.getParameter("password");
 		// check for errors in the form data before using is in a calculation
