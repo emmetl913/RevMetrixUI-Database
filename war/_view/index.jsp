@@ -126,7 +126,7 @@
           <a href="${pageContext.servletContext.contextPath}/shot">Shot</a>
           <a href="${pageContext.servletContext.contextPath}/ballArsenal">Ball Arsenal</a>
           <a href="https://github.com/emmetl913/RevMetrixUI-Database">GitHub</a>
-          <a href="${pageContext.servletContext.contextPath}/startBowling">Start Bowling</a>
+          <a href="${pageContext.servletContext.contextPath}/event">Start Bowling!</a>
 		  </div>
 		  
 		  <div class="container">
