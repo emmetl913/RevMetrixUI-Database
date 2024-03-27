@@ -139,17 +139,8 @@ public class BallArsenalServlet extends HttpServlet {
 			if (selectedBall !=  null)
 			{
 				String tempBallName = selectedBall;
-				Ball tempBall = new Ball(null);
+				Ball tempBall = new Ball(tempBallName);
 				System.out.println(tempBallName);
-				for(Ball ball : balls)
-				{
-					if (ball.getName() == tempBallName)
-					{
-						tempBall = ball;
-						tempBall.setName(tempBallName);
-						System.out.println("it got as far as the if statement");
-					}
-				}
 				acc.setCurrentBall(tempBall);
 			}
 			System.out.println("Account Current Ball: " + acc.getCurrentBall().getName());

@@ -201,7 +201,7 @@ button:hover {
 			            if (balls != null && !balls.isEmpty()) {
 			                for (Ball ball : balls) {
 			        %>
-			        <div class="ball-section" onclick="selectBall ('<%= ball.getName() %>>')">
+			        <div class="ball-section" onclick="selectBall ('<%= ball.getName() %>')">
 			            <p>Name: <%= ball.getName() %></p>
 			        </div>
 			        <% 
