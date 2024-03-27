@@ -18,6 +18,10 @@ public class AccountSignUpServlet extends HttpServlet {
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException {
+		
+		if(!AccountServlet.validLogin()) {
+            req.getRequestDispatcher("/_view/logIn.jsp").forward(req, resp);
+        }
 
 		System.out.println("Account SignUp Servlet: doGet");	
 		HttpSession session = req.getSession();
