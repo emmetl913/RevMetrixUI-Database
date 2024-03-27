@@ -167,6 +167,7 @@ public class GameServlet extends HttpServlet {
         req.setAttribute("gameObjArr", games);
 		session.setAttribute(gamesListKey, games);
 		session.setAttribute("currentGame", currentGame);
+		
 		// call JSP to generate empty form
 		req.getRequestDispatcher("/_view/game.jsp").forward(req, resp);
 	}
