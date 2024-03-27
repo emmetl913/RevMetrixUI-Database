@@ -2,8 +2,8 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
 <%@ page import="java.util.ArrayList" %>
-<%@ page import= "edu.ycp.cs320.lab02.model.Ball" %>
-<%@ page import="edu.ycp.cs320.lab02.model.BallArsenal" %>
+<%@ page import= "edu.ycp.cs320.RevMetrix.model.Ball" %>
+<%@ page import="edu.ycp.cs320.RevMetrix.model.BallArsenal" %>
 <%@ page import = "java.io.*,java.util.*" %>
 <%@ page import="javax.servlet.http.HttpSession" %>
 <%
@@ -27,6 +27,14 @@
     top: 10px; /* Adjust the top position as needed */
     width: 100%; /* Ensure the header spans the full width */
 }
+			input {
+	            width: 70%;
+	            padding: 8px;
+	            margin-bottom: 16px;
+	            box-sizing: border-box;
+	            border: 1px solid #ccc;
+	            border-radius: 4px;
+	        }
 			h1{
 				font-size: 50px;
 				color: black;
@@ -56,7 +64,7 @@
             background-color: white;
             box-shadow: 2px;
             /* Set fixed height for the container */
-            height: 330px;
+            height: 360px;
             /* Add scrollbar when content overflows */
             overflow: auto;            
         }
@@ -135,6 +143,18 @@
         margin-bottom: 10px; /* Add some space between ball sections */
         padding: 10px; /* Add padding inside each ball section */
     }
+button {
+    background-color: #4caf50;
+    color: #fff;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #45a049;
+}
 		</style>
 	</head>
 

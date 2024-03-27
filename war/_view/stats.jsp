@@ -1,10 +1,13 @@
 <!DOCTYPE html>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
-<%@ page import= "edu.ycp.cs320.RevMetrix.model.Game" %>
+<%@ page import= "edu.ycp.cs320.lab02.model.Game" %>
+<%@ page import= "edu.ycp.cs320.lab02.model.Event" %>
+
 <%@ page import = "java.io.*,java.util.*"%>
 <%@ page import="javax.servlet.http.HttpSession" %>
 <%
+	ArrayList<Event> events = (ArrayList<Event>)session.getAttribute("eventsListKey");
 	ArrayList<Game> games = (ArrayList<Game>)session.getAttribute("gamesListKey");
 	//ArrayList<Ball> games = (model != null) ? model.getBalls() : null;
 
@@ -139,39 +142,34 @@ button {
 	        <a href="#" onclick="showContent('shot')">Shot</a>
 	   	 </div>
 	</div>
-	<form id = "gameForm" action="${pageContext.servletContext.contextPath}/game" method="post">
+	<form id = "gameForm" action="${pageContext.servletContext.contextPath}/stats" method="post">
 	<div class="container">
 	
 		<!-- Game Page -->
-			<h1>Game Page!</h1>
-			<p> Select game by index: </p>
-
-			<select name="gameDropDown" id="establishment">
-			<%
-				if (games != null) {
-				  for (int i =0; i < games.size(); i++) {
-					  Game game = games.get(i);
-					  
-					  String is = ""+i;
-			%>
-			<option value=<%=is%>><%= game.getGameNumber() %> &nbsp&nbsp&nbsp|&nbsp&nbsp&nbsp Lane: <%=game.getLane()%> &nbsp&nbsp&nbsp|&nbsp&nbsp&nbsp # of Frames: <%=game.getFrameCount()%>
-			&nbsp&nbsp&nbsp|&nbsp&nbsp&nbsp Score: <%=game.getScore()%></option>
-		   <% 
-				 } } else {	%>
-					 <option value="${game.establishment}">No Establishments</option>
-		   <% } %>
-			</select>
-			<p><button id="submitButton" type="submit" id="gameStatus" name="select" value="selectCurrentGame"> Select Current Game</button></p>
+			<h1>Stats Page!</h1> 
 			<tr>
-				Enter Lane for a new game: <br> 
-				<input type="text" id="laneInput" name="laneInput" class="number-input">
-			</tr>
-				<br> 
-			<tr>
-			  	<button id="submitButton1"type="submit" id="gameStatus" name="new" value="startNewGame"> Start New Game</button>
+				
+				<!-- All stats that need an event will be displayed below>
+				<!-- First They must choose an event-->
+				
+				<select>
+				<%
+					if(events!=null) {
+						for(int i = 0; i < events.size();i++) {
+							events.get(i);
+							String is = ""+i; //for getting index of choice
+						
+							
+						}
+					}
+				%>
+				</select>
+				<button id="submitButton" type="submit" id="gameStatus" name="dont" value="leagueAverage">Get League Average</button>
+				&nbsp
+			  	<button id="submitButton1"type="submit" id="gameStatus" name="worry" value="startNewGame"> Start New Game</button>
 			</tr> 
 		</div>
 		</form>
-		
+	
 </body>
 </html>
