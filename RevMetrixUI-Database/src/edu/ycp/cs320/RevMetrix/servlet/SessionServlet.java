@@ -10,7 +10,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import edu.ycp.cs320.RevMetrix.model.BallArsenal;
 import edu.ycp.cs320.RevMetrix.model.Session;
 
 public class SessionServlet extends HttpServlet{
@@ -121,6 +120,11 @@ public class SessionServlet extends HttpServlet{
 		req.setAttribute("errorMessage", errorMessage);
 		req.setAttribute("model", model);
 		session.setAttribute(sessionKey, model);
+		
+		if(req.getParameter("submit") != null) {
+    		req.getRequestDispatcher("/_view/game.jsp").forward(req, resp);
+        }
+
 		
 		req.getRequestDispatcher("/_view/session.jsp").forward(req, resp);
 	}

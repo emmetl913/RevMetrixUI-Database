@@ -408,7 +408,7 @@
     		</table>
     		<input type="hidden" name="bowlType" id="bowlType" value="">
     		<tr>
-				<td><input type="Submit" name="submit" value="Submit Page"></td>
+				<td><input type="Submit" name="submit" value="Submit Page"><a href="${pageContext.servletContext.contextPath}/game"></a></td>
 			</tr>
 		</div>
 	</div>
