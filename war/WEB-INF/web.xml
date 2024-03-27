@@ -36,6 +36,11 @@
   	</servlet>
   	
   	<servlet>
+  	<servlet-name>EventServlet</servlet-name>
+  	<servlet-class>edu.ycp.cs320.RevMetrix.servlet.EventServlet</servlet-class>
+  	</servlet>
+  	
+  	<servlet>
   	<servlet-name>ShotServlet</servlet-name>
   	<servlet-class>edu.ycp.cs320.RevMetrix.servlet.ShotServlet</servlet-class>
   	</servlet>
@@ -85,6 +90,10 @@
   	<url-pattern>/ballArsenal</url-pattern></servlet-mapping>
   	
   	<servlet-mapping>
+  	<servlet-name>EventServlet</servlet-name>
+  	<url-pattern>/event</url-pattern></servlet-mapping>
+  
+    <servlet-mapping>
   	<servlet-name>SessionServlet</servlet-name>
   	<url-pattern>/session</url-pattern></servlet-mapping>
 
