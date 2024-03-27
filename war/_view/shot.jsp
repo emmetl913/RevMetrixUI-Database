@@ -67,6 +67,8 @@
                 height: 45px;
                 border-radius: 50%;
                 border: 1px solid black;
+                background-color: black;
+                color: white;
                 display: flex;
                 justify-content: center;
                 align-items: center;
@@ -80,8 +82,8 @@
             }
 
             .circle.selected{
-                background-color: black;
-                color: white;
+                background-color: white;
+                color: black;
             }
 
             .firstShot{
@@ -441,11 +443,11 @@
                 const isLeave = pin.classList.toggle('leave');
 
                 if(isLeave){
-                    pin.style.backgroundColor = 'black'
-                    pin.style.color = 'white';
-                }else{
                     pin.style.backgroundColor = 'white'
                     pin.style.color = 'black';
+                }else{
+                    pin.style.backgroundColor = 'black'
+                    pin.style.color = 'white';
                 }
 
                 const selectedBoxId = getSelectedScoreBoxId();
