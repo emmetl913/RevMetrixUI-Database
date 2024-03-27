@@ -366,7 +366,7 @@
 		<a href="${pageContext.servletContext.contextPath}/event">>Event</a>
 		<a href="${pageContext.servletContext.contextPath}/session">>Session</a>
 		<a href="${pageContext.servletContext.contextPath}/game">>Game</a>
-		<a href="#" onclick="showContent('shot')">>Shot</a>
+		<a href="${pageContext.servletContext.contextPath}/shot">>Shot</a>
 	   	 </div>
 	</div>
 <form id="session" action="${pageContext.servletContext.contextPath}/session" method="post">
