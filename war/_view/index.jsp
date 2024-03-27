@@ -74,7 +74,7 @@
   position: fixed;
   top: 0;
   left: 0;
-  background-color: black;
+  background: linear-gradient(to bottom, rgba( 243, 0, 178, 1 ), rgba( 28, 144, 243, 1 ) 95%, rgba( 255, 255, 0, 1 ));
   padding-top: 20px;
 }
 
@@ -126,7 +126,7 @@
           <a href="${pageContext.servletContext.contextPath}/shot">Shot</a>
           <a href="${pageContext.servletContext.contextPath}/ballArsenal">Ball Arsenal</a>
           <a href="https://github.com/emmetl913/RevMetrixUI-Database">GitHub</a>
-          <a href="${pageContext.servletContext.contextPath}/startBowling">Start Bowling</a>
+          <a href="${pageContext.servletContext.contextPath}/event">Start Bowling!</a>
 		  </div>
 		  
 		  <div class="container">
