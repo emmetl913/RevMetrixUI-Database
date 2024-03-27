@@ -303,8 +303,8 @@
 
                 <div class="row">
                     <div id="shot-count"></div>
-                    <div class="firstShot" id="score-box1" onclick="selectScoreBox('score-box1')" style="background-color: lightslategray;"></div>
-                    <div class="secondShot" id="score-box2" onclick="selectScoreBox('score-box2')" style="background-color: lightslategray;"></div>
+                    <div class="firstShot" id="score-box1" onclick="highlightSelectedScoreBox('score-box1')" style="background-color: lightslategray;"></div>
+                    <div class="secondShot" id="score-box2" onclick="highlightSelectedScoreBox('score-box2')" style="background-color: lightslategray;"></div>
                 </div>
     
                 <div class="row">
@@ -325,33 +325,19 @@
             const firstShot = 0;
             const secondShot = 0;
 
-            // function selectScoreBox(scoreBoxId, selectedBoxId){
-            //     //remove 'selected' class from all score boxes
-            //     document.querySelectorAll('.score-box').forEach(function(scoreBox){
-            //         scoreBox.classList.remove('selected');
-            //     });
+            function selectScoreBox(scoreBoxId){
+                //remove 'selected' class from all score boxes
+                document.querySelectorAll('.score-box[selected]').forEach(function(scoreBox){
+                    scoreBox.classList.remove('selected');
+                });
 
-            //     //add 'selected' to the clicked score box
-            //     let clickedScoreBox = document.getElementById(scoreBoxId);
-            //     // clickedScoreBox.classList.add('selected');
-
-            //     // let totalPinsLeftStanding = calculateTotalPinsLeftStanding();
-
-            //     // clickedScoreBox.textContent = totalPinsLeftStanding;
-            //     if(clickedScoreBox){
-            //         clickedScoreBox.classList.add('selected');
-            //         // let totalPinsLeftStanding = calculateTotalPinsLeftStanding();
-            //         // clickedScoreBox.textContent = totalPinsLeftStanding;
-
-            //         // //update the selected box ID
-            //         // // document.getElementById(selectedBoxId).value = scoreBoxId;
-
-            //         // let selectedBox = document.getElementById(selectedBoxId);
-            //         // if(selectedBox){
-            //         //     selectedBox.value = scoreBoxId;
-            //         // }
-            //     }
-            // }
+                //add 'selected' to the clicked score box
+                let clickedScoreBox = document.getElementById(scoreBoxId);
+               
+                if(clickedScoreBox){
+                    clickedScoreBox.setAttribute('selected', 'true');
+                }
+            }
 
             document.addEventListener("DOMContentLoaded", function(){
 
@@ -421,15 +407,17 @@
                 }
 
                 firstScoreBox.addEventListener("click", function(){
-                    selectScoreBoxId = 'score-box1';
-                    highlightSelectedScoreBox(firstScoreBox);
+                    // selectScoreBoxId = 'score-box1';
+                    // highlightSelectedScoreBox(firstScoreBox);
+                    selectScoreBox('score.box1', 'selected-score-box');
                 });
 
                 setFirstShot();
 
                 secondScoreBox.addEventListener("click", function(){
-                    selectScoreBoxId = 'score-box2';
-                    highlightSelectedScoreBox(secondScoreBox);
+                    // selectScoreBoxId = 'score-box2';
+                    // highlightSelectedScoreBox(secondScoreBox);
+                    selectScoreBox('score.box2', 'selected-score-box');
                 });
 
                 setSecondShot();
@@ -452,37 +440,51 @@
             function togglePin(pin){
                 const isLeave = pin.classList.toggle('leave');
 
-                const pins = document.querySelectorAll('.pin:not(.leave)');
-                pinCount = pins.length;
-
-                if(pin.classList.contains('leave')){
+                if(isLeave){
                     pin.style.backgroundColor = 'black'
                     pin.style.color = 'white';
-                    pinCount++;
                 }else{
                     pin.style.backgroundColor = 'white'
                     pin.style.color = 'black';
-                    pinCount--;
                 }
 
-                updateSelectedScoreBox(pinCount, shotType);
+                const selectedBoxId = getSelectedScoreBoxId();
+                console.log("Selected Score Box ID: ", selectedBoxId);
 
-                // Update the selected score box
-                if (selectedScoreBox) {
-                    selectScoreBox(selectedScoreBox.id);
-                }
+                const score = calculateScore();
+                console.log("Calculated Score: ", score);
 
+                updateSelectedScoreBox(score, selectedBoxId);
+                selectScoreBox(selectedBoxId, 'selected-score-box');
             }
 
             //function to highlight the selected score box
             function highlightSelectedScoreBox(scoreBox){
                 //removes highlight from all score boxes
-                document.querySelectorAll('#score-box').forEach(box =>{
+                document.querySelectorAll('.firstShot, .secondShot').forEach(box =>{
                     box.style.backgroundColor = 'lightslategray';
                 });
 
                 //highlights selected box
-                scoreBox.style.backgroundColor = 'orange';
+                const selectedBox = document.getElementById(scoreBox);
+                if(selectedBox){
+                    selectedBox.style.backgroundColor = 'orange';
+                }
+            }
+
+            function getSelectedScoreBoxId(){
+                const selectedScoreBox = document.querySelector('.firstShot, .secondShot');
+                console.log("Selected Score Box: ", selectedScoreBox);
+                if(selectedScoreBox){
+                    //console.log("Selected Score Box ID: ", selectedScoreBox.id);
+                    return selectedScoreBox.id;
+                }
+            }
+
+            function calculateScore(){
+                const pins = document.querySelectorAll('.pin:not(.leave)');
+                const pinsLeft = pins.length;
+                return 10-pinsLeft;
             }
 
             function clearPins(){
@@ -503,8 +505,8 @@
             }
 
             function setGutter(){
-                if(shot == firstShot){
-                    setAllPinsStanding();
+                setAllPinsStanding();
+                if(shot === firstShot){
                     clearSecondShot();
                     document.querySelector('#score-box1').textContent = '-';
                 }else{
@@ -548,16 +550,20 @@
             }
 
             function setFoul(){
-                console.log("Foul button clicked");
+                // console.log("Foul button clicked");
 
                 if(shot == firstShot){
                     setAllPinsStanding();
                     clearSecondShot();
-                    document.querySelector(`#score-box1`).textContent = "F";
-                }else{
-                    document.querySelector('#score-box2').textContent = "F";
-                }
+                    //document.querySelector(`#score-box1`).textContent = "F";
+                }//else{
+                //     document.querySelector('#score-box2').textContent = "F";
+                // }
                 // updateSelectedScoreBox(null, 'foul');
+
+                const selectedBoxId = getSelectedScoreBoxId();
+                updateSelectedScoreBox('F', selectedBoxId);
+                selectScoreBox(selectedBoxId, 'selected-score-box');
             }
 
             function setSpare(){
@@ -620,10 +626,11 @@
                 return pinsLeftStanding;
             }
 
-            function updateSelectedScoreBox(score){
+            function updateSelectedScoreBox(score, selectedScoreBoxId){
                 const selectedScoreBox = document.getElementById(selectedScoreBoxId);
+                console.log("Selected Score Box: ", selectedScoreBox);
                 if(selectedScoreBox){
-                    selectScoreBox.textContent = score;
+                    selectedScoreBox.textContent = score;
                 }
             }
 
