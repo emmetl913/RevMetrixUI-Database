@@ -31,9 +31,9 @@ public class ShotServlet extends HttpServlet {
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException {
 		
-		if(!AccountServlet.validLogin()) {
-            req.getRequestDispatcher("/_view/logIn.jsp").forward(req, resp);
-        }
+//		if(!AccountServlet.validLogin()) {
+//            req.getRequestDispatcher("/_view/logIn.jsp").forward(req, resp);
+//        }
 
 		System.out.println("Shot Servlet: doGet");	
 		
@@ -45,10 +45,10 @@ public class ShotServlet extends HttpServlet {
 		//get last access time of this webpage
 		long lastAccessTime = session.getLastAccessedTime();
 		String userIDKey = new String("userID");
-		String userID = new String("ABCD");
+		String userID = (String) session.getAttribute("userID");
 		
-		int gameNumber = 1;
-		int frameNumber = 1;
+		//int gameNumber = (int) session.getAttribute("gameNumber");
+		Integer frameNumber = (Integer) session.getAttribute("frameNumber");
 		
 		//check is new comer on webpage
 		String shotKey = new String("shotKey");
@@ -65,12 +65,8 @@ public class ShotServlet extends HttpServlet {
 //			}
 		}
 		
-		//get model and userID from jsp
-		userID = (String)session.getAttribute(userIDKey);
-//		frames = (ArrayList<Frame>) session.getAttribute(shotKey);
-//		
 		if(session.getAttribute("gameNumber") == null) {
-			session.setAttribute("gameNumber", gameNumber);
+			//session.setAttribute("gameNumber", gameNumber);
 			session.setAttribute("frameNumber", frameNumber);
 		}
 		
@@ -86,11 +82,46 @@ public class ShotServlet extends HttpServlet {
 //			req.getRequestDispatcher("/_view/shot.jsp").forward(req, resp);
 //		}
 		
+		if(frameNumber == null) {
+			frameNumber = 1;
+			session.setAttribute("frameNumber", frameNumber);
+		}
+		
+		//initialize the frames ArrayList
+		ArrayList<Frame> frames = (ArrayList<Frame>) session.getAttribute("frame");
+		if(frames == null) {
+			frames = new ArrayList<Frame>();
+			session.setAttribute("frames", frames);
+		}
+		
+		String action = req.getParameter("action");
+		if("nextFameBtn".equals(action)) {
+			if(frameNumber < 10) {
+				frameNumber++;
+			}
+		}else if("previousFrameBtn".equals(action)) {
+			if(frameNumber > 1) {
+				frameNumber--;
+			}
+		}
+		
+		//add new frame object to the arraylist
+		frames.add(new Frame(1, 1));
+		
+		//update frame number in session
+		session.setAttribute("frameNumber", frameNumber);
+		
 		//get ballArsenal from the session
 		List<Ball> ballArsenal = (List<Ball>)session.getAttribute("ballArsenal");
 		
+		req.setAttribute("userID", userID);
 		req.setAttribute("ballArsenal", ballArsenal);
-//		session.setAttribute(shotKey, frames);
+		req.setAttribute("frameNumber", frameNumber);
+//		
+		
+		//if the frame is out of range, it sends an error message to the user
+		boolean outOfRange = (frameNumber < 1 || frameNumber > 10);
+		req.setAttribute("outOfRange", outOfRange);
 		
 		// call JSP to generate empty form
 		req.getRequestDispatcher("/_view/shot.jsp").forward(req, resp);
@@ -102,90 +133,46 @@ public class ShotServlet extends HttpServlet {
 		System.out.println("Game Servlet: doPost");
 		
 		HttpSession session = req.getSession();
-	    long createTime = session.getCreationTime();
 		
-		String errorMessage = null;
-		Object sessionShot = session.getAttribute("shotKey");
-		
-//		if(sessionShot instanceof Shot) {
-//			shot = (Shot) sessionShot;
-//		}else {
-//			errorMessage = "Session does not contain a valid Shot object";
-//		}
-		
-		Frame frame = new Frame(1);
-		ShotController controller = new ShotController();
-		   
-		// Get last access time of this Webpage.
-		long lastAccessTime = session.getLastAccessedTime();
-		String userIDKey = new String("userID");
-		String userID = new String("ABCD");
-
-		String shotKey = new String("shotKey");
-		ArrayList<Frame> frames = new ArrayList<Frame>();
-		
-		   // Check if this is new comer on your Webpage.
-		if (session.isNew() ){
-	      session.setAttribute(userIDKey, userID);
-	      
-	      frames.add(new Frame(1,1));
-		  session.setAttribute(shotKey,  frames);
-		} 
-		
-		userID = (String)session.getAttribute(userIDKey);
-		frames = (ArrayList<Frame>)session.getAttribute(shotKey);
-		
-		//retreive or create a Frame object in the session
-		if(frames == null) {
-			frame = new Frame();
+		//handle form submission for next frame action
+		String action = req.getParameter("action");
+		if("nextFrameBtn".equals(action)) {
+			//increment frame number
+			Integer frameNumber = (Integer) session.getAttribute("frameNumber");
+			if(frameNumber == null) {
+				frameNumber = 1; //initialize frame number
+			}else if(frameNumber < 10) {
+				frameNumber++; //increment frame number is not exceeding 10
+			}
+			session.setAttribute("frameNumber", frameNumber);
 		}
-	    
-		//prevents null pointer exceptions
-		//retreive shot details
-	    String ballName = req.getParameter("ball");
-	    String shotType = req.getParameter("shotType");
-	    
-	    String pinsParam = req.getParameter("pins");
-	    int pins = 0;
-	    Shot shot = new Shot();
-	    
-	    if(pinsParam != null) {
-	    	pins = Integer.parseInt(pinsParam);
-	    }
-	    
-	    if(ballName != null && shotType != null) {
-	    	shot.setBallName(ballName);
-	    	shot.setType(shotType);
-	    }
-	    
-	    //creates a new shot object
-	    Shot shots = new Shot(ballName, shotType, pins);
-	    
-	    //add the shot to the frame
-//	    if(frames != null) {
-//	    	 frames.add(new Frame());
-//	    }
-	    
-//	    int firstShot = Integer.parseInt(req.getParameter("firstShot"));
-//	    int secondShot = Integer.parseInt(req.getParameter("secondShot"));
-//	   
-	    int totalScore = controller.calculateScore(session);
-	    session.setAttribute("totalScore", totalScore);
-	    
-	    if("incrementFrameNumber".equals(req.getParameter("action"))) {
-	    	Integer frameNumber = (Integer) session.getAttribute("frameNumber");
-	    	if(frameNumber == null) {
-		    	frameNumber = 1;	//initialize
-		    }else {
-		    	frameNumber++;		//increment
-		    }
-		    session.setAttribute("frameNumber",  frameNumber);
-		    resp.getWriter().write(String.valueOf(frameNumber));
-	    }
-	    
-	    req.setAttribute("errorMessage", errorMessage);
-	    session.setAttribute(shotKey, shot);
-	    
+		
+		//get ball name, shot type, and pins from form submission
+		//form submission = next Frame button
+		String ballName = req.getParameter("ball");
+		String shotType = req.getParameter("shotType");
+		
+		String pinsParam = req.getParameter("pins");
+		int pins = 0;
+		if(pinsParam != null && !pinsParam.isEmpty()) {
+			try {
+				pins = Integer.parseInt(pinsParam);
+			}catch(NumberFormatException e) {
+				e.printStackTrace();
+			}
+		}
+		
+		//create a new Shot object with submitted data
+		Shot shot = new Shot(ballName, shotType, pins);
+		
+		//add the shot object to the session
+		session.setAttribute("shot", shot);
+		
+		//calculate the total score using the ShotController
+		ShotController controller = new ShotController();
+		int totalScore = controller.calculateScore(session);
+		session.setAttribute("totalScore", totalScore);
+		
 		req.getRequestDispatcher("/_view/shot.jsp").forward(req, resp);
 	}
 }

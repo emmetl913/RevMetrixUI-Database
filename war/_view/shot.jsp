@@ -288,7 +288,7 @@
                         <span>Game:   ${sessionScope.gameNumber}</span>
                     </div>
                     <div class="frame-box" id="frameNumber">
-                        <span>Frame:   ${sessionScope.frameNumber}</span>
+                        <span>Frame: </span>
                     </div>
                     <div class="score-box">
                         <span>Total Score: ${sessionScope.totalScore}</span>
@@ -296,7 +296,7 @@
                 </div>
         
                 <!-- drop down menu - selecting a ball -->
-                <!-- <form action="ShotServlet" method="post" id="ball-form">
+                <form action="ShotServlet" method="post" id="ball-form">
                     <div class="dropdown">
                         <select name="ball">
                             <option value="">Select a ball...</option>
@@ -306,7 +306,7 @@
                             <option value="add">Add Ball... </option>
                         </select>
                     </div>
-                </form> -->
+                </form>
 
                 <div class="triangle">
                     <div class="row">
@@ -343,9 +343,17 @@
                 </div>
     
                 <div class="frame-buttons">
-                    <button id="previousFrameBtn" onclick="getPreviousFrame()">Previous Frame</button>
-                    <button type="submit" id="nextFrameBtn" onclick="incrementFrameNumber(event)">Next Frame</button>
+                    <button id="previousFrameBtn" type="button">Previous Frame</button>
+                    <button id="nextFrameBtn" type="button">Next Frame</button>
+
+                    <!-- <c:if test="${outOfRange}">
+                        <div class="error-message">
+                            Frame number is out of range. Please select a frame between 1 and 10.
+                        </div>
+                    </c:if> -->
                 </div>
+
+                <div id="error-message" style="color: red;"></div>
             </div>
         </form>
 
@@ -367,6 +375,7 @@
                 }
             }
 
+            //makes the page work - user interface
             document.addEventListener("DOMContentLoaded", function(){
 
                 // highlightSelectedScoreBox('score-box1');
@@ -405,34 +414,38 @@
 
                 let frameShots = [];
 
-                const frameNumberElement = document.getElementById("frameNumber");
-                if(frameNumberElement){
-                    frameNumberElement.innerHTML = "Frame: " + frameNumber;
-                }
+                // const frameNumberElement = document.getElementById("frameNumber");
+                // if(frameNumberElement){
+                //     frameNumberElement.innerHTML = "Frame: " + frameNumber;
+                // }
+
+                //event listener for the "Next Frame" button
+                const nextFrameBtn = document.getElementById("nextFrameBtn");
+                nextFrameBtn.addEventListener("click", function(){
+                    if(frameNumber < 10){
+                        frameNumber++;
+                        updateFrameNumber(frameNumber);
+                    }else{
+                        document.getElementById("error-message").textContent = "Frame number cannot exceed 10";
+                    }
+                });
+
+                //same thing for the previous frame
+                const previousFrameBtn = document.getElementById("previousFrameBtn");
+                previousFrameBtn.addEventListener("click", function() {
+                    if(frameNumber > 1){
+                        frameNumber--;
+                        updateFrameNumber(frameNumber);
+                    }else{
+                        document.getElementById("error-message").textContent = "Frame number cannot be less than 1";
+                    }
+                });
+
+                updateFrameNumber(frameNumber);
 
                 const gameNumberElement = document.getElementById("gameNumber");
                 if(gameNumberElement){
                     gameNumberElement.innerHTML = "Game: " + gameNumber;
-                }
-
-                function incrementFrameNumber(event) {
-                    event.preventDefault();
-                    var xhr = new XMLHttpRequest();
-                    xhr.open("POST", "${pageContext.servletContext.contextPath}/ShotServlet", true);
-                    xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-                    xhr.onreadystatechange = function() {
-                        if (xhr.readyState === XMLHttpRequest.DONE) {
-                            if (xhr.status === 200) {
-                                var newFrameNumber = xhr.responseText;
-                                // Update the frame number display on the page
-                                document.getElementById("frameNumber").textContent = "Frame: " + newFrameNumber;
-                            } else {
-                                // Handle error
-                                console.error("Error: " + xhr.status);
-                            }
-                        }
-                    };
-                    xhr.send("action=incrementFrameNumber");
                 }
 
                 function handleSelectChange(event){
@@ -626,9 +639,10 @@
                 clearPins();
                 resetPinCounts();
 
-                if(frameNumber > minFrame){
+                if(frameNumber > 1){
                     frameNumber--;
                     updateFrameNumber();
+                    restorePreviousFrame();
                 }
             }
 
@@ -638,16 +652,21 @@
                 clearFirstShot();
                 clearSecondShot();
 
-                if(frameNumber < maxFrame){
+                if(frameNumber < 10){
                     frameNumber++;
                     updateFrameNumber();
                 }
             }
 
-            function updateFrameNumber(){
+            function updateFrameNumber(frameNumber){
                 const frameNumberElement = document.getElementById('frameNumber');
                 if(frameNumberElement){
-                    frameNumberElement.innerHTML = "Frame: " + frameNumber;
+                    if(frameNumber >= 1 && frameNumber <= 10){
+                        frameNumberElement.textContent = "Frame: " + frameNumber;
+                        document.getElementById('error-message').textContent = "";
+                    }else{
+                        document.getElementById("error-message").textContent = "Frame number must be between 1 and 10";
+                    }
                 }
             }
 
@@ -699,6 +718,7 @@
                     updateSecondShotDisplay();
                 }
             }
+
         </script>
     </body>
 </html>
