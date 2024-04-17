@@ -24,14 +24,14 @@ public class AccountServlet extends HttpServlet {
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException {
-
+		
 		System.out.println("Account Servlet: doGet");	
 		
 		HttpSession session = req.getSession();
 		Account kevin=  new Account("Kevin", "Kevin1","KevinsEmail@gmail.com");
-
+		
 		ArrayList<Account> accList =(ArrayList<Account>)session.getAttribute("accountListKey");
-
+		
 		
 		if (session.isNew() ){
 		accList = new ArrayList<Account>();
