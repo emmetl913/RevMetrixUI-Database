@@ -290,9 +290,9 @@
                     <div class="frame-box" id="frameNumber">
                         <span>Frame: </span>
                     </div>
-                    <div class="score-box">
+                    <!-- <div class="score-box">
                         <span>Total Score: ${sessionScope.totalScore}</span>
-                    </div>
+                    </div> -->
                 </div>
         
                 <!-- drop down menu - selecting a ball -->
@@ -361,14 +361,31 @@
             const firstShot = 0;
             const secondShot = 0;
 
+            //const noPins = 0;
+            const allPins = 10;
+
+            const minFrame = 1;
+            const maxFrame = 12;
+
+            let pinCount = 0;
+            let firstShotCount = 0;
+            let secondShotCount = 0;
+            let shot = firstShot;
+
+            let frameNumber = 1;
+            let gameNumber = 1;
+
              // Highlight the leftmost box when the page loads
             // window.onload = function() {
             //     document.getElementById('box1').classList.add('highlighted');
             // };
 
             function selectScoreBox(scoreBoxId){
+                console.log("selectedScoreBox function called");
+                console.log("scoreBoxId: ", scoreBoxId);
+
                 //remove 'selected' class from all score boxes
-                document.querySelectorAll('score-box[selected]').forEach(function(scoreBox){
+                document.querySelectorAll('.score-box.selected').forEach(function(scoreBox){
                     scoreBox.classList.remove('selected');
                 });
 
@@ -376,7 +393,11 @@
                 let clickedScoreBox = document.getElementById(scoreBoxId);
                
                 if(clickedScoreBox){
-                    clickedScoreBox.setAttribute('selected', 'true');
+                    // clickedScoreBox.setAttribute('selected', 'true');
+
+                    console.log("Adding 'selected' class to clicked score box: ", clickedScoreBox);
+                    clickedScoreBox.classList.add('selected');
+                    highlightSelectedScoreBox(clickedScoreBox);
                 }
             }
 
@@ -392,19 +413,6 @@
                 //     });
                 // }
 
-                const noPins = 0;
-                const allPins = 10;
-
-                const minFrame = 1;
-                const maxFrame = 12;
-
-                let pinCount = noPins;
-                let firstShotCount = noPins;
-                let secondShotCount = noPins;
-                let shot = firstShot;
-
-                let frameNumber = 1;
-                let gameNumber = 1;
 
                 let firstScoreBox = document.getElementById("score-box1");
                 let secondScoreBox = document.getElementById("score-box2");
@@ -422,14 +430,6 @@
                 }
 
                 function addEventListeners() {
-                    document.querySelectorAll('.pin').forEach(function(pin) {
-                        pin.addEventListener("click", function() {
-                            togglePin(pin);
-                            let pinsLeftStanding = calculateTotalPinsLeftStanding();
-                            updateSelectedScoreBox(pinsLeftStanding);
-                        });
-                    });
-
                     firstScoreBox.addEventListener("click", function() {
                         selectScoreBox('score-box1', 'selected-score-box');
                     });
@@ -487,20 +487,18 @@
                 }
             });
 
-            // document.querySelectorAll('.pin').forEach*(function(pin){
-            //     pin.addEventListener("click", function() {
-            //         togglePin(pin);
-
-            //         const score = calculateScore();
-
-            //         const selectedScoreBoxId = getSelectedScoreBoxId();
-            //         updateSelectedScoreBox(score);
-            //         selectScoreBox(selectedScoreBoxId, 'selected-score-box');
-            //     });
-            // });
+            document.querySelectorAll('.pin').forEach(function(pin) {
+                pin.addEventListener("click", function() {
+                    console.log("pin clicked");
+                    togglePin(pin);
+                    updateSelectedScoreBox(calculateTotalPinsLeftStanding());
+                    highlightSelectedScoreBox(getSelectedScoreBoxId());
+                });
+            });
 
             function togglePin(pin){
-                const isLeave = pin.classList.toggle('leave');
+                console.log("togglePin function called");
+                const isLeave = pin.classList.toggle('selected');
 
                 if(isLeave){
                     pin.style.backgroundColor = 'white'
@@ -510,26 +508,21 @@
                     pin.style.color = 'white';
                 }
 
-                const selectedBoxId = getSelectedScoreBoxId();
+                // const pinsLeftStanding = calculateTotalPinsLeftStanding();
 
-                const score = calculateScore();
-
-                updateSelectedScoreBox(score);
-                selectScoreBox(selectedBoxId, 'selected-score-box');
+            //     updateSelectedScoreBox(calculateTotalPinsLeftStanding());
+            //     selectScoreBox(getSelectedScoreBoxId(), 'selected-score-box');
             }
 
             //function to highlight the selected score box
             function highlightSelectedScoreBox(scoreBox){
+                console.log("highlightSelectedScoreBox function called");
+                console.log("Selected Score Box: ", scoreBox);
+
                 //removes highlight from all score boxes
                 document.querySelectorAll('.firstShot, .secondShot').forEach(box =>{
-                        box.style.backgroundColor = 'lightslategray';
-                    });              
-
-                //highlights selected box
-                // const selectedBox = document.getElementById(scoreBox);
-                // if(selectedBox){
-                //     selectedBox.style.backgroundColor = 'orange';
-                // }
+                    box.style.backgroundColor = 'lightslategray';
+                });
 
                 const leftmostBox = document.querySelector('.firstShot');
                 if(leftmostBox){
@@ -556,19 +549,19 @@
             }
 
             function getSelectedScoreBoxId(){
-                const selectedScoreBox = document.querySelector('.firstShot, .secondShot');
+                const selectedScoreBox = document.querySelector('.firstShot.selected, .secondShot.selected');
                 console.log("Selected Score Box: ", selectedScoreBox);
                 if(selectedScoreBox){
                     return selectedScoreBox.id;
                 }
             }
 
-            function calculateScore(){
-                const pins = document.querySelectorAll('.pin.leave');
-                const pinsKnockedDown = pins.length;
-                const pinsLeft = 10-pinsKnockedDown;
-                return pinsLeft;
-            }
+            // function calculateScore(){
+            //     const pins = document.querySelectorAll('.pin.leave');
+            //     const pinsKnockedDown = pins.length;
+            //     const pinsLeft = 10-pinsKnockedDown;
+            //     return pinsLeft;
+            // }
 
             function clearPins(){
                 var pins = document.querySelectorAll(".pin");
@@ -588,13 +581,26 @@
             }
 
             function setGutter(){
-                setAllPinsStanding();
-                if(shot === firstShot){
-                    clearSecondShot();
-                    document.querySelector('#score-box1').textContent = '-';
-                }else{
-                    document.querySelector('#score-box2').textContent = '-';
-                }
+                console.log("Gutter button clicked");
+
+                // setAllPinsStanding();
+                clearPins();
+                // if(shot === firstShot){
+                //     clearSecondShot();
+                //     document.querySelector('#score-box1').textContent = '-';
+                // }else{
+                //     document.querySelector('#score-box2').textContent = '-';
+                // }
+
+                //check if it's the first shot and clear the the second shot if needed
+                // if(shot == firstShot){
+                //     setAllPinsStanding();
+                //     clearSecondShot();
+                // }
+
+                const selectedBoxId = getSelectedScoreBoxId();
+                updateSelectedScoreBox(selectedBoxId, '-');
+                selectScoreBox(selectedBoxId, 'selected-score-box');
             }
 
             function setFirstShot(){
@@ -633,14 +639,16 @@
             }
 
             function setFoul(){
+                console.log("foul button clicked")
                 if(shot == firstShot){
                     setAllPinsStanding();
                     clearSecondShot();
                 }
 
                 const selectedBoxId = getSelectedScoreBoxId();
-                updateSelectedScoreBox('F');
+                updateSelectedScoreBox(selectedBoxId, 'F');
                 selectScoreBox(selectedBoxId, 'selected-score-box');
+
             }
 
             function setSpare(){
@@ -659,7 +667,7 @@
                 setFirstShot();
                 resetPinCounts();
                 clearFirstShot();
-                document.querySelector('#score-box2').textContent = 'X';
+                document.querySelector('#score-box1').textContent = 'X';
             }
 
             function getPreviousFrame(){
@@ -707,6 +715,14 @@
                 }
             }
 
+            // function handleFrameChange(){
+            //     //update the UI when the user moves to the next frame
+            //     clearPins();
+            //     const selectedBoxId = getSelectedScoreBoxId();
+            //     const pinsLeftStanding = calculateScore();
+            //     updateSelectedScoreBox(pinsLeftStanding, selectScoreBoxId);
+            // }
+
             function calculateTotalPinsLeftStanding(){
                 const pins = document.querySelectorAll('.pin:not(.leave)');
 
@@ -719,10 +735,15 @@
                 return pinsLeftStanding;
             }
 
-            function updateSelectedScoreBox(score){
-                const selectedScoreBox = document.querySelector('.firstShot.selected, .secondShot.selected');
-                if(selectedScoreBox){
-                    selectedScoreBox.textContent = score;
+            function updateSelectedScoreBox(scoreBoxId, shotType){
+                document.querySelectorAll('.firstShot, .secondShot').forEach(box => {
+                    box.style.backgroundColor = 'lightslategray';
+                });
+
+                const selectedBox = document.getElementById(scoreBoxId);
+                if(selectedBox){
+                    selectedBox.style.backgroundColor = 'orange';
+                    selectedBox.textContent = shotType;
                 }
             }
 
