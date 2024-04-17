@@ -47,7 +47,7 @@ public class SQLDemo {
 		try {
 			Class.forName("org.apache.derby.jdbc.EmbeddedDriver");
 			
-			conn = DriverManager.getConnection("jdbc:derby:C:/cs320-spring2024/RevMetrixDB/suite.db;create=true");
+			conn = DriverManager.getConnection("jdbc:derby:C:/cs320-spring2024/suite.db;create=true");
 			conn.setAutoCommit(true);
 	
 			queryLoop(conn);
