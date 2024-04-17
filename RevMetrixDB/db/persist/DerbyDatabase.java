@@ -21,7 +21,7 @@ public class DerbyDatabase implements IDatabase {
 		} catch (Exception e) {
 			throw new IllegalStateException("Could not load Derby driver");
 		}
-	}
+	} 
 	
 	private interface Transaction<ResultType> {
 		public ResultType execute(Connection conn) throws SQLException;
@@ -29,7 +29,95 @@ public class DerbyDatabase implements IDatabase {
 
 	private static final int MAX_ATTEMPTS = 10;
 
-	
+	@Override
+	public Integer insertNewAccountinDB(final String email, final String password, final String username)
+	{
+		return executeTransacetion(new Transaction<Integer>() {
+			@Override
+			public Integer execute(Connection conn) throws SQLException {
+				PreparedStatement stmt1 = null;
+				PreparedStatement stmt2 = null;
+				PreparedStatement stmt3 = null;
+				PreparedStatement stmt4 = null;
+				PreparedStatement stmt5 = null;
+				PreparedStatement stmt6 = null;				
+				
+				ResultSet resultSet1 = null;
+				ResultSet resultSet3 = null;
+				ResultSet resultSet5 = null;
+				
+				Integer account_id = -1;
+				
+				// try to find account_id in db
+				try
+				{
+					stmt1 = conn.prepareStatement(
+							"select account_id from accounts"
+							+ " where email = ? and username = ?"
+					);
+					
+					stmt1.setString(email);
+					stmt1.setString(username);
+					
+					resultSet1 = stmt1.executeQuery();
+					
+					if(resultSet1.next())
+					{
+						account_id = resultSet1.getInt(1);
+						System.out.println("User <"+ username +"> found with email: "+ email +" and with id: "+account_id);
+					}
+					else 
+					{
+						System.out.println("User <"+ username +"> found with email: "+ email +" was not found");
+					}
+					if(account_id <= 0)
+					{
+						stmt2 = conn.prepareStatement(
+								"insert into accounts (username, email, password) "
+								+ " values(?, ?, ?)"
+						);
+						stmt2.setString(1, username);
+						stmt2.setString(2, email);
+						stmt2.setString(3, password);
+						
+						stmt2.executeUpdate();
+						
+						System.out.println("New account <"+email+"> , <"+username+"> , <"+password+"> inserted into accounts");
+						
+						// get the new account_id
+						stmt3 = conn.prepareStatement(
+								"select account_id from accounts "
+								+ " where email = ? and username = ?"
+						);
+						stmt3.setString(1, email);
+						stmt3.setString(2, username);
+						
+						resultSet3 = stmt3.executeQuery();
+						
+						if (resultSet3.next())
+						{
+							account_id = resultSet3.getInt(1);
+							System.out.println("New account <"+email+"> , <"+username+"> ID:"+account_id);
+						}
+					}
+					return account_id;
+				}
+				finally 
+				{
+					DBUtil.closeQuietly(resultSet1);
+					DBUtil.closeQuietly(stmt1);
+					DBUtil.closeQuietly(stmt2);					
+					DBUtil.closeQuietly(resultSet3);
+					DBUtil.closeQuietly(stmt3);					
+					DBUtil.closeQuietly(stmt4);
+					DBUtil.closeQuietly(resultSet5);
+					DBUtil.closeQuietly(stmt5);
+					DBUtil.closeQuietly(stmt6);
+
+				}
+			}
+		})
+	}
 	// transaction that retrieves a Book, and its Author by Title
 	@Override
 	public List<Pair<Author, Book>> findAuthorAndBookByTitle(final String title) {
@@ -579,7 +667,7 @@ public class DerbyDatabase implements IDatabase {
 	// TODO: Change it here and in SQLDemo.java under CS320_LibraryExample_Lab06->edu.ycp.cs320.sqldemo
 	// TODO: DO NOT PUT THE DB IN THE SAME FOLDER AS YOUR PROJECT - that will cause conflicts later w/Git
 	private Connection connect() throws SQLException {
-		Connection conn = DriverManager.getConnection("jdbc:derby:C:/cs320-spring2024/RevMetrixDatabase/library.db;create=true");		
+		Connection conn = DriverManager.getConnection("jdbc:derby:C:/cs320-spring2024/RevMetrixDB/suite.db;create=true");		
 		
 		// Set autocommit() to false to allow the execution of
 		// multiple queries/statements as part of the same transaction.

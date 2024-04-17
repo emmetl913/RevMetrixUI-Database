@@ -45,7 +45,7 @@ public class SQLDemo {
 		try {
 			Class.forName("org.apache.derby.jdbc.EmbeddedDriver");
 			
-			conn = DriverManager.getConnection("jdbc:derby:C:/cs320-spring2024/RevMetrixDatabase/library.db;create=true");
+			conn = DriverManager.getConnection("jdbc:derby:C:/cs320-spring2024/RevMetrixDB/suite.db;create=true");
 			conn.setAutoCommit(true);
 	
 			queryLoop(conn);
@@ -54,7 +54,7 @@ public class SQLDemo {
 		} finally {
 			DBUtil.closeQuietly(conn);
 		}
-}
+	}
 
 	private static void queryLoop(Connection conn) throws IOException {
 		StatementReader stmtReader = new StatementReader(new InputStreamReader(System.in));
