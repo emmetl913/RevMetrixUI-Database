@@ -1,4 +1,4 @@
-package edu.ycp.cs320.booksdb.persist;
+package db.persist;
 
 import java.sql.Connection;
 import java.sql.ResultSet;

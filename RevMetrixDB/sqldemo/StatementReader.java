@@ -1,4 +1,4 @@
-package edu.ycp.cs320.sqldemo;
+package sqldemo;
 
 import java.io.IOException;
 import java.io.Reader;
