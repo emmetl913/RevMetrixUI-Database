@@ -26,7 +26,8 @@
                 justify-content: center;
                 align-items: center;
                 position: relative;
-                margin-right: 20px;
+                /* margin-right: 15px; */
+                margin-left: 25px;
                 font-size: 24px;
                 font-weight: 900;
             }
@@ -404,16 +405,6 @@
             //makes the page work - user interface
             document.addEventListener("DOMContentLoaded", function(){
 
-                // highlightSelectedScoreBox('score-box1');
-
-                // const scoreBox2 = document.getElementById('score-box2');
-                // if(scoreBox2){
-                //     scoreBox2.addEventListener("click", function(){
-                //         highlightSelectedScoreBox('score-box2');
-                //     });
-                // }
-
-
                 let firstScoreBox = document.getElementById("score-box1");
                 let secondScoreBox = document.getElementById("score-box2");
 
@@ -447,6 +438,9 @@
                                 frameNumber++;
                                 console.log("Frame number updated: ", frameNumber);
                                 updateFrameNumber(frameNumber);
+                                clearFirstShot();
+                                clearSecondShot();
+                                clearPins();
                             } else {
                                 console.log("Frame number cannot exceed 10");
                                 displayErrorMessage("Frame number cannot exceed 10");
@@ -487,18 +481,10 @@
                 }
             });
 
-            document.querySelectorAll('.pin').forEach(function(pin) {
-                pin.addEventListener("click", function() {
-                    console.log("pin clicked");
-                    togglePin(pin);
-                    updateSelectedScoreBox(calculateTotalPinsLeftStanding());
-                    highlightSelectedScoreBox(getSelectedScoreBoxId());
-                });
-            });
-
             function togglePin(pin){
                 console.log("togglePin function called");
                 const isLeave = pin.classList.toggle('selected');
+                console.log("isLeave: ", isLeave);
 
                 if(isLeave){
                     pin.style.backgroundColor = 'white'
@@ -508,10 +494,11 @@
                     pin.style.color = 'white';
                 }
 
-                // const pinsLeftStanding = calculateTotalPinsLeftStanding();
+                const pinsLeftStanding = calculateTotalPinsLeftStanding();
 
-            //     updateSelectedScoreBox(calculateTotalPinsLeftStanding());
-            //     selectScoreBox(getSelectedScoreBoxId(), 'selected-score-box');
+                updateSelectedScoreBox(getSelectedScoreBoxId(), null, pinsLeftStanding);
+                // selectScoreBox(getSelectedScoreBoxId(), 'selected-score-box');
+                highlightSelectedScoreBox(getSelectedScoreBoxId());
             }
 
             //function to highlight the selected score box
@@ -585,21 +572,9 @@
 
                 // setAllPinsStanding();
                 clearPins();
-                // if(shot === firstShot){
-                //     clearSecondShot();
-                //     document.querySelector('#score-box1').textContent = '-';
-                // }else{
-                //     document.querySelector('#score-box2').textContent = '-';
-                // }
-
-                //check if it's the first shot and clear the the second shot if needed
-                // if(shot == firstShot){
-                //     setAllPinsStanding();
-                //     clearSecondShot();
-                // }
 
                 const selectedBoxId = getSelectedScoreBoxId();
-                updateSelectedScoreBox(selectedBoxId, '-');
+                updateSelectedScoreBox(selectedBoxId, '-', null);
                 selectScoreBox(selectedBoxId, 'selected-score-box');
             }
 
@@ -646,7 +621,7 @@
                 }
 
                 const selectedBoxId = getSelectedScoreBoxId();
-                updateSelectedScoreBox(selectedBoxId, 'F');
+                updateSelectedScoreBox(selectedBoxId, 'F', null);
                 selectScoreBox(selectedBoxId, 'selected-score-box');
 
             }
@@ -654,12 +629,21 @@
             function setSpare(){
                 clearPins();
                 setSecondShot();
-                if(document.querySelector('#score-box1').textContent !== '-'){
-                    if(document.querySelector('#score-box1').textContent !== 'F'){
-                        document.querySelector('#score-box1').textContent = firstShotCount; 
-                    }
+
+                const firstShotScore = document.querySelector('#score-box1').textContent;
+                console.log("First shot score: ", firstShotScore);
+
+                //if the first shot box had a score, update the first shot box with that score
+                if(firstShotScore !== 'X' && firstShotScore !== ''){
+                    document.querySelector('#score-box1').textContent = firstShotCount;
                 }
+
                 document.querySelector('#score-box2').textContent = '/';
+
+                // //if the first shot box had a score, update the first shot box with that score
+                // if(firstShotScore !== 'X' && firstShotScore !== ''){
+                //     document.querySelector('#score-box1').textContent = firstShotCount;
+                // }
             }
 
             function setStrike(){
@@ -724,18 +708,26 @@
             // }
 
             function calculateTotalPinsLeftStanding(){
-                const pins = document.querySelectorAll('.pin:not(.leave)');
+                const pins = document.querySelectorAll('.pin:not(.selected)');
 
-                let totalPins = 0;
-                pins.forEach(function(pin){
-                    totalPins += parseInt(pin.textContent);
-                });
+                const pinsLeftStanding = pins.length;
 
-                let pinsLeftStanding = 10-totalPins;
+                // let totalPins = 0;
+                // pins.forEach(function(pin){
+                //     const pinValue = parseInt(pin.textContent);
+                //     console.log("Pin value:", pin.textContent, "Parsed:", pinValue);
+                //     if(!isNaN(pinValue)){
+                //         totalPins += pinValue;
+                //     }
+                // });
+
+                // let pinsLeftStanding = 10-totalPins;
                 return pinsLeftStanding;
             }
 
-            function updateSelectedScoreBox(scoreBoxId, shotType){
+            function updateSelectedScoreBox(scoreBoxId, shotType, pinsLeftStanding){
+                // const pinsLeft = document.querySelectorAll('.pin:not(.selected)').length;
+
                 document.querySelectorAll('.firstShot, .secondShot').forEach(box => {
                     box.style.backgroundColor = 'lightslategray';
                 });
@@ -743,7 +735,11 @@
                 const selectedBox = document.getElementById(scoreBoxId);
                 if(selectedBox){
                     selectedBox.style.backgroundColor = 'orange';
-                    selectedBox.textContent = shotType;
+                    if(shotType !== null){
+                        selectedBox.textContent = shotType;
+                    }else{
+                        selectedBox.textContent = pinsLeftStanding;
+                    }
                 }
             }
 

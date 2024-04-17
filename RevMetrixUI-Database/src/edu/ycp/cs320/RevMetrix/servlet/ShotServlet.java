@@ -151,22 +151,29 @@ public class ShotServlet extends HttpServlet {
 		//form submission = next Frame button
 		String ballName = req.getParameter("ball");
 		String shotType = req.getParameter("shotType");
+		int pins = Integer.parseInt(req.getParameter("pins"));
 		
-		String pinsParam = req.getParameter("pins");
-		int pins = 0;
-		if(pinsParam != null && !pinsParam.isEmpty()) {
-			try {
-				pins = Integer.parseInt(pinsParam);
-			}catch(NumberFormatException e) {
-				e.printStackTrace();
-			}
-		}
+		//get first and second shot from the user
+		String firstShotScore = req.getParameter("firstShotScore");
+		String secondShotScore = req.getParameter("secondShotScore");
 		
+//		String pinsParam = req.getParameter("pins");
+//		int pins = 0;
+//		if(pinsParam != null && !pinsParam.isEmpty()) {
+//			try {
+//				pins = Integer.parseInt(pinsParam);
+//			}catch(NumberFormatException e) {
+//				e.printStackTrace();
+//			}
+//		}
+//		
 		//create a new Shot object with submitted data
 		Shot shot = new Shot(ballName, shotType, pins);
 		
-		//add the shot object to the session
+		//add shot object to session
 		session.setAttribute("shot", shot);
+		session.setAttribute("firstShotScore", firstShotScore);
+		session.setAttribute("secondShotScore", secondShotScore);
 		
 		//calculate the total score using the ShotController
 		ShotController controller = new ShotController();
