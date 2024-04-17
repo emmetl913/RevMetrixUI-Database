@@ -1,4 +1,4 @@
-package edu.ycp.cs320.sqldemo;
+package sqldemo;
 
 import java.sql.Connection;
 import java.sql.ResultSet;

@@ -3,6 +3,7 @@
 	<classpathentry kind="src" path="RevMetrixUI-Database/junit"/>
 	<classpathentry kind="src" path="RevMetrixUI-Database/main"/>
 	<classpathentry kind="src" path="RevMetrixUI-Database/src"/>
+	<classpathentry kind="src" path="RevMetrixDB"/>
 	<classpathentry kind="lib" path="CS320_Jetty9/lib/annotations/asm-5.1.jar"/>
 	<classpathentry kind="lib" path="CS320_Jetty9/lib/annotations/asm-commons-5.1.jar"/>
 	<classpathentry kind="lib" path="CS320_Jetty9/lib/annotations/javax.annotation-api-1.2.jar"/>

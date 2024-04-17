@@ -1,4 +1,4 @@
-package edu.ycp.cs320.booksdb.persist;
+package db.persist;
 
 public class DatabaseProvider {
 	private static IDatabase theInstance;
