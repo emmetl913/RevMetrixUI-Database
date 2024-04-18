@@ -14,6 +14,7 @@ import db.persist.IDatabase;
 import db.persist.PersistenceException;
 import edu.ycp.cs320.RevMetrix.model.Account;
 import edu.ycp.cs320.RevMetrix.model.Ball;
+import edu.ycp.cs320.RevMetrix.model.Establishment;
 import db.persist.InitialData;
 
 
@@ -546,6 +547,8 @@ public class DerbyDatabase implements IDatabase {
 						
 				PreparedStatement stmt4 = null;
 				PreparedStatement stmt5 = null;
+				PreparedStatement stmt6 = null;
+
 
 			
 				try {
@@ -580,10 +583,26 @@ public class DerbyDatabase implements IDatabase {
 					stmt5.executeUpdate();
 										
 					System.out.println("Balls table created");
+					
+					stmt6 = conn.prepareStatement(
+							"create table establishments (" +
+							"  esta_id integer primary key " +
+							"  generated always as identity (start with 1, increment by 1), " +
+							"  account_id integer," + 
+							"  name varchar(70)," +
+							"  address varchar(70)" +
+							")"//EstaId, accountId, establishmentName, address
+					);
+
+					stmt6.executeUpdate();
+										
+					System.out.println("Establishment table created");
 					return true;
 				} finally {
 					DBUtil.closeQuietly(stmt4);
 					DBUtil.closeQuietly(stmt5);
+					DBUtil.closeQuietly(stmt6);
+
 
 				}
 			}
@@ -601,6 +620,8 @@ public class DerbyDatabase implements IDatabase {
 				 */
 				List<Account> accountList;
 				List<Ball> ballList;
+				List<Establishment> estaList;
+
 				
 				try {
 					/*
@@ -609,6 +630,8 @@ public class DerbyDatabase implements IDatabase {
 					 */
 					accountList = InitialData.getAccounts();
 					ballList = InitialData.getBallArsenal();
+					estaList = InitialData.getEstablishments();
+
 				} catch (IOException e) {
 					throw new SQLException("Couldn't read initial data", e);
 				}
@@ -618,6 +641,8 @@ public class DerbyDatabase implements IDatabase {
 				PreparedStatement insertBookAuthor = null;
 				PreparedStatement insertAccount = null;
 				PreparedStatement insertBall = null;
+				PreparedStatement insertEstablishment = null;
+
 
 
 				try {
@@ -693,13 +718,32 @@ public class DerbyDatabase implements IDatabase {
 					insertBall.executeBatch();
 					System.out.println("Balls table populated");
 					
+					insertEstablishment= conn.prepareStatement("insert into establishments (account_id, name, address) values (?, ?, ?)");
+					for (Establishment establishment : estaList)
+					
+
+					{
+						insertEstablishment.setInt(1, establishment.getAccountId());	//				//ball id, accountid, weight, name, righthand, brand, color
+						insertEstablishment.setString(2, establishment.getEstablishmentName());
+						insertEstablishment.setString(3, establishment.getAddress());
+						insertEstablishment.addBatch();
+
+
+					}
+					
+					insertEstablishment.executeBatch();
+					System.out.println("Establishment table populated");
+					
+					
+					
 					return true;
 				} finally {
 					DBUtil.closeQuietly(insertBook);
 					DBUtil.closeQuietly(insertAuthor);
 					DBUtil.closeQuietly(insertBookAuthor);					
 					DBUtil.closeQuietly(insertAccount);					
-					DBUtil.closeQuietly(insertBall);					
+					DBUtil.closeQuietly(insertBall);
+					DBUtil.closeQuietly(insertEstablishment);					
 
 				}
 			}

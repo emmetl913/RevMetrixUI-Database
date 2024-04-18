@@ -3,14 +3,17 @@ package edu.ycp.cs320.RevMetrix.model;
 
 public class Establishment {
 	private String establishmentName, address;
+	private int EstaId, accountId;
 
 	public Establishment() {
 		
 	}
 	
-	public Establishment(String establishmentName, String address) {
+	public Establishment(int EstaId, int accountId, String establishmentName, String address) {
 		this.establishmentName = establishmentName;
 		this.address = address;
+		this.EstaId = EstaId;
+		this.accountId = accountId;
 	}
 	
 	public void setEstablishmentName(String establishmentName) {
@@ -29,4 +32,19 @@ public class Establishment {
 		return address;
 	}
 	
+	public void setEstaId(int EstaId) {
+		this.EstaId = EstaId;
+	}
+	
+	public int getEstaId() {
+		return EstaId;
+	}
+	
+	public void setAccountId(int accountId) {
+		this.accountId = accountId;
+	}
+	
+	public int getAccountId() {
+		return accountId;
+	}
 }

@@ -4,7 +4,7 @@ public class Ball {
 	private String name, color, brand;
 	private boolean rightHanded;
 	private float weight; 
-	private int ballId =1;
+	private int ballId;
 	private int accountId;
 	
 	
