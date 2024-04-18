@@ -414,7 +414,7 @@
                 addEventListeners();
 
                 function initializeUI(){
-                    highlightSelectedScoreBox('score-box1');
+                    highlightSelectedScoreBox(firstScoreBox);
                     updateFrameNumber(frameNumber);
                     // updateGameNumber(gameNumber);
                     clearErrorMessage();
@@ -422,11 +422,19 @@
 
                 function addEventListeners() {
                     firstScoreBox.addEventListener("click", function() {
-                        selectScoreBox('score-box1', 'selected-score-box');
+                        // selectScoreBox('score-box1', 'selected-score-box');
+                        if(!firstScoreBox.classList.contains('selected')){
+                            firstScoreBox.classList.add('selected');
+                            secondScoreBox.classList.remove('selected');
+                        }
                     });
 
                     secondScoreBox.addEventListener("click", function() {
-                        selectScoreBox('score-box2', 'selected-score-box');
+                        // selectScoreBox('score-box2', 'selected-score-box');
+                        if(!secondScoreBox.classList.contains('selected')){
+                            secondScoreBox.classList.add('selected');
+                            firstScoreBox.classList.remove('selected');
+                        }
                     });
 
                     const nextFrameBtn = document.getElementById("nextFrameBtn");
@@ -496,9 +504,18 @@
 
                 const pinsLeftStanding = calculateTotalPinsLeftStanding();
 
+                const secondShotBox = document.getElementById("score-box2");
+                if(secondShotBox.classList.contains("selected")){
+                    secondShotBox.textContent = pinsLeftStanding;
+                }
+
                 updateSelectedScoreBox(getSelectedScoreBoxId(), null, pinsLeftStanding);
                 // selectScoreBox(getSelectedScoreBoxId(), 'selected-score-box');
                 highlightSelectedScoreBox(getSelectedScoreBoxId());
+
+                if(secondShotBox.classList.contains("selected")){
+                    highlightSelectedScoreBox("score-box2");
+                }
             }
 
             //function to highlight the selected score box
@@ -516,9 +533,12 @@
                     leftmostBox.style.backgroundColor = 'orange';
                     leftmostBox.addEventListener('click', function () {
                         leftmostBox.style.backgroundColor = 'orange';
+                        leftmostBox.classList.add('selected');
+
                         const secondBox = document.querySelector('.secondShot');
                         if(secondBox){
                             secondBox.style.backgroundColor = 'lightslategray';
+                            secondBox.classList.remove('selected');
                         }
                     });
                 }
@@ -527,9 +547,12 @@
                 if(secondBox){
                     secondBox.addEventListener('click', function() {
                         secondBox.style.backgroundColor = 'orange';
+                        secondBox.classList.add('selected');
+
                         const firstBox = document.querySelector('.firstShot');
                         if(firstBox){
                             firstBox.style.backgroundColor = 'lightslategray';
+                            firstBox.classList.remove('selected');
                         }
                     });
                 }
@@ -539,6 +562,7 @@
                 const selectedScoreBox = document.querySelector('.firstShot.selected, .secondShot.selected');
                 console.log("Selected Score Box: ", selectedScoreBox);
                 if(selectedScoreBox){
+                    console.log("ID: ", selectedScoreBox.id);
                     return selectedScoreBox.id;
                 }
             }
@@ -575,7 +599,7 @@
 
                 const selectedBoxId = getSelectedScoreBoxId();
                 updateSelectedScoreBox(selectedBoxId, '-', null);
-                selectScoreBox(selectedBoxId, 'selected-score-box');
+                selectScoreBox(selectedBoxId);
             }
 
             function setFirstShot(){
@@ -622,7 +646,7 @@
 
                 const selectedBoxId = getSelectedScoreBoxId();
                 updateSelectedScoreBox(selectedBoxId, 'F', null);
-                selectScoreBox(selectedBoxId, 'selected-score-box');
+                selectScoreBox(selectedBoxId);
 
             }
 
@@ -728,11 +752,16 @@
             function updateSelectedScoreBox(scoreBoxId, shotType, pinsLeftStanding){
                 // const pinsLeft = document.querySelectorAll('.pin:not(.selected)').length;
 
+                console.log("ScoreBoxID: ", scoreBoxId);
+                console.log("shotType: ", shotType);
+                console.log("Pins left standing: ", pinsLeftStanding);
+
                 document.querySelectorAll('.firstShot, .secondShot').forEach(box => {
                     box.style.backgroundColor = 'lightslategray';
                 });
 
                 const selectedBox = document.getElementById(scoreBoxId);
+                console.log("selectedBox: ", selectedBox);
                 if(selectedBox){
                     selectedBox.style.backgroundColor = 'orange';
                     if(shotType !== null){
@@ -741,6 +770,7 @@
                         selectedBox.textContent = pinsLeftStanding;
                     }
                 }
+                console.log("function complete");
             }
 
             function initializeFrameShots(){

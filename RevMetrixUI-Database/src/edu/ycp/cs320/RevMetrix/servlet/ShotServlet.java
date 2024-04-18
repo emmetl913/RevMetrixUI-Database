@@ -30,7 +30,7 @@ public class ShotServlet extends HttpServlet {
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException {
-		
+//		
 //		if(!AccountServlet.validLogin()) {
 //            req.getRequestDispatcher("/_view/logIn.jsp").forward(req, resp);
 //        }
@@ -79,7 +79,7 @@ public class ShotServlet extends HttpServlet {
 //			req.setAttribute("ballArsenal", ballArsenal);
 //			
 //			// call JSP to generate empty form
-//			req.getRequestDispatcher("/_view/shot.jsp").forward(req, resp);
+//			//req.getRequestDispatcher("/_view/shot.jsp").forward(req, resp);
 //		}
 		
 		if(frameNumber == null) {
