@@ -7,6 +7,8 @@ import java.util.List;
 
 import db.persist.ReadCSV;
 import edu.ycp.cs320.RevMetrix.model.Account;
+import edu.ycp.cs320.RevMetrix.model.Ball;
+
 
 public class InitialData {
 
@@ -29,9 +31,9 @@ public class InitialData {
 				// read author ID from CSV file, but don't use it
 				// it's there for reference purposes, just make sure that it is correct
 				// when setting up the BookAuthors CSV file				
-				Integer.parseInt(i.next());
+			//	Integer.parseInt(i.next());
 				// auto-generate author ID, instead
-				int temp1 = accountId++;
+				//int temp1 = accountId++;
 				String temp2 = i.next();
 				String temp3 = i.next();
 				String temp4 = i.next();
@@ -42,6 +44,49 @@ public class InitialData {
 			return accountList;
 		}finally {
 			readAccounts.close();
+		}
+	}
+	public static List<Ball> getBallArsenal() throws IOException
+	{
+		List<Ball> ballList = new ArrayList<Ball>();
+		ReadCSV readBalls = new ReadCSV("ball_arsenal.csv");
+		try
+		{
+			Integer accountId = 1;
+			while(true)
+			{
+				List<String> tuple = readBalls.next();
+				if (tuple == null) {
+					break;
+				}
+				Iterator<String> i = tuple.iterator();
+
+				// read author ID from CSV file, but don't use it
+				// it's there for reference purposes, just make sure that it is correct
+				// when setting up the BookAuthors CSV file				
+			//	Integer.parseInt(i.next());
+				// auto-generate author ID, instead
+				//ball id, accountid, weight, name, righthand, brand, color
+			//	int temp1 = accountId++;
+				
+				//skip ball Id
+				accountId = Integer.parseInt(i.next());
+				
+				String temp1 = i.next();
+				float weight = Float.parseFloat(temp1);
+				String name = i.next();
+				String temp3 = i.next();
+				boolean rightHanded = Boolean.parseBoolean(temp3);
+				String brand = i.next();
+				String color = i.next();
+				Ball ball;
+				ball = new Ball(accountId, weight, name, rightHanded, brand, color);
+				
+				ballList.add(ball);
+			}
+			return ballList;
+		}finally {
+			readBalls.close();
 		}
 	}
 	
