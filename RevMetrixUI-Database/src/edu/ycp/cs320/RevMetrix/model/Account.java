@@ -7,6 +7,7 @@ public class Account {
 	private Event currentEvent;
 	private Session currentSession;
 	private Game currentGame;
+	private int accountId; 
 	//private Frame currentFrame;
 	private Shot currentShot;
 	
@@ -27,6 +28,12 @@ public class Account {
 		this.currentBall = ball;
 	}
 	
+	public Integer getAccountId() {
+		return accountId;
+	}
+	public void setAccountId(int accId) {
+		accountId = accId;
+	}
 	public String getUsername() {
 		return userName;
 	}

@@ -13,6 +13,8 @@ import sqldemo.DBUtil;
 import db.persist.IDatabase;
 import db.persist.PersistenceException;
 import edu.ycp.cs320.RevMetrix.model.Account;
+import edu.ycp.cs320.RevMetrix.model.Ball;
+import edu.ycp.cs320.RevMetrix.model.Establishment;
 import db.persist.InitialData;
 
 
@@ -197,6 +199,12 @@ public class DerbyDatabase implements IDatabase {
 			}
 		});
 	}
+	@Override
+	public Integer insertNewBallInDB(float weight, String name, Boolean righthand, String brand, String color) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 	// transaction that retrieves a Book, and its Author by Title
 	/*
 	 * @Override public List<Pair<Author, Book>> findAuthorAndBookByTitle(final
@@ -625,27 +633,66 @@ public class DerbyDatabase implements IDatabase {
 				PreparedStatement stmt2 = null;
 				PreparedStatement stmt1 = null; 
 				
+				PreparedStatement stmt5 = null;
+				PreparedStatement stmt6 = null;
+
+
 			
 				try {
 					
 					 stmt1 = conn.prepareStatement( "select * from accounts" );
 					 
 					
-					
-					
-					 stmt4 = conn.prepareStatement( "create table accounts (" +
-					 "  account_id integer primary key " +
-					 "    generated always as identity (start with 1, increment by 1), " +
-					 "  username varchar(70), " + "  password varchar(25), " +
-					 "  email varchar(70)" + ")" ); 
-					 
-					 stmt4.executeUpdate();
-					 
+					stmt4 = conn.prepareStatement(
+							"create table accounts (" +
+							"  account_id integer primary key " +
+							"    generated always as identity (start with 1, increment by 1), " +
+							"  username varchar(70), " +
+							"  password varchar(25), " +
+							"  email varchar(70)" +
+							")"
+					);
+ 					stmt4.executeUpdate();
 										
 					System.out.println("Accounts table created");
+				
+					stmt5 = conn.prepareStatement(
+							"create table balls (" +
+							"  ball_id integer primary key " +
+							"  generated always as identity (start with 1, increment by 1), " +
+							"  account_id integer," + 
+							"  weight float, " +
+							"  name varchar(70)," +
+							"  righthand boolean, " +
+							"  brand varchar(70)," +
+							"  color varchar(70)" +
+							")"//weight, name, righthand, brand, color
+					);
+
+					stmt5.executeUpdate();
+										
+					System.out.println("Balls table created");
+					
+					stmt6 = conn.prepareStatement(
+							"create table establishments (" +
+							"  esta_id integer primary key " +
+							"  generated always as identity (start with 1, increment by 1), " +
+							"  account_id integer," + 
+							"  name varchar(70)," +
+							"  address varchar(70)" +
+							")"//EstaId, accountId, establishmentName, address
+					);
+
+					stmt6.executeUpdate();
+										
+					System.out.println("Establishment table created");
 					return true;
 				} finally {
 					DBUtil.closeQuietly(stmt4);
+					DBUtil.closeQuietly(stmt5);
+					DBUtil.closeQuietly(stmt6);
+
+
 				}
 			}
 		});
@@ -661,6 +708,9 @@ public class DerbyDatabase implements IDatabase {
 				 * bookAuthorList;
 				 */
 				List<Account> accountList;
+				List<Ball> ballList;
+				List<Establishment> estaList;
+
 				
 				try {
 					/*
@@ -668,6 +718,9 @@ public class DerbyDatabase implements IDatabase {
 					 * bookAuthorList = InitialData.getBookAuthors();
 					 */
 					accountList = InitialData.getAccounts();
+					ballList = InitialData.getBallArsenal();
+					estaList = InitialData.getEstablishments();
+
 				} catch (IOException e) {
 					throw new SQLException("Couldn't read initial data", e);
 				}
@@ -676,6 +729,10 @@ public class DerbyDatabase implements IDatabase {
 				PreparedStatement insertBook       = null;
 				PreparedStatement insertBookAuthor = null;
 				PreparedStatement insertAccount = null;
+				PreparedStatement insertBall = null;
+				PreparedStatement insertEstablishment = null;
+
+
 
 				try {
 					// must completely populate Authors table before populating BookAuthors table because of primary keys
@@ -729,13 +786,54 @@ public class DerbyDatabase implements IDatabase {
 					insertAccount.executeBatch();
 					
 					System.out.println("Account table populated");
+					insertAccount.executeBatch();
+
+					insertBall= conn.prepareStatement("insert into balls (account_id, weight, name, righthand, brand, color) values (?, ?, ?, ?, ?, ?)");
+					for (Ball ball : ballList)
+					
+
+					{
+						insertBall.setInt(1, ball.getAccountId());	//				//ball id, accountid, weight, name, righthand, brand, color
+						insertBall.setFloat(2, ball.getWeight());
+						insertBall.setString(3, ball.getName());
+						insertBall.setBoolean(4, ball.getRightHanded());
+						insertBall.setString(5, ball.getBrand());
+						insertBall.setString(6, ball.getColor());
+						insertBall.addBatch();
+
+
+					}
+					
+					insertBall.executeBatch();
+					System.out.println("Balls table populated");
+					
+					insertEstablishment= conn.prepareStatement("insert into establishments (account_id, name, address) values (?, ?, ?)");
+					for (Establishment establishment : estaList)
+					
+
+					{
+						insertEstablishment.setInt(1, establishment.getAccountId());	//				//ball id, accountid, weight, name, righthand, brand, color
+						insertEstablishment.setString(2, establishment.getEstablishmentName());
+						insertEstablishment.setString(3, establishment.getAddress());
+						insertEstablishment.addBatch();
+
+
+					}
+					
+					insertEstablishment.executeBatch();
+					System.out.println("Establishment table populated");
+					
+					
 					
 					return true;
 				} finally {
 					DBUtil.closeQuietly(insertBook);
 					DBUtil.closeQuietly(insertAuthor);
-					DBUtil.closeQuietly(insertBookAuthor);				
-					DBUtil.closeQuietly(insertAccount);
+					DBUtil.closeQuietly(insertBookAuthor);					
+					DBUtil.closeQuietly(insertAccount);					
+					DBUtil.closeQuietly(insertBall);
+					DBUtil.closeQuietly(insertEstablishment);					
+
 				}
 			}
 		});
@@ -753,5 +851,4 @@ public class DerbyDatabase implements IDatabase {
 		System.out.println("Suite DB successfully initialized!");
 	}
 
-	
 }

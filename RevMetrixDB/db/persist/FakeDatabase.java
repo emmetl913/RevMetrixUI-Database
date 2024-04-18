@@ -15,8 +15,10 @@ public class FakeDatabase implements IDatabase {
 
 	@Override
 	public Integer insertNewSession(int sessionID, int eventID, String time, String oppType, String oppName,
-			int score) {
+			int score) { return null;}
 		// TODO Auto-generated method stub
+	@Override
+	public Integer insertNewBallInDB(float weight, String name, Boolean righthand,String brand, String color) {
 		return null;
 	}
 	
