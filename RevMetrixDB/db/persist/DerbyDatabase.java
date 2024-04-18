@@ -39,14 +39,11 @@ public class DerbyDatabase implements IDatabase {
 			public Integer execute(Connection conn) throws SQLException {
 				PreparedStatement stmt1 = null;
 				PreparedStatement stmt2 = null;
-				PreparedStatement stmt3 = null;
-				PreparedStatement stmt4 = null;
-				PreparedStatement stmt5 = null;
-				PreparedStatement stmt6 = null;				
+				PreparedStatement stmt3 = null;	
 				
 				ResultSet resultSet1 = null;
 				ResultSet resultSet3 = null;
-				ResultSet resultSet5 = null;
+				
 				
 				Integer account_id = -1;
 				
@@ -66,11 +63,11 @@ public class DerbyDatabase implements IDatabase {
 					if(resultSet1.next())
 					{
 						account_id = resultSet1.getInt(1);
-						System.out.println("User <"+ username +"> found with email: "+ email +" and with id: "+account_id);
+						System.out.println("User <"+ username +"> found with email <"+ email +"> and with id: "+account_id);
 					}
 					else 
 					{
-						System.out.println("User <"+ username +"> found with email: "+ email +" was not found");
+						System.out.println("User <"+ username +"> with email <"+ email +"> was not found");
 					}
 					if(account_id <= 0)
 					{
@@ -111,11 +108,7 @@ public class DerbyDatabase implements IDatabase {
 					DBUtil.closeQuietly(stmt2);					
 					DBUtil.closeQuietly(resultSet3);
 					DBUtil.closeQuietly(stmt3);					
-					DBUtil.closeQuietly(stmt4);
-					DBUtil.closeQuietly(resultSet5);
-					DBUtil.closeQuietly(stmt5);
-					DBUtil.closeQuietly(stmt6);
-
+					
 				}
 			}
 		});
@@ -508,7 +501,7 @@ public class DerbyDatabase implements IDatabase {
 	// TODO: Change it here and in SQLDemo.java under CS320_LibraryExample_Lab06->edu.ycp.cs320.sqldemo
 	// TODO: DO NOT PUT THE DB IN THE SAME FOLDER AS YOUR PROJECT - that will cause conflicts later w/Git
 	private Connection connect() throws SQLException {
-		Connection conn = DriverManager.getConnection("jdbc:derby:C:/cs320-spring2024/RevMetrixDB/suite.db;create=true");		
+		Connection conn = DriverManager.getConnection("jdbc:derby:C:/cs320-spring2024/suite.db;create=true");		
 		
 		// Set autocommit() to false to allow the execution of
 		// multiple queries/statements as part of the same transaction.
