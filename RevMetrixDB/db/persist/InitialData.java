@@ -7,6 +7,7 @@ import java.util.List;
 
 import db.persist.ReadCSV;
 import edu.ycp.cs320.RevMetrix.model.Account;
+import edu.ycp.cs320.RevMetrix.model.Session;
 
 public class InitialData {
 
@@ -29,7 +30,7 @@ public class InitialData {
 				// read author ID from CSV file, but don't use it
 				// it's there for reference purposes, just make sure that it is correct
 				// when setting up the BookAuthors CSV file				
-				Integer.parseInt(i.next());
+				//Integer.parseInt(i.next());
 				// auto-generate author ID, instead
 				int temp1 = accountId++;
 				String temp2 = i.next();
@@ -42,6 +43,39 @@ public class InitialData {
 			return accountList;
 		}finally {
 			readAccounts.close();
+		}
+	}
+	public static List<Session> getSessions() throws IOException
+	{
+		List<Session> sessionList = new ArrayList<Session>();
+		ReadCSV readSessions = new ReadCSV("session.csv");
+		try
+		{
+			Integer sessionID = 1;
+			while(true)
+			{
+				List<String> tuple = readSessions.next();
+				if(tuple == null)
+				{
+					break;
+				}
+				Iterator<String> i = tuple.iterator();
+				
+				int seshID = sessionID++;
+				int eventID = Integer.parseInt(i.next());
+				String dateTime = i.next();
+				String oppType = i.next();
+				String oppName = i.next();
+				int score = Integer.parseInt(i.next());
+				
+				Session session = new Session(sessionID, eventID, dateTime, oppType, oppName, score);
+				
+				sessionList.add(session);
+			}
+			return sessionList;
+		}finally
+		{
+			readSessions.close();
 		}
 	}
 	

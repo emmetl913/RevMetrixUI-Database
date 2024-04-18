@@ -117,9 +117,6 @@ public class StartBowlingServlet extends HttpServlet {
 			throws ServletException, IOException {
 		System.out.println("StartBowling Servlet: doPost");
 		
-		// Session Methods
-		Session session = new Session();
-		
 		
 		// Event Methods
 		EventArray model = new EventArray();
@@ -150,7 +147,6 @@ public class StartBowlingServlet extends HttpServlet {
 		
 		req.setAttribute("errorMessage", errorMessage);
 		req.setAttribute("game", model);
-		req.setAttribute("session", session);
 		
 		req.getRequestDispatcher("/_view/startBowling.jsp").forward(req, resp);
 	}

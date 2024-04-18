@@ -113,6 +113,90 @@ public class DerbyDatabase implements IDatabase {
 			}
 		});
 	}
+	
+	@Override
+	public Integer insertNewSession(int sessionID, int eventID, String time, String oppType, String oppName, int score) {
+		return executeTransaction(new Transaction<Integer>() {
+			@Override
+			public Integer execute(Connection conn) throws SQLException {
+				PreparedStatement stmt1 = null;
+				PreparedStatement stmt2 = null;
+				PreparedStatement stmt3 = null;	
+				
+				ResultSet resultSet1 = null;
+				ResultSet resultSet3 = null;
+				
+				
+				Integer session_id = -1;
+				
+				// try to find account_id in db
+				try
+				{
+					stmt1 = conn.prepareStatement(
+							"select session_id from sessions"
+							+ " where session_id = ? and event_id = ?"
+					);
+					
+					stmt1.setInt(1, sessionID);
+					stmt1.setInt(2, eventID);
+					
+					resultSet1 = stmt1.executeQuery();
+					
+					if(resultSet1.next())
+					{
+						session_id = resultSet1.getInt(1);
+						System.out.println("Session <"+ sessionID +"> found with eventID <"+ eventID +">");
+					}
+					else 
+					{
+						System.out.println("Session <"+ sessionID +"> was not found");
+					}
+					if(session_id <= 0)
+					{
+						stmt2 = conn.prepareStatement(
+								"insert into sessions (eventID, time, oppType, oppName, score) "
+								+ " values(?, ?, ?, ?, ?)"
+						);
+						stmt2.setInt(1, eventID);
+						stmt2.setString(2, time);
+						stmt2.setString(3, oppType);
+						stmt2.setString(4, oppName);
+						stmt2.setInt(5, score);
+						
+						stmt2.executeUpdate();
+						
+						System.out.println("New session <"+eventID+"> , <"+time+"> , <"+oppType+"> , <"+oppName+">, <"+score+"> inserted into sessoins");
+						
+						// get the new account_id
+						stmt3 = conn.prepareStatement(
+								"select * from sessions "
+								+ " where event_id = ? and session_id = ?"
+						);
+						stmt3.setInt(1, eventID);
+						stmt3.setInt(2, sessionID);
+						
+						resultSet3 = stmt3.executeQuery();
+						
+						if (resultSet3.next())
+						{
+							session_id = resultSet3.getInt(1);
+							System.out.println("New session  <"+eventID+"> , <"+time+"> , <"+oppType+"> , <"+oppName+">, <"+score+"> ID:"+session_id);
+						}
+					}
+					return session_id;
+				}
+				finally 
+				{
+					DBUtil.closeQuietly(resultSet1);
+					DBUtil.closeQuietly(stmt1);
+					DBUtil.closeQuietly(stmt2);					
+					DBUtil.closeQuietly(resultSet3);
+					DBUtil.closeQuietly(stmt3);					
+					
+				}
+			}
+		});
+	}
 	// transaction that retrieves a Book, and its Author by Title
 	/*
 	 * @Override public List<Pair<Author, Book>> findAuthorAndBookByTitle(final
@@ -538,20 +622,25 @@ public class DerbyDatabase implements IDatabase {
 			public Boolean execute(Connection conn) throws SQLException {
 						
 				PreparedStatement stmt4 = null;
+				PreparedStatement stmt2 = null;
+				PreparedStatement stmt1 = null; 
+				
 			
 				try {
 					
+					 stmt1 = conn.prepareStatement( "select * from accounts" );
+					 
 					
-					stmt4 = conn.prepareStatement(
-							"create table accounts (" +
-							"  account_id integer primary key " +
-							"    generated always as identity (start with 1, increment by 1), " +
-							"  username varchar(70), " +
-							"  password varchar(25), " +
-							"  email varchar(70)" +
-							")"
-					);
-					stmt4.executeUpdate();
+					
+					
+					 stmt4 = conn.prepareStatement( "create table accounts (" +
+					 "  account_id integer primary key " +
+					 "    generated always as identity (start with 1, increment by 1), " +
+					 "  username varchar(70), " + "  password varchar(25), " +
+					 "  email varchar(70)" + ")" ); 
+					 
+					 stmt4.executeUpdate();
+					 
 										
 					System.out.println("Accounts table created");
 					return true;
@@ -635,7 +724,9 @@ public class DerbyDatabase implements IDatabase {
 						insertAccount.setString(1, account.getUsername());
 						insertAccount.setString(2, account.getPassword());
 						insertAccount.setString(3, account.getEmail());
+						insertAccount.addBatch();
 					}
+					insertAccount.executeBatch();
 					
 					System.out.println("Account table populated");
 					
@@ -643,7 +734,8 @@ public class DerbyDatabase implements IDatabase {
 				} finally {
 					DBUtil.closeQuietly(insertBook);
 					DBUtil.closeQuietly(insertAuthor);
-					DBUtil.closeQuietly(insertBookAuthor);					
+					DBUtil.closeQuietly(insertBookAuthor);				
+					DBUtil.closeQuietly(insertAccount);
 				}
 			}
 		});
@@ -658,6 +750,8 @@ public class DerbyDatabase implements IDatabase {
 		System.out.println("Loading initial data...");
 		db.loadInitialData();
 		
-		System.out.println("Library DB successfully initialized!");
+		System.out.println("Suite DB successfully initialized!");
 	}
+
+	
 }

@@ -12,6 +12,13 @@ public class FakeDatabase implements IDatabase {
 		// TODO Auto-generated method stub
 		return null;
 	}
+
+	@Override
+	public Integer insertNewSession(int sessionID, int eventID, String time, String oppType, String oppName,
+			int score) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 	
 	/*
 	 * private List<Author> authorList; private List<Book> bookList;
