@@ -1,6 +1,8 @@
-package db.persist;
+package edu.ycp.cs320.RevMetrix.RevMetrixDB.db.persist;
 
+import java.util.ArrayList;
 
+import edu.ycp.cs320.RevMetrix.model.Establishment;
 
 public interface IDatabase {
 	/*
@@ -10,9 +12,11 @@ public interface IDatabase {
 	 * int published, String lastName, String firstName); public List<Pair<Author,
 	 * Book>> findAllBooksWithAuthors(); public List<Author> findAllAuthors();
 	 * public List<Author> removeBookByTitle(String title);
-	 */		
-	
+	 */
+
 	public Integer insertNewAccountinDB(String email, String password, String username);
 
 	public Integer insertNewBallInDB(float weight, String name, Boolean righthand, String brand, String color);
+
+	public ArrayList<Establishment> findEstablishmentByAccount(int accountId);
 }

@@ -1,4 +1,4 @@
-package sqldemo;
+package edu.ycp.cs320.RevMetrix.RevMetrixDB.sqldemo;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
@@ -17,8 +17,6 @@ import java.util.StringTokenizer;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import sqldemo.DBUtil;
-import sqldemo.StatementReader;
 /**
  * An interactive query tool for SQLite.
  */
@@ -26,30 +24,30 @@ public class SQLDemo {
 	static class RowList extends ArrayList<List<String>> {
 		private static final long serialVersionUID = 1L;
 	}
-	
-	private static final String PAD =
-		"                                                    " +
-		"                                                    " +
-		"                                                    " +
-		"                                                    ";
-	private static final String SEP =
-		"----------------------------------------------------" +
-		"----------------------------------------------------" +
-		"----------------------------------------------------" +
-		"----------------------------------------------------";
 
-	
-	// TODO: Here is where you name and specify the location of your Derby SQL database
-	// TODO: Change it here and in DerbyDatabase.java under CS320_LibraryExample_Lab06->edu.ycp.cs320.booksdb.persist
-	// TODO: DO NOT PUT THE DB IN THE SAME FOLDER AS YOUR PROJECT - that will cause conflicts later w/Git
+	private static final String PAD = "                                                    "
+			+ "                                                    "
+			+ "                                                    "
+			+ "                                                    ";
+	private static final String SEP = "----------------------------------------------------"
+			+ "----------------------------------------------------"
+			+ "----------------------------------------------------"
+			+ "----------------------------------------------------";
+
+	// TODO: Here is where you name and specify the location of your Derby SQL
+	// database
+	// TODO: Change it here and in DerbyDatabase.java under
+	// CS320_LibraryExample_Lab06->edu.ycp.cs320.booksdb.persist
+	// TODO: DO NOT PUT THE DB IN THE SAME FOLDER AS YOUR PROJECT - that will cause
+	// conflicts later w/Git
 	public static void main(String[] args) throws ClassNotFoundException, IOException {
 		Connection conn = null;
 		try {
 			Class.forName("org.apache.derby.jdbc.EmbeddedDriver");
-			
+
 			conn = DriverManager.getConnection("jdbc:derby:C:/cs320-spring2024/suite.db;create=true");
 			conn.setAutoCommit(true);
-	
+
 			queryLoop(conn);
 		} catch (SQLException e) {
 			System.out.println("Error: " + e.getMessage());
@@ -173,14 +171,14 @@ public class SQLDemo {
 		for (String colName : colNames) {
 			colWidths.add(colName.length());
 		}
-		for (List<String> row: rowList) {
+		for (List<String> row : rowList) {
 			for (int i = 0; i < row.size(); i++) {
 				colWidths.set(i, Math.max(colWidths.get(i), row.get(i).length()));
 			}
 		}
 		return colWidths;
 	}
-	
+
 	private static final Pattern INTEGER = Pattern.compile("\\d+");
 
 	private static void importCSV(Connection conn, String tableName, String csvFile) throws IOException, SQLException {
@@ -201,21 +199,21 @@ public class SQLDemo {
 	 * @throws IOException
 	 * @throws SQLException
 	 */
-	public static void readCSV(Connection conn, String tableName,
-			BufferedReader reader) throws IOException, SQLException {
+	public static void readCSV(Connection conn, String tableName, BufferedReader reader)
+			throws IOException, SQLException {
 		PreparedStatement stmt = null;
-		
+
 		while (true) {
 			String line = reader.readLine();
 			if (line == null) {
 				break;
 			}
-			
+
 			line = line.trim();
 			if (line.equals("")) {
 				continue;
 			}
-			
+
 			List<String> row = new ArrayList<String>();
 			StringTokenizer tok = new StringTokenizer(line, ",");
 			while (tok.hasMoreTokens()) {
@@ -229,19 +227,15 @@ public class SQLDemo {
 // DJH2: What really needs to be done is that the column names should be read from the CSV file,
 // DJH2: and then substituted into the 'insert' statement
 				System.out.println("Importing data for table: <" + tableName + ">");
-				if (tableName.toLowerCase().equals("books"))
-				{
+				if (tableName.toLowerCase().equals("books")) {
 					buf.append("insert into " + tableName + " (title, isbn, published) values (");
-				}
-				else if (tableName.toLowerCase().equals("authors"))
-				{
+				} else if (tableName.toLowerCase().equals("authors")) {
 					buf.append("insert into " + tableName + " (lastname, firstname) values (");
 				}
 // DJH2: this is the original code - it will not import into a table with an auto-incrementing primary key
 // DJH2: The primary key values must be manually determined and included in the CSV file.
-				else
-				{
-					buf.append("insert into " + tableName + " values (");					
+				else {
+					buf.append("insert into " + tableName + " values (");
 				}
 				for (int i = 0; i < row.size(); i++) {
 					if (i > 0) {
@@ -256,18 +250,18 @@ public class SQLDemo {
 				String value = row.get(i);
 				Matcher m = INTEGER.matcher(value);
 				if (m.matches()) {
-					stmt.setInt(i+1, Integer.parseInt(value));
+					stmt.setInt(i + 1, Integer.parseInt(value));
 				} else {
-					stmt.setString(i+1, row.get(i));
+					stmt.setString(i + 1, row.get(i));
 				}
 			}
 			stmt.addBatch();
 		}
-		
+
 		conn.setAutoCommit(false);
 		stmt.executeBatch();
 		conn.setAutoCommit(true);
-		
+
 		System.out.println("Successful import");
 	}
 }

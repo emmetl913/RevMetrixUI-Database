@@ -1,4 +1,4 @@
-package sqldemo;
+package edu.ycp.cs320.RevMetrix.RevMetrixDB.db.persist;
 
 import java.sql.Connection;
 import java.sql.ResultSet;

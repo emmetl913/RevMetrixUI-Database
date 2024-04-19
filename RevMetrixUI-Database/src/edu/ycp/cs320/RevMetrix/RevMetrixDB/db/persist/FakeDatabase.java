@@ -1,9 +1,4 @@
-package db.persist;
-
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-
+package edu.ycp.cs320.RevMetrix.RevMetrixDB.db.persist;
 
 public class FakeDatabase implements IDatabase {
 
@@ -12,15 +7,16 @@ public class FakeDatabase implements IDatabase {
 		// TODO Auto-generated method stub
 		return null;
 	}
+
 	@Override
-	public Integer insertNewBallInDB(float weight, String name, Boolean righthand,String brand, String color) {
+	public Integer insertNewBallInDB(float weight, String name, Boolean righthand, String brand, String color) {
 		return null;
 	}
-	
+
 	/*
 	 * private List<Author> authorList; private List<Book> bookList;
 	 */
-	
+
 	// Fake database constructor - initializes the DB
 	// the DB only consists for a List of Authors and a List of Books
 	/*
@@ -40,7 +36,7 @@ public class FakeDatabase implements IDatabase {
 	 * bookList.addAll(InitialData.getBooks()); } catch (IOException e) { throw new
 	 * IllegalStateException("Couldn't read initial data", e); } }
 	 */
-	
+
 	// query that retrieves Book and its Author by Title
 	/*
 	 * @Override public List<Pair<Author, Book>> findAuthorAndBookByTitle(String
@@ -53,7 +49,7 @@ public class FakeDatabase implements IDatabase {
 	 * findAuthorByAuthorId(book.getAuthorId()); result.add(new Pair<Author,
 	 * Book>(author, book)); } } return result; }
 	 */
-	
+
 	// query that retrieves all Books, for the Author's last name
 	/*
 	 * @Override public List<Pair<Author, Book>>
@@ -68,7 +64,6 @@ public class FakeDatabase implements IDatabase {
 	 * book)); } } } } return result; }
 	 */
 
-	
 	// query that retrieves all Books, with their Authors, from DB
 	/*
 	 * @Override public List<Pair<Author, Book>> findAllBooksWithAuthors() {
@@ -77,7 +72,6 @@ public class FakeDatabase implements IDatabase {
 	 * findAuthorByAuthorId(book.getAuthorId()); result.add(new Pair<Author,
 	 * Book>(author, book)); } return result; }
 	 */
-		
 
 	// query that retrieves all Authors from DB
 	/*
@@ -85,14 +79,17 @@ public class FakeDatabase implements IDatabase {
 	 * ArrayList<Author>(); for (Author author : authorList) { result.add(author); }
 	 * return result; }
 	 */
-	
-	
-	// query that inserts a new Book, and possibly new Author, into Books and Authors lists
+
+	// query that inserts a new Book, and possibly new Author, into Books and
+	// Authors lists
 	// insertion requires that we maintain Book and Author id's
-	// this can be a real PITA, if we intend to use the IDs to directly access the ArrayLists, since
-	// deleting a Book/Author in the list would mean updating the ID's, since other list entries are likely to move to fill the space.
-	// or we could mark Book/Author entries as deleted, and leave them open for reuse, but we could not delete an Author
-	//    unless they have no Books in the Books table
+	// this can be a real PITA, if we intend to use the IDs to directly access the
+	// ArrayLists, since
+	// deleting a Book/Author in the list would mean updating the ID's, since other
+	// list entries are likely to move to fill the space.
+	// or we could mark Book/Author entries as deleted, and leave them open for
+	// reuse, but we could not delete an Author
+	// unless they have no Books in the Books table
 	/*
 	 * @Override public Integer insertBookIntoBooksTable(String title, String isbn,
 	 * int published, String lastName, String firstName) { int authorId = -1; int
@@ -124,15 +121,14 @@ public class FakeDatabase implements IDatabase {
 	 * 
 	 * // return new Book Id return bookId; }
 	 */
-	
-	//not implemented in FakeDB
+
+	// not implemented in FakeDB
 	/*
 	 * public List<Author> removeBookByTitle(final String title) { List<Author>
 	 * authors = new ArrayList<Author>();
 	 * 
 	 * return authors; }
 	 */
-	
 
 	// query that retrieves an Author based on author_id
 	/*
