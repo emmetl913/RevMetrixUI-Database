@@ -18,4 +18,7 @@ public interface IDatabase {
 	// Shot Level Methods
 	public Integer insertNewGame(int gameID, int sessionID, int currentLane, int gameNum, int score);
 	public Integer insertNewSession(int sessionID, int eventID, String time, String oppType, String oppName, int score);
+	public Integer insertNewSession(int sessionID, int eventID, String time, String oppType, String oppName, int score);
+
+	public Integer insertNewBallInDB(int account_id, float weight, String name, Boolean righthand, String brand, String color);
 }

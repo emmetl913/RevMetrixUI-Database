@@ -1,3 +1,5 @@
 /.metadata/
 bowlingBall.jpg
+*.csv
+*.log
 /bin/

@@ -18,7 +18,7 @@ public class FakeDatabase implements IDatabase {
 			int score) { return null;}
 		// TODO Auto-generated method stub
 	@Override
-	public Integer insertNewBallInDB(float weight, String name, Boolean righthand,String brand, String color) {
+	public Integer insertNewBallInDB(int account_id, float weight, String name, Boolean righthand,String brand, String color) {
 		return null;
 	}
 
