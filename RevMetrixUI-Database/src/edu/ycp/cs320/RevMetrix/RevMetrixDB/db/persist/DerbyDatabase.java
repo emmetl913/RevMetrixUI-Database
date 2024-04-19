@@ -274,6 +274,7 @@ public class DerbyDatabase implements IDatabase {
 				PreparedStatement stmt2 = null;
 				PreparedStatement stmt3 = null;	
 
+	
 				
 				ResultSet resultSet1 = null;
 				ResultSet resultSet3 = null;
@@ -488,26 +489,6 @@ public class DerbyDatabase implements IDatabase {
 		return conn;
 	}
 	
-	/*
-	 * // retrieves Author information from query result set private void
-	 * loadAuthor(Author author, ResultSet resultSet, int index) throws SQLException
-	 * { author.setAuthorId(resultSet.getInt(index++));
-	 * author.setLastname(resultSet.getString(index++));
-	 * author.setFirstname(resultSet.getString(index++)); }
-	 * 
-	 * // retrieves Book information from query result set private void
-	 * loadBook(Book book, ResultSet resultSet, int index) throws SQLException {
-	 * book.setBookId(resultSet.getInt(index++)); //
-	 * book.setAuthorId(resultSet.getInt(index++)); // no longer used
-	 * book.setTitle(resultSet.getString(index++));
-	 * book.setIsbn(resultSet.getString(index++));
-	 * book.setPublished(resultSet.getInt(index++)); }
-	 * 
-	 * // retrieves WrittenBy information from query result set private void
-	 * loadBookAuthors(BookAuthor bookAuthor, ResultSet resultSet, int index) throws
-	 * SQLException { bookAuthor.setBookId(resultSet.getInt(index++));
-	 * bookAuthor.setAuthorId(resultSet.getInt(index++)); }
-	 */
 	
 	//  creates the Authors and Books tables
 	public void createTables() {
@@ -703,7 +684,6 @@ public class DerbyDatabase implements IDatabase {
 					insertBall= conn.prepareStatement("insert into balls (account_id, weight, name, righthand, brand, color) values (?, ?, ?, ?, ?, ?)");
 					for (Ball ball : ballList)
 					
-
 					{
 						insertBall.setInt(1, ball.getAccountId());					//ball id, accountid, weight, name, righthand, brand, color
 						insertBall.setFloat(2, ball.getWeight());
@@ -715,7 +695,6 @@ public class DerbyDatabase implements IDatabase {
 
 
 					}
-					insertNewBallInDB(1, (float)69.0, "Confucian", true , "BigBalls", "Blue");
 					
 					insertBall.executeBatch();
 					System.out.println("Balls table populated");
