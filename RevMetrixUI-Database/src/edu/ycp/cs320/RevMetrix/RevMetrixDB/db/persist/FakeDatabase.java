@@ -21,6 +21,12 @@ public class FakeDatabase implements IDatabase {
 	public Integer insertNewBallInDB(int account_id, float weight, String name, Boolean righthand,String brand, String color) {
 		return null;
 	}
+
+	@Override
+	public Integer insertNewGame(int gameID, int sessionID, int currentLane, int gameNum, int score) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 	
 	/*
 	 * private List<Author> authorList; private List<Book> bookList;
