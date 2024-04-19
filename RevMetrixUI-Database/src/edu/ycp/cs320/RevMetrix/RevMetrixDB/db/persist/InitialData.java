@@ -9,6 +9,7 @@ import edu.ycp.cs320.RevMetrix.model.Account;
 import edu.ycp.cs320.RevMetrix.model.Session;
 import edu.ycp.cs320.RevMetrix.model.Ball;
 import edu.ycp.cs320.RevMetrix.model.Establishment;
+import edu.ycp.cs320.RevMetrix.model.Game;
 
 
 public class InitialData {
@@ -46,6 +47,38 @@ public class InitialData {
 			return accountList;
 		}finally {
 			readAccounts.close();
+		}
+	}
+	public static List<Game> getGame() throws IOException
+	{
+		List<Game> gameList = new ArrayList<Game>();
+		ReadCSV readGame = new ReadCSV("game.csv");
+		try
+		{
+			Integer gameID = 1;
+			while(true)
+			{
+				List<String> tuple = readGame.next();
+				if(tuple == null)
+				{
+					break;
+				}
+				Iterator<String> i = tuple.iterator();
+				
+				int id = gameID++;
+				int sessionID = Integer.parseInt(i.next());
+				int currentLane = Integer.parseInt(i.next());
+				int gameNumber = Integer.parseInt(i.next());
+				int score = Integer.parseInt(i.next());
+				
+				Game game = new Game(id, sessionID, currentLane, gameNumber, score);
+				
+				gameList.add(game);
+			}
+			return gameList;
+		}finally
+		{
+			readGame.close();
 		}
 	}
 	public static List<Session> getSessions() throws IOException
