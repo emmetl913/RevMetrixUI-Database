@@ -1,4 +1,4 @@
-package db.persist;
+package edu.ycp.cs320.RevMetrix.RevMetrixDB.db.persist;
 
 public class PersistenceException extends RuntimeException {
 	private static final long serialVersionUID = 1L;

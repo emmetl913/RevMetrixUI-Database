@@ -1,4 +1,4 @@
-package db.persist;
+package edu.ycp.cs320.RevMetrix.RevMetrixDB.db.persist;
 
 import java.io.IOException;
 import java.sql.Connection;
@@ -9,12 +9,12 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-import sqldemo.DBUtil;
-import db.persist.IDatabase;
-import db.persist.PersistenceException;
+//import edu.ycp.cs320.RevMetrix.RevmetrixDB.sqldemo.DBUtil;
+//import db.persist.IDatabase;
+//import db.persist.PersistenceException;
 import edu.ycp.cs320.RevMetrix.model.Account;
 import edu.ycp.cs320.RevMetrix.model.Ball;
-import db.persist.InitialData;
+//import db.persist.InitialData;
 
 
 public class DerbyDatabase implements IDatabase {
