@@ -35,6 +35,18 @@ public class FakeDatabase implements IDatabase {
 		// TODO Auto-generated method stub
 		return null;
 	}
+
+	@Override
+	public List<Account> getAccountByUsername(String username) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public List<Account> getAccountByEmail(String email) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 	
 	/*
 	 * private List<Author> authorList; private List<Book> bookList;
