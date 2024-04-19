@@ -6,7 +6,9 @@ import java.util.Iterator;
 import java.util.List;
 
 import edu.ycp.cs320.RevMetrix.model.Account;
+import edu.ycp.cs320.RevMetrix.model.Session;
 import edu.ycp.cs320.RevMetrix.model.Ball;
+import edu.ycp.cs320.RevMetrix.model.Establishment;
 
 
 public class InitialData {
@@ -30,6 +32,7 @@ public class InitialData {
 				// read author ID from CSV file, but don't use it
 				// it's there for reference purposes, just make sure that it is correct
 				// when setting up the BookAuthors CSV file				
+				//Integer.parseInt(i.next());
 			//	Integer.parseInt(i.next());
 				// auto-generate author ID, instead
 				//int temp1 = accountId++;
@@ -45,6 +48,40 @@ public class InitialData {
 			readAccounts.close();
 		}
 	}
+	public static List<Session> getSessions() throws IOException
+	{
+		List<Session> sessionList = new ArrayList<Session>();
+		ReadCSV readSessions = new ReadCSV("session.csv");
+		try
+		{
+			Integer sessionID = 1;
+			while(true)
+			{
+				List<String> tuple = readSessions.next();
+				if(tuple == null)
+				{
+					break;
+				}
+				Iterator<String> i = tuple.iterator();
+				
+				int seshID = sessionID++;
+				int eventID = Integer.parseInt(i.next());
+				String dateTime = i.next();
+				String oppType = i.next();
+				String oppName = i.next();
+				int score = Integer.parseInt(i.next());
+				
+				Session session = new Session(seshID, eventID, dateTime, oppType, oppName, score);
+				
+				sessionList.add(session);
+			}
+			return sessionList;
+		}finally
+		{
+			readSessions.close();
+		}
+	}
+	
 	public static List<Ball> getBallArsenal() throws IOException
 	{
 		List<Ball> ballList = new ArrayList<Ball>();
@@ -86,6 +123,46 @@ public class InitialData {
 			return ballList;
 		}finally {
 			readBalls.close();
+		}
+	}
+	
+	public static List<Establishment> getEstablishments() throws IOException
+	{
+		List<Establishment> estaList = new ArrayList<Establishment>();
+		ReadCSV readEstablishment = new ReadCSV("establishment.csv");
+		try
+		{
+			Integer accountId = 1;
+			while(true)
+			{
+				List<String> tuple = readEstablishment.next();
+				if (tuple == null) {
+					break;
+				}
+				Iterator<String> i = tuple.iterator();
+
+				// read author ID from CSV file, but don't use it
+				// it's there for reference purposes, just make sure that it is correct
+				// when setting up the BookAuthors CSV file				
+			//	Integer.parseInt(i.next());
+				// auto-generate author ID, instead
+				//ball id, accountid, weight, name, righthand, brand, color
+			//	int temp1 = accountId++;
+				
+				//skip ball Id
+				int establishmentId = Integer.parseInt(i.next());
+				accountId = Integer.parseInt(i.next());
+				
+				String name = i.next();
+				String address = i.next();
+				Establishment establishment;
+				establishment = new Establishment(establishmentId,accountId, name, address);
+				
+				estaList.add(establishment);
+			}
+			return estaList;
+		}finally {
+			readEstablishment.close();
 		}
 	}
 	

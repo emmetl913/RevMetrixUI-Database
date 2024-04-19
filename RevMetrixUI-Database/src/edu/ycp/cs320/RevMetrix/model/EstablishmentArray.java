@@ -8,8 +8,8 @@ public class EstablishmentArray {
 	public EstablishmentArray() {
 		establishment = new ArrayList<>();
 
-		Establishment e1 = new Establishment("Colony Park Lanes & Games", "1900 Pennsylvania Ave, York, PA 17404");
-		Establishment e2 = new Establishment("Suburban Bowlerama", "1945 S Queen St, York, PA 17403");
+		Establishment e1 = new Establishment(0, 0, "Colony Park Lanes & Games", "1900 Pennsylvania Ave, York, PA 17404");
+		Establishment e2 = new Establishment(0, 0, "Suburban Bowlerama", "1945 S Queen St, York, PA 17403");
 
 		establishment.add(e1);
 		establishment.add(e2);

@@ -108,7 +108,7 @@ public class EstablishmentRegServlet extends HttpServlet {
         ArrayList<Establishment> establishments = model.getEstablishments(); //get ball ArrayList from session updated model
 		if(establishments == null) {
 			establishments = new ArrayList<Establishment>();
-			establishments.add(new Establishment("FirstBall", "FirstAddress"));
+			establishments.add(new Establishment(0, 0, "FirstBall", "FirstAddress"));
 		}
 		//on button press
 		String newEstablishmentName = req.getParameter("establishmentName");

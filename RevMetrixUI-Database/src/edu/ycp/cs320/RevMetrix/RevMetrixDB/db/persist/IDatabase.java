@@ -13,6 +13,7 @@ public interface IDatabase {
 	 */		
 	
 	public Integer insertNewAccountinDB(String email, String password, String username);
+	public Integer insertNewSession(int sessionID, int eventID, String time, String oppType, String oppName, int score);
 
 	public Integer insertNewBallInDB(int account_id, float weight, String name, Boolean righthand, String brand, String color);
 }
