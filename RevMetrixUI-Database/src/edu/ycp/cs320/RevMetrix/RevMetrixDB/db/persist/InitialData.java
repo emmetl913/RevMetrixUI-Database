@@ -5,8 +5,10 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import edu.ycp.cs320.RevMetrix.model.Account;
+import edu.ycp.cs320.RevMetrix.model.Session;
 import edu.ycp.cs320.RevMetrix.model.Ball;
 import edu.ycp.cs320.RevMetrix.model.Establishment;
+import edu.ycp.cs320.RevMetrix.model.Game;
 
 public class InitialData {
 
@@ -25,8 +27,9 @@ public class InitialData {
 
 				// read author ID from CSV file, but don't use it
 				// it's there for reference purposes, just make sure that it is correct
-				// when setting up the BookAuthors CSV file
-				// Integer.parseInt(i.next());
+				// when setting up the BookAuthors CSV file				
+				//Integer.parseInt(i.next());
+			//	Integer.parseInt(i.next());
 				// auto-generate author ID, instead
 				// int temp1 = accountId++;
 				String temp2 = i.next();
@@ -41,8 +44,74 @@ public class InitialData {
 			readAccounts.close();
 		}
 	}
-
-	public static List<Ball> getBallArsenal() throws IOException {
+	public static List<Game> getGames() throws IOException
+	{
+		List<Game> gameList = new ArrayList<Game>();
+		ReadCSV readGame = new ReadCSV("game.csv");
+		try
+		{
+			Integer gameID = 1;
+			while(true)
+			{
+				List<String> tuple = readGame.next();
+				if(tuple == null)
+				{
+					break;
+				}
+				Iterator<String> i = tuple.iterator();
+				
+				int id = gameID++;
+				int sessionID = Integer.parseInt(i.next());
+				int currentLane = Integer.parseInt(i.next());
+				int gameNumber = Integer.parseInt(i.next());
+				int score = Integer.parseInt(i.next());
+				
+				Game game = new Game(id, sessionID, currentLane, gameNumber, score);
+				
+				gameList.add(game);
+			}
+			return gameList;
+		}finally
+		{
+			readGame.close();
+		}
+	}
+	public static List<Session> getSessions() throws IOException
+	{
+		List<Session> sessionList = new ArrayList<Session>();
+		ReadCSV readSessions = new ReadCSV("session.csv");
+		try
+		{
+			Integer sessionID = 1;
+			while(true)
+			{
+				List<String> tuple = readSessions.next();
+				if(tuple == null)
+				{
+					break;
+				}
+				Iterator<String> i = tuple.iterator();
+				
+				int seshID = sessionID++;
+				int eventID = Integer.parseInt(i.next());
+				String dateTime = i.next();
+				String oppType = i.next();
+				String oppName = i.next();
+				int score = Integer.parseInt(i.next());
+				
+				Session session = new Session(seshID, eventID, dateTime, oppType, oppName, score);
+				
+				sessionList.add(session);
+			}
+			return sessionList;
+		}finally
+		{
+			readSessions.close();
+		}
+	}
+	
+	public static List<Ball> getBallArsenal() throws IOException
+	{
 		List<Ball> ballList = new ArrayList<Ball>();
 		ReadCSV readBalls = new ReadCSV("ball_arsenal.csv");
 		try {

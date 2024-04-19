@@ -28,7 +28,7 @@ public class Account {
 		this.currentBall = ball;
 	}
 	
-	public Integer getAccountId() {
+	public int getAccountId() {
 		return accountId;
 	}
 	public void setAccountId(int accId) {

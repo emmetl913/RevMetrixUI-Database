@@ -1,5 +1,12 @@
 package edu.ycp.cs320.RevMetrix.RevMetrixDB.db.persist;
 
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+
+import edu.ycp.cs320.RevMetrix.model.Account;
+
+
 public class FakeDatabase implements IDatabase {
 
 	@Override
@@ -9,7 +16,23 @@ public class FakeDatabase implements IDatabase {
 	}
 
 	@Override
-	public Integer insertNewBallInDB(float weight, String name, Boolean righthand, String brand, String color) {
+	public Integer insertNewSession(int sessionID, int eventID, String time, String oppType, String oppName,
+			int score) { return null;}
+		// TODO Auto-generated method stub
+	@Override
+	public Integer insertNewBallInDB(int account_id, float weight, String name, Boolean righthand,String brand, String color) {
+		return null;
+	}
+
+	@Override
+	public Integer insertNewGame(int gameID, int sessionID, int currentLane, int gameNum, int score) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public List<Account> getAccountByUsernameAndPassword(String username, String password) {
+		// TODO Auto-generated method stub
 		return null;
 	}
 

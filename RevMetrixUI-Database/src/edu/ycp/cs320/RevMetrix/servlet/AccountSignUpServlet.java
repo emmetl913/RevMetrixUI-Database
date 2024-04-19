@@ -10,6 +10,8 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import edu.ycp.cs320.RevMetrix.controller.AccountController;
+import edu.ycp.cs320.RevMetrix.controller.InsertAccountController;
+
 import edu.ycp.cs320.RevMetrix.model.Account;
 
 public class AccountSignUpServlet extends HttpServlet {
@@ -21,10 +23,6 @@ public class AccountSignUpServlet extends HttpServlet {
 		String errorMessage = null;
 
 		
-		if(!AccountServlet.validLogin()) {
-            req.getRequestDispatcher("/_view/logIn.jsp").forward(req, resp);
-        }
-
 		System.out.println("Account SignUp Servlet: doGet");	
 		HttpSession session = req.getSession();
 		Account kevin=  new Account("Kevin", "Kevin1","KevinsEmail@gmail.com");
@@ -88,6 +86,8 @@ public class AccountSignUpServlet extends HttpServlet {
 			if(password.equals(password2)) {
 				controller.signUp(username, password, email); //create an account with SignUp
 				accList = (ArrayList<Account>)session.getAttribute("accountListKey");
+				InsertAccountController newAcc = new InsertAccountController();
+				newAcc.insertAccountinDB(email, password, username);
 				accList.add(new Account(username, password, email));
 				System.out.println(accList.get(1).getUsername());
 
@@ -107,7 +107,7 @@ public class AccountSignUpServlet extends HttpServlet {
 
 			req.getRequestDispatcher("/_view/logIn.jsp").forward(req, resp);
 		}
-		if (req.getParameter("logIn") != null) {
+		else if (req.getParameter("logIn") != null) {
 			//accList = (ArrayList<Account>)session.getAttribute("accountListKey");
 			//session.setAttribute("accountListKey", accList);
 			//System.out.println(accList.get(0).getUsername());
@@ -115,6 +115,12 @@ public class AccountSignUpServlet extends HttpServlet {
 			req.setAttribute("errorMessage", errorMessage);
 			req.setAttribute("game", model);
 			req.getRequestDispatcher("/_view/logIn.jsp").forward(req, resp);
+			
+		}
+		else{
+			req.setAttribute("errorMessage", errorMessage);
+			req.setAttribute("game", model);
+			req.getRequestDispatcher("/_view/signUp.jsp").forward(req, resp);
 		}
 		// Add parameters as request attributes
 		// this creates attributes named "first" and "second for the response, and grabs the
@@ -123,9 +129,8 @@ public class AccountSignUpServlet extends HttpServlet {
 		// and forth, it's a good idea
 		// add result objects as attributes
 		// this adds the errorMessage text and the result to the response
-		req.setAttribute("errorMessage", errorMessage);
-		req.setAttribute("game", model);
+		
 		// Forward to view to render the result HTML document
-		req.getRequestDispatcher("/_view/signUp.jsp").forward(req, resp);
+		
 	}
 }

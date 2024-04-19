@@ -67,7 +67,7 @@ public class StartBowlingServlet extends HttpServlet {
 		
 		
 		ArrayList<Establishment> establishment = new ArrayList<>();
-		Establishment e1 = new Establishment("Colony Park Lanes & Games", "1900 Pennsylvania Ave, York, PA 17404");
+		Establishment e1 = new Establishment(0, 0, "Colony Park Lanes & Games", "1900 Pennsylvania Ave, York, PA 17404");
 		
 		ArrayList<Event> events = model.getEvents();
         if(model.getEvents() == null) {
@@ -117,9 +117,6 @@ public class StartBowlingServlet extends HttpServlet {
 			throws ServletException, IOException {
 		System.out.println("StartBowling Servlet: doPost");
 		
-		// Session Methods
-		Session session = new Session();
-		
 		
 		// Event Methods
 		EventArray model = new EventArray();
@@ -150,7 +147,6 @@ public class StartBowlingServlet extends HttpServlet {
 		
 		req.setAttribute("errorMessage", errorMessage);
 		req.setAttribute("game", model);
-		req.setAttribute("session", session);
 		
 		req.getRequestDispatcher("/_view/startBowling.jsp").forward(req, resp);
 	}

@@ -17,6 +17,8 @@ import java.util.StringTokenizer;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+//import sqldemo.DBUtil;
+//import sqldemo.StatementReader;
 /**
  * An interactive query tool for SQLite.
  */

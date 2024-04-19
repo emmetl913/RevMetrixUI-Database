@@ -9,8 +9,8 @@ public class EventArray {
 		events = new ArrayList<>();
 		ArrayList<Establishment> establishment = new ArrayList<>();
 		
-		Establishment e1 = new Establishment("Colony Park Lanes & Games", "1900 Pennsylvania Ave, York, PA 17404");
-		Establishment e2 = new Establishment("Suburban Bowlerama", "1945 S Queen St, York, PA 17403");
+		Establishment e1 = new Establishment(0, 0, "Colony Park Lanes & Games", "1900 Pennsylvania Ave, York, PA 17404");
+		Establishment e2 = new Establishment(0, 0, "Suburban Bowlerama", "1945 S Queen St, York, PA 17403");
 		
 		Event b1 = new Event("Practice", "Practice", 4, e1);
 		Event b2 = new Event("Ronan City Tournament", "Tournament", 35, e2);
