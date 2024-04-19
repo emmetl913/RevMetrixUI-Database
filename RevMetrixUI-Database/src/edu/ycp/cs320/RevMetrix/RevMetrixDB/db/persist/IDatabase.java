@@ -1,6 +1,8 @@
 package edu.ycp.cs320.RevMetrix.RevMetrixDB.db.persist;
 
+import java.util.List;
 
+import edu.ycp.cs320.RevMetrix.model.Account;
 
 public interface IDatabase {
 	/*
@@ -13,6 +15,7 @@ public interface IDatabase {
 	 */		
 	
 	public Integer insertNewAccountinDB(String email, String password, String username);
+	public List<Account> getAccountByUsernameAndPassword(String username, String password);
 	public Integer insertNewBallInDB(int account_id, float weight, String name, Boolean righthand, String brand, String color);
 	
 	// Shot Level Methods

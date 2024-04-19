@@ -37,6 +37,58 @@ public class DerbyDatabase implements IDatabase {
 	}
 
 	private static final int MAX_ATTEMPTS = 10;
+	
+	@Override
+	public List<Account> getAccountByUsernameAndPassword(String username, String password) {
+		return executeTransaction(new Transaction<List<Account>>() {
+			@Override
+			public List<Account> execute(Connection conn) throws SQLException
+			{
+				PreparedStatement stmt1 = null;
+				
+				ResultSet resultSet1 = null;
+				
+				try
+				{
+					stmt1 = conn.prepareStatement(
+						"select * from accounts"+
+						"  where accounts.username = ? "+
+						"  and accounts.password = ?"
+					);
+					stmt1.setString(1, username);
+					stmt1.setString(2, password);
+					
+					List<Account> result = new ArrayList<Account>();
+					
+					resultSet1 = stmt1.executeQuery();
+					
+					Boolean found = false;
+					
+					while(resultSet1.next())
+					{
+						found = true;
+						Account acc = new Account("", "", "");
+						loadAccount(acc, resultSet1, 1);
+						
+						result.add(acc);
+					}
+					
+					return result;
+				} 
+				finally
+				{
+					DBUtil.closeQuietly(stmt1);
+				}
+			}
+		});
+	}
+	private void loadAccount(Account account, ResultSet resultSet, int index) throws SQLException {
+		account.setAccountId(resultSet.getInt(index++));
+		account.setUsername(resultSet.getString(index++));
+		account.setPassword(resultSet.getString(index++));
+		account.setEmail(resultSet.getString(index++));
+	}
+	
 	@Override
 	public Integer insertNewBallInDB(int account_id, float weight, String name, Boolean righthand, String brand, String color) {
 		return executeTransaction(new Transaction<Integer>() {
@@ -53,7 +105,7 @@ public class DerbyDatabase implements IDatabase {
 				Integer ball_id = -1;
 
 				
-				// try to find account_id in db
+				// try to find ball_id in db
 				try
 				{
 					stmt1 = conn.prepareStatement(
@@ -95,16 +147,12 @@ public class DerbyDatabase implements IDatabase {
 						stmt2.setString(6,color);
 						stmt2.executeUpdate();
 						
-						System.out.println("New ball inserted. ball_id: "+ ball_id + 
-								" account_id: "+account_id+" weight: "+weight+" name: "+name+
-								"isRightHanded: " +righthand+ " brand: "+brand+" color: "+color);
-						
 						// get the new ball_id
 						stmt3 = conn.prepareStatement(
 								"select ball_id from balls"
 								+ " where name = ? and brand = ? and account_id = ?"
 						);
-								
+							
 						stmt3.setString(1, name);
 						stmt3.setString(2, brand);
 						stmt3.setInt(3, account_id);
@@ -115,7 +163,9 @@ public class DerbyDatabase implements IDatabase {
 						{
 							ball_id = resultSet3.getInt(1);
 
-							System.out.println("Ball <"+ name +"> found with brand <"+ brand +"> and with acc_id: "+account_id + "and ball id: "+ball_id);
+							System.out.println("New ball inserted. ball_id: "+ ball_id + 
+									" account_id: "+account_id+" weight: "+weight+" name: "+name+
+									" isRightHanded: " +righthand+ " brand: "+brand+" color: "+color);
 						}
 					}
 					return ball_id;
@@ -610,9 +660,16 @@ public class DerbyDatabase implements IDatabase {
 						insertAccount.setString(3, account.getEmail());
 						insertAccount.addBatch();
 					}
-					insertNewAccountinDB("a", "B", "c");
-					insertAccount.executeBatch();
+					insertNewAccountinDB("email@gmail.com", "password1", "username1");
 					
+					
+					List<Account> testList = new ArrayList<Account>();
+					testList = getAccountByUsernameAndPassword("username1", "password1");
+					Account temp = testList.get(0);
+					System.out.println("Found account with id: "+temp.getAccountId()+" and username: "+temp.getUsername()
+					+" and password: "+temp.getPassword()+" and email: "+temp.getEmail());
+					
+					insertAccount.executeBatch();
 					System.out.println("Account table populated");
 
 					insertGame = conn.prepareStatement("insert into games (session_id, currentLane, gameNumber, score) values (?, ?, ?, ?)");

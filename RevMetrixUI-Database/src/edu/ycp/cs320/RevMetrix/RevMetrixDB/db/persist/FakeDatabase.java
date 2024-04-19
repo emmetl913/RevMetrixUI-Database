@@ -4,6 +4,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import edu.ycp.cs320.RevMetrix.model.Account;
+
 
 public class FakeDatabase implements IDatabase {
 
@@ -24,6 +26,12 @@ public class FakeDatabase implements IDatabase {
 
 	@Override
 	public Integer insertNewGame(int gameID, int sessionID, int currentLane, int gameNum, int score) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public List<Account> getAccountByUsernameAndPassword(String username, String password) {
 		// TODO Auto-generated method stub
 		return null;
 	}
