@@ -289,7 +289,7 @@
                         <span>Game:   ${sessionScope.gameNumber}</span>
                     </div>
                     <div class="frame-box" id="frameNumber">
-                        <span>Frame: </span>
+                        <span>Frame: <%= request.getAttribute("frameNumber") %></span>
                     </div>
                     <!-- <div class="score-box">
                         <span>Total Score: ${sessionScope.totalScore}</span>
@@ -331,8 +331,16 @@
     
                     <div class="row">
                         <div id="shot-count"></div>
-                        <div class="firstShot" id="score-box1" onclick="highlightSelectedScoreBox('score-box1')" style="background-color: lightslategray;"></div>
-                        <div class="secondShot" id="score-box2" style="background-color: lightslategray;"></div>
+                        <div class="firstShot" id="score-box1" onclick="highlightSelectedScoreBox('score-box1')" style="background-color: lightslategray;">
+                            <c:forEach var="shot" items="${formattedShots1}">
+                                ${shot}
+                            </c:forEach>
+                        </div>
+                        <div class="secondShot" id="score-box2" style="background-color: lightslategray;">
+                            <c:forEach var="shot" items="${formattedShots2}">
+                                ${shot}
+                            </c:forEach>
+                        </div>
                     </div>
                 </div>
     
@@ -359,8 +367,8 @@
         </form>
 
         <script>
-            const firstShot = 0;
-            const secondShot = 0;
+            const firstShot = null;
+            const secondShot = null;
 
             //const noPins = 0;
             const allPins = 10;
@@ -376,10 +384,9 @@
             let frameNumber = 1;
             let gameNumber = 1;
 
-             // Highlight the leftmost box when the page loads
-            // window.onload = function() {
-            //     document.getElementById('box1').classList.add('highlighted');
-            // };
+            let frameShots = [];
+
+            initializeFrameShots();
 
             function selectScoreBox(scoreBoxId){
                 console.log("selectedScoreBox function called");
@@ -408,8 +415,6 @@
                 let firstScoreBox = document.getElementById("score-box1");
                 let secondScoreBox = document.getElementById("score-box2");
 
-                let frameShots = [];
-
                 initializeUI();
                 addEventListeners();
 
@@ -426,6 +431,9 @@
                         if(!firstScoreBox.classList.contains('selected')){
                             firstScoreBox.classList.add('selected');
                             secondScoreBox.classList.remove('selected');
+
+                            setFirstShot();
+                            // togglePin(pin);
                         }
                     });
 
@@ -434,6 +442,9 @@
                         if(!secondScoreBox.classList.contains('selected')){
                             secondScoreBox.classList.add('selected');
                             firstScoreBox.classList.remove('selected');
+
+                            setSecondShot();
+                            // togglePin(pin);
                         }
                     });
 
@@ -443,12 +454,15 @@
                         nextFrameBtn.addEventListener("click", function() {
                             console.log("Next frame button clicked");
                             if (frameNumber < 10) {
-                                frameNumber++;
-                                console.log("Frame number updated: ", frameNumber);
-                                updateFrameNumber(frameNumber);
-                                clearFirstShot();
-                                clearSecondShot();
-                                clearPins();
+                                // frameNumber++;
+                                // console.log("Frame number updated: ", frameNumber);
+                                // updateFrameNumber(frameNumber);
+                                // clearFirstShot();
+                                // clearSecondShot();
+                                // clearPins();
+                                updateFrameShots();
+
+                                getNextFrame();
                             } else {
                                 console.log("Frame number cannot exceed 10");
                                 displayErrorMessage("Frame number cannot exceed 10");
@@ -464,9 +478,12 @@
                         previousFrameBtn.addEventListener("click", function() {
                             console.log("Previous frame button clicked");
                             if (frameNumber > 1) {
-                                frameNumber--;
-                                console.log("Frame number updated: ", frameNumber);
-                                updateFrameNumber(frameNumber);
+                                // frameNumber--;
+                                // console.log("Frame number updated: ", frameNumber);
+                                // updateFrameNumber(frameNumber);
+                                // restorePreviousFrame();
+                                getPreviousFrame();
+                                console.log("Loaded previous frame successfully");
                             } else {
                                 console.log("Frame number cannot be less than 1");
                                 displayErrorMessage("Frame number cannot be less than 1");
@@ -491,6 +508,15 @@
 
             function togglePin(pin){
                 console.log("togglePin function called");
+                // const isLeave = pin.classList.toggle('selected');
+                const selectedScoreBox = getSelectedScoreBoxId();
+                // console.log("isLeave: ", isLeave);
+
+                if(!selectedScoreBox){
+                    console.log("No selected shot box");
+                    return;
+                }
+
                 const isLeave = pin.classList.toggle('selected');
                 console.log("isLeave: ", isLeave);
 
@@ -503,6 +529,12 @@
                 }
 
                 const pinsLeftStanding = calculateTotalPinsLeftStanding();
+
+                if(selectedScoreBox === "score-box1"){
+                    firstShotCount = pinsLeftStanding;
+                }else if(selectedScoreBox === "score-box2"){
+                    secondShotCount = pinsLeftStanding;
+                }
 
                 const secondShotBox = document.getElementById("score-box2");
                 if(secondShotBox.classList.contains("selected")){
@@ -683,9 +715,9 @@
                 resetPinCounts();
 
                 if(frameNumber > 1){
-                    frameNumber--;
-                    updateFrameNumber();
                     restorePreviousFrame();
+                    frameNumber--;
+                    updateFrameNumber(frameNumber);
                 }
             }
 
@@ -696,6 +728,8 @@
                 if(frameNumber < 10){
                     frameNumber++;
                     updateFrameNumber(frameNumber);
+                    clearFirstShot();
+                    clearSecondShot();
                 }
             }
 
@@ -714,7 +748,7 @@
             function updateFrameNumber(frameNumber){
                 const frameNumberElement = document.getElementById('frameNumber');
                 if(frameNumberElement){
-                    if(frameNumber >= 1 && frameNumber <= 10){
+                    if(frameNumber >= 1 && frameNumber <= maxFrame){
                         frameNumberElement.textContent = "Frame: " + frameNumber;
                         document.getElementById('error-message').textContent = "";
                     }else{
@@ -785,21 +819,63 @@
 
             //function to update shot information for the current frame
             function updateFrameShots(){
-                frameShots[frameNumber-1].firstShot = firstShotCount;
-                frameShots[frameNumber-1].secondShot = secondShotCount;
+                //ensure frameShots exist
+                if(!frameShots){
+                    initializeFrameShots();
+                }
+
+                frameShots[frameNumber-1] = {
+                    firstShot: firstShotCount,
+                    secondShot: secondShotCount
+                };
+
+                // frameShots[frameNumber-1].firstShot = firstShotCount;
+                // frameShots[frameNumber-1].secondShot = secondShotCount;
             }
 
             //function to restore shot information for the previous frame
             function restorePreviousFrame(){
-                if(frameNumber > 1){
-                    //Restore shot information from the array for the previous frame
-                    firstShotCount = frameShots[frameNumber-2].firstShot;
-                    secondShotCount = frameShots[frameNumber-2].secondShot;
+                console.log("Restoring...");
+                // console.log("frameNumber: ", frameNumber);
+                // console.log("frameShots: ", frameShots);
+                
+                if(frameNumber === 1){
+                    console.log("Cannot restore previous frame because this is the first frame");
+                    return;
+                }
 
-                    //update the display with the restored shot information
+                const previousFrameIndex = frameNumber-2;
+
+                if(frameShots[previousFrameIndex]){
+                    const previousFrame = frameShots[previousFrameIndex];
+
+                    firstShotCount = previousFrame.firstShot;
+                    secondShotCount = previousFrame.secondShot;
+
+                    console.log("First shot count: ", firstShotCount);
+                    console.log("Second shot count: ", secondShotCount);
+
+
                     updateFirstShotDisplay();
                     updateSecondShotDisplay();
-                }
+
+                    console.log("Previous frame restored successfully");
+                    
+                }else{
+                    console.log("Shot information for previous frame is not available");
+                }                
+            }
+
+            //function to update the first shot display
+            function updateFirstShotDisplay(){
+                const firstShotBox = document.getElementById("score-box1");
+                firstShotBox.textContent = firstShotCount !== null ? firstShotCount : "";
+            }
+
+            //function to update the second shot display
+            function updateSecondShotDisplay(){
+                const secondShotBox = document.getElementById("score-box2");
+                secondShotBox.textContent = secondShotCount !== null ? secondShotCount : "";
             }
 
         </script>

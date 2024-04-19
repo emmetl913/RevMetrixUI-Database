@@ -30,10 +30,10 @@ public class ShotServlet extends HttpServlet {
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException {
-//		
-//		if(!AccountServlet.validLogin()) {
-//            req.getRequestDispatcher("/_view/logIn.jsp").forward(req, resp);
-//        }
+		
+		if(!AccountServlet.validLogin()) {
+            req.getRequestDispatcher("/_view/logIn.jsp").forward(req, resp);
+        }
 
 		System.out.println("Shot Servlet: doGet");	
 		
@@ -52,7 +52,7 @@ public class ShotServlet extends HttpServlet {
 		
 		//check is new comer on webpage
 		String shotKey = new String("shotKey");
-//		ArrayList<Frame> frames = (ArrayList<Frame>) session.getAttribute(shotKey);
+		ArrayList<Frame> frames = (ArrayList<Frame>) session.getAttribute("frames");
 //		
 		if(session.isNew()) {
 			session.setAttribute(userIDKey, userID);
@@ -88,7 +88,7 @@ public class ShotServlet extends HttpServlet {
 		}
 		
 		//initialize the frames ArrayList
-		ArrayList<Frame> frames = (ArrayList<Frame>) session.getAttribute("frame");
+//		ArrayList<Frame> frames = (ArrayList<Frame>) session.getAttribute("frame");
 		if(frames == null) {
 			frames = new ArrayList<Frame>();
 			session.setAttribute("frames", frames);
@@ -134,17 +134,32 @@ public class ShotServlet extends HttpServlet {
 		
 		HttpSession session = req.getSession();
 		
+		ArrayList<Frame> frames = (ArrayList<Frame>) session.getAttribute("frames");
+		if(frames == null) {
+			frames = new ArrayList<Frame>();
+			session.setAttribute("frames", frames);
+		}
+		
+		Integer frameNumber = (Integer) session.getAttribute("frameNumber");
+		
+		FrameController frameController = new FrameController();
+		
 		//handle form submission for next frame action
 		String action = req.getParameter("action");
 		if("nextFrameBtn".equals(action)) {
 			//increment frame number
-			Integer frameNumber = (Integer) session.getAttribute("frameNumber");
 			if(frameNumber == null) {
 				frameNumber = 1; //initialize frame number
 			}else if(frameNumber < 10) {
 				frameNumber++; //increment frame number is not exceeding 10
 			}
 			session.setAttribute("frameNumber", frameNumber);
+		}
+		
+		if("previousFrameBtn".equals(action)) {
+			if(frameNumber != null && frameNumber > 1) {
+				frameNumber--;
+			}
 		}
 		
 		//get ball name, shot type, and pins from form submission
@@ -154,8 +169,8 @@ public class ShotServlet extends HttpServlet {
 		int pins = Integer.parseInt(req.getParameter("pins"));
 		
 		//get first and second shot from the user
-		String firstShotScore = req.getParameter("firstShotScore");
-		String secondShotScore = req.getParameter("secondShotScore");
+		String firstShotScore = req.getParameter("scoreBox1Shots");
+		String secondShotScore = req.getParameter("scoreBox2Shots");
 		
 //		String pinsParam = req.getParameter("pins");
 //		int pins = 0;
@@ -172,8 +187,34 @@ public class ShotServlet extends HttpServlet {
 		
 		//add shot object to session
 		session.setAttribute("shot", shot);
-		session.setAttribute("firstShotScore", firstShotScore);
-		session.setAttribute("secondShotScore", secondShotScore);
+		session.setAttribute("scoreBox1Shots", firstShotScore);
+		session.setAttribute("scoreBox2Shots", secondShotScore);
+		
+		//StringBuilder = modify contents of the string without creating a new String object
+		StringBuilder formattedShots1 = new StringBuilder();
+		StringBuilder formattedShots2 = new StringBuilder();
+		
+		int shotIndex = 0;
+		
+		for(Frame frame : frames) {
+			for(Shot frameShot : frame.getShots()) {
+				//append shot to the appropriate StringBuilder based on the shot index
+				if(shotIndex == 0) {
+					formattedShots1.append(frameShot.toString()).append(", ");
+				}else {
+					formattedShots2.append(frameShot.toString()).append(", ");
+				}
+				
+				//increment shotINdex
+				shotIndex = (shotIndex + 1) % 2;
+			}
+		}
+		
+		req.setAttribute("formattedShots1", formattedShots1.toString());
+		req.setAttribute("formattedShots2", formattedShots2.toString());
+		
+		Frame frame = frameController.findOrCreateFrame(frames, frameNumber);
+		frame.addShot(shot);
 		
 		//calculate the total score using the ShotController
 		ShotController controller = new ShotController();
