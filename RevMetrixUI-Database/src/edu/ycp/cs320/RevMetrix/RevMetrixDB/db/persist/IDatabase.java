@@ -13,12 +13,11 @@ public interface IDatabase {
 	 */		
 	
 	public Integer insertNewAccountinDB(String email, String password, String username);
-	public Integer insertNewBallInDB(float weight, String name, Boolean righthand, String brand, String color);
+	public Integer insertNewBallInDB(int account_id, float weight, String name, Boolean righthand, String brand, String color);
 	
 	// Shot Level Methods
 	public Integer insertNewGame(int gameID, int sessionID, int currentLane, int gameNum, int score);
 	public Integer insertNewSession(int sessionID, int eventID, String time, String oppType, String oppName, int score);
-	public Integer insertNewSession(int sessionID, int eventID, String time, String oppType, String oppName, int score);
 
-	public Integer insertNewBallInDB(int account_id, float weight, String name, Boolean righthand, String brand, String color);
+	
 }

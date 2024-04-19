@@ -49,7 +49,7 @@ public class InitialData {
 			readAccounts.close();
 		}
 	}
-	public static List<Game> getGame() throws IOException
+	public static List<Game> getGames() throws IOException
 	{
 		List<Game> gameList = new ArrayList<Game>();
 		ReadCSV readGame = new ReadCSV("game.csv");
