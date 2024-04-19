@@ -53,7 +53,7 @@ public class EventServlet extends HttpServlet {
 		userID = (String)session.getAttribute(userIDKey);
 
 		//controller.setModel(model);
-		Establishment e1 = new Establishment("Colony Park Lanes & Games", "1900 Pennsylvania Ave, York, PA 17404");
+		Establishment e1 = new Establishment(0, 0, "Colony Park Lanes & Games", "1900 Pennsylvania Ave, York, PA 17404");
 
 		
 		ArrayList<Event> events = model.getEvents();
@@ -108,7 +108,7 @@ public class EventServlet extends HttpServlet {
 				//end session shenanigans
 		
 		controller.setModel(model);
-		Establishment e1 = new Establishment(null, null);
+		Establishment e1 = new Establishment(0, 0, null, null);
 
 		
 		ArrayList<Event> events = model.getEvents();

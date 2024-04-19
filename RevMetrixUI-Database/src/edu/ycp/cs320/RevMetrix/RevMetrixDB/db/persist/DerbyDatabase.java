@@ -1,4 +1,4 @@
-package db.persist;
+package edu.ycp.cs320.RevMetrix.RevMetrixDB.db.persist;
 
 import java.io.IOException;
 import java.sql.Connection;
@@ -9,13 +9,11 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-import sqldemo.DBUtil;
-import db.persist.IDatabase;
-import db.persist.PersistenceException;
 import edu.ycp.cs320.RevMetrix.model.Account;
 import edu.ycp.cs320.RevMetrix.model.Ball;
 import edu.ycp.cs320.RevMetrix.model.Establishment;
-import db.persist.InitialData;
+import edu.ycp.cs320.RevMetrix.model.Session;
+
 
 
 public class DerbyDatabase implements IDatabase {
@@ -631,17 +629,13 @@ public class DerbyDatabase implements IDatabase {
 						
 				PreparedStatement stmt4 = null;
 				PreparedStatement stmt2 = null;
-				PreparedStatement stmt1 = null; 
 				
 				PreparedStatement stmt5 = null;
 				PreparedStatement stmt6 = null;
 
 
 			
-				try {
-					
-					 stmt1 = conn.prepareStatement( "select * from accounts" );
-					 
+				try { 
 					
 					stmt4 = conn.prepareStatement(
 							"create table accounts (" +
@@ -656,6 +650,21 @@ public class DerbyDatabase implements IDatabase {
 										
 					System.out.println("Accounts table created");
 				
+					stmt2 = conn.prepareStatement(
+							"create table sessions (" +
+							" session_id integer primary key "+
+							" generated always as identity (start with 1, increment by 1), " +
+							" event_id integer," +
+							" time varchar(25)," +
+							" oppType varchar(30)," +
+							" oppName varchar(50)," +
+							" score integer" +
+							")"
+					);
+					stmt2.executeUpdate();
+					
+					System.out.println("Sessions table created");
+					
 					stmt5 = conn.prepareStatement(
 							"create table balls (" +
 							"  ball_id integer primary key " +
@@ -688,6 +697,7 @@ public class DerbyDatabase implements IDatabase {
 					System.out.println("Establishment table created");
 					return true;
 				} finally {
+					DBUtil.closeQuietly(stmt2);
 					DBUtil.closeQuietly(stmt4);
 					DBUtil.closeQuietly(stmt5);
 					DBUtil.closeQuietly(stmt6);
@@ -710,7 +720,7 @@ public class DerbyDatabase implements IDatabase {
 				List<Account> accountList;
 				List<Ball> ballList;
 				List<Establishment> estaList;
-
+				List<Session> seshList;
 				
 				try {
 					/*
@@ -720,6 +730,7 @@ public class DerbyDatabase implements IDatabase {
 					accountList = InitialData.getAccounts();
 					ballList = InitialData.getBallArsenal();
 					estaList = InitialData.getEstablishments();
+					seshList = InitialData.getSessions();
 
 				} catch (IOException e) {
 					throw new SQLException("Couldn't read initial data", e);
@@ -731,6 +742,7 @@ public class DerbyDatabase implements IDatabase {
 				PreparedStatement insertAccount = null;
 				PreparedStatement insertBall = null;
 				PreparedStatement insertEstablishment = null;
+				PreparedStatement insertSession = null;
 
 
 
@@ -786,7 +798,20 @@ public class DerbyDatabase implements IDatabase {
 					insertAccount.executeBatch();
 					
 					System.out.println("Account table populated");
-					insertAccount.executeBatch();
+
+					insertSession = conn.prepareStatement("insert into sessions (event_id, time, oppType, oppName, score) values (?, ?, ?, ?, ?)");
+					for (Session session : seshList)
+					{
+						insertSession.setInt(1, session.getEventID());
+						insertSession.setString(2, session.getTime());
+						insertSession.setString(3, session.getOppType());
+						insertSession.setString(4, session.getOpponent());
+						insertSession.setInt(5, session.getScore());
+						insertSession.addBatch();
+					}
+					insertSession.executeBatch();
+					
+					System.out.println("Sessions table populated");
 
 					insertBall= conn.prepareStatement("insert into balls (account_id, weight, name, righthand, brand, color) values (?, ?, ?, ?, ?, ?)");
 					for (Ball ball : ballList)
@@ -833,7 +858,7 @@ public class DerbyDatabase implements IDatabase {
 					DBUtil.closeQuietly(insertAccount);					
 					DBUtil.closeQuietly(insertBall);
 					DBUtil.closeQuietly(insertEstablishment);					
-
+					DBUtil.closeQuietly(insertSession);
 				}
 			}
 		});

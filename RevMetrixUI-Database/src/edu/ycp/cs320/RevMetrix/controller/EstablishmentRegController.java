@@ -11,7 +11,7 @@ public class EstablishmentRegController {
 	}
 	//adds a ball to the arsenal with the name and color
 	public void addEstablishment(String name, String address) {
-		Establishment establishment = new Establishment(name, address);
+		Establishment establishment = new Establishment(0, 0, name, address);
 		model.addEstablishment(establishment);
 	}
 	public void changeEstablishmentNameAtIndex(int index, String newName){

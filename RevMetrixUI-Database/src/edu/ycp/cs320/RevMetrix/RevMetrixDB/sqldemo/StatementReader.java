@@ -1,4 +1,4 @@
-package sqldemo;
+package edu.ycp.cs320.RevMetrix.RevMetrixDB.sqldemo;
 
 import java.io.IOException;
 import java.io.Reader;

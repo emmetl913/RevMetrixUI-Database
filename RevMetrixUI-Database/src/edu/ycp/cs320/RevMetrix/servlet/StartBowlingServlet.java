@@ -67,7 +67,7 @@ public class StartBowlingServlet extends HttpServlet {
 		
 		
 		ArrayList<Establishment> establishment = new ArrayList<>();
-		Establishment e1 = new Establishment("Colony Park Lanes & Games", "1900 Pennsylvania Ave, York, PA 17404");
+		Establishment e1 = new Establishment(0, 0, "Colony Park Lanes & Games", "1900 Pennsylvania Ave, York, PA 17404");
 		
 		ArrayList<Event> events = model.getEvents();
         if(model.getEvents() == null) {

@@ -1,11 +1,10 @@
-package db.persist;
+package edu.ycp.cs320.RevMetrix.RevMetrixDB.db.persist;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-import db.persist.ReadCSV;
 import edu.ycp.cs320.RevMetrix.model.Account;
 import edu.ycp.cs320.RevMetrix.model.Session;
 import edu.ycp.cs320.RevMetrix.model.Ball;
@@ -72,7 +71,7 @@ public class InitialData {
 				String oppName = i.next();
 				int score = Integer.parseInt(i.next());
 				
-				Session session = new Session(sessionID, eventID, dateTime, oppType, oppName, score);
+				Session session = new Session(seshID, eventID, dateTime, oppType, oppName, score);
 				
 				sessionList.add(session);
 			}
