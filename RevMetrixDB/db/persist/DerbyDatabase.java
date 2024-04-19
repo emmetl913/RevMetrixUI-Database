@@ -115,9 +115,99 @@ public class DerbyDatabase implements IDatabase {
 		});
 	}
 	@Override
-	public Integer insertNewBallInDB(float weight, String name, Boolean righthand, String brand, String color) {
-		// TODO Auto-generated method stub
-		return null;
+	public Integer insertNewBallInDB(int account_id, float weight, String name, Boolean righthand, String brand, String color) {
+		return executeTransaction(new Transaction<Integer>() {
+			@Override
+			public Integer execute(Connection conn) throws SQLException {
+				PreparedStatement stmt1 = null;
+				PreparedStatement stmt2 = null;
+				PreparedStatement stmt3 = null;	
+				
+				ResultSet resultSet1 = null;
+				ResultSet resultSet3 = null;
+				
+				
+				Integer ball_id = -1;
+
+				
+				// try to find account_id in db
+				try
+				{
+					stmt1 = conn.prepareStatement(
+							"select ball_id from balls"
+							+ " where name = ? and brand = ? and account_id = ?"
+					);
+					
+					stmt1.setString(1, name);
+					stmt1.setString(2, brand);
+					stmt1.setInt(3, account_id);
+					
+					resultSet1 = stmt1.executeQuery();
+					
+					if(resultSet1.next())
+					{
+						ball_id = resultSet1.getInt(1);
+
+						System.out.println("Ball <"+ name +"> found with brand <"+ brand +"> and with acc_id: "+account_id + "and ball id: "+ball_id);
+					}
+					else 
+					{
+						System.out.println("Ball <"+ name +"> with brand <"+ brand +"> was not found");
+					}
+					if(ball_id <= 0)
+					{
+						
+						stmt2 = conn.prepareStatement(
+								"insert into balls (account_id, weight, name, righthand, brand, color)"
+								+ " values (?, ?, ?, ?, ?, ?)"
+						);
+						//get current account_id
+						
+						
+						stmt2.setInt(1, account_id);	//				//ball id, accountid, weight, name, righthand, brand, color
+						stmt2.setFloat(2, weight);
+						stmt2.setString(3, name);
+						stmt2.setBoolean(4, righthand);
+						stmt2.setString(5, brand);
+						stmt2.setString(6,color);
+						stmt2.executeUpdate();
+						
+						System.out.println("New ball inserted. ball_id: "+ ball_id + 
+								" account_id: "+account_id+" weight: "+weight+" name: "+name+
+								"isRightHanded: " +righthand+ " brand: "+brand+" color: "+color);
+						
+						// get the new ball_id
+						stmt3 = conn.prepareStatement(
+								"select ball_id from balls"
+								+ " where name = ? and brand = ? and account_id = ?"
+						);
+								
+						stmt3.setString(1, name);
+						stmt3.setString(2, brand);
+						stmt3.setInt(3, account_id);
+						
+						resultSet3 = stmt3.executeQuery();
+						
+						if (resultSet3.next())
+						{
+							ball_id = resultSet3.getInt(1);
+
+							System.out.println("Ball <"+ name +"> found with brand <"+ brand +"> and with acc_id: "+account_id + "and ball id: "+ball_id);
+						}
+					}
+					return ball_id;
+				}
+				finally 
+				{
+					DBUtil.closeQuietly(resultSet1);
+					DBUtil.closeQuietly(stmt1);
+					DBUtil.closeQuietly(stmt2);					
+					DBUtil.closeQuietly(resultSet3);
+					DBUtil.closeQuietly(stmt3);					
+					
+				}
+			}
+		});
 	}
 
 	// transaction that retrieves a Book, and its Author by Title
@@ -670,16 +760,18 @@ public class DerbyDatabase implements IDatabase {
 						insertAccount.addBatch();
 
 					}
+					insertNewAccountinDB("a", "B", "c");
 					
 					System.out.println("Account table populated");
 					insertAccount.executeBatch();
 
+					
 					insertBall= conn.prepareStatement("insert into balls (account_id, weight, name, righthand, brand, color) values (?, ?, ?, ?, ?, ?)");
 					for (Ball ball : ballList)
 					
 
 					{
-						insertBall.setInt(1, ball.getAccountId());	//				//ball id, accountid, weight, name, righthand, brand, color
+						insertBall.setInt(1, ball.getAccountId());					//ball id, accountid, weight, name, righthand, brand, color
 						insertBall.setFloat(2, ball.getWeight());
 						insertBall.setString(3, ball.getName());
 						insertBall.setBoolean(4, ball.getRightHanded());
@@ -689,6 +781,7 @@ public class DerbyDatabase implements IDatabase {
 
 
 					}
+					insertNewBallInDB(1, (float)69.0, "Confucian", true , "BigBalls", "Blue");
 					
 					insertBall.executeBatch();
 					System.out.println("Balls table populated");
@@ -699,7 +792,10 @@ public class DerbyDatabase implements IDatabase {
 					DBUtil.closeQuietly(insertAuthor);
 					DBUtil.closeQuietly(insertBookAuthor);					
 					DBUtil.closeQuietly(insertAccount);					
-					DBUtil.closeQuietly(insertBall);					
+					DBUtil.closeQuietly(insertBall);				
+					
+					System.out.println("testing insertion of ball method");
+					
 
 				}
 			}

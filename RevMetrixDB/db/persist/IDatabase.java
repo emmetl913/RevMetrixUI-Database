@@ -14,5 +14,5 @@ public interface IDatabase {
 	
 	public Integer insertNewAccountinDB(String email, String password, String username);
 
-	public Integer insertNewBallInDB(float weight, String name, Boolean righthand, String brand, String color);
+	public Integer insertNewBallInDB(int account_id, float weight, String name, Boolean righthand, String brand, String color);
 }
