@@ -1,15 +1,16 @@
 package edu.ycp.cs320.RevMetrix.model;
 
 import java.util.ArrayList;
-import edu.ycp.cs320.RevMetrix.controller.EstablishmentController;
+import edu.ycp.cs320.RevMetrix.controller.EstablishmentRegController;
 
 public class EstablishmentArray {
 	private ArrayList<Establishment> establishment;
+	private EstablishmentRegController controller;
 	
-	public EstablishmentArray() {
-		
-		establishment = EstablishmentController.getAllEstablishmentsForAccount(1);
-			
+	public EstablishmentArray(int acc) {
+		controller = new EstablishmentRegController();
+		establishment = (ArrayList<Establishment>) controller.getAllEstablishmentsForAccount(acc);
+
 	}
 	
 	public void addEstablishment(Establishment establishment) {

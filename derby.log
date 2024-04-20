@@ -1,12 +1,12 @@
 ----------------------------------------------------------------
-Fri Apr 19 00:23:34 EDT 2024:
-Booting Derby version The Apache Software Foundation - Apache Derby - 10.10.2.0 - (1582446): instance a816c00e-018e-f498-6f7e-00000e436968 
-on database directory C:\cs320-spring2024\suite.db with class loader sun.misc.Launcher$AppClassLoader@73d16e93 
-Loaded from file:/C:/Users/elars/eclipse-workspace/cs320-spring2024/CS320_Derby/lib/derby.jar
+Sat Apr 20 15:02:59 EDT 2024:
+Booting Derby version The Apache Software Foundation - Apache Derby - 10.10.2.0 - (1582446): instance a816c00e-018e-fce3-ec20-00000db3c838 
+on database directory C:\cs320-spring2024\suite.db with class loader sun.misc.Launcher$AppClassLoader@5acf9800 
+Loaded from file:/C:/Users/zacha/OneDrive/Documents/Coding%20projects/cs320-spring2024/CS320_Derby/lib/derby.jar
 java.vendor=Oracle Corporation
-java.runtime.version=1.8.0_391-b13
-user.dir=C:\Users\elars\git\RevMetrixUI-Database
-os.name=Windows 11
+java.runtime.version=1.8.0_301-b09
+user.dir=C:\Users\zacha\OneDrive\Documents\GitHub\RevMetrixUI-Database
+os.name=Windows 10
 os.arch=amd64
 os.version=10.0
 derby.system.home=null

@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import edu.ycp.cs320.RevMetrix.model.Account;
+import edu.ycp.cs320.RevMetrix.model.Establishment;
 
 
 public class FakeDatabase implements IDatabase {
@@ -32,6 +33,18 @@ public class FakeDatabase implements IDatabase {
 
 	@Override
 	public List<Account> getAccountByUsernameAndPassword(String username, String password) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Integer insertNewBallInDB(float weight, String name, Boolean righthand, String brand, String color) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public List<Establishment> getEstablishmentByAccount(int accountId) {
 		// TODO Auto-generated method stub
 		return null;
 	}

@@ -11,6 +11,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import edu.ycp.cs320.RevMetrix.controller.EstablishmentRegController;
+import edu.ycp.cs320.RevMetrix.model.Account;
 import edu.ycp.cs320.RevMetrix.model.Establishment;
 import edu.ycp.cs320.RevMetrix.model.EstablishmentArray;
 
@@ -49,11 +50,11 @@ public class EstablishmentRegServlet extends HttpServlet {
 		//model = (EstablishmentArray)session.getAttribute(establishmentRegKey);
 
 		userID = (String)session.getAttribute(userIDKey);
-
+		Account acc = (Account) session.getAttribute("currAccount");
 		//controller.setModel(model);
 		
 		if (model == null) {
-		    model = new EstablishmentArray();
+		    model = new EstablishmentArray(acc.getAccountId());
 		    session.setAttribute(establishmentRegKey, model);
 		}
 		ArrayList<Establishment> establishments = model.getEstablishments();
@@ -63,8 +64,6 @@ public class EstablishmentRegServlet extends HttpServlet {
 		// Set the ArrayList as a request attribute
 		req.setAttribute("esta", establishments);
 		session.setAttribute(establishmentRegKey, model); //update session model
-
-		
 		
 		// call JSP to generate empty form
 		req.getRequestDispatcher("/_view/establishmentReg.jsp").forward(req, resp);
@@ -80,10 +79,6 @@ public class EstablishmentRegServlet extends HttpServlet {
 		// holds the error message text, if there is any
 		String errorMessage = null;
 
-		EstablishmentArray model = new EstablishmentArray();
-		EstablishmentRegController controller = new EstablishmentRegController();
-		controller.setModel(model);
-
 		// Get session creation time.
 				HttpSession session = req.getSession();
 			    long createTime = session.getCreationTime();
@@ -94,6 +89,11 @@ public class EstablishmentRegServlet extends HttpServlet {
 				String userID = new String("ABCD");
 
 				String establishmentRegKey = new String("establishmentRegKey");
+				
+				Account acc = (Account) session.getAttribute("currAccount");
+				EstablishmentArray model = new EstablishmentArray(acc.getAccountId());
+				EstablishmentRegController controller = new EstablishmentRegController();
+				controller.setModel(model);
 				
 				   // Check if this is new comer on your Webpage.
 				if (session.isNew() ){
