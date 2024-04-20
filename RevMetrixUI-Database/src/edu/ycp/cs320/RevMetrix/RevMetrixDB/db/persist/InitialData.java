@@ -225,7 +225,6 @@ public class InitialData {
 		ReadCSV readBalls = new ReadCSV("ball_arsenal.csv");
 		try
 		{
-			Integer ballID = 1;
 			while(true)
 			{
 				List<String> tuple = readBalls.next();
@@ -249,7 +248,7 @@ public class InitialData {
 				boolean rightHanded = Boolean.parseBoolean(i.next());
 				String brand = i.next();
 				String color = i.next();
-				Ball ball = new Ball(ballID++, accountId, weight, name, rightHanded, brand, color);
+				Ball ball = new Ball(accountId, weight, name, rightHanded, brand, color);
 				
 				ballList.add(ball);
 			}

@@ -68,6 +68,19 @@ public class FakeDatabase implements IDatabase {
 		// TODO Auto-generated method stub
 		return null;
 	}
+
+	@Override
+	public List<Ball> getBallByName(String name) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Integer insertNewShotWithFrameID(int sessionID, int gameID, int frameID, int shotNumber, String count,
+			int ballID, String pinsLeft) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 	
 	/*
 	 * private List<Author> authorList; private List<Book> bookList;
