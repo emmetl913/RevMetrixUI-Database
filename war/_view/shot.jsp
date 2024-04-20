@@ -428,6 +428,7 @@
                 }
 
                 function addEventListeners() {
+
                     firstScoreBox.addEventListener("click", function() {
                         // selectScoreBox('score-box1', 'selected-score-box');
                         if(!firstScoreBox.classList.contains('selected')){
@@ -449,13 +450,6 @@
                             secondShotScore = 0;
 
                             setSecondShot();
-                            // togglePin(pin);
-                            // calculateSecondShotScore();
-
-                            // let pinsLeftAfterFirstShot = calculatePinsLeftStandingAfterFirstShot(firstShotCount);
-
-                            // // const firstShotCount = parseInt(document.getElementById("score-box1").textContent);
-                            // const secondShotScore = 1;
 
                             if(firstShotCount !== null){
                                 const maxPinsSecondShot = 10 - firstShotCount;
@@ -465,12 +459,6 @@
                                 }
                             }
 
-                            // // updateSecondShotDisplay();
-                            // secondShotScore = Math.min(secondScoreScore + 1, pinsLeftAfterFirstShot);
-
-                            // secondScoreBox.textContent = secondShotScore;
-
-                            // secondScoreBox.textContent = '1';
                             updateSecondShotDisplay();
                         }
                     });
@@ -622,34 +610,51 @@
                     box.style.backgroundColor = 'lightslategray';
                 });
 
-                const leftmostBox = document.querySelector('.firstShot');
-                if(leftmostBox){
-                    leftmostBox.style.backgroundColor = 'orange';
-                    leftmostBox.addEventListener('click', function () {
-                        leftmostBox.style.backgroundColor = 'orange';
-                        leftmostBox.classList.add('selected');
+                const firstScoreBox = document.querySelector('.firstShot');
+                const secondScoreBox = document.querySelector('.secondShot');
 
-                        const secondBox = document.querySelector('.secondShot');
-                        if(secondBox){
-                            secondBox.style.backgroundColor = 'lightslategray';
-                            secondBox.classList.remove('selected');
-                        }
-                    });
+                if(scoreBox === firstScoreBox){
+                    firstScoreBox.style.backgroundColor = 'orange';
+                    firstScoreBox.classList.add('selected');
+
+                    secondScoreBox.style.backgroundColor = 'lightslategray';
+                    secondScoreBox.classList.remove('selected');
+                }else if(scoreBox === secondScoreBox){
+                    secondScoreBox.style.backgroundColor = 'orange';
+                    secondScoreBox.classList.add('selected');
+
+                    firstScoreBox.style.backgroundColor = 'lightslategray';
+                    firstScoreBox.classList.remove('selected');
                 }
 
-                const secondBox = document.querySelector('.secondShot');
-                if(secondBox){
-                    secondBox.addEventListener('click', function() {
-                        secondBox.style.backgroundColor = 'orange';
-                        secondBox.classList.add('selected');
+                // const leftmostBox = document.querySelector('.firstShot');
+                // if(leftmostBox){
+                //     leftmostBox.style.backgroundColor = 'orange';
+                //     leftmostBox.addEventListener('click', function () {
+                //         leftmostBox.style.backgroundColor = 'orange';
+                //         leftmostBox.classList.add('selected');
 
-                        const firstBox = document.querySelector('.firstShot');
-                        if(firstBox){
-                            firstBox.style.backgroundColor = 'lightslategray';
-                            firstBox.classList.remove('selected');
-                        }
-                    });
-                }
+                //         const secondBox = document.querySelector('.secondShot');
+                //         if(secondBox){
+                //             secondBox.style.backgroundColor = 'lightslategray';
+                //             secondBox.classList.remove('selected');
+                //         }
+                //     });
+                // }
+
+                // const secondBox = document.querySelector('.secondShot');
+                // if(secondBox){
+                //     secondBox.addEventListener('click', function() {
+                //         secondBox.style.backgroundColor = 'orange';
+                //         secondBox.classList.add('selected');
+
+                //         const firstBox = document.querySelector('.firstShot');
+                //         if(firstBox){
+                //             firstBox.style.backgroundColor = 'lightslategray';
+                //             firstBox.classList.remove('selected');
+                //         }
+                //     });
+                // }
             }
 
             function getSelectedScoreBoxId(){
@@ -665,6 +670,18 @@
                 var pins = document.querySelectorAll(".pin");
                 pins.forEach(function(pin){
                     pin.classList.remove('leave');
+                    pin.classList.add('selected');
+                    pin.style.backgroundColor = 'black';
+                    pin.style.color = 'white';
+                });
+            }
+
+            function invertPinColors(){
+                var pins = document.querySelectorAll(".pin");
+                pins.forEach(function(pin) {
+                    var backgroundColor = pin.style.backgroundColor;
+                    pin.style.backgroundColor = pin.style.color;
+                    pin.style.color = backgroundColor;
                 });
             }
 
@@ -681,12 +698,14 @@
             function setGutter(){
                 console.log("Gutter button clicked");
 
-                // setAllPinsStanding();
-                clearPins();
-
                 const selectedBoxId = getSelectedScoreBoxId();
-                updateSelectedScoreBox(selectedBoxId, '-', null);
-                selectScoreBox(selectedBoxId);
+
+                if(selectedBoxId){
+                    updateSelectedScoreBox(selectedBoxId, '-', null);
+                    selectScoreBox(selectedBoxId);
+                }else{
+                    console.log("no score box selected");
+                }
             }
 
             function setFirstShot(){
@@ -726,36 +745,32 @@
             }
 
             function setFoul(){
-                console.log("foul button clicked")
-                if(shot == firstShot){
-                    setAllPinsStanding();
-                    clearSecondShot();
-                }
+                console.log("foul button clicked");
 
                 const selectedBoxId = getSelectedScoreBoxId();
-                updateSelectedScoreBox(selectedBoxId, 'F', null);
-                selectScoreBox(selectedBoxId);
 
+                if(selectedBoxId){
+                    updateSelectedScoreBox(selectedBoxId, 'F', null);
+                    selectScoreBox(selectedBoxId);
+                }else{
+                    console.log("no score box selected");
+                }
             }
 
             function setSpare(){
                 clearPins();
                 setSecondShot();
 
-                const firstShotScore = document.querySelector('#score-box1').textContent;
-                console.log("First shot score: ", firstShotScore);
+                const secondShotBox = document.getElementById("score-box2");
+                secondShotBox.textContent = '/';
 
-                //if the first shot box had a score, update the first shot box with that score
-                if(firstShotScore !== 'X' && firstShotScore !== ''){
-                    document.querySelector('#score-box1').textContent = firstShotCount;
+                const firstShotScore = document.getElementById("score-box1").textContent;
+                const firstShotValue = firstScoreBox.textContent;
+                if(firstShotValue !== 'X'){
+                    secondShotBox.textContent = '/';
                 }
 
-                document.querySelector('#score-box2').textContent = '/';
-
-                // //if the first shot box had a score, update the first shot box with that score
-                // if(firstShotScore !== 'X' && firstShotScore !== ''){
-                //     document.querySelector('#score-box1').textContent = firstShotCount;
-                // }
+                updateSecondShotDisplay();
             }
 
             function setStrike(){
@@ -778,7 +793,8 @@
             }
 
             function getNextFrame(){
-                clearPins();
+                // clearPins();
+                invertPinColors();
                 resetPinCounts();
 
                 if(frameNumber < 10){
