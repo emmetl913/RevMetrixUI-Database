@@ -3,32 +3,39 @@ package edu.ycp.cs320.RevMetrix.model;
 import java.util.ArrayList;
 
 public class Frame{
-	private int frameNumber;
-	private int gameNumber;
+	private int gameID, score, frameNumber;
 	private ArrayList<Shot> shots;
 	private int laneNumber;
 	
-	public Frame() {
-		this.frameNumber = 1;
-		this.gameNumber = 1;
-		this.laneNumber = 1;
-		this.shots = new ArrayList<>();
-	}
-	
-	public Frame(int frameNumber) {
+	public Frame(int gameID, int score, int frameNumber) {
 		this.frameNumber = frameNumber;
-		this.shots = new ArrayList<>();
+		this.gameID = gameID;
+		this.score = score;
 	}
 	
-	public Frame(int gameNumber, int frameNumber){
-		this.gameNumber = gameNumber;
-		this.frameNumber = frameNumber;
-		this.shots = new ArrayList<>();
+	public int getGameID()
+	{
+		return this.gameID;
 	}
-	
-	public Frame(int gameNumber, ArrayList<Shot> shots){
-		this.gameNumber = gameNumber;
-		this.shots = shots;
+	public void setGameID(int id)
+	{
+		this.gameID = id;
+	}
+	public int getFrameNumber()
+	{
+		return this.frameNumber;
+	}
+	public void setFrameNumber(int id)
+	{
+		this.frameNumber = id;
+	}
+	public int getScore()
+	{
+		return this.score;
+	}
+	public void setScore(int score)
+	{
+		this.score = score;
 	}
 	
 	public int getFrame() {

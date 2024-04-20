@@ -3,17 +3,47 @@ package edu.ycp.cs320.RevMetrix.model;
 
 public class Event {
 	private String eventName, type, standingString, establishmentString;
-	private int standing;
+	private int standing, eventID, estbID, time;
 	private Establishment establishment;
 	
-	public Event(String name, String type, int standing, Establishment establishment) {
+	public Event(int eventID, int estbID, String name, int time, String type, int standing) {
+		
+		this.eventID = eventID;
+		this.estbID = estbID;
 		this.eventName = name;
+		this.time = time;
 		this.type = type;
 		this.standing = standing;
-		this.establishment = establishment;
+		
 		this.standingString = Integer.toString(standing);
-		this.establishmentString = establishment.getEstablishmentName();
 	}
+	
+	public int getTime()
+	{
+		return this.time;
+	}
+	public void setTime(int time)
+	{
+		this.time = time;
+	}
+	
+	public int getEstbID()
+	{
+		return this.estbID;
+	}
+	public void setEstbID(int id)
+	{
+		this.estbID = id;
+	}
+	public int getEventID()
+	{
+		return this.eventID;
+	}
+	public void setEventID(int id)
+	{
+		this.eventID = id;
+	}
+	
 	
 	public String getEventName() {
 		return eventName;

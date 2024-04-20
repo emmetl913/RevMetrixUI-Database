@@ -6,6 +6,8 @@ import java.util.List;
 
 import edu.ycp.cs320.RevMetrix.model.Account;
 import edu.ycp.cs320.RevMetrix.model.Establishment;
+import edu.ycp.cs320.RevMetrix.model.Ball;
+import edu.ycp.cs320.RevMetrix.model.Shot;
 
 
 public class FakeDatabase implements IDatabase {
@@ -38,17 +40,35 @@ public class FakeDatabase implements IDatabase {
 	}
 
 	@Override
-	public Integer insertNewBallInDB(float weight, String name, Boolean righthand, String brand, String color) {
+	public Integer insertNewEvent(int eventID, int estbID, String name, int time, String type, int standing) { 
+		return null;
+	}
+	public List<Account> getAccountByUsername(String username) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
 	public List<Establishment> getEstablishmentByAccount(int accountId) {
+		return null;
+	}
+	public List<Account> getAccountByEmail(String email) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
+	@Override
+	public List<Shot> findAllShots() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Integer insertNewFrame(int gameID, int score, int frameNumber) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	
 	/*
 	 * private List<Author> authorList; private List<Book> bookList;
 	 */

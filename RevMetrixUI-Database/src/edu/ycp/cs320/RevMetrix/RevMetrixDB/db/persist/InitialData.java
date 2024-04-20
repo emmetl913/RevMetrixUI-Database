@@ -6,8 +6,11 @@ import java.util.Iterator;
 import java.util.List;
 import edu.ycp.cs320.RevMetrix.model.Account;
 import edu.ycp.cs320.RevMetrix.model.Session;
+import edu.ycp.cs320.RevMetrix.model.Shot;
 import edu.ycp.cs320.RevMetrix.model.Ball;
 import edu.ycp.cs320.RevMetrix.model.Establishment;
+import edu.ycp.cs320.RevMetrix.model.Event;
+import edu.ycp.cs320.RevMetrix.model.Frame;
 import edu.ycp.cs320.RevMetrix.model.Game;
 
 public class InitialData {
@@ -110,13 +113,116 @@ public class InitialData {
 		}
 	}
 	
+	public static List<Event> getEvents() throws IOException
+	{
+		List<Event> eventList = new ArrayList<Event>();
+		ReadCSV readEvents = new ReadCSV("event.csv");
+		try
+		{
+			Integer eventID = 1;
+			while(true)
+			{
+				List<String> tuple = readEvents.next();
+				if (tuple == null)
+				{
+					break;
+				}
+				Iterator<String> i = tuple.iterator();
+				int estbID = Integer.parseInt(i.next());
+				String name = i.next();
+				int time = Integer.parseInt(i.next());
+				String type = i.next();
+				int standing = Integer.parseInt(i.next());
+				
+				Event event = new Event(eventID++, estbID, name, time, type, standing);
+				
+				eventList.add(event);
+			}
+			return eventList;
+		} finally
+		{
+			readEvents.close();
+		}
+	}
+	
+	public static List<Frame> getFrames() throws IOException
+	{
+		List<Frame> frameList = new ArrayList<Frame>();
+		ReadCSV readFrames = new ReadCSV("frame.csv");
+		try
+		{
+			Integer frameID = 1;
+			while(true)
+			{
+				List<String> tuple = readFrames.next();
+				if (tuple == null)
+				{
+					break;
+				}
+				
+				Iterator<String> i = tuple.iterator();
+				
+				
+				int gameID = Integer.parseInt(i.next());
+				int score = Integer.parseInt(i.next());
+				int frameNumber = Integer.parseInt(i.next());
+				
+				Frame frame = new Frame(gameID, score, frameNumber);
+				
+				frameList.add(frame);
+			}
+			return frameList;
+		} finally
+		{
+			readFrames.close();
+		}
+	}
+	public static List<Shot> getShots() throws IOException
+	{
+		List<Shot> shotList = new ArrayList<Shot>();
+		ReadCSV readShots = new ReadCSV("shot.csv");
+		try
+		{
+			Integer shotID = 1;
+			while(true)
+			{
+				List<String> tuple = readShots.next();
+				if (tuple == null)
+				{
+					break;
+				}
+				
+				Iterator<String> i = tuple.iterator();
+				
+				
+				int sessionID = Integer.parseInt(i.next());
+				int gameID = Integer.parseInt(i.next());
+				int frameID = Integer.parseInt(i.next());
+				int shotNumber = Integer.parseInt(i.next());
+				String count = i.next();
+				int ballID = Integer.parseInt(i.next());
+				String pinsLeft = i.next();
+				
+				Shot shot = new Shot(sessionID, gameID, frameID, shotNumber, count, ballID, pinsLeft);
+				
+				shotList.add(shot);
+			}
+			return shotList;
+		} finally
+		{
+			readShots.close();
+		}
+	}
+	
 	public static List<Ball> getBallArsenal() throws IOException
 	{
 		List<Ball> ballList = new ArrayList<Ball>();
 		ReadCSV readBalls = new ReadCSV("ball_arsenal.csv");
-		try {
-			Integer accountId = 1;
-			while (true) {
+		try
+		{
+			Integer ballID = 1;
+			while(true)
+			{
 				List<String> tuple = readBalls.next();
 				if (tuple == null) {
 					break;
@@ -128,22 +234,18 @@ public class InitialData {
 				// when setting up the BookAuthors CSV file
 				// Integer.parseInt(i.next());
 				// auto-generate author ID, instead
-				// ball id, accountid, weight, name, righthand, brand, color
-				// int temp1 = accountId++;
-
-				// skip ball Id
-				accountId = Integer.parseInt(i.next());
-
-				String temp1 = i.next();
-				float weight = Float.parseFloat(temp1);
+				//ball id, accountid, weight, name, righthand, brand, color
+			//	int temp1 = accountId++;
+				
+				//skip ball Id
+				int accountId = Integer.parseInt(i.next());
+				float weight = Float.parseFloat(i.next());
 				String name = i.next();
-				String temp3 = i.next();
-				boolean rightHanded = Boolean.parseBoolean(temp3);
+				boolean rightHanded = Boolean.parseBoolean(i.next());
 				String brand = i.next();
 				String color = i.next();
-				Ball ball;
-				ball = new Ball(accountId, weight, name, rightHanded, brand, color);
-
+				Ball ball = new Ball(ballID++, accountId, weight, name, rightHanded, brand, color);
+				
 				ballList.add(ball);
 			}
 			return ballList;
