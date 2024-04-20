@@ -33,6 +33,9 @@ public class BallArsenal {
 		public Ball getBallAtIndex(int index) {
 			return balls.get(index);
 		}
+		public void setBalls(ArrayList<Ball> newBalls) {
+			balls = newBalls;
+		}
 		public ArrayList<Ball> getBalls(){
 			return balls;
 		}

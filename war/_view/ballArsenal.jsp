@@ -208,8 +208,9 @@ button:hover {
 			                }
 			            } else { 
 			        %>
-			        <p>No balls available.</p>
-			        <% } 		session.setAttribute("ballArsenalKey", model); //update session model %>
+			        <p>You don't have any balls yet. </p>
+			        <p> If you had two you could be a real boy.</p>
+			        <% } 		session.setAttribute("ballArsenalKey", model);%> 
 				
 				</div>
 			</div>

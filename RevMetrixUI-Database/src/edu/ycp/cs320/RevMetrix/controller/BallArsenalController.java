@@ -2,6 +2,7 @@ package edu.ycp.cs320.RevMetrix.controller;
 import edu.ycp.cs320.RevMetrix.model.Ball;
 import edu.ycp.cs320.RevMetrix.model.BallArsenal;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import edu.ycp.cs320.RevMetrix.RevMetrixDB.db.persist.*;
@@ -18,6 +19,9 @@ public class BallArsenalController {
 	}
 	public void setModel(BallArsenal model) {
 		this.arsenal = model;
+	}
+	public void setBalls(ArrayList<Ball> newBalls) {
+		arsenal.setBalls(newBalls);
 	}
 	//adds a ball to the arsenal with the name and color
 	public void addBall(String name) {
@@ -38,6 +42,7 @@ public class BallArsenalController {
 			return ballList;
 		}
 	}
+	
 	public boolean insertBallinDB(int account_id, float weight, String name, Boolean righthand, String brand, String color) {
 		
 		// insert new book (and possibly new author) into DB
