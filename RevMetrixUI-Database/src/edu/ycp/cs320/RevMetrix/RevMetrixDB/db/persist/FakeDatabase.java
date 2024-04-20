@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import edu.ycp.cs320.RevMetrix.model.Account;
+import edu.ycp.cs320.RevMetrix.model.Ball;
 
 
 public class FakeDatabase implements IDatabase {
@@ -35,6 +36,14 @@ public class FakeDatabase implements IDatabase {
 		// TODO Auto-generated method stub
 		return null;
 	}
+
+	@Override
+	public Integer insertNewEvent(int eventID, int estbID, String name, int time, String type, int standing) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	
 	
 	/*
 	 * private List<Author> authorList; private List<Book> bookList;

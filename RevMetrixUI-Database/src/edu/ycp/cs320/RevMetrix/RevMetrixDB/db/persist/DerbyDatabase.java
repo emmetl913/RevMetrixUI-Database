@@ -18,6 +18,7 @@ import edu.ycp.cs320.RevMetrix.model.Ball;
 import edu.ycp.cs320.RevMetrix.model.Account;
 import edu.ycp.cs320.RevMetrix.model.Ball;
 import edu.ycp.cs320.RevMetrix.model.Establishment;
+import edu.ycp.cs320.RevMetrix.model.Event;
 import edu.ycp.cs320.RevMetrix.model.Game;
 import edu.ycp.cs320.RevMetrix.model.Session;
 
@@ -87,6 +88,16 @@ public class DerbyDatabase implements IDatabase {
 		account.setUsername(resultSet.getString(index++));
 		account.setPassword(resultSet.getString(index++));
 		account.setEmail(resultSet.getString(index++));
+	}
+	
+	private void loadBall(Ball ball, ResultSet resultSet, int index) throws SQLException {
+		ball.setBallId(resultSet.getInt(index++));
+		ball.setAccountId(resultSet.getInt(index++));
+		ball.setWeight(resultSet.getInt(index++));
+		ball.setName(resultSet.getString(index++));
+		ball.setRightHanded(resultSet.getBoolean(index++));
+		ball.setBrand(resultSet.getString(index++));
+		ball.setColor(resultSet.getString(index++));
 	}
 	
 	@Override
@@ -202,7 +213,7 @@ public class DerbyDatabase implements IDatabase {
 				try
 				{
 					stmt1 = conn.prepareStatement(
-							"select game_id from game"
+							"select game_id from games"
 							+ " where session_id = ? "
 					);
 					
@@ -222,7 +233,7 @@ public class DerbyDatabase implements IDatabase {
 					if(game_id <= 0)
 					{
 						stmt2 = conn.prepareStatement(
-								"insert into game (sessionID, currentLane, gameNumber, score) "
+								"insert into games (sessionID, currentLane, gameNumber, score) "
 								+ " values(?, ?, ?, ?, ?)"
 						);
 						stmt2.setInt(1, sessionID);
@@ -251,6 +262,88 @@ public class DerbyDatabase implements IDatabase {
 						}
 					}
 					return game_id;
+				}
+				finally 
+				{
+					DBUtil.closeQuietly(resultSet1);
+					DBUtil.closeQuietly(stmt1);
+					DBUtil.closeQuietly(stmt2);					
+					DBUtil.closeQuietly(resultSet3);
+					DBUtil.closeQuietly(stmt3);					
+					
+				}
+			}
+		});
+	}
+	@Override
+	public Integer insertNewEvent(int eventID, int estbID, String name, int time, String type, int standing) {
+		return executeTransaction(new Transaction<Integer>() {
+			@Override
+			public Integer execute(Connection conn) throws SQLException {
+				PreparedStatement stmt1 = null;
+				PreparedStatement stmt2 = null;
+				PreparedStatement stmt3 = null;	
+				
+				ResultSet resultSet1 = null;
+				ResultSet resultSet3 = null;
+				
+				
+				Integer event_id = -1;
+				
+				// try to find account_id in db
+				try
+				{
+					stmt1 = conn.prepareStatement(
+							"select event_id from events"
+							+ " where estb_id = ? "
+					);
+					
+					stmt1.setInt(1, estbID);
+					
+					resultSet1 = stmt1.executeQuery();
+					
+					if(resultSet1.next())
+					{
+						event_id = resultSet1.getInt(1);
+						System.out.println("Event <"+ eventID +"> found with estbID <"+ estbID +">");
+					}
+					else 
+					{
+						System.out.println("Event <"+ eventID +"> was not found");
+					}
+					if(event_id <= 0)
+					{
+						stmt2 = conn.prepareStatement(
+								"insert into events (estb_id, name, time, type, standing) "
+								+ " values(?, ?, ?, ?, ?)"
+						);
+						stmt2.setInt(1, estbID);
+						stmt2.setString(2, name);
+						stmt2.setInt(3, time);
+						stmt2.setString(4, type);
+						stmt2.setInt(5, standing);
+						
+						stmt2.executeUpdate();
+						
+						System.out.println("New event <"+name+"> , <"+time+"> , <"+type+">, <"+standing+"> inserted into games");
+						
+						// get the new account_id
+						stmt3 = conn.prepareStatement(
+								"select * from events "
+								+ " where event_id = ? and estb_id = ?"
+						);
+						stmt3.setInt(1, eventID);
+						stmt3.setInt(2, estbID);
+						
+						resultSet3 = stmt3.executeQuery();
+						
+						if (resultSet3.next())
+						{
+							event_id = resultSet3.getInt(1);
+							System.out.println("New event <"+name+"> , <"+time+"> , <"+type+">, <"+standing+"> ID: "+event_id);
+						}
+					}
+					return event_id;
 				}
 				finally 
 				{
@@ -495,17 +588,32 @@ public class DerbyDatabase implements IDatabase {
 		executeTransaction(new Transaction<Boolean>() {
 			@Override
 			public Boolean execute(Connection conn) throws SQLException {
-						
+			
+				PreparedStatement stmt6 = null;
+				PreparedStatement stmt5 = null;		
 				PreparedStatement stmt4 = null;
+				PreparedStatement stmt3 = null;
 				PreparedStatement stmt2 = null;
 				PreparedStatement stmt1 = null;
 				
-				PreparedStatement stmt5 = null;
-				PreparedStatement stmt6 = null;
+				
 
-
+				String tablesCreated = "Tables Created: ";
 			
 				try { 
+					stmt3 = conn.prepareStatement(
+							"create table events ("+
+							" event_id integer primary key "+
+							" generated always as identity (start with 1, increment by 1), "+
+							" estb_id integer,"+
+							" name varchar(40),"+
+							" time integer,"+
+							" type varchar(40),"+
+							" standing integer"+
+							")"
+					);
+					stmt3.executeUpdate();
+					tablesCreated += "Events, ";
 					
 					stmt1 = conn.prepareStatement(
 							"create table games (" +
@@ -518,7 +626,7 @@ public class DerbyDatabase implements IDatabase {
 							")"
 					);
 					stmt1.executeUpdate();
-					System.out.println("Games table created");
+					tablesCreated += "Games, ";
 					
 					stmt4 = conn.prepareStatement(
 							"create table accounts (" +
@@ -531,7 +639,7 @@ public class DerbyDatabase implements IDatabase {
 					);
  					stmt4.executeUpdate();
 										
-					System.out.println("Accounts table created");
+ 					tablesCreated += "Accounts, ";
 				
 					stmt2 = conn.prepareStatement(
 							"create table sessions (" +
@@ -546,7 +654,7 @@ public class DerbyDatabase implements IDatabase {
 					);
 					stmt2.executeUpdate();
 					
-					System.out.println("Sessions table created");
+					tablesCreated += "Sessions, ";
 					
 					stmt5 = conn.prepareStatement(
 							"create table balls (" +
@@ -563,7 +671,7 @@ public class DerbyDatabase implements IDatabase {
 
 					stmt5.executeUpdate();
 										
-					System.out.println("Balls table created");
+					tablesCreated += "Balls, ";
 					
 					stmt6 = conn.prepareStatement(
 							"create table establishments (" +
@@ -577,7 +685,9 @@ public class DerbyDatabase implements IDatabase {
 
 					stmt6.executeUpdate();
 										
-					System.out.println("Establishment table created");
+					tablesCreated += "Establishments, ";
+					System.out.println(tablesCreated);
+					
 					return true;
 				} finally {
 					DBUtil.closeQuietly(stmt1);
@@ -606,6 +716,7 @@ public class DerbyDatabase implements IDatabase {
 				List<Establishment> estaList;
 				List<Session> seshList;
 				List<Game> gameList;
+				List<Event> eventList;
 				
 				try {
 					/*
@@ -617,6 +728,7 @@ public class DerbyDatabase implements IDatabase {
 					estaList = InitialData.getEstablishments();
 					seshList = InitialData.getSessions();
 					gameList = InitialData.getGames();
+					eventList = InitialData.getEvents();
 
 				} catch (IOException e) {
 					throw new SQLException("Couldn't read initial data", e);
@@ -627,11 +739,24 @@ public class DerbyDatabase implements IDatabase {
 				PreparedStatement insertEstablishment = null;
 				PreparedStatement insertSession = null;
 				PreparedStatement insertGame = null;
+				PreparedStatement insertEvent = null;
 
-
-
+				String tablesPopulated = "Tables Populated: ";
+				
 				try {
 					
+					insertEvent = conn.prepareStatement("insert into events (estb_id, name, time, type, standing) values (?, ?, ?, ?, ?)");
+					for(Event event : eventList)
+					{
+						insertEvent.setInt(1, event.getEstbID());
+						insertEvent.setString(2, event.getEventName());
+						insertEvent.setInt(3, event.getTime());
+						insertEvent.setString(4, event.getType());
+						insertEvent.setInt(5, event.getStanding());
+						insertEvent.addBatch();
+					}
+					insertEvent.executeBatch();
+					tablesPopulated += "Events, ";
 					
 					insertAccount = conn.prepareStatement("insert into accounts (username, password, email) values (?, ?, ?)");
 					for (Account account : accountList)
@@ -644,14 +769,19 @@ public class DerbyDatabase implements IDatabase {
 					insertNewAccountinDB("email@gmail.com", "password1", "username1");
 					
 					
-					List<Account> testList = new ArrayList<Account>();
-					testList = getAccountByUsernameAndPassword("username1", "password1");
-					Account temp = testList.get(0);
-					System.out.println("Found account with id: "+temp.getAccountId()+" and username: "+temp.getUsername()
-					+" and password: "+temp.getPassword()+" and email: "+temp.getEmail());
+					
+					 List<Account> testList = new ArrayList<Account>(); testList =
+					 getAccountByUsernameAndPassword("username1", "password1"); 
+					 Account temp = testList.get(0);
+					 System.out.println("Found account with id: "
+					 +temp.getAccountId()
+					 +" and username: "+temp.getUsername()
+					 +" and password: "+temp.getPassword()
+					 +" and email: "+temp.getEmail());
+					 
 					
 					insertAccount.executeBatch();
-					System.out.println("Account table populated");
+					tablesPopulated += "Accounts, ";
 
 					insertGame = conn.prepareStatement("insert into games (session_id, currentLane, gameNumber, score) values (?, ?, ?, ?)");
 					for (Game game : gameList)
@@ -664,7 +794,7 @@ public class DerbyDatabase implements IDatabase {
 					}
 					insertGame.executeBatch();
 					
-					System.out.println("Game table populated");
+					tablesPopulated += "Games, ";
 					
 					insertSession = conn.prepareStatement("insert into sessions (event_id, time, oppType, oppName, score) values (?, ?, ?, ?, ?)");
 					for (Session session : seshList)
@@ -678,7 +808,7 @@ public class DerbyDatabase implements IDatabase {
 					}
 					insertSession.executeBatch();
 					
-					System.out.println("Sessions table populated");
+					tablesPopulated += "Sessions, ";
 
 					
 					insertBall= conn.prepareStatement("insert into balls (account_id, weight, name, righthand, brand, color) values (?, ?, ?, ?, ?, ?)");
@@ -692,12 +822,11 @@ public class DerbyDatabase implements IDatabase {
 						insertBall.setString(5, ball.getBrand());
 						insertBall.setString(6, ball.getColor());
 						insertBall.addBatch();
-
-
 					}
+								
 					
 					insertBall.executeBatch();
-					System.out.println("Balls table populated");
+					tablesPopulated += "Balls, ";
 					
 					insertEstablishment= conn.prepareStatement("insert into establishments (account_id, name, address) values (?, ?, ?)");
 					for (Establishment establishment : estaList)
@@ -713,9 +842,9 @@ public class DerbyDatabase implements IDatabase {
 					}
 					
 					insertEstablishment.executeBatch();
-					System.out.println("Establishment table populated");
+					tablesPopulated += "Establishments, ";
 					
-					
+					System.out.println(tablesPopulated);
 					
 					return true;
 				} finally {			
@@ -724,6 +853,7 @@ public class DerbyDatabase implements IDatabase {
 					DBUtil.closeQuietly(insertEstablishment);					
 					DBUtil.closeQuietly(insertSession);
 					DBUtil.closeQuietly(insertGame);
+					DBUtil.closeQuietly(insertEvent);
 				}
 			}
 		});
@@ -740,6 +870,7 @@ public class DerbyDatabase implements IDatabase {
 		
 		System.out.println("Suite DB successfully initialized!");
 	}
+	
 	
 	
 

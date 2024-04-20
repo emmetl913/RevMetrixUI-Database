@@ -9,6 +9,7 @@ import edu.ycp.cs320.RevMetrix.model.Account;
 import edu.ycp.cs320.RevMetrix.model.Session;
 import edu.ycp.cs320.RevMetrix.model.Ball;
 import edu.ycp.cs320.RevMetrix.model.Establishment;
+import edu.ycp.cs320.RevMetrix.model.Event;
 import edu.ycp.cs320.RevMetrix.model.Game;
 
 
@@ -115,13 +116,45 @@ public class InitialData {
 		}
 	}
 	
+	public static List<Event> getEvents() throws IOException
+	{
+		List<Event> eventList = new ArrayList<Event>();
+		ReadCSV readEvents = new ReadCSV("event.csv");
+		try
+		{
+			Integer eventID = 1;
+			while(true)
+			{
+				List<String> tuple = readEvents.next();
+				if (tuple == null)
+				{
+					break;
+				}
+				Iterator<String> i = tuple.iterator();
+				int estbID = Integer.parseInt(i.next());
+				String name = i.next();
+				int time = Integer.parseInt(i.next());
+				String type = i.next();
+				int standing = Integer.parseInt(i.next());
+				
+				Event event = new Event(eventID++, estbID, name, time, type, standing);
+				
+				eventList.add(event);
+			}
+			return eventList;
+		} finally
+		{
+			readEvents.close();
+		}
+	}
+	
 	public static List<Ball> getBallArsenal() throws IOException
 	{
 		List<Ball> ballList = new ArrayList<Ball>();
 		ReadCSV readBalls = new ReadCSV("ball_arsenal.csv");
 		try
 		{
-			Integer accountId = 1;
+			Integer ballID = 1;
 			while(true)
 			{
 				List<String> tuple = readBalls.next();
@@ -139,17 +172,13 @@ public class InitialData {
 			//	int temp1 = accountId++;
 				
 				//skip ball Id
-				accountId = Integer.parseInt(i.next());
-				
-				String temp1 = i.next();
-				float weight = Float.parseFloat(temp1);
+				int accountId = Integer.parseInt(i.next());
+				float weight = Float.parseFloat(i.next());
 				String name = i.next();
-				String temp3 = i.next();
-				boolean rightHanded = Boolean.parseBoolean(temp3);
+				boolean rightHanded = Boolean.parseBoolean(i.next());
 				String brand = i.next();
 				String color = i.next();
-				Ball ball;
-				ball = new Ball(accountId, weight, name, rightHanded, brand, color);
+				Ball ball = new Ball(ballID++, accountId, weight, name, rightHanded, brand, color);
 				
 				ballList.add(ball);
 			}

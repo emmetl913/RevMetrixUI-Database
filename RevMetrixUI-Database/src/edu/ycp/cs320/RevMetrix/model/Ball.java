@@ -7,11 +7,11 @@ public class Ball {
 	private int ballId;
 	private int accountId;
 	
-	
-	public Ball(String name) {
-		this.name = name;
-	}
-	public Ball(int accountId, float weight, String name, boolean rightHand, String brand, String color) {
+	/*
+	 * public Ball(String name) { this.name = name; }
+	 */
+	public Ball(int ballID, int accountId, float weight, String name, boolean rightHand, String brand, String color) {
+		this.ballId = ballID;
 		this.accountId = accountId;
 		this.name = name;
 		this.rightHanded = rightHand;
