@@ -4,6 +4,7 @@ import java.util.List;
 
 import edu.ycp.cs320.RevMetrix.model.Account;
 import edu.ycp.cs320.RevMetrix.model.Ball;
+import edu.ycp.cs320.RevMetrix.model.Shot;
 
 public interface IDatabase {
 	/*
@@ -20,6 +21,7 @@ public interface IDatabase {
 	
 	public List<Account> getAccountByUsernameAndPassword(String username, String password);
 	public List<Account> getAccountByUsername(String username);
+	public List<Shot> findAllShots();
 	
 	// Shot Level Methods
 	List<Account> getAccountByEmail(String email);
@@ -28,5 +30,7 @@ public interface IDatabase {
 	public Integer insertNewEvent(int eventID, int estbID, String name, int time, String type, int standing);
 	public Integer insertNewSession(int sessionID, int eventID, String time, String oppType, String oppName, int score);
 	public Integer insertNewGame(int gameID, int sessionID, int currentLane, int gameNum, int score);
+	public Integer insertNewFrame(int gameID, int score, int frameNumber);
+	public Integer insertNewShotWithFrameID(int sessionID, int gameID, int frameID, int shotNumber, String count, int ballID, String pinsLeft);
 	
 }

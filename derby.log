@@ -1,6 +1,6 @@
 ----------------------------------------------------------------
-Fri Apr 19 21:05:58 EDT 2024:
-Booting Derby version The Apache Software Foundation - Apache Derby - 10.10.2.0 - (1582446): instance a816c00e-018e-f909-e2c3-00000d7b3140 
+Fri Apr 19 21:32:12 EDT 2024:
+Booting Derby version The Apache Software Foundation - Apache Derby - 10.10.2.0 - (1582446): instance a816c00e-018e-f921-e7e3-00000d7b3150 
 on database directory C:\cs320-spring2024\suite.db with class loader sun.misc.Launcher$AppClassLoader@73d16e93 
 Loaded from file:/C:/Users/elars/eclipse-workspace/cs320-spring2024/CS320_Derby/lib/derby.jar
 java.vendor=Oracle Corporation
