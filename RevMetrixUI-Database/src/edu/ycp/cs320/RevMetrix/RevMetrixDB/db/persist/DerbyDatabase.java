@@ -78,6 +78,7 @@ public class DerbyDatabase implements IDatabase {
 				finally
 				{
 					DBUtil.closeQuietly(stmt1);
+					resultSet1.close();
 				}
 			}
 		});
@@ -162,15 +163,117 @@ public class DerbyDatabase implements IDatabase {
 				finally
 				{
 					DBUtil.closeQuietly(stmt1);
+					resultSet1.close();
+					
 				}
 			}
 		});
 	}
+	
 	private void loadAccount(Account account, ResultSet resultSet, int index) throws SQLException {
 		account.setAccountId(resultSet.getInt(index++));
 		account.setUsername(resultSet.getString(index++));
 		account.setPassword(resultSet.getString(index++));
 		account.setEmail(resultSet.getString(index++));
+	}
+	@Override
+	public List<Ball> getBallByName(String name) {
+		return executeTransaction(new Transaction<List<Ball>>() {
+			@Override
+			public List<Ball> execute(Connection conn) throws SQLException
+			{
+				PreparedStatement stmt1 = null;
+				
+				ResultSet resultSet1 = null;
+				
+				try
+				{
+					stmt1 = conn.prepareStatement(
+						"select * from balls"+
+						"  where balls.name = ? "
+					);
+					stmt1.setString(1, name);
+					
+					List<Ball> result = new ArrayList<Ball>();
+					
+					resultSet1 = stmt1.executeQuery();
+					
+					Boolean found = false;
+					
+					while(resultSet1.next())
+					{
+						found = true;
+						Ball ball = new Ball(0,0,"", true,"","" );
+						loadBall(ball, resultSet1, 1);
+						
+						result.add(ball);
+					}
+					
+					return result;
+				} 
+				finally
+				{
+					DBUtil.closeQuietly(stmt1);
+					resultSet1.close();
+				}
+			}
+		});
+	}
+	@Override
+	public ArrayList<Ball> getBallsByAccountIdFromDB(int accountId) {
+		return executeTransaction(new Transaction<ArrayList<Ball>>() {
+			@Override
+			public ArrayList<Ball> execute(Connection conn) throws SQLException
+			{
+				PreparedStatement stmt1 = null;
+				
+				ResultSet resultSet1 = null;
+				
+				try
+				{
+					stmt1 = conn.prepareStatement(
+							"select * from balls"+
+							" where balls.account_id = ?"
+					);
+					
+					stmt1.setInt(1, 1);
+					
+					ArrayList<Ball> result = new ArrayList<Ball>();
+					
+					resultSet1 = stmt1.executeQuery();
+					
+					Boolean found = false;
+					//System.out.println("plase pwrint dis");
+					//it did pwrint that successfully
+					//System.out.print("TOILET: "resultSet1.getInt(1));
+					while(resultSet1.next())
+					{
+						found = true;
+						Ball ball = new Ball(0, 0, "name", false, "", "");
+						loadBall(ball, resultSet1, 0);
+						System.out.println("SKREET" + ball.getName());
+						result.add(ball);
+					}
+					
+					return result;
+				} 
+				finally
+				{
+					DBUtil.closeQuietly(stmt1);
+					resultSet1.close();
+				}
+			}
+		});
+	}
+	private void loadBall(Ball ball, ResultSet resultSet, int index) throws SQLException {
+		//Proper order: ball id, accountid, weight, name, righthand, brand, color
+		ball.setBallId(resultSet.getInt(index++));
+		ball.setAccountId(resultSet.getInt(index++));
+		ball.setWeight(resultSet.getFloat(index++));
+		ball.setName(resultSet.getString(index++));
+		ball.setRightHanded(resultSet.getBoolean(index++));
+		ball.setBrand(resultSet.getString(index++));
+		ball.setColor(resultSet.getString(index++));
 	}
 	
 	@Override
@@ -786,9 +889,18 @@ public class DerbyDatabase implements IDatabase {
 
 
 					}
+					System.out.println("Balls table populated");
+					//testing the getAccountByEmail function
+//					List<Account> testListForEmail= new ArrayList<Account>();
+//					testListForEmail = getAccountByEmail("email@gmail.com");
+//					temp = testList.get(0);
+//					System.out.println("Test email should be email@gmail.com --> "+temp.getEmail());
+					
 					
 					insertBall.executeBatch();
-					System.out.println("Balls table populated");
+					List<Ball> ballListTest = getBallsByAccountIdFromDB(1);
+					Ball ball= ballListTest.get(0);
+					System.out.println(ball.getName());
 					
 					insertEstablishment= conn.prepareStatement("insert into establishments (account_id, name, address) values (?, ?, ?)");
 					for (Establishment establishment : estaList)
@@ -815,6 +927,8 @@ public class DerbyDatabase implements IDatabase {
 					DBUtil.closeQuietly(insertEstablishment);					
 					DBUtil.closeQuietly(insertSession);
 					DBUtil.closeQuietly(insertGame);
+					
+					
 				}
 			}
 		});

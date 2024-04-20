@@ -3,6 +3,7 @@ package edu.ycp.cs320.RevMetrix.RevMetrixDB.db.persist;
 import java.util.List;
 
 import edu.ycp.cs320.RevMetrix.model.Account;
+import edu.ycp.cs320.RevMetrix.model.Ball;
 
 public interface IDatabase {
 	/*
@@ -24,6 +25,8 @@ public interface IDatabase {
 	public Integer insertNewGame(int gameID, int sessionID, int currentLane, int gameNum, int score);
 	public Integer insertNewSession(int sessionID, int eventID, String time, String oppType, String oppName, int score);
 	List<Account> getAccountByEmail(String email);
+	List<Ball> getBallsByAccountIdFromDB(int accountId);
+	List<Ball> getBallByName(String name);
 
 	
 }

@@ -5,7 +5,6 @@ import static org.junit.Assert.assertTrue;
 import org.junit.Before;
 import org.junit.Test;
 
-import edu.ycp.cs320.RevMetrix.controller.AccountController;
 import edu.ycp.cs320.RevMetrix.model.Account;
 
 public class AccountControllerTest {
