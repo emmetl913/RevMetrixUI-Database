@@ -83,6 +83,90 @@ public class DerbyDatabase implements IDatabase {
 			}
 		});
 	}
+	@Override
+	public List<Account> getAccountByUsername(String username) {
+		return executeTransaction(new Transaction<List<Account>>() {
+			@Override
+			public List<Account> execute(Connection conn) throws SQLException
+			{
+				PreparedStatement stmt1 = null;
+				
+				ResultSet resultSet1 = null;
+				
+				try
+				{
+					stmt1 = conn.prepareStatement(
+						"select * from accounts"+
+						"  where accounts.username = ? "
+					);
+					stmt1.setString(1, username);
+					
+					List<Account> result = new ArrayList<Account>();
+					
+					resultSet1 = stmt1.executeQuery();
+					
+					Boolean found = false;
+					
+					while(resultSet1.next())
+					{
+						found = true;
+						Account acc = new Account("", "", "");
+						loadAccount(acc, resultSet1, 1);
+						
+						result.add(acc);
+					}
+					
+					return result;
+				} 
+				finally
+				{
+					DBUtil.closeQuietly(stmt1);
+				}
+			}
+		});
+	}
+	@Override
+	public List<Account> getAccountByEmail(String email) {
+		return executeTransaction(new Transaction<List<Account>>() {
+			@Override
+			public List<Account> execute(Connection conn) throws SQLException
+			{
+				PreparedStatement stmt1 = null;
+				
+				ResultSet resultSet1 = null;
+				
+				try
+				{
+					stmt1 = conn.prepareStatement(
+						"select * from accounts"+
+						"  where accounts.email = ? "
+					);
+					stmt1.setString(1, email);
+					
+					List<Account> result = new ArrayList<Account>();
+					
+					resultSet1 = stmt1.executeQuery();
+					
+					Boolean found = false;
+					
+					while(resultSet1.next())
+					{
+						found = true;
+						Account acc = new Account("", "", "");
+						loadAccount(acc, resultSet1, 1);
+						
+						result.add(acc);
+					}
+					
+					return result;
+				} 
+				finally
+				{
+					DBUtil.closeQuietly(stmt1);
+				}
+			}
+		});
+	}
 	private void loadAccount(Account account, ResultSet resultSet, int index) throws SQLException {
 		account.setAccountId(resultSet.getInt(index++));
 		account.setUsername(resultSet.getString(index++));

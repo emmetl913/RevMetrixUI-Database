@@ -2,6 +2,7 @@ package edu.ycp.cs320.RevMetrix.servlet;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -28,27 +29,13 @@ public class AccountServlet extends HttpServlet {
 		System.out.println("Account Servlet: doGet");	
 		
 		HttpSession session = req.getSession();
-		Account kevin=  new Account("Kevin", "Kevin1","KevinsEmail@gmail.com");
 		
-		ArrayList<Account> accList =(ArrayList<Account>)session.getAttribute("accountListKey");
+		//When we sign out, doGet of AccountServlet is ran
+		//So we set the currentAccount to null here.
+		Account acc = null;
+		session.setAttribute("currAccount", acc);
+
 		
-		
-		if (session.isNew() ){
-		accList = new ArrayList<Account>();
-		accList.add(kevin);
-		session.setAttribute("accountListKey", accList);
-		}
-		if(accList == null) {
-			accList = new ArrayList<Account>();
-			accList.add(kevin);
-			session.setAttribute("accountListKey", accList);
-		}
-		if(accList.isEmpty()) {
-			accList = new ArrayList<Account>();
-			accList.add(kevin);
-			session.setAttribute("accountListKey", accList);		
-		}
-		// call JSP to generate empty form
 		req.getRequestDispatcher("/_view/logIn.jsp").forward(req, resp);
 		validLogin = false;
 	}
@@ -67,55 +54,23 @@ public class AccountServlet extends HttpServlet {
 		AccountController controller = new AccountController();
 		controller.setModel(model);
 		
-		// result of calculation goes here
-		// decode POSTed form parameters and dispatch to controller
+		//make session
 		HttpSession session = req.getSession();
-	    long createTime = session.getCreationTime();
-		long lastAccessTime = session.getLastAccessedTime();
 		
 		String username = req.getParameter("username");
 		String password = req.getParameter("password");
-		Account kevin=  new Account("Kevin", "Kevin1","KevinsEmail@gmail.com");
 
-		ArrayList<Account> accList = (ArrayList<Account>)session.getAttribute("accountListKey");
-
-
-		if (session.isNew() ){
-		accList = new ArrayList<Account>();
-		accList.add(kevin);
-		session.setAttribute("accountListKey", accList);
-		}
-		else if(accList == null) {
-			accList = new ArrayList<Account>();
-			accList.add(kevin);
-			session.setAttribute("accountListKey", accList);
-		}
-		else if(accList.isEmpty()) {
-			accList = new ArrayList<Account>();
-			accList.add(kevin);
-			session.setAttribute("accountListKey", accList);		
-		}
-//		else {
-//		}
-		for(Account account: accList) {
-			
-			 if(!validLogin) {
-				controller.setModel(account);
-				
-				if(controller.getValidLogin(username, password)) {
-					validLogin = controller.getValidLogin(username, password);
-					session.setAttribute("currAccount", account);
-				}
-				System.out.println("user: " +account.getUsername()+ ", password: " + account.getPassword()
-				+ ", isValidLogin: "+ controller.getValidLogin(username, password));
-
-			}
+		if(!username.equals("")) {
+			validLogin = controller.getValidLogin(username, password);
 			if(validLogin) {
-				break;
+				List<Account> newList = controller.getAccountByUsernameAndPassword(username, password);
+				Account acc = newList.get(0);
+				
+				//set our current account to the successfully logged in account
+				session.setAttribute("currAccount", acc);
 			}
-					
 		}
-		if(!validLogin) {
+		else if(!validLogin) {
 			errorMessage = "Username or password is incorrect.";
 		}
 		
@@ -129,29 +84,17 @@ public class AccountServlet extends HttpServlet {
 		if (req.getParameter("logIn") != null && validLogin) {
 			req.setAttribute("errorMessage", errorMessage);
 			req.setAttribute("game", model);
-			session.setAttribute("accountListKey", accList);	
+			//session.setAttribute("accountListKey", accList);	
 			req.getRequestDispatcher("/_view/index.jsp").forward(req, resp);
 		}
 		else if (req.getParameter("registerButton") != null) {
 			req.setAttribute("errorMessage", errorMessage);
 			req.setAttribute("game", model);
-			session.setAttribute("accountListKey", accList);	
+			//session.setAttribute("accountListKey", accList);	
 			req.getRequestDispatcher("/_view/signUp.jsp").forward(req, resp);
 		}
 		else {
 			req.getRequestDispatcher("/_view/logIn.jsp").forward(req, resp);
 		}
-		// Add parameters as request attributes
-		// this creates attributes named "first" and "second for the response, and grabs the
-		// values that were originally assigned to the request attributes, also named "first" and "second"
-		// they don't have to be named the same, but in this case, since we are passing them back
-		// and forth, it's a good idea
-		// add result objects as attributes
-		// this adds the errorMessage text and the result to the response
-			
-
-		// Forward to view to render the result HTML document
-		
-
 	}
 }
