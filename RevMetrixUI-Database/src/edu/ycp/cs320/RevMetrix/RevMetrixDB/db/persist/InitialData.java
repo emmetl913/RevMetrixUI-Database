@@ -7,9 +7,11 @@ import java.util.List;
 
 import edu.ycp.cs320.RevMetrix.model.Account;
 import edu.ycp.cs320.RevMetrix.model.Session;
+import edu.ycp.cs320.RevMetrix.model.Shot;
 import edu.ycp.cs320.RevMetrix.model.Ball;
 import edu.ycp.cs320.RevMetrix.model.Establishment;
 import edu.ycp.cs320.RevMetrix.model.Event;
+import edu.ycp.cs320.RevMetrix.model.Frame;
 import edu.ycp.cs320.RevMetrix.model.Game;
 
 
@@ -145,6 +147,75 @@ public class InitialData {
 		} finally
 		{
 			readEvents.close();
+		}
+	}
+	
+	public static List<Frame> getFrames() throws IOException
+	{
+		List<Frame> frameList = new ArrayList<Frame>();
+		ReadCSV readFrames = new ReadCSV("frame.csv");
+		try
+		{
+			Integer frameID = 1;
+			while(true)
+			{
+				List<String> tuple = readFrames.next();
+				if (tuple == null)
+				{
+					break;
+				}
+				
+				Iterator<String> i = tuple.iterator();
+				
+				
+				int gameID = Integer.parseInt(i.next());
+				int score = Integer.parseInt(i.next());
+				int frameNumber = Integer.parseInt(i.next());
+				
+				Frame frame = new Frame(gameID, score, frameNumber);
+				
+				frameList.add(frame);
+			}
+			return frameList;
+		} finally
+		{
+			readFrames.close();
+		}
+	}
+	public static List<Shot> getShots() throws IOException
+	{
+		List<Shot> shotList = new ArrayList<Shot>();
+		ReadCSV readShots = new ReadCSV("shot.csv");
+		try
+		{
+			Integer shotID = 1;
+			while(true)
+			{
+				List<String> tuple = readShots.next();
+				if (tuple == null)
+				{
+					break;
+				}
+				
+				Iterator<String> i = tuple.iterator();
+				
+				
+				int sessionID = Integer.parseInt(i.next());
+				int gameID = Integer.parseInt(i.next());
+				int frameID = Integer.parseInt(i.next());
+				int shotNumber = Integer.parseInt(i.next());
+				String count = i.next();
+				int ballID = Integer.parseInt(i.next());
+				String pinsLeft = i.next();
+				
+				Shot shot = new Shot(sessionID, gameID, frameID, shotNumber, count, ballID, pinsLeft);
+				
+				shotList.add(shot);
+			}
+			return shotList;
+		} finally
+		{
+			readShots.close();
 		}
 	}
 	

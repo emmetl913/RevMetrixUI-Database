@@ -3,47 +3,84 @@ package edu.ycp.cs320.RevMetrix.model;
 import java.util.List;
 
 public class Shot{
-	private int pins;
-	private String type;
-	private String ballName;
+	private int pins, sessionID, gameID, frameID, shotNumber, ballID;
+	private String count, pinsLeft;
 	
 	//Constructor
-	public Shot() {
-		this.pins = 0;
-		this.type = "";
-		this.ballName = "";
+	public Shot(int sessionID, int gameID, int frameID, int shotNumber, String count, int ballID, String pinsLeft) {
+		this.sessionID = sessionID;
+		this.gameID = gameID;
+		this.frameID = frameID;
+		this.shotNumber = shotNumber;
+		this.count = count;
+		this.ballID = ballID;
+		this.pinsLeft = pinsLeft;
 	}
 	
-	public Shot(String Name, String type, int pins) {
-		this.ballName = Name;
-		this.type = type;
+	public int getPins()
+	{
+		return this.pins;
+	}
+	public void setPins(int pins)
+	{
 		this.pins = pins;
 	}
-	
-	//gets the numbers of pins that were knocked over from the user input
-	public int getKnockedOver() {
-		return pins;
+	public int getSessionID()
+	{
+		return this.sessionID; 
+	}
+	public void setSessionID(int id)
+	{
+		this.sessionID = id;
+	}
+	public int getGameID()
+	{
+		return this.gameID;
+	}
+	public void setGameID(int id)
+	{
+		this.gameID = id;
+	}
+	public int getFrameID()
+	{
+		return this.frameID;
+	}
+	public void setFrameID(int id)
+	{
+		this.frameID = id;
+	}
+	public int getShotNumber()
+	{
+		return this.shotNumber;
+	}
+	public void setShotNumber(int num)
+	{
+		this.shotNumber = num;
+	}
+	public String getCount()
+	{
+		return this.count;
+	}
+	public void setCount(String count)
+	{
+		this.count = count;
+	}
+	public int getBallID()
+	{
+		return this.ballID;
+	}
+	public void setBallID(int id)
+	{
+		this.ballID = id;
+	}
+	public String getPinsLeft()
+	{
+		return this.pinsLeft;
+	}
+	public void setPinsLeft(String left)
+	{
+		this.pinsLeft = left;
 	}
 	
-	//sets the pins knocked over from the user
-	public void setKnockedOver(int pins) {
-		this.pins = pins;
-	}
 	
-	//get the type of score (F, -, X, /)
-	public String getType() {
-		return type;
-	}
-	
-	public void setType(String type) {
-		this.type = type;
-	}	
-	
-	public String getBallName() {
-		return ballName;
-	}
-	
-	public void setBallName(String ballName) {
-		this.ballName = ballName;
-	}
 }

@@ -19,8 +19,10 @@ import edu.ycp.cs320.RevMetrix.model.Account;
 import edu.ycp.cs320.RevMetrix.model.Ball;
 import edu.ycp.cs320.RevMetrix.model.Establishment;
 import edu.ycp.cs320.RevMetrix.model.Event;
+import edu.ycp.cs320.RevMetrix.model.Frame;
 import edu.ycp.cs320.RevMetrix.model.Game;
 import edu.ycp.cs320.RevMetrix.model.Session;
+import edu.ycp.cs320.RevMetrix.model.Shot;
 
 
 
@@ -673,6 +675,8 @@ public class DerbyDatabase implements IDatabase {
 			@Override
 			public Boolean execute(Connection conn) throws SQLException {
 			
+				PreparedStatement stmt8 = null;
+				PreparedStatement stmt7 = null;
 				PreparedStatement stmt6 = null;
 				PreparedStatement stmt5 = null;		
 				PreparedStatement stmt4 = null;
@@ -685,6 +689,34 @@ public class DerbyDatabase implements IDatabase {
 				String tablesCreated = "Tables Created: ";
 			
 				try { 
+					stmt8 = conn.prepareStatement(
+						"create table shots ("
+						+ " shot_id integer primary key"
+						+ " generated always as identity (start with 1, increment by 1),"
+						+ " frame_id integer,"
+						+ " game_id integer,"
+						+ " session_id integer,"
+						+ " shot_number integer,"
+						+ " count varchar(1),"
+						+ " ball_id integer,"
+						+ " pins_left varchar(10)"
+						+ ")"	
+					);
+					stmt8.executeUpdate();
+					tablesCreated += "Shots, ";
+					
+					stmt7 = conn.prepareStatement(
+							"create table frames ("+
+							" frame_id integer primary key "+
+							" generated always as identity (start with 1, increment by 1), "+
+							" game_id integer,"
+							+ " score integer, "
+							+ " frame_number integer"
+							+ ")"
+					);
+					stmt7.executeUpdate();
+					tablesCreated += "Frames, ";
+					
 					stmt3 = conn.prepareStatement(
 							"create table events ("+
 							" event_id integer primary key "+
@@ -774,12 +806,15 @@ public class DerbyDatabase implements IDatabase {
 					
 					return true;
 				} finally {
+					
+					// Ah, perfection
 					DBUtil.closeQuietly(stmt1);
 					DBUtil.closeQuietly(stmt2);
 					DBUtil.closeQuietly(stmt4);
 					DBUtil.closeQuietly(stmt5);
 					DBUtil.closeQuietly(stmt6);
-
+					DBUtil.closeQuietly(stmt7);
+					DBUtil.closeQuietly(stmt8);
 
 				}
 			}
@@ -801,6 +836,8 @@ public class DerbyDatabase implements IDatabase {
 				List<Session> seshList;
 				List<Game> gameList;
 				List<Event> eventList;
+				List<Frame> frameList;
+				List<Shot> shotList;
 				
 				try {
 					/*
@@ -813,6 +850,8 @@ public class DerbyDatabase implements IDatabase {
 					seshList = InitialData.getSessions();
 					gameList = InitialData.getGames();
 					eventList = InitialData.getEvents();
+					frameList = InitialData.getFrames();
+					shotList = InitialData.getShots();
 
 				} catch (IOException e) {
 					throw new SQLException("Couldn't read initial data", e);
@@ -824,10 +863,37 @@ public class DerbyDatabase implements IDatabase {
 				PreparedStatement insertSession = null;
 				PreparedStatement insertGame = null;
 				PreparedStatement insertEvent = null;
+				PreparedStatement insertFrame = null;
+				PreparedStatement insertShot = null;
 
 				String tablesPopulated = "Tables Populated: ";
 				
 				try {
+					insertShot = conn.prepareStatement("insert into shots (frame_id, game_id, session_id, shot_number, count, ball_id, pins_left) values (?, ?, ?, ?, ?, ?, ?)");
+					for(Shot shot : shotList)
+					{
+						insertShot.setInt(1, shot.getFrameID());
+						insertShot.setInt(2, shot.getGameID());
+						insertShot.setInt(3, shot.getSessionID());
+						insertShot.setInt(4, shot.getShotNumber());
+						insertShot.setString(5, shot.getCount());
+						insertShot.setInt(6, shot.getBallID());
+						insertShot.setString(7, shot.getPinsLeft());
+						insertShot.addBatch();
+					}
+					insertShot.executeBatch();
+					tablesPopulated += "Shots, ";
+					
+					insertFrame = conn.prepareStatement("insert into frames (game_id, score, frame_number) values (?, ?, ?)");
+					for(Frame frame : frameList)
+					{
+						insertFrame.setInt(1, frame.getGameID());
+						insertFrame.setInt(2, frame.getScore());
+						insertFrame.setInt(3, frame.getFrameNumber());
+						insertFrame.addBatch();
+					}
+					insertFrame.executeBatch();
+					tablesPopulated += "Frames, ";
 					
 					insertEvent = conn.prepareStatement("insert into events (estb_id, name, time, type, standing) values (?, ?, ?, ?, ?)");
 					for(Event event : eventList)
@@ -938,6 +1004,8 @@ public class DerbyDatabase implements IDatabase {
 					DBUtil.closeQuietly(insertSession);
 					DBUtil.closeQuietly(insertGame);
 					DBUtil.closeQuietly(insertEvent);
+					DBUtil.closeQuietly(insertFrame);
+					DBUtil.closeQuietly(insertShot);
 				}
 			}
 		});
