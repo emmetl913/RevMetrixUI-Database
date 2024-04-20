@@ -19,14 +19,9 @@ public interface IDatabase {
 	public Integer insertNewBallInDB(int account_id, float weight, String name, Boolean righthand, String brand, String color);
 	
 	public List<Account> getAccountByUsernameAndPassword(String username, String password);
-	public List<Account> getAccountByUsernameAndPassword(String username, String password);
 	public List<Account> getAccountByUsername(String username);
-
-	public Integer insertNewBallInDB(int account_id, float weight, String name, Boolean righthand, String brand, String color);
 	
 	// Shot Level Methods
-	public Integer insertNewGame(int gameID, int sessionID, int currentLane, int gameNum, int score);
-	public Integer insertNewSession(int sessionID, int eventID, String time, String oppType, String oppName, int score);
 	List<Account> getAccountByEmail(String email);
 
 	// Shot Level Methods

@@ -39,7 +39,7 @@ public class FakeDatabase implements IDatabase {
 
 	@Override
 	public Integer insertNewEvent(int eventID, int estbID, String name, int time, String type, int standing) { 
-		return null
+		return null;
 	}
 	public List<Account> getAccountByUsername(String username) {
 		// TODO Auto-generated method stub
