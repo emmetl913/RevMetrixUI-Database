@@ -71,8 +71,8 @@
                 height: 45px;
                 border-radius: 50%;
                 border: 1px solid black;
-                background-color: black;
-                color: white;
+                background-color: white;
+                color: black;
                 display: flex;
                 justify-content: center;
                 align-items: center;
@@ -86,8 +86,8 @@
             }
 
             .pin.selected{
-                background-color: white;
-                color: black;
+                background-color: black;
+                color: white;
             }
 
             .triangle{
@@ -381,6 +381,8 @@
             let secondShotCount = 0;
             let shot = firstShot;
 
+            let secondShotScore = 0;
+
             let frameNumber = 1;
             let gameNumber = 1;
 
@@ -434,6 +436,7 @@
 
                             setFirstShot();
                             // togglePin(pin);
+                            updateFirstShotDisplay();
                         }
                     });
 
@@ -443,8 +446,32 @@
                             secondScoreBox.classList.add('selected');
                             firstScoreBox.classList.remove('selected');
 
+                            secondShotScore = 0;
+
                             setSecondShot();
                             // togglePin(pin);
+                            // calculateSecondShotScore();
+
+                            // let pinsLeftAfterFirstShot = calculatePinsLeftStandingAfterFirstShot(firstShotCount);
+
+                            // // const firstShotCount = parseInt(document.getElementById("score-box1").textContent);
+                            // const secondShotScore = 1;
+
+                            if(firstShotCount !== null){
+                                const maxPinsSecondShot = 10 - firstShotCount;
+
+                                if(secondShotScore > maxPinsSecondShot){
+                                    setSpare();
+                                }
+                            }
+
+                            // // updateSecondShotDisplay();
+                            // secondShotScore = Math.min(secondScoreScore + 1, pinsLeftAfterFirstShot);
+
+                            // secondScoreBox.textContent = secondShotScore;
+
+                            // secondScoreBox.textContent = '1';
+                            updateSecondShotDisplay();
                         }
                     });
 
@@ -459,7 +486,7 @@
                                 // updateFrameNumber(frameNumber);
                                 // clearFirstShot();
                                 // clearSecondShot();
-                                // clearPins();
+                                clearPins();
                                 updateFrameShots();
 
                                 getNextFrame();
@@ -506,11 +533,14 @@
                 }
             });
 
+            let secondScoreBoxClicked = false;
+
             function togglePin(pin){
                 console.log("togglePin function called");
                 // const isLeave = pin.classList.toggle('selected');
                 const selectedScoreBox = getSelectedScoreBoxId();
                 // console.log("isLeave: ", isLeave);
+                console.log("Second Shot initialize: ", secondShotScore);
 
                 if(!selectedScoreBox){
                     console.log("No selected shot box");
@@ -521,33 +551,65 @@
                 console.log("isLeave: ", isLeave);
 
                 if(isLeave){
-                    pin.style.backgroundColor = 'white'
-                    pin.style.color = 'black';
-                }else{
                     pin.style.backgroundColor = 'black'
                     pin.style.color = 'white';
+                }else{
+                    pin.style.backgroundColor = 'white'
+                    pin.style.color = 'black';
                 }
 
-                const pinsLeftStanding = calculateTotalPinsLeftStanding();
-
-                if(selectedScoreBox === "score-box1"){
-                    firstShotCount = pinsLeftStanding;
-                }else if(selectedScoreBox === "score-box2"){
-                    secondShotCount = pinsLeftStanding;
-                }
-
-                const secondShotBox = document.getElementById("score-box2");
-                if(secondShotBox.classList.contains("selected")){
-                    secondShotBox.textContent = pinsLeftStanding;
-                }
-
-                updateSelectedScoreBox(getSelectedScoreBoxId(), null, pinsLeftStanding);
-                // selectScoreBox(getSelectedScoreBoxId(), 'selected-score-box');
+                // const pinsLeftStanding = calculateTotalPinsLeftStanding();
+                updateSelectedScoreBox(getSelectedScoreBoxId(), null, calculateTotalPinsLeftStanding());
                 highlightSelectedScoreBox(getSelectedScoreBoxId());
 
-                if(secondShotBox.classList.contains("selected")){
-                    highlightSelectedScoreBox("score-box2");
+                const secondShotBox = document.getElementById("score-box2");
+
+                if(selectedScoreBox === "score-box2" && secondShotBox.classList.contains('selected')){
+                    secondScoreBoxClicked = true;
                 }
+
+                if(selectedScoreBox === "score-box2" && secondScoreBoxClicked){
+                    const pinsLeftAfterFirstShot = calculatePinsLeftStandingAfterFirstShot(firstShotCount);
+                    secondShotScore++;
+                    updateSecondShotDisplay();
+                }
+
+                // if(selectedScoreBox === "score-box1"){
+                //     firstShotCount = pinsLeftStanding;
+                // }else if(selectedScoreBox === "score-box2"){
+                //     if(isLeave){
+                //         if(secondShotScore < (10-firstShotCount)){
+                //             secondShotScore++;
+                //         }
+                //     }else{
+                //         if(secondShotScore > 1){
+                //             secondShotScore--;
+                //         }
+                //     }
+
+                //     //stays within the range
+                //     // if(secondShotScore < 1){
+                //     //     secondShotScore = 1;
+                //     // }else if(secondShotScore > (10-firstShotCount)){
+                //     //     secondShotScore = 10 - firstShotCount;
+                //     // }
+
+                //     //update second shot display
+                    // const secondScoreBox = document.getElementById("score-box2");
+                    // secondScoreBox.textContent = secondShotScore;
+                // }
+
+                // const secondShotBox = document.getElementById("score-box2");
+                // if(secondShotBox.classList.contains("selected")){
+                //     secondShotBox.textContent = pinsLeftStanding;
+                // }
+
+                // updateSelectedScoreBox(getSelectedScoreBoxId(), null, calculateTotalPinsLeftStanding());
+                // highlightSelectedScoreBox(getSelectedScoreBoxId());
+
+                // if(secondShotBox.classList.contains("selected")){
+                //     highlightSelectedScoreBox("score-box2");
+                // }
             }
 
             //function to highlight the selected score box
@@ -599,13 +661,6 @@
                 }
             }
 
-            // function calculateScore(){
-            //     const pins = document.querySelectorAll('.pin.leave');
-            //     const pinsKnockedDown = pins.length;
-            //     const pinsLeft = 10-pinsKnockedDown;
-            //     return pinsLeft;
-            // }
-
             function clearPins(){
                 var pins = document.querySelectorAll(".pin");
                 pins.forEach(function(pin){
@@ -644,6 +699,7 @@
                 shot = secondShot;
                 document.querySelector('#score-box1').style.backgroundColor = 'lightslategray';
                 document.querySelector('#score-box2').style.backgroundColor = 'orange';
+                secondShotScore = 0;
             }
 
             function clearFirstShot(){
@@ -757,30 +813,14 @@
                 }
             }
 
-            // function handleFrameChange(){
-            //     //update the UI when the user moves to the next frame
-            //     clearPins();
-            //     const selectedBoxId = getSelectedScoreBoxId();
-            //     const pinsLeftStanding = calculateScore();
-            //     updateSelectedScoreBox(pinsLeftStanding, selectScoreBoxId);
-            // }
-
             function calculateTotalPinsLeftStanding(){
-                const pins = document.querySelectorAll('.pin:not(.selected)');
+                const totalPins = 10;
+                const pins = document.querySelectorAll('.pin:not(.selected)').length;
 
-                const pinsLeftStanding = pins.length;
+                const pinsKnockedOver = totalPins - pins;
+                //const pinsLeftStanding = pins.length;
 
-                // let totalPins = 0;
-                // pins.forEach(function(pin){
-                //     const pinValue = parseInt(pin.textContent);
-                //     console.log("Pin value:", pin.textContent, "Parsed:", pinValue);
-                //     if(!isNaN(pinValue)){
-                //         totalPins += pinValue;
-                //     }
-                // });
-
-                // let pinsLeftStanding = 10-totalPins;
-                return pinsLeftStanding;
+                return pinsKnockedOver;
             }
 
             function updateSelectedScoreBox(scoreBoxId, shotType, pinsLeftStanding){
@@ -788,7 +828,7 @@
 
                 console.log("ScoreBoxID: ", scoreBoxId);
                 console.log("shotType: ", shotType);
-                console.log("Pins left standing: ", pinsLeftStanding);
+                console.log("Pins knocked over: ", pinsLeftStanding);
 
                 document.querySelectorAll('.firstShot, .secondShot').forEach(box => {
                     box.style.backgroundColor = 'lightslategray';
@@ -828,9 +868,6 @@
                     firstShot: firstShotCount,
                     secondShot: secondShotCount
                 };
-
-                // frameShots[frameNumber-1].firstShot = firstShotCount;
-                // frameShots[frameNumber-1].secondShot = secondShotCount;
             }
 
             //function to restore shot information for the previous frame
@@ -875,7 +912,62 @@
             //function to update the second shot display
             function updateSecondShotDisplay(){
                 const secondShotBox = document.getElementById("score-box2");
-                secondShotBox.textContent = secondShotCount !== null ? secondShotCount : "";
+                // secondShotBox.textContent = secondShotCount !== null ? secondShotCount : "";
+
+                if(firstShotCount !== null){
+                    const maxPinsSecondShot = 10 - firstShotCount;
+
+                    if(secondShotScore <= maxPinsSecondShot){
+                        secondShotBox.textContent = secondShotScore;
+                    }else{
+                        setSpare();
+                    }
+                }
+
+                // const maxPinsSecondShot = 10 - firstShotCount;
+
+                // if(!secondShotBox){
+                //     return;
+                // }
+
+                // if(secondShotScore > maxPinsSecondShot){
+                //     console.log("Too may pins");
+                // }
+
+                // const secondShotScore = Math.min(maxPinsSecondShot, 1);
+
+                // const secondShotScore = calculateSecondShotScore();
+
+                secondShotBox.textContent = secondShotScore;
+            }
+
+            // let currentSecondShotScore = 1;
+
+            //function to calculate the second shot
+            function calculateSecondShotScore(){
+                // const pinsLeftStandingAfterFirstShot = 10 - firstShotCount;
+                // console.log("pins left standing after first shot: ", pinsLeftStandingAfterFirstShot);
+
+                // //strike
+                // // if(pinsLeftStandingAfterFirstShot === 10){
+                // //     setStrike();
+                // //     return;
+                // // }
+
+                // //no pins left standing - strike
+                // if(pinsLeftStandingAfterFirstShot === 0){
+                //     setStrike();
+                //     return;
+                // }
+
+                // return Math.min(0, 10-firstShotCount) + 1;
+
+                let secondShotScore = 1;
+                return secondShotScore;
+            }
+
+            function calculatePinsLeftStandingAfterFirstShot(firstShotCount){
+                return 10 - firstShotCount;
             }
 
         </script>
