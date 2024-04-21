@@ -73,7 +73,7 @@ public boolean insertAccountinDB(String email, String password, String username)
 	//Modifying the function to try and implement the database check.
 	public boolean getValidLogin(String enteredUsername, String enteredPassword) {
 		List<Account> accList = db.getAccountByUsernameAndPassword(enteredUsername, enteredPassword);
-		if(accList == null) {
+		if(accList == null || accList.isEmpty()) {
 			return false;
 		}
 		//if accList has values then the account must exist therefore the login is valid

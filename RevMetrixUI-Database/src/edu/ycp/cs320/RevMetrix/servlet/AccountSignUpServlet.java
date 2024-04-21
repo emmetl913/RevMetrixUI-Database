@@ -37,6 +37,7 @@ public class AccountSignUpServlet extends HttpServlet {
 //			session.setAttribute("accountListKey", accList);		
 //		}
 		// call JSP to generate empty form
+		errorMessage = null;
 		req.setAttribute("errorMessage", errorMessage);
 		req.getRequestDispatcher("/_view/signUp.jsp").forward(req, resp);
 	}

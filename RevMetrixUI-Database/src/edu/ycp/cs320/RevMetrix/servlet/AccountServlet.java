@@ -35,7 +35,8 @@ public class AccountServlet extends HttpServlet {
 		Account acc = null;
 		session.setAttribute("currAccount", acc);
 
-		
+		String errorMessage = null;
+		req.setAttribute("errorMessage", errorMessage);
 		req.getRequestDispatcher("/_view/logIn.jsp").forward(req, resp);
 		validLogin = false;
 	}
@@ -60,8 +61,8 @@ public class AccountServlet extends HttpServlet {
 		String username = req.getParameter("username");
 		String password = req.getParameter("password");
 
+		validLogin = controller.getValidLogin(username, password);
 		if(!username.equals("")) {
-			validLogin = controller.getValidLogin(username, password);
 			if(validLogin) {
 				List<Account> newList = controller.getAccountByUsernameAndPassword(username, password);
 				Account acc = newList.get(0);
@@ -70,14 +71,16 @@ public class AccountServlet extends HttpServlet {
 				session.setAttribute("currAccount", acc);
 			}
 		}
-		else if(!validLogin) {
+		if(!validLogin) {
 			errorMessage = "Username or password is incorrect.";
+			System.out.println("Aint no thing to it bbg"); //Error messages arent showing up
 		}
+		
 		
 		// check for errors in the form data before using is in a calculation
 		if (username.length() < 5 || password.length()<5) {
 			//errorMessage = "Please enter a username and/or password that are both longer than 5 characters";
-			errorMessage = " ";
+			//errorMessage = " ";
 		}
 		
 
@@ -94,6 +97,7 @@ public class AccountServlet extends HttpServlet {
 			req.getRequestDispatcher("/_view/signUp.jsp").forward(req, resp);
 		}
 		else {
+			req.setAttribute("errorMessage", errorMessage);
 			req.getRequestDispatcher("/_view/logIn.jsp").forward(req, resp);
 		}
 	}

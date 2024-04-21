@@ -115,17 +115,39 @@ public class BallArsenalServlet extends HttpServlet {
 //					balls = new ArrayList<Ball>();
 //					balls.add(new Ball("FirstBall"));
 //				}
-		        controller.setBalls(balls);
+		       
 				//end session shenanigans
 		
 		//on button press
 		String newBallName = req.getParameter("ballName");
+		String newBallBrand = req.getParameter("ballBrand");
+		String newBallWeight = req.getParameter("ballWeight");
+		String newBallColor = req.getParameter("ballColor");
+		String newBallLeftHand = req.getParameter("leftHand");
+		String newBallRightHand = req.getParameter("rightHand");
 		String removeBallName = req.getParameter("removeBallName");
+		boolean rightHanded = true;
 		
 		if (req.getParameter("addBall") != null ) {
-			//System.out.println(model.getBallAtIndex(0).getName());
-			controller.addBall(newBallName);
-			controller.insertBallinDB(currentAccount.getAccountId(), 1, newBallName, true, "brand", "color");
+		    float ballWeight = Float.parseFloat(newBallWeight);
+		    rightHanded = Boolean.parseBoolean(newBallRightHand);
+		    Integer did = 0;
+		    try {
+				if (req.getParameter("newType").equals("left")) {
+					rightHanded = false;
+					did++;
+				} else if (req.getParameter("newType").equals("right")) {
+					rightHanded = true;
+					did++;
+				} 
+		    }	
+		    catch(NullPointerException e) {
+		    	errorMessage = "Please select the ball's hand";
+		    }
+		    if(did != 0) {
+				controller.insertBallinDB(currentAccount.getAccountId(), 
+				ballWeight, newBallName, rightHanded, newBallBrand, newBallColor);
+			}
 		}
 		if(req.getParameter("removeBall") != null) {
 			//controller.removeBall(removeBallName);
@@ -138,10 +160,10 @@ public class BallArsenalServlet extends HttpServlet {
 			        }
 			    }
 		}
-		if (session.getAttribute("currentGame") != null ) {
-			Game g = (Game)session.getAttribute("currentGame");
-			System.out.println(g.getLane());
-		}
+//		if (session.getAttribute("currentGame") != null ) {
+//			Game g = (Game)session.getAttribute("currentGame");
+//			System.out.println(g.getLane());
+//		}
 		String selectedBall = req.getParameter("selectedBall");
 		
 		try {
@@ -161,9 +183,13 @@ public class BallArsenalServlet extends HttpServlet {
 		
 		
 		req.setAttribute("errorMessage", errorMessage);
+		 balls = (ArrayList<Ball>) controller.getBallByAccountId(currentAccount.getAccountId());
+	     controller.setBalls(balls);
 		req.setAttribute("balls", balls);
+		//Update the current ball to the session account
 		session.setAttribute("currAccount", currentAccount);
-		//session.setAttribute(ballArsenalKey, model); //update session model
+		
+		session.setAttribute(ballArsenalKey, model); //update session model
 
 		req.getRequestDispatcher("/_view/ballArsenal.jsp").forward(req, resp);
 		
