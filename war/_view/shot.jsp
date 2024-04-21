@@ -301,8 +301,8 @@
                     <div class="dropdown">
                         <select name="ball">
                             <option value="">Select a ball...</option>
-                            <c:forEach var="ball" items="${ballArsenal.getBalls()}">
-                                <option value="${ball.getName()}">${ball.getName()}</option>
+                            <c:forEach var="ball" items="${ballArsenal}">
+                                <option value="${ball.getId()}">${ball.getName()}</option>
                             </c:forEach>
                             <option value="add">Add Ball... </option>
                         </select>
@@ -332,16 +332,9 @@
                     <div class="row">
                         <div id="shot-count"></div>
                         <div class="firstShot" id="score-box1" style="background-color: lightslategray;">
-                            <!-- <c:forEach var="shot" items="${formattedShots1}">
-                                ${shot}
-                            </c:forEach> -->
                             ${formattedShots1}
                         </div>
                         <div class="secondShot" id="score-box2" style="background-color: lightslategray;">
-                            <!-- <c:forEach var="shot" items="${formattedShots2}">
-                                ${shot}
-                            </c:forEach> -->
-
                             ${formattedShots2}
                         </div>
                     </div>
@@ -900,6 +893,23 @@
 
             function calculatePinsLeftStandingAfterFirstShot(firstShotCount){
                 return 10 - firstShotCount;
+            }
+
+            function selectScoreBoxAndSubmit(scoreBoxId){
+                selectScoreBox(scoreBoxId);
+
+                var firstShotValue = null;
+                var secondShotValue = null;
+
+                if(scoreBoxId === 'score-box1'){
+                    firstShotValue = document.getElementById('score-box1').textContent.trim();
+                }else if(scoreBoxId === 'score-box2'){
+                    secondShotValue = document.getElementById('score-box2').textContent.trim();
+                }
+
+                var url = '${pageContext.servletContext.contextPath}/shot?firstShotScore=' + encodeURIComponent(firstShotValue) + '&secondShotScore=' + encodeURIComponent(secondShotValue);
+
+                window.location.href = url;
             }
 
         </script>
