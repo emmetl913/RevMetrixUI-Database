@@ -24,8 +24,9 @@ public class AccountSignUpServlet extends HttpServlet {
 		
 		System.out.println("Account SignUp Servlet: doGet");	
 		HttpSession session = req.getSession();
-		Account kevin=  new Account("Kevin", "Kevin1","KevinsEmail@gmail.com");
-
+		//Account kevin=  new Account("Kevin", "Kevin1","KevinsEmail@gmail.com");
+		Account acc = null;
+		session.setAttribute("currAccount", acc);
 //		ArrayList<Account> accList = new ArrayList<Account>();
 //		if (session.isNew() ){
 //		accList.add(kevin);
@@ -36,6 +37,7 @@ public class AccountSignUpServlet extends HttpServlet {
 //			session.setAttribute("accountListKey", accList);		
 //		}
 		// call JSP to generate empty form
+		errorMessage = null;
 		req.setAttribute("errorMessage", errorMessage);
 		req.getRequestDispatcher("/_view/signUp.jsp").forward(req, resp);
 	}

@@ -36,6 +36,12 @@
 	            border: 1px solid #ccc;
 	            border-radius: 4px;
 	        }
+			.color-picker, input[type="number"]{
+			    height: 69px; 
+				width: 69px;
+				vertical-align: middle;
+			}
+			
 			h1{
 				font-size: 50px;
 				color: black;
@@ -181,10 +187,20 @@ button:hover {
 	
 		<form id="ballArsenalForm" action="${pageContext.servletContext.contextPath}/ballArsenal" method="post">
 			<header><h1>Bowling Ball Arsenal</h1></header>	
+	          <input type="hidden" id="type" name="newType" value="">
 
 			<div class="ball-box" id="ballBoxDiv">
 				<div id="add-ball-form">
 					<input type="text" name="ballName" placeholder="Ball Name">
+				    <input type="text" name="ballBrand" placeholder="Ball Brand"><br>
+				    <input type="number" name="ballWeight" placeholder="Ball Weight (in pounds)" step="0.01" class="color-picker">
+				    <input type="color" name="ballColor" placeholder="Ball Color" class="color-picker">
+				    <br> 
+				    
+				    <button name="leftHand" type="button"onclick="setToLeft()">>Left Hand</button>
+				    <button name="rightHand" type="button"onclick="setToRight()">Right Hand</button>
+				    <br>
+				    
 					<button text="Add Ball" name="addBall" type="submit" value="Register Ball">
 					Add Ball</button>
 					
@@ -201,16 +217,16 @@ button:hover {
 			            if (balls != null && !balls.isEmpty()) {
 			                for (Ball ball : balls) {
 			        %>
-			        <div class="ball-section" onclick="selectBall ('<%= ball.getName() %>')">
-			            <p>Name: <%= ball.getName() %></p>
+			        <div class="ball-section" onclick="selectBall ('<%= ball.getName() %>')"> <!-- change to ballId-->
+			            <p>Name: <%= ball.getName() %> RightHanded: <%= ball.getRightHanded()%> </p>
 			        </div>
 			        <% 
 			                }
 			            } else { 
 			        %>
-			        <p>No balls available.</p>
-			        <% } 		session.setAttribute("ballArsenalKey", model); //update session model %>
-				
+			        <p>You don't have any balls yet. </p>
+			        <p> If you had two you could be a real boy.</p>
+			        <% } 		session.setAttribute("ballArsenalKey", model);%> 
 				</div>
 			</div>
 			<input type="hidden" name="selectedBall" id="selectedBall" value="">
@@ -220,6 +236,12 @@ button:hover {
 		        document.getElementById('selectedBall').value = ballName;
 		        document.getElementById('ballArsenalForm').submit();
 		    }
+		 function setToLeft() {
+	          document.getElementById("type").value = "left";
+	        }
+		 function setToRight() {
+	          document.getElementById("type").value = "right";
+	        }
 		</script>
 	</body>
 </html>

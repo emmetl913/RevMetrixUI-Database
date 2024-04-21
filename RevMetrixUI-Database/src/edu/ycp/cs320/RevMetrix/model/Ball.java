@@ -7,11 +7,13 @@ public class Ball {
 	private int ballId;
 	private int accountId;
 	
-	/*
-	 * public Ball(String name) { this.name = name; }
-	 */
-	public Ball(int ballID, int accountId, float weight, String name, boolean rightHand, String brand, String color) {
-		this.ballId = ballID;
+	
+	 public Ball(String name) { 
+		 this.name = name; 
+		 }
+	 
+	public Ball(int accountId, float weight, String name, boolean rightHand, String brand, String color) {
+		//this.ballId = ballID;
 		this.accountId = accountId;
 		this.name = name;
 		this.rightHanded = rightHand;
@@ -19,6 +21,10 @@ public class Ball {
 		this.weight = weight;
 		this.brand = brand;
 	}
+	public Ball() {
+		// TODO Auto-generated constructor stub
+	}
+
 	public void setAccountId(int accId) {
 		accountId = accId;
 	}

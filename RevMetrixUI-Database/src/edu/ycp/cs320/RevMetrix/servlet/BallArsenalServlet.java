@@ -31,15 +31,15 @@ public class BallArsenalServlet extends HttpServlet {
 		
 		System.out.println("BallArsenal Servlet: doGet");	
 		
-		//BallArsenalController controller = new BallArsenalController();
+		BallArsenalController controller = new BallArsenalController();
 		// Get session creation time.
 		HttpSession session = req.getSession();
-	    long createTime = session.getCreationTime();
+	    //long createTime = session.getCreationTime();
 		   
 		// Get last access time of this Webpage.
-		long lastAccessTime = session.getLastAccessedTime();
-		String userIDKey = new String("userID");
-		String userID = new String("ABCD");
+		//long lastAccessTime = session.getLastAccessedTime();
+		//String userIDKey = new String("userID");
+		//String userID = new String("ABCD");
 
 		   // Check if this is new comer on your Webpage.
 		String ballArsenalKey = new String("ballArsenalKey");
@@ -47,21 +47,23 @@ public class BallArsenalServlet extends HttpServlet {
 
 		// If first visit: new session id
 		if (session.isNew() ){
-	      session.setAttribute(userIDKey, userID);
+			if(model == null) {
+				model = new BallArsenal();
+			}
 		  session.setAttribute(ballArsenalKey,  model);
 		} 
-		//Get model and userID from jsp
-		userID = (String)session.getAttribute(userIDKey);
-
-		//controller.setModel(model);
 		
 		if(model == null) {
 			model = new BallArsenal();
 			session.setAttribute(ballArsenalKey, model);
 		}
-		ArrayList<Ball> balls = model.getBalls();
-        balls = model.getBalls();
-        
+		controller.setModel(model);	
+		
+		ArrayList<Ball> balls;
+       // balls = model.getBalls();
+		Account currentAccount = (Account) session.getAttribute("currAccount");
+        balls = (ArrayList<Ball>) controller.getBallByAccountId(currentAccount.getAccountId());
+        controller.setBalls(balls);
 		// Set the ArrayList as a request attribute
 		req.setAttribute("balls", balls);
 		session.setAttribute(ballArsenalKey, model); //update session model
@@ -79,44 +81,73 @@ public class BallArsenalServlet extends HttpServlet {
 		
 		String errorMessage = null;
 
-		BallArsenal model = new BallArsenal();
+		
 		BallArsenalController controller = new BallArsenalController();
 				
 		// Get session creation time.
 				HttpSession session = req.getSession();
-			    long createTime = session.getCreationTime();
-				   
-				// Get last access time of this Webpage.
-				long lastAccessTime = session.getLastAccessedTime();
-				String userIDKey = new String("userID");
-				String userID = new String("ABCD");
-
 				String ballArsenalKey = new String("ballArsenalKey");
+				BallArsenal model = (BallArsenal)session.getAttribute(ballArsenalKey);
 
-				   // Check if this is new comer on your Webpage.
+				// If first visit: new session id
 				if (session.isNew() ){
-			      session.setAttribute(userIDKey, userID);
+					if(model == null) {
+						model = new BallArsenal();
+					}
 				  session.setAttribute(ballArsenalKey,  model);
 				} 
-				model = (BallArsenal)session.getAttribute(ballArsenalKey);
-				userID = (String)session.getAttribute(userIDKey);
 				
+				if(model == null) {
+					model = new BallArsenal();
+					session.setAttribute(ballArsenalKey, model);
+				}
+				controller.setModel(model);	
+				
+				ArrayList<Ball> balls;
+		       // balls = model.getBalls();
+				Account currentAccount = (Account) session.getAttribute("currAccount");
+				if(currentAccount == null) {
+					//If they have not signed in don't run the code after this by sending them to the login page
+					req.getRequestDispatcher("/_view/logIn.jsp").forward(req, resp);
+				}
+		        balls = (ArrayList<Ball>) controller.getBallByAccountId(currentAccount.getAccountId());
+//		        if(balls == null) {
+//					balls = new ArrayList<Ball>();
+//					balls.add(new Ball("FirstBall"));
+//				}
+		       
 				//end session shenanigans
-		Account acc =  (Account)session.getAttribute("currAccount");
-		session.setAttribute("currAccount", acc);
-		controller.setModel(model);
-        ArrayList<Ball> balls = model.getBalls(); //get ball ArrayList from session updated model
-		if(balls == null) {
-			balls = new ArrayList<Ball>();
-			balls.add(new Ball("FirstBall"));
-		}
+		
 		//on button press
 		String newBallName = req.getParameter("ballName");
+		String newBallBrand = req.getParameter("ballBrand");
+		String newBallWeight = req.getParameter("ballWeight");
+		String newBallColor = req.getParameter("ballColor");
+		String newBallLeftHand = req.getParameter("leftHand");
+		String newBallRightHand = req.getParameter("rightHand");
 		String removeBallName = req.getParameter("removeBallName");
+		boolean rightHanded = true;
 		
 		if (req.getParameter("addBall") != null ) {
-			//System.out.println(model.getBallAtIndex(0).getName());
-			controller.addBall(newBallName);
+		    float ballWeight = Float.parseFloat(newBallWeight);
+		    rightHanded = Boolean.parseBoolean(newBallRightHand);
+		    Integer did = 0;
+		    try {
+				if (req.getParameter("newType").equals("left")) {
+					rightHanded = false;
+					did++;
+				} else if (req.getParameter("newType").equals("right")) {
+					rightHanded = true;
+					did++;
+				} 
+		    }	
+		    catch(NullPointerException e) {
+		    	errorMessage = "Please select the ball's hand";
+		    }
+		    if(did != 0) {
+				controller.insertBallinDB(currentAccount.getAccountId(), 
+				ballWeight, newBallName, rightHanded, newBallBrand, newBallColor);
+			}
 		}
 		if(req.getParameter("removeBall") != null) {
 			//controller.removeBall(removeBallName);
@@ -129,21 +160,22 @@ public class BallArsenalServlet extends HttpServlet {
 			        }
 			    }
 		}
-		if (session.getAttribute("currentGame") != null ) {
-			Game g = (Game)session.getAttribute("currentGame");
-			System.out.println(g.getLane());
-		}
+//		if (session.getAttribute("currentGame") != null ) {
+//			Game g = (Game)session.getAttribute("currentGame");
+//			System.out.println(g.getLane());
+//		}
 		String selectedBall = req.getParameter("selectedBall");
 		
 		try {
+			//Setting the selected ball to the currentBall on the currentACcount
 			if (selectedBall !=  null)
 			{
 				String tempBallName = selectedBall;
 				Ball tempBall = new Ball(tempBallName);
 				System.out.println(tempBallName);
-				acc.setCurrentBall(tempBall);
+				currentAccount.setCurrentBall(tempBall);
 			}
-			System.out.println("Account Current Ball: " + acc.getCurrentBall().getName());
+			System.out.println("Account Current Ball: " + currentAccount.getCurrentBall().getName());
 		} catch(NullPointerException e)
 		{
 			System.out.println("you are dumb you should've figured this out by now dumbass");
@@ -151,7 +183,12 @@ public class BallArsenalServlet extends HttpServlet {
 		
 		
 		req.setAttribute("errorMessage", errorMessage);
+		 balls = (ArrayList<Ball>) controller.getBallByAccountId(currentAccount.getAccountId());
+	     controller.setBalls(balls);
 		req.setAttribute("balls", balls);
+		//Update the current ball to the session account
+		session.setAttribute("currAccount", currentAccount);
+		
 		session.setAttribute(ballArsenalKey, model); //update session model
 
 		req.getRequestDispatcher("/_view/ballArsenal.jsp").forward(req, resp);

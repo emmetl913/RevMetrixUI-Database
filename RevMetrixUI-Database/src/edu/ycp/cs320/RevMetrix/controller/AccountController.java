@@ -1,7 +1,7 @@
 package edu.ycp.cs320.RevMetrix.controller;
 import edu.ycp.cs320.RevMetrix.model.Account;
 
-import java.util.ArrayList;
+
 import java.util.List;
 
 import edu.ycp.cs320.RevMetrix.RevMetrixDB.db.persist.*;
@@ -73,7 +73,7 @@ public boolean insertAccountinDB(String email, String password, String username)
 	//Modifying the function to try and implement the database check.
 	public boolean getValidLogin(String enteredUsername, String enteredPassword) {
 		List<Account> accList = db.getAccountByUsernameAndPassword(enteredUsername, enteredPassword);
-		if(accList == null) {
+		if(accList == null || accList.isEmpty()) {
 			return false;
 		}
 		//if accList has values then the account must exist therefore the login is valid
