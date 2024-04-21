@@ -189,9 +189,10 @@ public class InitialData {
 				List<String> tuple = readShots.next();
 				if (tuple == null)
 				{
+					System.out.println("It broke!");
 					break;
 				}
-				
+				System.out.println(tuple);
 				Iterator<String> i = tuple.iterator();
 				
 				

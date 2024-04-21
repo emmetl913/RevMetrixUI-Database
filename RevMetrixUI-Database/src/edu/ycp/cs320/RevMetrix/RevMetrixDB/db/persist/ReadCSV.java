@@ -16,6 +16,7 @@ public class ReadCSV implements Closeable {
 		InputStream in = this.getClass().getClassLoader().getResourceAsStream("edu/ycp/cs320/RevMetrix/RevMetrixDB/db/persist/res/" + resourceName);
 		
 		if (in == null) {
+			System.out.println("Yep, this is the problem part 2");
 			throw new IOException("Couldn't open " + resourceName);
 		}
 		this.reader = new BufferedReader(new InputStreamReader(in));
@@ -24,6 +25,7 @@ public class ReadCSV implements Closeable {
 	public List<String> next() throws IOException {
 		String line = reader.readLine();
 		if (line == null) {
+			System.out.println("Yep, this is the problem");
 			return null;
 		}
 		List<String> tuple = new ArrayList<String>();
