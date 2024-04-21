@@ -13,6 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import edu.ycp.cs320.RevMetrix.controller.FrameController;
+import edu.ycp.cs320.RevMetrix.controller.GameController;
 import edu.ycp.cs320.RevMetrix.controller.ShotController;
 import edu.ycp.cs320.RevMetrix.model.Shot;
 import edu.ycp.cs320.RevMetrix.model.Frame;
@@ -156,11 +157,38 @@ public class ShotServlet extends HttpServlet {
 			session.setAttribute("frameNumber", frameNumber);
 		}
 		
+		Object firstShot = session.getAttribute("firstShotCount");
+		Object secondShot = session.getAttribute("secondShotCount");
+		
+		int firstShotCount = 0;
+		int secondShotCount = 0;
+		
 		if("previousFrameBtn".equals(action)) {
 			if(frameNumber != null && frameNumber > 1) {
 				frameNumber--;
+				
+				if(firstShot instanceof Integer) {
+					firstShotCount = (Integer) firstShot;
+				}else if(firstShot instanceof String) {
+					if(!((String) firstShot).isEmpty()) {
+						firstShotCount = Character.getNumericValue(((String) firstShot).charAt(0));
+					}
+				}
+				
+				if(secondShot instanceof Integer) {
+					secondShotCount = (Integer) secondShot;
+				}else if(secondShot instanceof String) {
+					if(!((String) secondShot).isEmpty()) {
+						firstShotCount = Character.getNumericValue(((String) secondShot).charAt(0));
+					}
+				}
+				
+				session.setAttribute("firstShotCount", firstShotCount);
+				session.setAttribute("secondShotScore", secondShotCount);
 			}
 		}
+		
+		GameController game = new GameController();
 		
 		//get ball name, shot type, and pins from form submission
 		//form submission = next Frame button
@@ -169,8 +197,8 @@ public class ShotServlet extends HttpServlet {
 		int pins = Integer.parseInt(req.getParameter("pins"));
 		
 		//get first and second shot from the user
-		String firstShotScore = req.getParameter("scoreBox1Shots");
-		String secondShotScore = req.getParameter("scoreBox2Shots");
+		String firstShotScore = req.getParameter("score-box1");
+		String secondShotScore = req.getParameter("score-box2");
 		
 //		String pinsParam = req.getParameter("pins");
 //		int pins = 0;
@@ -185,41 +213,22 @@ public class ShotServlet extends HttpServlet {
 		//create a new Shot object with submitted data
 		Shot shot = new Shot(ballName, shotType, pins);
 		
+		Frame frame = FrameController.findOrCreateFrame(frames, frameNumber);
+		frame.addShot(shot);
+		
 		//add shot object to session
 		session.setAttribute("shot", shot);
-		session.setAttribute("scoreBox1Shots", firstShotScore);
-		session.setAttribute("scoreBox2Shots", secondShotScore);
-		
-		//StringBuilder = modify contents of the string without creating a new String object
-		StringBuilder formattedShots1 = new StringBuilder();
-		StringBuilder formattedShots2 = new StringBuilder();
-		
-		int shotIndex = 0;
-		
-		for(Frame frame : frames) {
-			for(Shot frameShot : frame.getShots()) {
-				//append shot to the appropriate StringBuilder based on the shot index
-				if(shotIndex == 0) {
-					formattedShots1.append(frameShot.toString()).append(", ");
-				}else {
-					formattedShots2.append(frameShot.toString()).append(", ");
-				}
+		session.setAttribute("firstShotCount", firstShotScore);
+		session.setAttribute("secondShotScore", secondShotScore);
 				
-				//increment shotINdex
-				shotIndex = (shotIndex + 1) % 2;
-			}
-		}
-		
-		req.setAttribute("formattedShots1", formattedShots1.toString());
-		req.setAttribute("formattedShots2", formattedShots2.toString());
-		
-		Frame frame = frameController.findOrCreateFrame(frames, frameNumber);
-		frame.addShot(shot);
 		
 		//calculate the total score using the ShotController
 		ShotController controller = new ShotController();
 		int totalScore = controller.calculateScore(session);
 		session.setAttribute("totalScore", totalScore);
+		
+		game.updateFormattedShots(session, frames);
+		System.out.print("Formatted shots updated successfully.");
 		
 		req.getRequestDispatcher("/_view/shot.jsp").forward(req, resp);
 	}

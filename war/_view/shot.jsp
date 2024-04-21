@@ -331,15 +331,18 @@
     
                     <div class="row">
                         <div id="shot-count"></div>
-                        <div class="firstShot" id="score-box1" onclick="highlightSelectedScoreBox('score-box1')" style="background-color: lightslategray;">
-                            <c:forEach var="shot" items="${formattedShots1}">
+                        <div class="firstShot" id="score-box1" style="background-color: lightslategray;">
+                            <!-- <c:forEach var="shot" items="${formattedShots1}">
                                 ${shot}
-                            </c:forEach>
+                            </c:forEach> -->
+                            ${formattedShots1}
                         </div>
                         <div class="secondShot" id="score-box2" style="background-color: lightslategray;">
-                            <c:forEach var="shot" items="${formattedShots2}">
+                            <!-- <c:forEach var="shot" items="${formattedShots2}">
                                 ${shot}
-                            </c:forEach>
+                            </c:forEach> -->
+
+                            ${formattedShots2}
                         </div>
                     </div>
                 </div>
@@ -352,14 +355,8 @@
                 </div>
     
                 <div class="frame-buttons">
-                    <button id="previousFrameBtn" type="button">Previous Frame</button>
-                    <button id="nextFrameBtn" type="button">Next Frame</button>
-
-                    <!-- <c:if test="${outOfRange}">
-                        <div class="error-message">
-                            Frame number is out of range. Please select a frame between 1 and 10.
-                        </div>
-                    </c:if> -->
+                    <button id="previousFrameBtn" name="action" type="button">Previous Frame</button>
+                    <button id="nextFrameBtn" name="action" type="button">Next Frame</button>
                 </div>
 
                 <div id="error-message" style="color: red;"></div>
@@ -390,14 +387,23 @@
 
             initializeFrameShots();
 
+            let selectedScoreBoxId = null;
+
             function selectScoreBox(scoreBoxId){
                 console.log("selectedScoreBox function called");
                 console.log("scoreBoxId: ", scoreBoxId);
 
                 //remove 'selected' class from all score boxes
-                document.querySelectorAll('.score-box.selected').forEach(function(scoreBox){
-                    scoreBox.classList.remove('selected');
-                });
+                // document.querySelectorAll('.score-box.selected').forEach(function(scoreBox){
+                //     scoreBox.classList.remove('selected');
+                // });
+
+                if(selectedScoreBoxId !== null){
+                    const previousSelectedScoreBox = document.getElementById(selectedScoreBoxId);
+                    if(previousSelectedScoreBox){
+                        previousSelectedScoreBox.classList.remove('selected');
+                    }
+                }
 
                 //add 'selected' to the clicked score box
                 let clickedScoreBox = document.getElementById(scoreBoxId);
@@ -408,6 +414,7 @@
                     console.log("Adding 'selected' class to clicked score box: ", clickedScoreBox);
                     clickedScoreBox.classList.add('selected');
                     highlightSelectedScoreBox(clickedScoreBox);
+                    selectedScoreBoxId = scoreBoxId;
                 }
             }
 
@@ -435,6 +442,8 @@
                             firstScoreBox.classList.add('selected');
                             secondScoreBox.classList.remove('selected');
 
+                            highlightSelectedScoreBox("score-box1");
+
                             setFirstShot();
                             // togglePin(pin);
                             updateFirstShotDisplay();
@@ -446,6 +455,8 @@
                         if(!secondScoreBox.classList.contains('selected')){
                             secondScoreBox.classList.add('selected');
                             firstScoreBox.classList.remove('selected');
+
+                            highlightSelectedScoreBox("score-box2");
 
                             secondShotScore = 0;
 
@@ -547,57 +558,15 @@
                 }
 
                 // const pinsLeftStanding = calculateTotalPinsLeftStanding();
-                updateSelectedScoreBox(getSelectedScoreBoxId(), null, calculateTotalPinsLeftStanding());
-                highlightSelectedScoreBox(getSelectedScoreBoxId());
+                updateSelectedScoreBox(selectedScoreBox, null, calculateTotalPinsLeftStanding());
+                highlightSelectedScoreBox(selectedScoreBox);
 
-                const secondShotBox = document.getElementById("score-box2");
-
-                if(selectedScoreBox === "score-box2" && secondShotBox.classList.contains('selected')){
-                    secondScoreBoxClicked = true;
-                }
-
-                if(selectedScoreBox === "score-box2" && secondScoreBoxClicked){
-                    const pinsLeftAfterFirstShot = calculatePinsLeftStandingAfterFirstShot(firstShotCount);
+                if(selectedScoreBox === "score-box2" && isLeave){
+                    //const pinsLeftAfterFirstShot = calculatePinsLeftStandingAfterFirstShot(firstShotCount);
                     secondShotScore++;
                     updateSecondShotDisplay();
                 }
 
-                // if(selectedScoreBox === "score-box1"){
-                //     firstShotCount = pinsLeftStanding;
-                // }else if(selectedScoreBox === "score-box2"){
-                //     if(isLeave){
-                //         if(secondShotScore < (10-firstShotCount)){
-                //             secondShotScore++;
-                //         }
-                //     }else{
-                //         if(secondShotScore > 1){
-                //             secondShotScore--;
-                //         }
-                //     }
-
-                //     //stays within the range
-                //     // if(secondShotScore < 1){
-                //     //     secondShotScore = 1;
-                //     // }else if(secondShotScore > (10-firstShotCount)){
-                //     //     secondShotScore = 10 - firstShotCount;
-                //     // }
-
-                //     //update second shot display
-                    // const secondScoreBox = document.getElementById("score-box2");
-                    // secondScoreBox.textContent = secondShotScore;
-                // }
-
-                // const secondShotBox = document.getElementById("score-box2");
-                // if(secondShotBox.classList.contains("selected")){
-                //     secondShotBox.textContent = pinsLeftStanding;
-                // }
-
-                // updateSelectedScoreBox(getSelectedScoreBoxId(), null, calculateTotalPinsLeftStanding());
-                // highlightSelectedScoreBox(getSelectedScoreBoxId());
-
-                // if(secondShotBox.classList.contains("selected")){
-                //     highlightSelectedScoreBox("score-box2");
-                // }
             }
 
             //function to highlight the selected score box
@@ -605,56 +574,26 @@
                 console.log("highlightSelectedScoreBox function called");
                 console.log("Selected Score Box: ", scoreBox);
 
-                //removes highlight from all score boxes
-                document.querySelectorAll('.firstShot, .secondShot').forEach(box =>{
-                    box.style.backgroundColor = 'lightslategray';
-                });
-
                 const firstScoreBox = document.querySelector('.firstShot');
+                console.log("firstShot: ", firstScoreBox);
                 const secondScoreBox = document.querySelector('.secondShot');
+                console.log("secondShot: ", secondScoreBox);
 
                 if(scoreBox === firstScoreBox){
+                    console.log("score-box1 highlighted");
                     firstScoreBox.style.backgroundColor = 'orange';
                     firstScoreBox.classList.add('selected');
 
                     secondScoreBox.style.backgroundColor = 'lightslategray';
                     secondScoreBox.classList.remove('selected');
                 }else if(scoreBox === secondScoreBox){
+                    console.log("score-box2 highlighted");
                     secondScoreBox.style.backgroundColor = 'orange';
                     secondScoreBox.classList.add('selected');
 
                     firstScoreBox.style.backgroundColor = 'lightslategray';
                     firstScoreBox.classList.remove('selected');
                 }
-
-                // const leftmostBox = document.querySelector('.firstShot');
-                // if(leftmostBox){
-                //     leftmostBox.style.backgroundColor = 'orange';
-                //     leftmostBox.addEventListener('click', function () {
-                //         leftmostBox.style.backgroundColor = 'orange';
-                //         leftmostBox.classList.add('selected');
-
-                //         const secondBox = document.querySelector('.secondShot');
-                //         if(secondBox){
-                //             secondBox.style.backgroundColor = 'lightslategray';
-                //             secondBox.classList.remove('selected');
-                //         }
-                //     });
-                // }
-
-                // const secondBox = document.querySelector('.secondShot');
-                // if(secondBox){
-                //     secondBox.addEventListener('click', function() {
-                //         secondBox.style.backgroundColor = 'orange';
-                //         secondBox.classList.add('selected');
-
-                //         const firstBox = document.querySelector('.firstShot');
-                //         if(firstBox){
-                //             firstBox.style.backgroundColor = 'lightslategray';
-                //             firstBox.classList.remove('selected');
-                //         }
-                //     });
-                // }
             }
 
             function getSelectedScoreBoxId(){
@@ -783,7 +722,7 @@
 
             function getPreviousFrame(){
                 clearPins();
-                resetPinCounts();
+                //resetPinCounts();
 
                 if(frameNumber > 1){
                     restorePreviousFrame();
@@ -795,7 +734,7 @@
             function getNextFrame(){
                 // clearPins();
                 invertPinColors();
-                resetPinCounts();
+                // resetPinCounts();
 
                 if(frameNumber < 10){
                     frameNumber++;
@@ -902,15 +841,24 @@
                 if(frameShots[previousFrameIndex]){
                     const previousFrame = frameShots[previousFrameIndex];
 
-                    firstShotCount = previousFrame.firstShot;
-                    secondShotCount = previousFrame.secondShot;
+                    const restoredFirstShot = previousFrame.firstShot;
+                    const restoredSecondShot = previousFrame.secondShot;
 
                     console.log("First shot count: ", firstShotCount);
                     console.log("Second shot count: ", secondShotCount);
 
+                    if(restoredFirstShot !== null){
+                        firstShotCount = restoredFirstShot;
+                        updateFirstShotDisplay()
+                    }
 
-                    updateFirstShotDisplay();
-                    updateSecondShotDisplay();
+                    if(restoredSecondShot !== null){
+                        secondShotScore = restoredSecondShot;
+                        updateSecondShotDisplay();
+                    }
+
+                    // updateFirstShotDisplay();
+                    // updateSecondShotDisplay();
 
                     console.log("Previous frame restored successfully");
                     
@@ -922,7 +870,14 @@
             //function to update the first shot display
             function updateFirstShotDisplay(){
                 const firstShotBox = document.getElementById("score-box1");
-                firstShotBox.textContent = firstShotCount !== null ? firstShotCount : "";
+                // firstShotBox.textContent = firstShotCount !== null ? firstShotCount : "";
+
+                if(firstShotCount !== null){
+                    console.log("First shot restored: ", firstShotCount);
+                    firstShotBox.textContent = firstShotCount;
+                }else{
+                    firstShotBox.textContent = "N/A";
+                }
             }
 
             //function to update the second shot display
@@ -940,46 +895,7 @@
                     }
                 }
 
-                // const maxPinsSecondShot = 10 - firstShotCount;
-
-                // if(!secondShotBox){
-                //     return;
-                // }
-
-                // if(secondShotScore > maxPinsSecondShot){
-                //     console.log("Too may pins");
-                // }
-
-                // const secondShotScore = Math.min(maxPinsSecondShot, 1);
-
-                // const secondShotScore = calculateSecondShotScore();
-
                 secondShotBox.textContent = secondShotScore;
-            }
-
-            // let currentSecondShotScore = 1;
-
-            //function to calculate the second shot
-            function calculateSecondShotScore(){
-                // const pinsLeftStandingAfterFirstShot = 10 - firstShotCount;
-                // console.log("pins left standing after first shot: ", pinsLeftStandingAfterFirstShot);
-
-                // //strike
-                // // if(pinsLeftStandingAfterFirstShot === 10){
-                // //     setStrike();
-                // //     return;
-                // // }
-
-                // //no pins left standing - strike
-                // if(pinsLeftStandingAfterFirstShot === 0){
-                //     setStrike();
-                //     return;
-                // }
-
-                // return Math.min(0, 10-firstShotCount) + 1;
-
-                let secondShotScore = 1;
-                return secondShotScore;
             }
 
             function calculatePinsLeftStandingAfterFirstShot(firstShotCount){
