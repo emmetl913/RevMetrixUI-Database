@@ -34,9 +34,9 @@ public interface IDatabase {
 
 	// Shot Level Methods
 	public Integer insertNewEvent(int eventID, int estbID, String name, int time, String type, int standing);
-	public Integer insertNewSession(int sessionID, int eventID, String time, String oppType, String oppName, int score);
-	public Integer insertNewGame(int gameID, int sessionID, int currentLane, int gameNum, int score);
 	public Integer insertNewFrame(int gameID, int score, int frameNumber);
 	public Integer insertNewShotWithFrameID(int sessionID, int gameID, int frameID, int shotNumber, String count, int ballID, String pinsLeft);
+	public Integer insertNewEstablishment(int account_id, String name, String address);
+	public Integer removeEstablishment(int accID, String name);
 	
 }

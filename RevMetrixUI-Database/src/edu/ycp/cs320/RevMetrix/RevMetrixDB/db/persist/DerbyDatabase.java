@@ -88,6 +88,121 @@ public class DerbyDatabase implements IDatabase {
 		});
 	}
 	
+	public Integer insertNewEstablishment(int account_id, String name, String address) {
+		return executeTransaction(new Transaction<Integer>() {
+			@Override
+			public Integer execute(Connection conn) throws SQLException {
+				PreparedStatement stmt1 = null;
+				PreparedStatement stmt2 = null;
+				PreparedStatement stmt3 = null;	
+				
+				ResultSet resultSet1 = null;
+				ResultSet resultSet3 = null;
+				
+				
+				Integer esta_id = -1;
+
+				
+				// try to find ball_id in db
+				try
+				{
+					stmt1 = conn.prepareStatement(
+							"select esta_id from establishments"
+							+ " where name = ? and address = ? and account_id = ?"
+					);
+					
+					stmt1.setString(1, name);
+					stmt1.setString(2, address);
+					stmt1.setInt(3, account_id);
+					
+					resultSet1 = stmt1.executeQuery();
+					
+					if(resultSet1.next())
+					{
+						esta_id = resultSet1.getInt(1);
+
+						System.out.println("Establishment <"+ name +"> found with address <"+ address +"> and with acc_id: "+account_id + "and esta id: "+esta_id);
+					}
+					else 
+					{
+						System.out.println("Establishment <"+ name +"> with address <"+ address +"> was not found");
+					}
+					if(esta_id <= 0)
+					{
+						
+						stmt2 = conn.prepareStatement(
+								"insert into establishments (account_id, name, address)"
+								+ " values (?, ?, ?)"
+						);
+						//get current account_id
+						
+						
+						stmt2.setInt(1, account_id);	//				//ball id, accountid, weight, name, righthand, brand, color
+						stmt2.setString(2, name);
+						stmt2.setString(3, address);
+						stmt2.executeUpdate();
+						
+						// get the new ball_id
+						stmt3 = conn.prepareStatement(
+								"select esta_id from establishments"
+									+ " where name = ? and address = ? and account_id = ?"
+						);
+							
+						stmt3.setString(1, name);
+						stmt3.setString(2, address);
+						stmt3.setInt(3, account_id);
+						
+						resultSet3 = stmt3.executeQuery();
+						
+						if (resultSet3.next())
+						{
+							esta_id = resultSet3.getInt(1);
+
+							System.out.println("New Establishments inserted. Esta_id: "+ esta_id + 
+									" account_id: "+account_id+" Name: "+name+" Address: "+address);
+						}
+					}
+					return esta_id;
+				}
+				finally 
+				{
+					DBUtil.closeQuietly(resultSet1);
+					DBUtil.closeQuietly(stmt1);
+					DBUtil.closeQuietly(stmt2);					
+					DBUtil.closeQuietly(resultSet3);
+					DBUtil.closeQuietly(stmt3);					
+					
+				}
+			}
+		});
+	}
+	
+	public Integer removeEstablishment(int accID, String name) {
+		return executeTransaction(new Transaction<Integer>() {
+			@Override
+			public Integer execute(Connection conn) throws SQLException {
+				PreparedStatement stmt = null;
+				ResultSet resultSet = null;
+				
+				try {
+					stmt = conn.prepareStatement(
+							"delete from establishments where name = ? and account_id = ?"
+					);
+					stmt.setString(1, name);
+					stmt.setInt(2, accID);
+
+					stmt.execute();
+					
+					return 1;
+				} finally {
+					DBUtil.closeQuietly(resultSet);
+					DBUtil.closeQuietly(stmt);
+				}
+			}
+		});
+	}
+	
+	
 	@Override
 	public List<Shot> findAllShots() {
 //		return executeTransaction(new Transaction<List<Shot>>() {
@@ -682,8 +797,6 @@ public class DerbyDatabase implements IDatabase {
 				PreparedStatement stmt1 = null;
 				PreparedStatement stmt2 = null;
 				PreparedStatement stmt3 = null;	
-
-	
 				
 				ResultSet resultSet1 = null;
 				ResultSet resultSet3 = null;
@@ -944,7 +1057,7 @@ public class DerbyDatabase implements IDatabase {
 						+ " game_id integer,"
 						+ " session_id integer,"
 						+ " shot_number integer,"
-						+ " count varchar(1),"
+						+ " count varchar(10000),"
 						+ " ball_id integer,"
 						+ " pins_left varchar(10)"
 						+ ")"	
@@ -964,7 +1077,7 @@ public class DerbyDatabase implements IDatabase {
 					stmt7.executeUpdate();
 					tablesCreated += "Frames, ";
 					
-					stmt3 = conn.prepareStatement(
+					stmt6 = conn.prepareStatement(
 							"create table events ("+
 							" event_id integer primary key "+
 							" generated always as identity (start with 1, increment by 1), "+
@@ -975,10 +1088,10 @@ public class DerbyDatabase implements IDatabase {
 							" standing integer"+
 							")"
 					);
-					stmt3.executeUpdate();
+					stmt6.executeUpdate();
 					tablesCreated += "Events, ";
 					
-					stmt1 = conn.prepareStatement(
+					stmt5 = conn.prepareStatement(
 							"create table games (" +
 							"  game_id integer primary key " +
 							"    generated always as identity (start with 1, increment by 1), " +
@@ -988,10 +1101,10 @@ public class DerbyDatabase implements IDatabase {
 							"  score integer" +
 							")"
 					);
-					stmt1.executeUpdate();
+					stmt5.executeUpdate();
 					tablesCreated += "Games, ";
 					
-					stmt2 = conn.prepareStatement(
+					stmt4 = conn.prepareStatement(
 							"create table accounts (" +
 							"  account_id integer primary key " +
 							"    generated always as identity (start with 1, increment by 1), " +
@@ -1000,7 +1113,7 @@ public class DerbyDatabase implements IDatabase {
 							"  email varchar(70)" +
 							")"
 					);
- 					stmt2.executeUpdate();
+ 					stmt4.executeUpdate();
 										
  					tablesCreated += "Accounts, ";
 				
@@ -1019,7 +1132,7 @@ public class DerbyDatabase implements IDatabase {
 					
 					tablesCreated += "Sessions, ";
 					
-					stmt4 = conn.prepareStatement(
+					stmt2 = conn.prepareStatement(
 							"create table balls (" +
 							"  ball_id integer primary key " +
 							"  generated always as identity (start with 1, increment by 1), " +
@@ -1032,11 +1145,11 @@ public class DerbyDatabase implements IDatabase {
 							")"//weight, name, righthand, brand, color
 					);
 
-					stmt4.executeUpdate();
+					stmt2.executeUpdate();
 										
 					tablesCreated += "Balls, ";
 					
-					stmt5 = conn.prepareStatement(
+					stmt1 = conn.prepareStatement(
 							"create table establishments (" +
 							"  esta_id integer primary key " +
 							"  generated always as identity (start with 1, increment by 1), " +
@@ -1046,7 +1159,7 @@ public class DerbyDatabase implements IDatabase {
 							")"//EstaId, accountId, establishmentName, address
 					);
 
-					stmt5.executeUpdate();
+					stmt1.executeUpdate();
 										
 					tablesCreated += "Establishments, ";
 					System.out.println(tablesCreated);
@@ -1169,32 +1282,6 @@ public class DerbyDatabase implements IDatabase {
 						insertAccount.setString(3, account.getEmail());
 						insertAccount.addBatch();
 					}
-					insertAccount.executeBatch();
-					System.out.println("Account table populated");
-					
-//					insertNewAccountinDB("email@gmail.com", "password1", "username1");
-
-					
-//					List<Account> testList = new ArrayList<Account>();
-//					testList = getAccountByUsernameAndPassword("username1", "password1");
-//					Account temp = testList.get(0);
-//					System.out.println("Found account with id: "+temp.getAccountId()+" and username: "+temp.getUsername()
-//					+" and password: "+temp.getPassword()+" and email: "+temp.getEmail());
-//					
-					insertNewAccountinDB("email@gmail.com", "password1", "username1");
-					
-					
-					
-					 List<Account> testList = new ArrayList<Account>(); testList =
-					 getAccountByUsernameAndPassword("username1", "password1"); 
-					 Account temp = testList.get(0);
-					 System.out.println("Found account with id: "
-					 +temp.getAccountId()
-					 +" and username: "+temp.getUsername()
-					 +" and password: "+temp.getPassword()
-					 +" and email: "+temp.getEmail());
-					 
-					
 					insertAccount.executeBatch();
 					tablesPopulated += "Accounts, ";
 

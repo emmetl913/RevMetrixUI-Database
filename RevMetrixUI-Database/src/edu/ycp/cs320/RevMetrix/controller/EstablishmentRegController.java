@@ -21,6 +21,13 @@ public class EstablishmentRegController {
 		DatabaseProvider.setInstance(new DerbyDatabase());
 		db = DatabaseProvider.getInstance();		
 	}
+	
+	public Boolean removeEstablishment(int accID, String name) {
+		if(db.removeEstablishment(accID, name) == 1)
+			return true;
+		else
+			return false;
+	}
 
 	public List<Establishment> getAllEstablishmentsForAccount(int accountId) {
 	
@@ -35,26 +42,31 @@ public class EstablishmentRegController {
 		return estaList;
 	}
 	
+	public Integer insertNewEstablishment(int account_id, String name, String address) {
+		
+		// get the list of (Author, Book) pairs from DB
+		Integer newEsta = db.insertNewEstablishment(account_id, name, address);
+		
+		if (newEsta == null) {
+			System.out.println("Establishments for <" + name + "> dont exist");
+			return null;
+		}
+		// return Esta for this title
+			return newEsta;
+		}
+	
 	public void setModel(EstablishmentArray model) {
 		this.model = model;
 	}
 	
 	//adds a ball to the arsenal with the name and color
-	public void addEstablishment(String name, String address) {
-		Establishment establishment = new Establishment(0, 0, name, address);
+	public void addEstablishment(int acc, String name, String address) {
+		Establishment establishment = new Establishment(insertNewEstablishment(acc, name, address), acc, name, address);
 		model.addEstablishment(establishment);
 	}
 	
 	public void changeEstablishmentNameAtIndex(int index, String newName){
 		model.getEstablishmentAtIndex(index).setEstablishmentName(newName);
 	}
-	
-	//finds the ball that is to be removed, and removes it from the list
-	public void removeEstablishment(String name) {
-		for(Establishment establishment : model.getEstablishments()) {
-			if(establishment.getEstablishmentName().equals(name)) {
-				model.removeEstablishment(establishment);
-			}
-		}
-	}
+		
 }
