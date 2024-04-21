@@ -59,7 +59,7 @@ public class EventServlet extends HttpServlet {
 		ArrayList<Event> events = model.getEvents();
         if(model.getEvents() == null) {
         	events = new ArrayList<Event>();
-        	events.add(new Event("FirstName", "FirstType", 0, e1));
+        	events.add(new Event(1, 1, "", 1, "", 1));
 		}
         else {
         	events = model.getEvents();
@@ -114,7 +114,7 @@ public class EventServlet extends HttpServlet {
 		ArrayList<Event> events = model.getEvents();
         if(model.getEvents() == null) {
         	events = new ArrayList<Event>();
-        	events.add(new Event("FirstName", "FirstType", 0, e1));
+        	events.add(new Event(1, 1, "", 1, "", 1));
 		}
 		//on button press
 		String newEventName = req.getParameter("eventName");

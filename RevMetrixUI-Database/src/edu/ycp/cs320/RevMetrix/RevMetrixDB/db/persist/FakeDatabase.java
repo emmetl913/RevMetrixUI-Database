@@ -54,13 +54,20 @@ public class FakeDatabase implements IDatabase {
 	}
 
 	@Override
-	public List<Shot> findAllShots() {
+	public Integer insertNewFrame(int gameID, int score, int frameNumber) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public Integer insertNewFrame(int gameID, int score, int frameNumber) {
+	public List<Shot> findAllShotsWithSessionID(int sessionID) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Integer insertNewShotWithFrameID(int sessionID, int gameID, int frameID, int shotNumber, String count,
+			int ballID, String pinsLeft) {
 		// TODO Auto-generated method stub
 		return null;
 	}

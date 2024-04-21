@@ -113,7 +113,7 @@ public class ShotServlet extends HttpServlet {
 //			errorMessage = "Session does not contain a valid Shot object";
 //		}
 		
-		Frame frame = new Frame(1);
+		Frame frame = new Frame(1, 1, 1);
 		ShotController controller = new ShotController();
 		   
 		// Get last access time of this Webpage.
@@ -137,7 +137,7 @@ public class ShotServlet extends HttpServlet {
 		
 		//retreive or create a Frame object in the session
 		if(frames == null) {
-			frame = new Frame();
+			frame = new Frame(0, 0, 0);
 		}
 	    
 		//prevents null pointer exceptions
@@ -147,7 +147,7 @@ public class ShotServlet extends HttpServlet {
 	    
 	    String pinsParam = req.getParameter("pins");
 	    int pins = 0;
-	    Shot shot = new Shot();
+	    Shot shot = new Shot(0, 0, 0, 0, "", 0, "");
 	    
 	    if(pinsParam != null) {
 	    	pins = Integer.parseInt(pinsParam);

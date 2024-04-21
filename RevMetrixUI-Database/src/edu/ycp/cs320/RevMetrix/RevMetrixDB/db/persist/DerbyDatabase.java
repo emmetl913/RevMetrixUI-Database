@@ -42,24 +42,54 @@ public class DerbyDatabase implements IDatabase {
 	private static final int MAX_ATTEMPTS = 10;
 	
 	@Override
-	public List<Shot> findAllShots() {
-//		return executeTransaction(new Transaction<List<Shot>>() {
-//			@Override
-//			public List<Shot> execute(Connection conn) throws SQLException
-//			{
-//				PreparedStatement stmt1 = null;
-//				ResultSet resultSet1 = null;
-//				
-//				try
-//				{
-//					stmt1 = conn.prepareStatement(
-//							"select * "
-//					);
-//				}
-//			}
-//		});
-		return null;
+	public List<Shot> findAllShotsWithSessionID(int sessionID) {
+		return executeTransaction(new Transaction<List<Shot>>() {
+			@Override
+			public List<Shot> execute(Connection conn) throws SQLException
+			{
+				PreparedStatement stmt1 = null;
+				ResultSet resultSet1 = null;
+				
+				try
+				{
+					stmt1 = conn.prepareStatement(
+							"select * from shots where shots.session_id = ?"
+					);
+					stmt1.setInt(1, sessionID);
+					
+					List<Shot> result = new ArrayList<Shot>();
+					
+					resultSet1 = stmt1.executeQuery();
+					
+					boolean found = false;
+					while(resultSet1.next())
+					{
+						found = true;
+						Shot shot = new Shot(0,0,0,0, "", 0, "");
+						loadShot(shot, resultSet1, 1);
+						result.add(shot);
+					}
+					System.out.println("Found any shots?: "+ found);
+					return result;
+				} finally
+				{
+					DBUtil.closeQuietly(resultSet1);
+					DBUtil.closeQuietly(stmt1);
+				}
+			}
+		});
+
 	}
+	private void loadShot(Shot shot, ResultSet resultSet, int index) throws SQLException {
+		shot.setFrameID(resultSet.getInt(index++));
+		shot.setGameID(resultSet.getInt(index++));
+		shot.setSessionID(resultSet.getInt(index++));
+		shot.setShotNumber(resultSet.getInt(index++));
+		shot.setCount(resultSet.getString(index++));
+		shot.setBallID(resultSet.getInt(index++));
+		shot.setPinsLeft(resultSet.getString(index++));
+	}
+	
 	@Override
 	public List<Account> getAccountByUsernameAndPassword(String username, String password) {
 		return executeTransaction(new Transaction<List<Account>>() {
@@ -1068,6 +1098,15 @@ public class DerbyDatabase implements IDatabase {
 						insertShot.setString(7, shot.getPinsLeft());
 						insertShot.addBatch();
 					}
+					//insertNewShotWithFrameID(1, 1, 1, 1, "4", 6, "1234");
+					List<Shot> testShot = new ArrayList<Shot>();
+					int index = 1;
+					testShot = findAllShotsWithSessionID(index);
+					Shot shot = testShot.get(0);
+					System.out.println("Found shot with frameID: <"+shot.getFrameID()+"> "
+							+ "gameID: <"+shot.getGameID()+"> "
+									+ "sessionID: <"+shot.getSessionID()+"> :3");
+					
 					insertShot.executeBatch();
 					tablesPopulated += "Shots, ";
 					

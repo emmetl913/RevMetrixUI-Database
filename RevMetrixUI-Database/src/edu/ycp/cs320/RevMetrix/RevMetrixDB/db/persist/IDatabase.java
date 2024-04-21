@@ -21,7 +21,7 @@ public interface IDatabase {
 	
 	public List<Account> getAccountByUsernameAndPassword(String username, String password);
 	public List<Account> getAccountByUsername(String username);
-	public List<Shot> findAllShots();
+	public List<Shot> findAllShotsWithSessionID(int sessionID);
 	
 	// Shot Level Methods
 	List<Account> getAccountByEmail(String email);
