@@ -33,7 +33,7 @@ public class SessionServlet extends HttpServlet{
 		String userID = new String("ABCD");
 		
 		String sessionKey = new String("sessionKey");
-		Session model = new Session();
+		Session model = null;
 		
 		if (session.isNew() ) 
 		{
@@ -45,7 +45,7 @@ public class SessionServlet extends HttpServlet{
 		
 		if(model == null)
 		{
-			model = new Session();
+			model = new Session(0, 0, "", "", "", 0);
 			session.setAttribute(sessionKey, model);
 		}
 		
@@ -63,7 +63,7 @@ public class SessionServlet extends HttpServlet{
 		
 		String errorMessage = null;
 		
-		Session model = new Session();
+		Session model = null;
 		
 		HttpSession session = req.getSession();
 		long createTime = session.getCreationTime();

@@ -3,11 +3,22 @@ package edu.ycp.cs320.RevMetrix.model;
 import java.util.ArrayList;
 
 public class Session {
+	private int sessionID, eventID;
 	private String time, eName;
-	private String opp;
+	private String opp, oppType;
 	private int score;
 	private ArrayList<Game> games;
 	
+	
+	public Session(int sessionId, int eventID, String time, String oppType, String opp, int score)
+	{
+		this.sessionID = sessionId;
+		this.eventID = eventID;
+		this.time = time;
+		this.oppType = oppType;
+		this.opp = opp;
+		this.score = score;
+	}
 	// Getters
 	public String getTime()
 	{
@@ -21,10 +32,23 @@ public class Session {
 	{
 		return this.opp;
 	}
+	public String getOppType()
+	{
+		return this.oppType;
+	}
 	public int getScore()
 	{
 		return this.score;
 	}
+	public int getSessionID()
+	{
+		return this.sessionID;
+	}
+	public int getEventID()
+	{
+		return this.eventID;
+	}
+	
 	public Game getSpecificGame(int gameNum)
 	{
 		return this.games.get(gameNum);
@@ -48,10 +72,24 @@ public class Session {
 	{
 		this.opp = opp;
 	}
+	public void setOppType(String oppType)
+	{
+		this.oppType = oppType;
+	}
 	public void setScore(int score)
 	{
 		this.score = score;
 	}
+	public void setSessionID(int sessionID)
+	{
+		this.sessionID = sessionID;
+	}
+	public void setEventID(int eventID)
+	{
+		this.eventID = eventID;
+	}
+	
+	
 	public void addGame(Game game)
 	{
 		this.games.add(game);
