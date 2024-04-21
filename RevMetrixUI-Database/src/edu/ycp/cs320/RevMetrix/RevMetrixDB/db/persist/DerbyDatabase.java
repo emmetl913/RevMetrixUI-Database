@@ -357,12 +357,7 @@ public class DerbyDatabase implements IDatabase {
 		});
 	}
 	
-	private void loadAccount(Account account, ResultSet resultSet, int index) throws SQLException {
-		account.setAccountId(resultSet.getInt(index++));
-		account.setUsername(resultSet.getString(index++));
-		account.setPassword(resultSet.getString(index++));
-		account.setEmail(resultSet.getString(index++));
-	}
+
 	@Override
 	public List<Ball> getBallByName(String name) {
 		return executeTransaction(new Transaction<List<Ball>>() {
