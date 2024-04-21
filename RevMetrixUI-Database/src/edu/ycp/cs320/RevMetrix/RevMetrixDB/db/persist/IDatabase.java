@@ -31,6 +31,8 @@ public interface IDatabase {
 	public Integer insertNewSession(int sessionID, int eventID, String time, String oppType, String oppName, int score);
 	public List<Establishment> getEstablishmentsByAccount(int accID);
 	List<Account> getAccountByEmail(String email);
+	List<Ball> getBallsByAccountIdFromDB(int accountId);
+	List<Ball> getBallByName(String name);
 
 	// Shot Level Methods
 	public Integer insertNewEvent(int eventID, int estbID, String name, int time, String type, int standing);

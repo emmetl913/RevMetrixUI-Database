@@ -58,6 +58,10 @@ public class FakeDatabase implements IDatabase {
 	}
 
 	@Override
+	public List<Ball> getBallsByAccountIdFromDB(int accountId) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 	public List<Shot> findAllShots() {
 		// TODO Auto-generated method stub
 		return null;
@@ -65,6 +69,19 @@ public class FakeDatabase implements IDatabase {
 
 	@Override
 	public Integer insertNewFrame(int gameID, int score, int frameNumber) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public List<Ball> getBallByName(String name) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Integer insertNewShotWithFrameID(int sessionID, int gameID, int frameID, int shotNumber, String count,
+			int ballID, String pinsLeft) {
 		// TODO Auto-generated method stub
 		return null;
 	}

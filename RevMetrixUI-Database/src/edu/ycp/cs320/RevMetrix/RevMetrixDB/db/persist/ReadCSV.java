@@ -31,7 +31,9 @@ public class ReadCSV implements Closeable {
 		while (tok.hasMoreTokens()) {
 			tuple.add(tok.nextToken().trim());
 		}
+		//System.out.println(tuple);
 		return tuple;
+		
 	}
 
 	public void close() throws IOException {

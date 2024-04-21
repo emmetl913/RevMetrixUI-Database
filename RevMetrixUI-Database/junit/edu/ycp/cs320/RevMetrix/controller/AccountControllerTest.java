@@ -2,10 +2,12 @@ package edu.ycp.cs320.RevMetrix.controller;
 
 import static org.junit.Assert.assertTrue;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.junit.Before;
 import org.junit.Test;
 
-import edu.ycp.cs320.RevMetrix.controller.AccountController;
 import edu.ycp.cs320.RevMetrix.model.Account;
 
 public class AccountControllerTest {
@@ -38,5 +40,10 @@ public class AccountControllerTest {
 		boolean testSuccess = controller.getValidLogin("Kevin","Kevin1");
 		assertTrue(testSuccess == true);
 	}
-	
+	@Test
+	public void testInsertAccount() {
+		controller.insertAccountinDB("BrandonEmail", "password", "username");
+		List<Account> accountList = controller.getAccountByEmail("BrandonEmail");
+		assertTrue(accountList.get(0).getEmail().equals("BrandonEmail"));
+	}
 }
