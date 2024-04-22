@@ -10,7 +10,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import edu.ycp.cs320.RevMetrix.controller.GameController;
+import edu.ycp.cs320.RevMetrix.controller.GameControllerReal;
 import edu.ycp.cs320.RevMetrix.model.Account;
 import edu.ycp.cs320.RevMetrix.model.Game;
 
@@ -34,10 +34,11 @@ public class GameServlet extends HttpServlet {
 	  
 		Account acc = (Account) session.getAttribute("currAccount");
 		System.out.print(acc.getAccountId());
-		GameController controller = new GameController();
+		GameControllerReal controller = new GameControllerReal();
 		
+		List<Game> games = new ArrayList<Game>();
+		games = controller.getGames();
 		
-
 		for(Game game : games)
 		{
 			System.out.println(game.getGameID());
@@ -62,7 +63,7 @@ public class GameServlet extends HttpServlet {
 		Account acc = (Account) session.getAttribute("currAccount");
 		System.out.print(acc.getAccountId());
 		Game model = new Game(0,0,0,0,0);
-		GameController controller = new GameController();
+		GameControllerReal controller = new GameControllerReal();
 		controller.setModel(model);
 		
 		List<Game> games = controller.getGames();
@@ -77,7 +78,7 @@ public class GameServlet extends HttpServlet {
 		   // Check if this is new comer on your Webpage.
 		
 		String gamesListKey = new String("gamesListKey");
-		ArrayList<Game> games = (ArrayList<Game>)session.getAttribute(gamesListKey);
+	//	ArrayList<Game> games = (ArrayList<Game>)session.getAttribute(gamesListKey);
 		
 		// If first visit: new session id
 		if (session.isNew() ){
@@ -97,7 +98,7 @@ public class GameServlet extends HttpServlet {
 			session.setAttribute(gamesListKey, games);
 		}
 		//Get model and userID from jsp
-		userID = (String)session.getAttribute(userIDKey);
+		
 		games = (ArrayList<Game>)session.getAttribute(gamesListKey);
 		//controller.setModel(model);
 //		if(games != null) {
@@ -158,7 +159,7 @@ public class GameServlet extends HttpServlet {
         req.setAttribute("gameObjArr", games);
 		session.setAttribute(gamesListKey, games);
 		session.setAttribute("currentGame", currentGame);
-		Account acc = (Account)session.getAttribute("currAccount");
+		//Account acc = (Account)session.getAttribute("currAccount");
 		acc.setCurrentGame((Game)session.getAttribute("currentGame"));
 		session.setAttribute("currAccount", acc);
 
