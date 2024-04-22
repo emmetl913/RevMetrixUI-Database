@@ -15,8 +15,8 @@ public class ShotController {
 		shots = new ArrayList<Shot>();
 	}
 
-	public Shot createShot(int sessionID, int gameID, int frameID, int shotNumber, String count, int ballID, String pinsLeft) {
-		Shot shot = new Shot(1, 1, 1, 1, "", 1, "");
+	public Shot createShot(String type, int pins) {
+		Shot shot = new Shot();
 		shots.add(shot);
 		return shot;
 	}
@@ -28,7 +28,7 @@ public class ShotController {
 	public int getTotalPins() {
 		int totalPins = 0;
 		for (Shot shot : shots) {
-			totalPins += shot.getPins();
+			totalPins += shot.getKnockedOver();
 		}
 		return totalPins;
 	}
@@ -39,21 +39,41 @@ public class ShotController {
 	    int totalScore = 0;
 	    
 	    if(frameNumber != null) {
-	    	//retrieve all shots from the user's session
-	    	for(int i=1; i<frameNumber; i++) {
-	    		Shot shot = (Shot) session.getAttribute("shot" + i);
-	    		if(shot != null) {
-	    			shots.add(shot);
-	    		}
-	    	}
-	    	
-	    	for(Shot shot : shots) {
-	    		//process shot type
-//	    		totalScore += processShotType(shot.getType());
-	    		
-	    		//add knocked over pins
-	    		totalScore += shot.getPins();
-	    	}
+	    	// Retrieve all the shots for the user from the session
+		    for (int i = 1; i < frameNumber; i++) {
+		        Shot shot = (Shot) session.getAttribute("shot" + i);
+		        if(shot != null) {
+		        	shots.add(shot);
+		        }
+		    }
+
+		    for (Shot shot : shots) {
+		        // Implement your calculation logic here based on the shot type, knocked pins, etc.
+		        // This is just an example
+		        if (shot.getType().equals("strike")) {
+		            totalScore += 10;
+		            if(shots.size() > shots.indexOf(shot)+1) {
+		            	Shot nextShot = shots.get(shots.indexOf(shot)+1);
+		            	if(nextShot != null) {
+		            		totalScore += nextShot.getKnockedOver();
+		            		if(!nextShot.getType().equals("strike") && shots.size() > shots.indexOf(shot)+2) {
+		            			Shot secondNextShot = shots.get(shots.indexOf(shot)+2);
+		            			if(secondNextShot != null) {
+		            				totalScore += secondNextShot.getKnockedOver();
+		            			}
+		            		}
+		            	}
+		            }
+		        } else {
+		            totalScore += shot.getKnockedOver();
+		            if(shots.size() > shots.indexOf(shot)+1) {
+		            	Shot nextShot = shots.get(shots.indexOf(shot)+1);
+		            	if(nextShot != null) {
+		            		totalScore += nextShot.getKnockedOver();
+		            	}
+		            }
+		        }
+		    }
 	    }
 
 	    return totalScore;
@@ -61,28 +81,6 @@ public class ShotController {
 
 	public void reset() {
 		shots.clear();
-	}
-	
-	public boolean isShotType(String value) {
-		return value.equals("X") || value.equals("/") || value.equals("-") || value.equals("F");
-	}
-	
-	public int processShotType(String type) {
-		if(isShotType(type)) {
-			//strike
-			if(type.equals("X")) {
-				return 10;
-			//spare
-			}else if(type.equals("/")) {
-				return 10;
-			//gutter or foul
-			}else {
-				return 0;
-			}
-		}else {
-			//not a shot type
-			return 0;
-		}
 	}
 
 }

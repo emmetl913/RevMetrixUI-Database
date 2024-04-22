@@ -1,7 +1,6 @@
 package edu.ycp.cs320.RevMetrix.model;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class Frame{
 	private int gameID, score, frameNumber;

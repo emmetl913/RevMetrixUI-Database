@@ -21,8 +21,4 @@ public class ShotControllerTest{
 		controller = new ShotController();
 	}
 
-	@Test
-	public void createShot() {
-		
-	}
 }
