@@ -72,7 +72,7 @@ public class StartBowlingServlet extends HttpServlet {
 		ArrayList<Event> events = model.getEvents();
         if(model.getEvents() == null) {
         	events = new ArrayList<Event>();
-        	events.add(new Event(0, 0, "", 0, "", 0));
+        	events.add(new Event(0, 0, 1, "", 0, "", 0));
 		}
         else {
         	events = model.getEvents();

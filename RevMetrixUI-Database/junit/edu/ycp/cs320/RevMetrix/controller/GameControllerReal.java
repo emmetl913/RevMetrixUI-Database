@@ -1,5 +1,6 @@
 package edu.ycp.cs320.RevMetrix.controller;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import edu.ycp.cs320.RevMetrix.RevMetrixDB.db.persist.DatabaseProvider;
@@ -7,12 +8,12 @@ import edu.ycp.cs320.RevMetrix.RevMetrixDB.db.persist.DerbyDatabase;
 import edu.ycp.cs320.RevMetrix.RevMetrixDB.db.persist.IDatabase;
 import edu.ycp.cs320.RevMetrix.model.Game;
 
-public class GameController {
+public class GameControllerReal {
 	private List<Game> games;
 	private Game model;
 	private IDatabase db = null;
 	
-	public GameController()
+	public GameControllerReal()
 	{
 		DatabaseProvider.setInstance(new DerbyDatabase());
 		db = DatabaseProvider.getInstance();
@@ -29,10 +30,12 @@ public class GameController {
 	{
 		return this.games.get(index);
 	}
-	public List<Game> getGames()
-	{
-		return this.games;
-	}
+	
+//	public List<Game> getGames()
+//	{
+//		return this.games;
+//	}
+	
 	public int getNumberOfGames()
 	{
 		return games.size();
@@ -68,5 +71,7 @@ public class GameController {
 			return newGame;
 		}
 	}
-	
+	public List<Game> getGames() {
+		return this.games;
+	}
 }
