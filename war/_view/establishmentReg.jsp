@@ -6,7 +6,7 @@
 <%@ page import = "java.io.*,java.util.*"%>
 <%@ page import="javax.servlet.http.HttpSession" %>
 <%
-	EstablishmentArray model = (EstablishmentArray) session.getAttribute("establishmentRegKey");
+	EstablishmentArray model = (EstablishmentArray) request.getAttribute("estaArray");
 	ArrayList<Establishment> establishments = (model != null) ? model.getEstablishments() : null;
 %>
 

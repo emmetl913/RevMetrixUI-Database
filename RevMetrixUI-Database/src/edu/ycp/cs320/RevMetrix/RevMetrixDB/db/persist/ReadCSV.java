@@ -11,7 +11,7 @@ import java.util.StringTokenizer;
 
 public class ReadCSV implements Closeable {
 	private BufferedReader reader;
-	
+
 	public ReadCSV(String resourceName) throws IOException {
 		InputStream in = this.getClass().getClassLoader().getResourceAsStream("edu/ycp/cs320/RevMetrix/RevMetrixDB/db/persist/res/" + resourceName);
 		
@@ -21,7 +21,7 @@ public class ReadCSV implements Closeable {
 		}
 		this.reader = new BufferedReader(new InputStreamReader(in));
 	}
-	
+
 	public List<String> next() throws IOException {
 		String line = reader.readLine();
 		if (line == null) {
@@ -37,7 +37,7 @@ public class ReadCSV implements Closeable {
 		return tuple;
 		
 	}
-	
+
 	public void close() throws IOException {
 		reader.close();
 	}

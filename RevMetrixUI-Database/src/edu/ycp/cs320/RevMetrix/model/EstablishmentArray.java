@@ -1,18 +1,16 @@
 package edu.ycp.cs320.RevMetrix.model;
 
 import java.util.ArrayList;
+import edu.ycp.cs320.RevMetrix.controller.EstablishmentRegController;
 
 public class EstablishmentArray {
 	private ArrayList<Establishment> establishment;
+	private EstablishmentRegController controller;
 	
-	public EstablishmentArray() {
-		establishment = new ArrayList<>();
+	public EstablishmentArray(int acc) {
+		controller = new EstablishmentRegController();
+		establishment = (ArrayList<Establishment>) controller.getAllEstablishmentsForAccount(acc);
 
-		Establishment e1 = new Establishment(0, 0, "Colony Park Lanes & Games", "1900 Pennsylvania Ave, York, PA 17404");
-		Establishment e2 = new Establishment(0, 0, "Suburban Bowlerama", "1945 S Queen St, York, PA 17403");
-
-		establishment.add(e1);
-		establishment.add(e2);
 	}
 	
 	public void addEstablishment(Establishment establishment) {
