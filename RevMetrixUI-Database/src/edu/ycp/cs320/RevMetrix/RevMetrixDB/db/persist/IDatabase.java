@@ -6,6 +6,9 @@ import edu.ycp.cs320.RevMetrix.model.Establishment;
 import edu.ycp.cs320.RevMetrix.model.Event;
 import edu.ycp.cs320.RevMetrix.model.Game;
 import edu.ycp.cs320.RevMetrix.model.Session;
+import edu.ycp.cs320.RevMetrix.model.Game;
+import edu.ycp.cs320.RevMetrix.model.Session;
+import edu.ycp.cs320.RevMetrix.model.Event;
 
 import java.util.List;
 

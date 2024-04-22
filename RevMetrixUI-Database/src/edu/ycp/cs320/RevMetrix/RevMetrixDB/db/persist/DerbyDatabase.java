@@ -1529,7 +1529,6 @@ public class DerbyDatabase implements IDatabase {
 						insertShot.setString(7, shot.getPinsLeft());
 						insertShot.addBatch();
 					}
-					//insertNewShotWithFrameID(1, 1, 1, 1, "4", 6, "1234");
 					
 					insertShot.executeBatch();
 					tablesPopulated += "Shots, ";
