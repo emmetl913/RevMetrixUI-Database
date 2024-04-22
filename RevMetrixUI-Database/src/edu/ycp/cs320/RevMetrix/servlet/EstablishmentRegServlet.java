@@ -36,7 +36,6 @@ public class EstablishmentRegServlet extends HttpServlet {
 	    
 	    
 		Account acc = (Account) session.getAttribute("currAccount");
-		System.out.print(acc.getAccountId());
 		EstablishmentArray model = new EstablishmentArray(acc.getAccountId());
 		EstablishmentRegController controller = new EstablishmentRegController();
 		controller.setModel(model);

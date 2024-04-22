@@ -64,7 +64,7 @@ public class BallArsenalController {
 		// insert new book (and possibly new author) into DB
 		Integer ball_id = db.insertNewBallInDB(account_id, weight, name, righthand, brand, color);
 		//check if the insertion succeeded
-		if (account_id > 0){
+		if (ball_id > 0){
 			System.out.println("New ball (Ball ID: " + ball_id + ", Ball Name: "+name+") successfully added to balls table");
 			return true;
 		}

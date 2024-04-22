@@ -40,7 +40,54 @@ public class DerbyDatabase implements IDatabase {
 	}
 
 	private static final int MAX_ATTEMPTS = 10;	
-	
+	@Override
+	public List<Game> getGameBySessionID(int sessionID)
+	{
+		return executeTransaction(new Transaction<List<Game>>() {
+			@Override
+			public List<Game> execute(Connection conn) throws SQLException 
+			{
+				PreparedStatement stmt = null;
+				ResultSet resultSet = null;
+				
+				try 
+				{
+					stmt = conn.prepareStatement(
+						" select * from games where session_id = ?"	
+					);
+					stmt.setInt(1, sessionID);
+					
+					List<Game> result = new ArrayList<Game>();
+					Boolean found = false;
+					
+					while(resultSet.next())
+					{
+						found = true;
+						
+						Game game = new Game(0, 0, 0, 0, 0);
+						loadGame(game, resultSet, 1);
+						result.add(game);
+					}
+					if (!found) {
+						System.out.println("No Games were found in the database");
+					}
+					return result;
+				} finally
+				{
+					DBUtil.closeQuietly(stmt);
+					DBUtil.closeQuietly(resultSet);
+				}
+			}
+		});
+		
+	}
+	private void loadGame(Game game, ResultSet resultSet, int index) throws SQLException {
+		game.setGameID(resultSet.getInt(index++));
+		game.setSessionID(resultSet.getInt(index++));
+		game.setLane(resultSet.getInt(index++));
+		game.setGameNumber(resultSet.getInt(index++));
+		game.setScore(resultSet.getInt(index++));
+	}
 	@Override
 	public List<Establishment> getEstablishmentsByAccount(int accID) {
 		return executeTransaction(new Transaction<List<Establishment>>() {
@@ -77,6 +124,50 @@ public class DerbyDatabase implements IDatabase {
 					// check if any authors were found
 					if (!found) {
 						System.out.println("No Establishment were found in the database");
+					}
+					
+					return result;
+				} finally {
+					DBUtil.closeQuietly(resultSet);
+					DBUtil.closeQuietly(stmt);
+				}
+			}
+		});
+	}
+	
+	@Override
+	public List<Event> getEventsByAccount(int accID) {
+		return executeTransaction(new Transaction<List<Event>>() {
+			@Override
+			public List<Event> execute(Connection conn) throws SQLException {
+				PreparedStatement stmt = null;
+				ResultSet resultSet = null;
+				
+				try {
+					stmt = conn.prepareStatement(
+							"select * from events "+
+							"where acc_id = ?"
+					);
+					stmt.setInt(1, accID);
+					
+					List<Event> result = new ArrayList<Event>();
+					resultSet = stmt.executeQuery();
+					
+					// for testing that a result was returned
+					Boolean found = false;
+					
+					while (resultSet.next()) {
+						found = true;
+						
+						Event event = new Event();
+						loadEvent(event, resultSet, 1);
+						
+						result.add(event);
+					}
+					
+					// check if any authors were found
+					if (!found) {
+						System.out.println("No Events were found in the database");
 					}
 					
 					return result;
@@ -688,6 +779,59 @@ public class DerbyDatabase implements IDatabase {
 		});
 	}
 	@Override
+	public List<Session> getSessionByEventID(int eventID) {
+		return executeTransaction(new Transaction<List<Session>>() {
+			@Override
+			public List<Session> execute(Connection conn) throws SQLException
+			{
+			PreparedStatement stmt1 = null;	
+			ResultSet resultSet1 = null;
+				
+				try
+				{
+					stmt1 = conn.prepareStatement(
+							"select * from sessions"+
+							" where sessions.event_id = ?"
+					);
+					
+					stmt1.setInt(1, eventID);
+					
+					List<Session> result = new ArrayList<Session>();
+					
+					resultSet1 = stmt1.executeQuery();
+					
+					Boolean found = false;
+				
+					while(resultSet1.next())
+					{
+						found = true;
+						Session session = new Session(0, 0, "", "", "", 0);
+						loadSession(session, resultSet1, 1);
+						//System.out.println("SKREET" + ball.getName());
+						result.add(session);
+					}
+					
+					return result;
+				} 
+				finally
+				{
+					DBUtil.closeQuietly(stmt1);
+					DBUtil.closeQuietly(resultSet1);
+				}
+		
+			}
+		});
+	}
+	private void loadSession(Session session, ResultSet resultSet, int index) throws SQLException {
+		//Proper order: ball id, accountid, weight, name, righthand, brand, color
+		session.setSessionID(resultSet.getInt(index++));
+		session.setEventID(resultSet.getInt(index++));
+		session.setTime(resultSet.getString(index++));
+		session.setOppType(resultSet.getString(index++));
+		session.setName(resultSet.getString(index++));
+		session.setScore(resultSet.getInt(index++));
+	}
+	@Override
 	public Integer insertNewFrame(int gameID, int score, int frameNumber) {
 		return executeTransaction(new Transaction<Integer>() {
 			@Override
@@ -849,8 +993,9 @@ public class DerbyDatabase implements IDatabase {
 			}
 		});
 	}
+	
 	@Override
-	public Integer insertNewEvent(int eventID, int estbID, String name, int time, String type, int standing) {
+	public Integer insertNewEvent(int accID, int estbID, String name, int time, String type, int standing) {
 		return executeTransaction(new Transaction<Integer>() {
 			@Override
 			public Integer execute(Connection conn) throws SQLException {
@@ -869,45 +1014,50 @@ public class DerbyDatabase implements IDatabase {
 				{
 					stmt1 = conn.prepareStatement(
 							"select event_id from events"
-							+ " where estb_id = ? "
+							+ " where acc_id = ? and name = ? and time = ?"
 					);
 					
-					stmt1.setInt(1, estbID);
+					stmt1.setInt(1, accID);
+					stmt1.setString(2, name);
+					stmt1.setInt(3, time);
 					
 					resultSet1 = stmt1.executeQuery();
 					
 					if(resultSet1.next())
 					{
 						event_id = resultSet1.getInt(1);
-						System.out.println("Event <"+ eventID +"> found with estbID <"+ estbID +">");
+						System.out.println("Event <"+ name +"> found with estbID <"+ estbID +">");
 					}
 					else 
 					{
-						System.out.println("Event <"+ eventID +"> was not found");
+						System.out.println("Event <"+ name +"> was not found");
 					}
 					if(event_id <= 0)
 					{
 						stmt2 = conn.prepareStatement(
-								"insert into events (estb_id, name, time, type, standing) "
-								+ " values(?, ?, ?, ?, ?)"
+								"insert into events (acc_id, estb_id, name, time, type, standing) "
+								+ " values(?, ?, ?, ?, ?, ?)"
 						);
-						stmt2.setInt(1, estbID);
-						stmt2.setString(2, name);
-						stmt2.setInt(3, time);
-						stmt2.setString(4, type);
-						stmt2.setInt(5, standing);
+						stmt2.setInt(1, accID);
+						stmt2.setInt(2, estbID);
+						stmt2.setString(3, name);
+						stmt2.setInt(4, time);
+						stmt2.setString(5, type);
+						stmt2.setInt(6, standing);
 						
 						stmt2.executeUpdate();
 						
-						System.out.println("New event <"+name+"> , <"+time+"> , <"+type+">, <"+standing+"> inserted into games");
+						System.out.println("New event <"+name+"> , <"+time+"> , <"+type+">, <"+standing+"> inserted into event");
 						
 						// get the new account_id
 						stmt3 = conn.prepareStatement(
-								"select * from events "
-								+ " where event_id = ? and estb_id = ?"
+								"select event_id from events"
+							+ " where acc_id = ? and name = ? and time = ?"
 						);
-						stmt3.setInt(1, eventID);
-						stmt3.setInt(2, estbID);
+								
+						stmt3.setInt(1, accID);
+						stmt3.setString(2, name);
+						stmt3.setInt(3, time);
 						
 						resultSet3 = stmt3.executeQuery();
 						
@@ -1164,6 +1314,18 @@ public class DerbyDatabase implements IDatabase {
 		establishment.setEstablishmentName(resultSet.getString(index++));
 		establishment.setAddress(resultSet.getString(index++));
 	}
+	
+	private void loadEvent(Event event, ResultSet resultSet, int index) throws SQLException {
+		//event_id, acc_id, estb_id, name, time,type, standing
+		event.setEventID(resultSet.getInt(index++));
+		event.setAccount(resultSet.getInt(index++));
+		event.setEstbID(resultSet.getInt(index++));
+		event.setName(resultSet.getString(index++));
+		event.setTime(resultSet.getInt(index++));
+		event.setType(resultSet.getString(index++));
+		event.setStanding(resultSet.getInt(index++));
+
+	}
 
 	private void loadAccount(Account account, ResultSet resultSet, int index) throws SQLException {
 		account.setAccountId(resultSet.getInt(index++));
@@ -1224,6 +1386,7 @@ public class DerbyDatabase implements IDatabase {
 							"create table events ("+
 							" event_id integer primary key "+
 							" generated always as identity (start with 1, increment by 1), "+
+							" acc_id integer," +
 							" estb_id integer,"+
 							" name varchar(40),"+
 							" time integer,"+
@@ -1391,13 +1554,6 @@ public class DerbyDatabase implements IDatabase {
 						insertShot.addBatch();
 					}
 					//insertNewShotWithFrameID(1, 1, 1, 1, "4", 6, "1234");
-					List<Shot> testShot = new ArrayList<Shot>();
-					int index = 1;
-					testShot = findAllShotsWithSessionID(index);
-					Shot shot = testShot.get(0);
-					System.out.println("Found shot with frameID: <"+shot.getFrameID()+"> "
-							+ "gameID: <"+shot.getGameID()+"> "
-									+ "sessionID: <"+shot.getSessionID()+"> :3");
 					
 					insertShot.executeBatch();
 					tablesPopulated += "Shots, ";
@@ -1413,14 +1569,15 @@ public class DerbyDatabase implements IDatabase {
 					insertFrame.executeBatch();
 					tablesPopulated += "Frames, ";
 					
-					insertEvent = conn.prepareStatement("insert into events (estb_id, name, time, type, standing) values (?, ?, ?, ?, ?)");
+					insertEvent = conn.prepareStatement("insert into events (acc_id, estb_id, name, time, type, standing) values (?,?, ?, ?, ?, ?)");
 					for(Event event : eventList)
 					{
-						insertEvent.setInt(1, event.getEstbID());
-						insertEvent.setString(2, event.getEventName());
-						insertEvent.setInt(3, event.getTime());
-						insertEvent.setString(4, event.getType());
-						insertEvent.setInt(5, event.getStanding());
+						insertEvent.setInt(1, event.getAccount());
+						insertEvent.setInt(2, event.getEstbID());
+						insertEvent.setString(3, event.getEventName());
+						insertEvent.setInt(4, event.getTime());
+						insertEvent.setString(5, event.getType());
+						insertEvent.setInt(6, event.getStanding());
 						insertEvent.addBatch();
 					}
 					insertEvent.executeBatch();
@@ -1560,5 +1717,6 @@ public class DerbyDatabase implements IDatabase {
 		// TODO Auto-generated method stub
 		return null;
 	}
+	
 	
 }
