@@ -49,7 +49,7 @@ public class EventServlet extends HttpServlet {
         else {
         	events = model.getEvents();
         }
-        EstablishmentArray estaModel = new EstablishmentArray();
+        EstablishmentArray estaModel = new EstablishmentArray(acc.getAccountId());
 		EstablishmentRegController estaController = new EstablishmentRegController();
 		estaController.setModel(estaModel);
 		

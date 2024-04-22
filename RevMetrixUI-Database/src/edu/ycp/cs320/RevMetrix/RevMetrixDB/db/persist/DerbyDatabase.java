@@ -1453,14 +1453,6 @@ public class DerbyDatabase implements IDatabase {
 						insertShot.setString(7, shot.getPinsLeft());
 						insertShot.addBatch();
 					}
-					//insertNewShotWithFrameID(1, 1, 1, 1, "4", 6, "1234");
-					List<Shot> testShot = new ArrayList<Shot>();
-					int index = 1;
-					testShot = findAllShotsWithSessionID(index);
-					Shot shot = testShot.get(0);
-					System.out.println("Found shot with frameID: <"+shot.getFrameID()+"> "
-							+ "gameID: <"+shot.getGameID()+"> "
-									+ "sessionID: <"+shot.getSessionID()+"> :3");
 					
 					insertShot.executeBatch();
 					tablesPopulated += "Shots, ";
