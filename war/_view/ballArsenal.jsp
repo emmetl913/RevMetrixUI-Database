@@ -9,54 +9,61 @@
 <%@ page import="javax.servlet.http.HttpSession" %>
 <%
 // Retrieve ArrayList from session attribute
-	//HttpSession session = request.getSession();
-	BallArsenal model = (BallArsenal) session.getAttribute("ballArsenalKey");
-	ArrayList<Ball> balls = (model != null) ? model.getBalls() : null;
+//HttpSession session = request.getSession();
+BallArsenal model = (BallArsenal) session.getAttribute("ballArsenalKey");
+ArrayList<Ball> balls = (model != null) ? model.getBalls() : null;
 %>
 
 <html>
-	<head>
-		<title>Bowling Ball Arsenal</title>
-		<style type="text/css">
-			body{
-				font-family: Arial, Helvetica, sans-serif;
-			}
+<head>
+<title>Bowling Ball Arsenal</title>
+<style type="text/css">
+body{
+font-family: Arial, Helvetica, sans-serif;
+}
 
-			header {
+header {
     text-align: center;
     position: absolute;
     top: 10px; /* Adjust the top position as needed */
     width: 100%; /* Ensure the header spans the full width */
 }
-			input {
-	            width: 70%;
-	            padding: 8px;
-	            margin-bottom: 16px;
-	            box-sizing: border-box;
-	            border: 1px solid #ccc;
-	            border-radius: 4px;
-	        }
-			.color-picker, input[type="number"]{
-			    height: 69px; 
-				width: 69px;
-				vertical-align: middle;
-			}
-			
-			h1{
-				font-size: 50px;
-				color: black;
-				text-align: center;
-			}
+input {
+           width: 70%;
+           padding: 8px;
+           margin-bottom: 16px;
+           box-sizing: border-box;
+           border: 1px solid #ccc;
+           border-radius: 4px;
+       }
+.color-picker{
+   height: 50px;
+width: 70px;
+vertical-align: middle;
+}
+input[type="number"]{
+width: 180px;
+}
 
-			#ball-list{
-				margin-top: 20px;
-			}
+h1{
+font-size: 50px;
+color: black;
+text-align: center;
+}
 
-			#add-ball-form, #remove-ball-form{
-				margin-bottom: 10px;
-			}
+#ball-list{
+margin-top: 20px;
+}
 
-	.ball-box {
+#add-ball-form, #remove-ball-form{
+margin-bottom: 10px;
+}
+.error{
+color: red;
+        font-weight: bold;
+}
+
+.ball-box {
             width: 800px;
             align-items: center;
             text-align: center;
@@ -71,7 +78,7 @@
             background-color: white;
             box-shadow: 2px;
             /* Set fixed height for the container */
-            height: 360px;
+            height: 430px;
             /* Add scrollbar when content overflows */
             overflow: auto;            
         }
@@ -93,17 +100,17 @@
             height: 350px;
             /* Add scrollbar when content overflows */
             overflow: auto;
-			background-color: green;
-            
+background-color: green;
+           
         }
 
-			.bowling-ball-img{
-				width: 150px;	/*Adjust the size of the image*/
-				height: auto;
-				margin-bottom: 10px;
-			}
+.bowling-ball-img{
+width: 150px; /*Adjust the size of the image*/
+height: auto;
+margin-bottom: 10px;
+}
 
-			/* Style for the black sidebar */
+/* Style for the black sidebar */
 .sidebar {
   height: 100%;
   width: 250px;
@@ -149,9 +156,11 @@
         border: 1px solid black; /* Add border around each ball section */
         margin-bottom: 10px; /* Add some space between ball sections */
         padding: 10px; /* Add padding inside each ball section */
+background-color: white;
+
     }
 .ball-section:hover{
-	background-color: #33B5FF;
+background-color: #33B5FF;
 }
 button {
     background-color: #4caf50;
@@ -165,83 +174,92 @@ button {
 button:hover {
     background-color: #45a049;
 }
-		</style>
-	</head>
+</style>
+</head>
 
-	<body>
-		<c:if test="${! empty errorMessage}">
-			<div class="error">${errorMessage}</div>
-		</c:if>
+<body>
 
-		<div class="sidebar">
-		 <a href="${pageContext.servletContext.contextPath}/index">
-			<img src="${pageContext.request.contextPath}/_view/BowlingBall.png"width="100" height="100">
-		  </a>
-	      <a href="${pageContext.servletContext.contextPath}/establishmentReg">Establishment Registration</a>
-		  <a href="${pageContext.servletContext.contextPath}/logIn">Sign Out</a>
+
+<div class="sidebar">
+<a href="${pageContext.servletContext.contextPath}/index">
+<img src="${pageContext.request.contextPath}/_view/BowlingBall.png"width="100" height="100">
+ </a>
+     <a href="${pageContext.servletContext.contextPath}/establishmentReg">Establishment Registration</a>
+ <a href="${pageContext.servletContext.contextPath}/logIn">Sign Out</a>
           <a href="${pageContext.servletContext.contextPath}/shot">Shot</a>
           <a href="${pageContext.servletContext.contextPath}/ballArsenal">Ball Arsenal</a>
           <a href="https://github.com/emmetl913/RevMetrixUI-Database">GitHub</a>
           <a href="${pageContext.servletContext.contextPath}/startBowling">Start Bowling</a>
-		  </div>
-	
-		<form id="ballArsenalForm" action="${pageContext.servletContext.contextPath}/ballArsenal" method="post">
-			<header><h1>Bowling Ball Arsenal</h1></header>	
-	          <input type="hidden" id="type" name="newType" value="">
+ </div>
 
-			<div class="ball-box" id="ballBoxDiv">
-				<div id="add-ball-form">
-					<input type="text" name="ballName" placeholder="Ball Name">
-				    <input type="text" name="ballBrand" placeholder="Ball Brand"><br>
-				    <input type="number" name="ballWeight" placeholder="Ball Weight (in pounds)" step="0.01" class="color-picker">
-				    <input type="color" name="ballColor" placeholder="Ball Color" class="color-picker">
-				    <br> 
-				    
-				    <button name="leftHand" type="button"onclick="setToLeft()">>Left Hand</button>
-				    <button name="rightHand" type="button"onclick="setToRight()">Right Hand</button>
-				    <br>
-				    
-					<button text="Add Ball" name="addBall" type="submit" value="Register Ball">
-					Add Ball</button>
-					
-							
-					
-				</div>
-				<div id="remove-ball-form">
-					<input type="text" name="removeBallName" placeholder="Ball Name to Remove">
-					<button name="removeBall" type="submit" value="Remove Ball">
-					Remove Ball</button>
-				</div>
-				<div id="ballsList"> &nbsp		
-					<% 
-			            if (balls != null && !balls.isEmpty()) {
-			                for (Ball ball : balls) {
-			        %>
-			        <div class="ball-section" onclick="selectBall ('<%= ball.getName() %>')"> <!-- change to ballId-->
-			            <p>Name: <%= ball.getName() %> RightHanded: <%= ball.getRightHanded()%> </p>
-			        </div>
-			        <% 
-			                }
-			            } else { 
-			        %>
-			        <p>You don't have any balls yet. </p>
-			        <p> If you had two you could be a real boy.</p>
-			        <% } 		session.setAttribute("ballArsenalKey", model);%> 
-				</div>
-			</div>
-			<input type="hidden" name="selectedBall" id="selectedBall" value="">
-		</form>
-		<script>
-		 function selectBall(ballName) {
-		        document.getElementById('selectedBall').value = ballName;
-		        document.getElementById('ballArsenalForm').submit();
-		    }
-		 function setToLeft() {
-	          document.getElementById("type").value = "left";
-	        }
-		 function setToRight() {
-	          document.getElementById("type").value = "right";
-	        }
-		</script>
-	</body>
+<form id="ballArsenalForm" action="${pageContext.servletContext.contextPath}/ballArsenal" method="post">
+<header><h1>Bowling Ball Arsenal</h1></header>
+         <input type="hidden" id="type" name="newType" value="">
+
+<div class="ball-box" id="ballBoxDiv">
+<c:if test="${! empty errorMessage}">
+<div class="error">${errorMessage}</div>
+</c:if>
+<div id="add-ball-form">
+<input type="text" name="ballName" placeholder="Ball Name">
+   <input type="text" name="ballBrand" placeholder="Ball Brand"><br>
+   <input type="number" name="ballWeight" placeholder="Ball Weight (in pounds)" step="0.01" class="color-picker">
+   <input type="color" name="ballColor" placeholder="Ball Color" class="color-picker">
+   <br>
+   
+   <button name="leftHand" type="button"onclick="setToLeft()">Left Hand</button>
+   <button name="rightHand" type="button"onclick="setToRight()">Right Hand</button>
+   <br>
+   <br>
+<button text="Add Ball" name="addBall" type="submit" value="Register Ball">
+Add Ball</button>
+
+
+
+</div>
+<div id="remove-ball-form">
+<input type="text" name = "removeBallName"placeholder="Ball Name to Remove">
+<button name="removeBall" type="submit" value="Remove Ball">
+Remove Ball</button>
+</div>
+<div id="ballsList"> &nbsp
+<%
+           if (balls != null && !balls.isEmpty()) {
+               for (Ball ball : balls) {
+                String ballColor = ball.getColor();
+       %>
+       <div class="ball-section" onclick="selectBall ('<%= ball %>')"><!--  style="background-color: <%=ballColor%>;"-->
+       
+       <p>Name: <%= ball.getName() %> RightHanded: <%= ball.getRightHanded() %> </p>
+   </div>
+
+       <%
+               }
+           } else {
+       %>
+       <p>You don't have any balls yet. </p>
+       <p> If you had two you could be a real boy.</p>
+       <% } session.setAttribute("ballArsenalKey", model);%>
+</div>
+</div>
+<input type="hidden" name="selectedBall" id="selectedBall" value="">
+</form>
+<script>
+
+   // JavaScript to set hover color for each ball section
+//does not exist
+
+
+function selectBall(ballName) {
+       document.getElementById('selectedBall').value = ballName;
+       document.getElementById('ballArsenalForm').submit();
+   }
+function setToLeft() {
+         document.getElementById("type").value = "left";
+       }
+function setToRight() {
+         document.getElementById("type").value = "right";
+       }
+</script>
+</body>
 </html>

@@ -118,7 +118,8 @@ public class BallArsenalServlet extends HttpServlet {
 		       
 				//end session shenanigans
 		
-		//on button press
+		        
+		//Ball obj parameters from the jsp
 		String newBallName = req.getParameter("ballName");
 		String newBallBrand = req.getParameter("ballBrand");
 		String newBallWeight = req.getParameter("ballWeight");
@@ -127,38 +128,73 @@ public class BallArsenalServlet extends HttpServlet {
 		String newBallRightHand = req.getParameter("rightHand");
 		String removeBallName = req.getParameter("removeBallName");
 		boolean rightHanded = true;
-		
+		float ballWeight = 0;
+
+		//on button press
 		if (req.getParameter("addBall") != null ) {
-		    float ballWeight = Float.parseFloat(newBallWeight);
-		    rightHanded = Boolean.parseBoolean(newBallRightHand);
-		    Integer did = 0;
+			  Boolean hasSelectedHand = false;
+			  
+			  //test to see if ball already exists on account by name
+			  List<Ball> ballTestList = controller.getBallByName(newBallName);
+			  if(ballTestList != null) {
+				  for(Ball ball: ballTestList) {
+					  if(ball.getAccountId() == currentAccount.getAccountId()) {
+						   errorMessage =  "Ball: "+newBallName+" already exists on this account";
+					  }
+				  }
+			  }
 		    try {
+		    	//technically this would all look better if i moved it into a fucntion but im not going to
+		    	//this code handles cases where information is not entered in the form
+		    	//as well as inserting the ball to the database with full information
+			    rightHanded = Boolean.parseBoolean(newBallRightHand);
+			    if(newBallWeight == null || newBallWeight.equals("")) {
+			    	ballWeight = 0;
+			    	errorMessage = "Please enter a ball weight";
+			    }
+			    else {
+			    	ballWeight = Float.parseFloat(newBallWeight);
+			    }
+			    
+			    //Ensure one of the hands is chosen and set the value
 				if (req.getParameter("newType").equals("left")) {
 					rightHanded = false;
-					did++;
+					hasSelectedHand = true;
 				} else if (req.getParameter("newType").equals("right")) {
 					rightHanded = true;
-					did++;
+					hasSelectedHand = true;
+					
 				} 
+				else {
+					List<Integer> throwNullOnPurposeBecauseImCrazy = null;
+					throwNullOnPurposeBecauseImCrazy.get(0);
+				}
 		    }	
 		    catch(NullPointerException e) {
 		    	errorMessage = "Please select the ball's hand";
 		    }
-		    if(did != 0) {
+		    if(hasSelectedHand && errorMessage == null) {
 				controller.insertBallinDB(currentAccount.getAccountId(), 
 				ballWeight, newBallName, rightHanded, newBallBrand, newBallColor);
+				errorMessage = "New ball: "+newBallName+" successfully added!";
 			}
 		}
+		
 		if(req.getParameter("removeBall") != null) {
-			//controller.removeBall(removeBallName);
-			 Iterator<Ball> iterator = balls.iterator();
-			    while (iterator.hasNext()) {
-			        Ball ball = iterator.next();
-			        if (ball.getName().equals(removeBallName)) {
-			            iterator.remove(); // Remove the ball from the ArrayList
-			            break; // Exit the loop after removing the ball
-			        }
-			    }
+			 //test to see if ball already exists on account by name
+			System.out.println("Remove ball button clicked");
+			  List<Ball> ballTestList = controller.getBallByName(removeBallName);
+			  if(ballTestList != null) {
+				  for(Ball ball: ballTestList) {
+					  if(ball.getAccountId() == currentAccount.getAccountId()) {
+						  controller.removeBall(currentAccount.getAccountId(),removeBallName);
+						  System.out.println("Sup bitch");
+					  }
+				  }
+			  }
+			  else {
+				  System.out.println("YOu remove ball not removing but exists");
+			  }
 		}
 //		if (session.getAttribute("currentGame") != null ) {
 //			Game g = (Game)session.getAttribute("currentGame");
@@ -170,7 +206,9 @@ public class BallArsenalServlet extends HttpServlet {
 			//Setting the selected ball to the currentBall on the currentACcount
 			if (selectedBall !=  null)
 			{
+				//currenaccount.setball to selected ball then add to session
 				String tempBallName = selectedBall;
+				
 				Ball tempBall = new Ball(tempBallName);
 				System.out.println(tempBallName);
 				currentAccount.setCurrentBall(tempBall);

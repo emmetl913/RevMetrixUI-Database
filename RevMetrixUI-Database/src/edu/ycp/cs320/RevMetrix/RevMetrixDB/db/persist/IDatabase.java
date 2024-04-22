@@ -4,6 +4,8 @@ import java.util.ArrayList;
 
 import edu.ycp.cs320.RevMetrix.model.Establishment;
 import edu.ycp.cs320.RevMetrix.model.Event;
+import edu.ycp.cs320.RevMetrix.model.Game;
+import edu.ycp.cs320.RevMetrix.model.Session;
 
 import java.util.List;
 
@@ -27,7 +29,9 @@ public interface IDatabase {
 	List<Account> getAccountByEmail(String email);
 	List<Ball> getBallsByAccountIdFromDB(int accountId);
 	List<Ball> getBallByName(String name);
-
+	List<Game> getGameBySessionID(int sessionID);
+	List<Session> getSessionByEventID(int eventID);
+	
 	// Shot Level Methods
 	public Integer insertNewFrame(int gameID, int score, int frameNumber);
 	public Integer insertNewShotWithFrameID(int sessionID, int gameID, int frameID, int shotNumber, String count, int ballID, String pinsLeft);
