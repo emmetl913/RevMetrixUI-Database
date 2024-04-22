@@ -160,7 +160,7 @@
 
     }
 .ball-section:hover{
-	background-color: blue;
+	background-color: #33B5FF;
 }
 button {
     background-color: #4caf50;
@@ -218,7 +218,7 @@ button:hover {
 					
 				</div>
 				<div id="remove-ball-form">
-					<input type="text" name="removeBallName" placeholder="Ball Name to Remove">
+					<input type="text" name = "removeBallName"placeholder="Ball Name to Remove">
 					<button name="removeBall" type="submit" value="Remove Ball">
 					Remove Ball</button>
 				</div>
@@ -228,7 +228,7 @@ button:hover {
 			                for (Ball ball : balls) {
 			                	String ballColor = ball.getColor();
 			        %>
-			        <div class="ball-section" onclick="selectBall ('<%= ball.getName() %>')"><!--  style="background-color: <%=ballColor%>;"-->
+			        <div class="ball-section" onclick="selectBall ('<%= ball %>')"><!--  style="background-color: <%=ballColor%>;"-->
 			        
 			        <p>Name: <%= ball.getName() %> RightHanded: <%= ball.getRightHanded() %> </p>
 			    </div>

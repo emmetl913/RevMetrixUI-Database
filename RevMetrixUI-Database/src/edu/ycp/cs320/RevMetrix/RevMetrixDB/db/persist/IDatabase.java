@@ -33,6 +33,8 @@ public interface IDatabase {
 	List<Account> getAccountByEmail(String email);
 	List<Ball> getBallsByAccountIdFromDB(int accountId);
 	List<Ball> getBallByName(String name);
+	public Integer removeBall(int accID, String name);
+
 
 	// Shot Level Methods
 	public Integer insertNewEvent(int eventID, int estbID, String name, int time, String type, int standing);

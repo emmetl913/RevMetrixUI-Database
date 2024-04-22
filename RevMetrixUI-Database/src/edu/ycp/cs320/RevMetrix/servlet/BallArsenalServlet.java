@@ -176,19 +176,25 @@ public class BallArsenalServlet extends HttpServlet {
 		    if(hasSelectedHand && errorMessage == null) {
 				controller.insertBallinDB(currentAccount.getAccountId(), 
 				ballWeight, newBallName, rightHanded, newBallBrand, newBallColor);
-				errorMessage = "New Ball: "+newBallName+" successfully added!";
+				errorMessage = "New ball: "+newBallName+" successfully added!";
 			}
 		}
+		
 		if(req.getParameter("removeBall") != null) {
-			//controller.removeBall(removeBallName);
-			 Iterator<Ball> iterator = balls.iterator();
-			    while (iterator.hasNext()) {
-			        Ball ball = iterator.next();
-			        if (ball.getName().equals(removeBallName)) {
-			            iterator.remove(); // Remove the ball from the ArrayList
-			            break; // Exit the loop after removing the ball
-			        }
-			    }
+			 //test to see if ball already exists on account by name
+			System.out.println("Remove ball button clicked");
+			  List<Ball> ballTestList = controller.getBallByName(removeBallName);
+			  if(ballTestList != null) {
+				  for(Ball ball: ballTestList) {
+					  if(ball.getAccountId() == currentAccount.getAccountId()) {
+						  controller.removeBall(currentAccount.getAccountId(),removeBallName);
+						  System.out.println("Sup bitch");
+					  }
+				  }
+			  }
+			  else {
+				  System.out.println("YOu remove ball not removing but exists");
+			  }
 		}
 //		if (session.getAttribute("currentGame") != null ) {
 //			Game g = (Game)session.getAttribute("currentGame");
@@ -200,7 +206,9 @@ public class BallArsenalServlet extends HttpServlet {
 			//Setting the selected ball to the currentBall on the currentACcount
 			if (selectedBall !=  null)
 			{
+				//currenaccount.setball to selected ball then add to session
 				String tempBallName = selectedBall;
+				
 				Ball tempBall = new Ball(tempBallName);
 				System.out.println(tempBallName);
 				currentAccount.setCurrentBall(tempBall);

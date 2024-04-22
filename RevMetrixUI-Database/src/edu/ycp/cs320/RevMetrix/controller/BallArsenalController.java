@@ -42,6 +42,12 @@ public class BallArsenalController {
 			return ballList;
 		}
 	}
+	public Boolean removeBall(int accID, String name) {
+		if(db.removeBall(accID, name) == 1)
+			return true;
+		else
+			return false;
+	}
 	public List<Ball> getBallByName(String ballName){
 		List<Ball> ballList = db.getBallByName(ballName);
 		if(ballList.isEmpty()) {
@@ -69,13 +75,13 @@ public class BallArsenalController {
 	}
 	
 	//finds the ball that is to be removed, and removes it from the list
-	public void removeBall(String name) {
-		for(Ball ball : arsenal.getBalls()) {
-			if(ball.getName().equals(name)) {
-				arsenal.removeBall(ball);
-			}
-		}
-	}
+//	public void removeBall(String name) {
+//		for(Ball ball : arsenal.getBalls()) {
+//			if(ball.getName().equals(name)) {
+//				arsenal.removeBall(ball);
+//			}
+//		}
+//	}
 	
 	
 }

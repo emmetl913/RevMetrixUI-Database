@@ -387,7 +387,31 @@ public class DerbyDatabase implements IDatabase {
 		});
 	}
 	
+	public Integer removeBall(int accID, String name) {
+		return executeTransaction(new Transaction<Integer>() {
+			@Override
+			public Integer execute(Connection conn) throws SQLException {
+				PreparedStatement stmt = null;
+				ResultSet resultSet = null;
+				
+				try {
+					stmt = conn.prepareStatement(
+							"delete from balls where name = ? and account_id = ?"
+					);
+					stmt.setString(1, name);
+					stmt.setInt(2, accID);
 
+					stmt.execute();
+					
+					return 1;
+				} finally {
+					DBUtil.closeQuietly(resultSet);
+					DBUtil.closeQuietly(stmt);
+				}
+			}
+		});
+	}
+	
 	@Override
 	public List<Ball> getBallByName(String name) {
 		return executeTransaction(new Transaction<List<Ball>>() {
