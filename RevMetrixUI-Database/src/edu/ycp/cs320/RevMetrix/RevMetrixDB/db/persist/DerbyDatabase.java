@@ -135,6 +135,50 @@ public class DerbyDatabase implements IDatabase {
 		});
 	}
 	
+	@Override
+	public List<Event> getEventsByAccount(int accID) {
+		return executeTransaction(new Transaction<List<Event>>() {
+			@Override
+			public List<Event> execute(Connection conn) throws SQLException {
+				PreparedStatement stmt = null;
+				ResultSet resultSet = null;
+				
+				try {
+					stmt = conn.prepareStatement(
+							"select * from events "+
+							"where acc_id = ?"
+					);
+					stmt.setInt(1, accID);
+					
+					List<Event> result = new ArrayList<Event>();
+					resultSet = stmt.executeQuery();
+					
+					// for testing that a result was returned
+					Boolean found = false;
+					
+					while (resultSet.next()) {
+						found = true;
+						
+						Event event = new Event();
+						loadEvent(event, resultSet, 1);
+						
+						result.add(event);
+					}
+					
+					// check if any authors were found
+					if (!found) {
+						System.out.println("No Events were found in the database");
+					}
+					
+					return result;
+				} finally {
+					DBUtil.closeQuietly(resultSet);
+					DBUtil.closeQuietly(stmt);
+				}
+			}
+		});
+	}
+	
 	public Integer insertNewEstablishment(int account_id, String name, String address) {
 		return executeTransaction(new Transaction<Integer>() {
 			@Override
@@ -925,8 +969,9 @@ public class DerbyDatabase implements IDatabase {
 			}
 		});
 	}
+	
 	@Override
-	public Integer insertNewEvent(int eventID, int estbID, String name, int time, String type, int standing) {
+	public Integer insertNewEvent(int accID, int estbID, String name, int time, String type, int standing) {
 		return executeTransaction(new Transaction<Integer>() {
 			@Override
 			public Integer execute(Connection conn) throws SQLException {
@@ -945,45 +990,50 @@ public class DerbyDatabase implements IDatabase {
 				{
 					stmt1 = conn.prepareStatement(
 							"select event_id from events"
-							+ " where estb_id = ? "
+							+ " where acc_id = ? and name = ? and time = ?"
 					);
 					
-					stmt1.setInt(1, estbID);
+					stmt1.setInt(1, accID);
+					stmt1.setString(2, name);
+					stmt1.setInt(3, time);
 					
 					resultSet1 = stmt1.executeQuery();
 					
 					if(resultSet1.next())
 					{
 						event_id = resultSet1.getInt(1);
-						System.out.println("Event <"+ eventID +"> found with estbID <"+ estbID +">");
+						System.out.println("Event <"+ name +"> found with estbID <"+ estbID +">");
 					}
 					else 
 					{
-						System.out.println("Event <"+ eventID +"> was not found");
+						System.out.println("Event <"+ name +"> was not found");
 					}
 					if(event_id <= 0)
 					{
 						stmt2 = conn.prepareStatement(
-								"insert into events (estb_id, name, time, type, standing) "
-								+ " values(?, ?, ?, ?, ?)"
+								"insert into events (acc_id, estb_id, name, time, type, standing) "
+								+ " values(?, ?, ?, ?, ?, ?)"
 						);
-						stmt2.setInt(1, estbID);
-						stmt2.setString(2, name);
-						stmt2.setInt(3, time);
-						stmt2.setString(4, type);
-						stmt2.setInt(5, standing);
+						stmt2.setInt(1, accID);
+						stmt2.setInt(2, estbID);
+						stmt2.setString(3, name);
+						stmt2.setInt(4, time);
+						stmt2.setString(5, type);
+						stmt2.setInt(6, standing);
 						
 						stmt2.executeUpdate();
 						
-						System.out.println("New event <"+name+"> , <"+time+"> , <"+type+">, <"+standing+"> inserted into games");
+						System.out.println("New event <"+name+"> , <"+time+"> , <"+type+">, <"+standing+"> inserted into event");
 						
 						// get the new account_id
 						stmt3 = conn.prepareStatement(
-								"select * from events "
-								+ " where event_id = ? and estb_id = ?"
+								"select event_id from events"
+							+ " where acc_id = ? and name = ? and time = ?"
 						);
-						stmt3.setInt(1, eventID);
-						stmt3.setInt(2, estbID);
+								
+						stmt3.setInt(1, accID);
+						stmt3.setString(2, name);
+						stmt3.setInt(3, time);
 						
 						resultSet3 = stmt3.executeQuery();
 						
@@ -1240,6 +1290,18 @@ public class DerbyDatabase implements IDatabase {
 		establishment.setEstablishmentName(resultSet.getString(index++));
 		establishment.setAddress(resultSet.getString(index++));
 	}
+	
+	private void loadEvent(Event event, ResultSet resultSet, int index) throws SQLException {
+		//event_id, acc_id, estb_id, name, time,type, standing
+		event.setEventID(resultSet.getInt(index++));
+		event.setAccount(resultSet.getInt(index++));
+		event.setEstbID(resultSet.getInt(index++));
+		event.setName(resultSet.getString(index++));
+		event.setTime(resultSet.getInt(index++));
+		event.setType(resultSet.getString(index++));
+		event.setStanding(resultSet.getInt(index++));
+
+	}
 
 	private void loadAccount(Account account, ResultSet resultSet, int index) throws SQLException {
 		account.setAccountId(resultSet.getInt(index++));
@@ -1300,6 +1362,7 @@ public class DerbyDatabase implements IDatabase {
 							"create table events ("+
 							" event_id integer primary key "+
 							" generated always as identity (start with 1, increment by 1), "+
+							" acc_id integer," +
 							" estb_id integer,"+
 							" name varchar(40),"+
 							" time integer,"+
@@ -1466,7 +1529,6 @@ public class DerbyDatabase implements IDatabase {
 						insertShot.setString(7, shot.getPinsLeft());
 						insertShot.addBatch();
 					}
-					//insertNewShotWithFrameID(1, 1, 1, 1, "4", 6, "1234");
 					
 					insertShot.executeBatch();
 					tablesPopulated += "Shots, ";
@@ -1482,14 +1544,15 @@ public class DerbyDatabase implements IDatabase {
 					insertFrame.executeBatch();
 					tablesPopulated += "Frames, ";
 					
-					insertEvent = conn.prepareStatement("insert into events (estb_id, name, time, type, standing) values (?, ?, ?, ?, ?)");
+					insertEvent = conn.prepareStatement("insert into events (acc_id, estb_id, name, time, type, standing) values (?,?, ?, ?, ?, ?)");
 					for(Event event : eventList)
 					{
-						insertEvent.setInt(1, event.getEstbID());
-						insertEvent.setString(2, event.getEventName());
-						insertEvent.setInt(3, event.getTime());
-						insertEvent.setString(4, event.getType());
-						insertEvent.setInt(5, event.getStanding());
+						insertEvent.setInt(1, event.getAccount());
+						insertEvent.setInt(2, event.getEstbID());
+						insertEvent.setString(3, event.getEventName());
+						insertEvent.setInt(4, event.getTime());
+						insertEvent.setString(5, event.getType());
+						insertEvent.setInt(6, event.getStanding());
 						insertEvent.addBatch();
 					}
 					insertEvent.executeBatch();

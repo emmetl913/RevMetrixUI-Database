@@ -128,13 +128,14 @@ public class InitialData {
 					break;
 				}
 				Iterator<String> i = tuple.iterator();
+				int accID = Integer.parseInt(i.next());
 				int estbID = Integer.parseInt(i.next());
 				String name = i.next();
 				int time = Integer.parseInt(i.next());
 				String type = i.next();
 				int standing = Integer.parseInt(i.next());
 				
-				Event event = new Event(eventID++, estbID, name, time, type, standing);
+				Event event = new Event(eventID++, accID, estbID, name, time, type, standing);
 				
 				eventList.add(event);
 			}
