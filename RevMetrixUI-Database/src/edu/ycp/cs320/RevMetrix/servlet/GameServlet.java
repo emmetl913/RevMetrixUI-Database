@@ -46,18 +46,18 @@ public class GameServlet extends HttpServlet {
 	      if(games == null) {
 				games = new ArrayList<Game>();
 				
-				games.add(new Game(1,14));
-				games.add(new Game(2,22));
-				games.add(new Game(3,4));
+				games.add(new Game(1, 1, 14, 2, 3));
+				games.add(new Game(1, 2, 22, 3, 4));
+				games.add(new Game(1, 3, 4, 4, 5));
 				session.setAttribute(gamesListKey, games);
 			}
 		} 
 		if(games == null) {
 			games = new ArrayList<Game>();
 			
-			games.add(new Game(1,14));
-			games.add(new Game(2,22));
-			games.add(new Game(3,4));
+			games.add(new Game(1, 1, 14, 2, 3));
+			games.add(new Game(1, 2, 22, 3, 4));
+			games.add(new Game(1, 3, 4, 4, 5));
 			session.setAttribute(gamesListKey, games);
 		}
 		//Get model and userID from jsp
@@ -106,18 +106,18 @@ public class GameServlet extends HttpServlet {
 		// If first visit: new session id
 		if (session.isNew() ){
 		  //initialize the games list with 3 games
-		  games.add(new Game(1,14));
-		  games.add(new Game(2,22));
-		  games.add(new Game(3,4));
+		  games.add(new Game(1, 1, 14, 2, 3));
+		  games.add(new Game(1, 2, 22, 3, 4));
+		  games.add(new Game(1, 3, 4, 4, 5));
 		  session.setAttribute(gamesListKey, games);
 		  
 		} 
 		if(games == null) {
 			games = new ArrayList<Game>();
 			
-			games.add(new Game(1,14));
-			games.add(new Game(2,22));
-			games.add(new Game(3,4));
+			games.add(new Game(1, 1, 14, 2, 3));
+			games.add(new Game(1, 2, 22, 3, 4));
+			games.add(new Game(1, 3, 4, 4, 5));
 			session.setAttribute(gamesListKey, games);
 		}
 		//Get model and userID from jsp
@@ -168,7 +168,7 @@ public class GameServlet extends HttpServlet {
         }
         if(req.getParameter("new") != null) {
         	//currentGame = selected game from dropdown
-        	games.add(new Game(games.size(),laneInput));
+        	
         	currentGame = games.get(games.size()-1);
         	
         	req.setAttribute("gameObjArr", games);

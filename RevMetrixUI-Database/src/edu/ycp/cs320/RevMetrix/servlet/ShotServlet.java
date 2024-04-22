@@ -228,6 +228,88 @@ public class ShotServlet extends HttpServlet {
 		int totalScore = controller.calculateScore(session);
 		session.setAttribute("totalScore", totalScore);
 		
+		String errorMessage = null;
+		Object sessionShot = session.getAttribute("shotKey");
+		
+//		if(sessionShot instanceof Shot) {
+//			shot = (Shot) sessionShot;
+//		}else {
+//			errorMessage = "Session does not contain a valid Shot object";
+//		}
+		
+		Frame frame = new Frame(1, 1, 1);
+		ShotController controller = new ShotController();
+		   
+		// Get last access time of this Webpage.
+		long lastAccessTime = session.getLastAccessedTime();
+		String userIDKey = new String("userID");
+		String userID = new String("ABCD");
+
+		String shotKey = new String("shotKey");
+		ArrayList<Frame> frames = new ArrayList<Frame>();
+		
+		   // Check if this is new comer on your Webpage.
+		if (session.isNew() ){
+	      session.setAttribute(userIDKey, userID);
+	      
+	      frames.add(new Frame(1,1));
+		  session.setAttribute(shotKey,  frames);
+		} 
+		
+		userID = (String)session.getAttribute(userIDKey);
+		frames = (ArrayList<Frame>)session.getAttribute(shotKey);
+		
+		//retreive or create a Frame object in the session
+		if(frames == null) {
+			frame = new Frame(0, 0, 0);
+		}
+	    
+		//prevents null pointer exceptions
+		//retreive shot details
+	    String ballName = req.getParameter("ball");
+	    String shotType = req.getParameter("shotType");
+	    
+	    String pinsParam = req.getParameter("pins");
+	    int pins = 0;
+	    Shot shot = new Shot(0, 0, 0, 0, "", 0, "");
+	    
+	    if(pinsParam != null) {
+	    	pins = Integer.parseInt(pinsParam);
+	    }
+	    
+	    if(ballName != null && shotType != null) {
+	    	shot.setBallName(ballName);
+	    	shot.setType(shotType);
+	    }
+	    
+	    //creates a new shot object
+	    Shot shots = new Shot(ballName, shotType, pins);
+	    
+	    //add the shot to the frame
+//	    if(frames != null) {
+//	    	 frames.add(new Frame());
+//	    }
+	    
+//	    int firstShot = Integer.parseInt(req.getParameter("firstShot"));
+//	    int secondShot = Integer.parseInt(req.getParameter("secondShot"));
+//	   
+	    int totalScore = controller.calculateScore(session);
+	    session.setAttribute("totalScore", totalScore);
+	    
+	    if("incrementFrameNumber".equals(req.getParameter("action"))) {
+	    	Integer frameNumber = (Integer) session.getAttribute("frameNumber");
+	    	if(frameNumber == null) {
+		    	frameNumber = 1;	//initialize
+		    }else {
+		    	frameNumber++;		//increment
+		    }
+		    session.setAttribute("frameNumber",  frameNumber);
+		    resp.getWriter().write(String.valueOf(frameNumber));
+	    }
+	    
+	    req.setAttribute("errorMessage", errorMessage);
+	    session.setAttribute(shotKey, shot);
+	    
 		req.getRequestDispatcher("/_view/shot.jsp").forward(req, resp);
 	}
 }
