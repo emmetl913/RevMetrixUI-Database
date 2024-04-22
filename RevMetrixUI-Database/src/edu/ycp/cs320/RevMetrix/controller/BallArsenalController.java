@@ -42,6 +42,16 @@ public class BallArsenalController {
 			return ballList;
 		}
 	}
+	public List<Ball> getBallByName(String ballName){
+		List<Ball> ballList = db.getBallByName(ballName);
+		if(ballList.isEmpty()) {
+			System.out.println("Aint no balls in your account bro with name: "+ballName);
+			return null;
+		}
+		else {
+			return ballList;
+		}
+	}
 	
 	public boolean insertBallinDB(int account_id, float weight, String name, Boolean righthand, String brand, String color) {
 		

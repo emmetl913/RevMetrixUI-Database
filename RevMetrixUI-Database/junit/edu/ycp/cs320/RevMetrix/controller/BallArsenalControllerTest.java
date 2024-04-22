@@ -39,6 +39,11 @@ public class BallArsenalControllerTest {
 		ballList = controller.getBallByAccountId(1); 
 		assertTrue(ballList.get(0).getName().equals("8lbPurpleMary"));
 	}
+	@Test
+	public void testGetBallByName() {
+		ballList = controller.getBallByName("8lbPurpleMary");
+		assertTrue(ballList.get(0).getName().equals("8lbPurpleMary"));
+	}
 	
 	
 	
