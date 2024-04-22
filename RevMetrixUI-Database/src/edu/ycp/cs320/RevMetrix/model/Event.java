@@ -3,11 +3,14 @@ package edu.ycp.cs320.RevMetrix.model;
 
 public class Event {
 	private String eventName, type, standingString, establishmentString;
-	private int standing, eventID, estbID, time;
+	private int standing, eventID, estbID, time, accountID;
 	private Establishment establishment;
 	
-	public Event(int eventID, int estbID, String name, int time, String type, int standing) {
-		
+	public Event() {
+	}
+	
+	public Event(int eventID, int accountID, int estbID, String name, int time, String type, int standing) {
+		this.accountID = accountID;
 		this.eventID = eventID;
 		this.estbID = estbID;
 		this.eventName = name;
@@ -86,6 +89,14 @@ public class Event {
 	
 	public String getEstablishmentStringName() {
 		return establishmentString;
+	}
+
+	public int getAccount() {
+		return accountID;
+	}
+	
+	public void setAccount(int accountID) {
+		this.accountID = accountID;
 	}
 	
 }

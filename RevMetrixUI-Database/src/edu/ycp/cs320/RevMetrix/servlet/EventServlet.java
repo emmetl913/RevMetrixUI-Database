@@ -11,6 +11,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import edu.ycp.cs320.RevMetrix.model.Account;
 import edu.ycp.cs320.RevMetrix.model.Establishment;
 import edu.ycp.cs320.RevMetrix.model.EstablishmentArray;
 import edu.ycp.cs320.RevMetrix.controller.BallArsenalController;
@@ -32,46 +33,24 @@ public class EventServlet extends HttpServlet {
         }
 
 		System.out.println("Event Servlet: doGet");	
-		HttpSession session = req.getSession();
-	    long createTime = session.getCreationTime();
-		   
-		// Get last access time of this Webpage.
-		long lastAccessTime = session.getLastAccessedTime();
-		String userIDKey = new String("userID");
-		String userID = new String("ABCD");
-
-		   // Check if this is new comer on your Webpage.
-		String eventKey = new String("eventKey");
-		EventArray model = new EventArray();
+		HttpSession session = req.getSession();		
 		
-		// If first visit: new session id
-		if (session.isNew() ){
-	      session.setAttribute(userIDKey, userID);
-		  session.setAttribute(eventKey,  model);
-		} 
-		//Get model and userID from jsp
-		userID = (String)session.getAttribute(userIDKey);
+		Account acc = (Account) session.getAttribute("currAccount");
 
-		//controller.setModel(model);
-		Establishment e1 = new Establishment(0, 0, "Colony Park Lanes & Games", "1900 Pennsylvania Ave, York, PA 17404");
-
-		
-		ArrayList<Event> events = model.getEvents();
-        if(model.getEvents() == null) {
-        	events = new ArrayList<Event>();
-        	events.add(new Event(1, 1, "", 1, "", 1));
-		}
-        else {
-        	events = model.getEvents();
-        }
-        EstablishmentArray estaModel = new EstablishmentArray();
+        EstablishmentArray estaModel = new EstablishmentArray(acc.getAccountId());
 		EstablishmentRegController estaController = new EstablishmentRegController();
 		estaController.setModel(estaModel);
+		
+		EventArray model = new EventArray();
+		EventController controller = new EventController();
+		controller.setModel(model);
+		
         ArrayList<Establishment> estabs = estaModel.getEstablishments();
+        
+		ArrayList<Event> events = model.getEvents();
 		// Set the ArrayList as a request attribute
 		req.setAttribute("event", events);
 		req.setAttribute("esta", estabs);
-		session.setAttribute(eventKey, model); //update session model
 		
 		// call JSP to generate empty form
 		req.getRequestDispatcher("/_view/event.jsp").forward(req, resp);
@@ -88,59 +67,26 @@ public class EventServlet extends HttpServlet {
 		EventController controller = new EventController();
 				
 		// Get session creation time.
-				HttpSession session = req.getSession();
-			    long createTime = session.getCreationTime();
-				   
-				// Get last access time of this Webpage.
-				long lastAccessTime = session.getLastAccessedTime();
-				String userIDKey = new String("userID");
-				String userID = new String("ABCD");
+		HttpSession session = req.getSession();
+		Account acc = (Account) session.getAttribute("currAccount");
 
-				String eventKey = new String("eventKey");
-
-				   // Check if this is new comer on your Webpage.
-				if (session.isNew() ){
-			      session.setAttribute(userIDKey, userID);
-				  session.setAttribute(eventKey,  model);
-				} 
-				model = (EventArray)session.getAttribute(eventKey);
-				userID = (String)session.getAttribute(userIDKey);
-				//end session shenanigans
 		
 		controller.setModel(model);
-		Establishment e1 = new Establishment(0, 0, null, null);
-
-		
 		ArrayList<Event> events = model.getEvents();
-        if(model.getEvents() == null) {
-        	events = new ArrayList<Event>();
-        	events.add(new Event(1, 1, "", 1, "", 1));
-		}
+        
 		//on button press
 		String newEventName = req.getParameter("eventName");
 		int newStanding = Integer.valueOf(req.getParameter("standing"));
 		String EstaName = req.getParameter("establishment");
-		Establishment newEstab = e1;
-		
-
         String type = null;
+        int esstabID = -1;
         
-        EstablishmentArray estaModel = new EstablishmentArray();
+        EstablishmentArray estaModel = new EstablishmentArray(acc.getAccountId());
 		EstablishmentRegController estaController = new EstablishmentRegController();
 		estaController.setModel(estaModel);
         ArrayList<Establishment> estabs = estaModel.getEstablishments(); //get ball ArrayList from session updated model
 		
-        Iterator<Establishment> iterator = estabs.iterator();
-	    for (int x = 0; x < estabs.size(); x++) {
-	    	iterator.hasNext();
-	    	Establishment estab = iterator.next();
-	        if (estab.getEstablishmentName().equals(EstaName)) {
-	        	newEstab = estaModel.getEstablishmentAtIndex(x);
-	        }
-	    }
         
-		// Set the ArrayList as a request attribute
-		
 		
 		try {
 			
@@ -154,13 +100,21 @@ public class EventServlet extends HttpServlet {
 				type = null;
 			}
 			
-		controller.addEvent(newEventName, type, newStanding, newEstab);
-		System.out.print(""+newEventName+", " + type+", " +newStanding+", " +newEstab.getEstablishmentName());
+			for(Establishment esta : estabs) {
+				if(EstaName.equals(esta.getEstablishmentName()))
+					esstabID = esta.getEstaId();
+			}
+						
+		controller.addEvent(acc.getAccountId(), esstabID , 9, newEventName,type, newStanding);
+		System.out.print("Account id:"+acc.getAccountId()+" esstabID:" + esstabID+" time:" + " 9 " +" newEventName:" + newEventName+" type:" + type+" newStanding:" + newStanding);
 
 		}catch(NullPointerException e) {
-			System.out.print(""+newEventName+", " + type+", " +newStanding+", " +newEstab.getEstablishmentName());
 			errorMessage = "Invalid Input";
 		}
+		
+		estabs = estaModel.getEstablishments();
+        
+		events = model.getEvents();
 			
 		req.setAttribute("errorMessage", errorMessage);
 		req.setAttribute("event", events);

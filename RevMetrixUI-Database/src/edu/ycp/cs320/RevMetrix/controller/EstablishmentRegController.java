@@ -1,7 +1,6 @@
 package edu.ycp.cs320.RevMetrix.controller;
 import edu.ycp.cs320.RevMetrix.model.Establishment;
 import edu.ycp.cs320.RevMetrix.model.EstablishmentArray;
-
 import edu.ycp.cs320.RevMetrix.model.Establishment;
 
 import java.util.List;
@@ -42,10 +41,9 @@ public class EstablishmentRegController {
 		return estaList;
 	}
 	
-	public Integer insertNewEstablishment(int account_id, String name, String address) {
-		
+	public Integer insertNewEstablishment(int account_id, int estb_id, String name, int time, String type, int standing) {
 		// get the list of (Author, Book) pairs from DB
-		Integer newEsta = db.insertNewEstablishment(account_id, name, address);
+		Integer newEsta = db.insertNewEvent(account_id, estb_id, name, time, type, standing);
 		
 		if (newEsta == null) {
 			System.out.println("Establishments for <" + name + "> dont exist");
@@ -61,7 +59,7 @@ public class EstablishmentRegController {
 	
 	//adds a ball to the arsenal with the name and color
 	public void addEstablishment(int acc, String name, String address) {
-		Establishment establishment = new Establishment(insertNewEstablishment(acc, name, address), acc, name, address);
+		Establishment establishment = new Establishment(db.insertNewEstablishment(acc, name, address), acc, name, address);
 		model.addEstablishment(establishment);
 	}
 	
