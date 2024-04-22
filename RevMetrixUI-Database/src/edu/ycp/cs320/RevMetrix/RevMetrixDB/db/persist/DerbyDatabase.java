@@ -1611,8 +1611,15 @@ public class DerbyDatabase implements IDatabase {
 		
 	}
 
+	
 	@Override
-	public Integer insertNewBallInDB(float weight, String name, Boolean righthand, String brand, String color) {
+	public List<Game> getGameBySessionID(int sessionID) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public List<Session> getSessionByEventID(int eventID) {
 		// TODO Auto-generated method stub
 		return null;
 	}

@@ -49,9 +49,9 @@ public class StartBowlingServlet extends HttpServlet {
 		  session.setAttribute(startBowlingKey,  model);
 		  
 		  //initialize the games list with 3 games
-		  games.add(new Game(1,14));
-		  games.add(new Game(2,22));
-		  games.add(new Game(3,4));
+		  games.add(new Game(1,1,1,1,14));
+		  games.add(new Game(1,1,1,2,22));
+		  games.add(new Game(1,1,1,3,4));
 		  session.setAttribute(gamesListKey, games);
 		  
 		} 
@@ -72,7 +72,7 @@ public class StartBowlingServlet extends HttpServlet {
 		ArrayList<Event> events = model.getEvents();
         if(model.getEvents() == null) {
         	events = new ArrayList<Event>();
-        	events.add(new Event("FirstName", "FirstType", 0, e1));
+        	events.add(new Event(1,1,1,"FirstName", 1, "FirstType", 0));
 		}
         else {
         	events = model.getEvents();
@@ -87,7 +87,7 @@ public class StartBowlingServlet extends HttpServlet {
         
         // Check which button was clicked
         if ("startNewGame".equals(buttonValue)) {
-        	Game g = new Game(games.size()+1,1);
+        	Game g = new Game(1,1,1,games.size()+1,1);
         	games.add(g); //game gets added to the end of the list //dont worry that the gameNumber will repeat.
         	//Eventually it won't because it will take database values
         	currentGame = g;
