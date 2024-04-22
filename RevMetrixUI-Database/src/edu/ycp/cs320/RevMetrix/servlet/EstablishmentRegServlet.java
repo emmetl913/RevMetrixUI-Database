@@ -11,6 +11,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import edu.ycp.cs320.RevMetrix.controller.EstablishmentRegController;
+import edu.ycp.cs320.RevMetrix.model.Account;
 import edu.ycp.cs320.RevMetrix.model.Establishment;
 import edu.ycp.cs320.RevMetrix.model.EstablishmentArray;
 
@@ -29,42 +30,28 @@ public class EstablishmentRegServlet extends HttpServlet {
 		System.out.println("establishmentReg Servlet: doGet");	
 		
 		HttpSession session = req.getSession();
-	    long createTime = session.getCreationTime();
-		   
-		// Get last access time of this Webpage.
-		long lastAccessTime = session.getLastAccessedTime();
-		String userIDKey = new String("userID");
-		String userID = new String("ABD");
-
-		   // Check if this is new comer on your Webpage.
-		String establishmentRegKey = new String("establishmentRegKey");
-		EstablishmentArray model = (EstablishmentArray) session.getAttribute(establishmentRegKey);
 
 		// If first visit: new session id
-		if (session.isNew() ){
-	      session.setAttribute(userIDKey, userID);
-		  session.setAttribute(establishmentRegKey,  model);
-		} 
 		//Get model and userID from jsp
-		//model = (EstablishmentArray)session.getAttribute(establishmentRegKey);
-
-		userID = (String)session.getAttribute(userIDKey);
-
-		//controller.setModel(model);
+	    
+	    
+		Account acc = (Account) session.getAttribute("currAccount");
+		System.out.print(acc.getAccountId());
+		EstablishmentArray model = new EstablishmentArray(acc.getAccountId());
+		EstablishmentRegController controller = new EstablishmentRegController();
+		controller.setModel(model);
 		
-		if (model == null) {
-		    model = new EstablishmentArray();
-		    session.setAttribute(establishmentRegKey, model);
-		}
 		ArrayList<Establishment> establishments = model.getEstablishments();
+		
+		for(Establishment esta : establishments) {
+			System.out.println(esta.getEstablishmentName());
+		}
+		
 		establishments = model.getEstablishments();
-
         
 		// Set the ArrayList as a request attribute
 		req.setAttribute("esta", establishments);
-		session.setAttribute(establishmentRegKey, model); //update session model
-
-		
+		req.setAttribute("estaArray", model);
 		
 		// call JSP to generate empty form
 		req.getRequestDispatcher("/_view/establishmentReg.jsp").forward(req, resp);
@@ -79,32 +66,17 @@ public class EstablishmentRegServlet extends HttpServlet {
 		
 		// holds the error message text, if there is any
 		String errorMessage = null;
+		HttpSession session = req.getSession();
 
-		EstablishmentArray model = new EstablishmentArray();
+		Account acc = (Account) session.getAttribute("currAccount");
+		System.out.print(acc.getAccountId());
+		EstablishmentArray model = new EstablishmentArray(acc.getAccountId());
 		EstablishmentRegController controller = new EstablishmentRegController();
 		controller.setModel(model);
-
-		// Get session creation time.
-				HttpSession session = req.getSession();
-			    long createTime = session.getCreationTime();
-				   
-				// Get last access time of this Webpage.
-				long lastAccessTime = session.getLastAccessedTime();
-				String userIDKey = new String("userID");
-				String userID = new String("ABCD");
-
-				String establishmentRegKey = new String("establishmentRegKey");
 				
 				   // Check if this is new comer on your Webpage.
-				if (session.isNew() ){
-			      session.setAttribute(userIDKey, userID);
-				  session.setAttribute(establishmentRegKey,  model);
-				} 
-				model = (EstablishmentArray)session.getAttribute(establishmentRegKey);
-				userID = (String)session.getAttribute(userIDKey);
 				//end session shenanigans
 		
-		controller.setModel(model);
         ArrayList<Establishment> establishments = model.getEstablishments(); //get ball ArrayList from session updated model
 		if(establishments == null) {
 			establishments = new ArrayList<Establishment>();
@@ -117,24 +89,18 @@ public class EstablishmentRegServlet extends HttpServlet {
 		
 		if (req.getParameter("submitEstab") != null ) {
 			//System.out.println(model.getBallAtIndex(0).getName());
-			controller.addEstablishment(newEstablishmentName, newEstablishmentAddress);
+			controller.addEstablishment(acc.getAccountId(),newEstablishmentName, newEstablishmentAddress);
 		}
 		if(req.getParameter("submitRemoveEstab") != null) {
 			//controller.removeBall(removeBallName);
-			 Iterator<Establishment> iterator = establishments.iterator();
-			    while (iterator.hasNext()) {
-			    	Establishment establishment = iterator.next();
-			        if (establishment.getEstablishmentName().equals(removeEstablishmentName)) {
-			            iterator.remove(); // Remove the ball from the ArrayList
-			            break; // Exit the loop after removing the ball
-			        }
-			    }
+			 controller.removeEstablishment(acc.getAccountId(), removeEstablishmentName);
 		}
+		
+        establishments = model.getEstablishments(); 
 		
 		req.setAttribute("errorMessage", errorMessage);
 		req.setAttribute("esta", establishments);
-		session.setAttribute(establishmentRegKey, model); //update session model
-		
+		req.setAttribute("estaArray", model);
 		req.getRequestDispatcher("/_view/establishmentReg.jsp").forward(req, resp);
 	}
 

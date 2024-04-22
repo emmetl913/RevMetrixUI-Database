@@ -4,9 +4,8 @@ package edu.ycp.cs320.RevMetrix.model;
 public class Establishment {
 	private String establishmentName, address;
 	private int EstaId, accountId;
-
+	
 	public Establishment() {
-		
 	}
 	
 	public Establishment(int EstaId, int accountId, String establishmentName, String address) {
