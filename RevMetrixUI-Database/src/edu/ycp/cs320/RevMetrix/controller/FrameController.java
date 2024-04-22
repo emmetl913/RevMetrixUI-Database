@@ -25,7 +25,7 @@ public class FrameController{
 		}
 		
 		//if the frame doesn't exist, create a new one and add it to the list
-		Frame newFrame = new Frame(frameNumber);
+		Frame newFrame = new Frame(0, 0, frameNumber);
 		frames.add(newFrame);
 		return newFrame;
 	}

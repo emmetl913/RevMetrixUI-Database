@@ -15,8 +15,8 @@ public class ShotController {
 		shots = new ArrayList<Shot>();
 	}
 
-	public Shot createShot(String type, int pins) {
-		Shot shot = new Shot();
+	public Shot createShot(int sessionID, int gameID, int frameID, int shotNumber, String count, int ballID, String pinsLeft) {
+		Shot shot = new Shot(1, 1, 1, 1, "", 1, "");
 		shots.add(shot);
 		return shot;
 	}
@@ -28,7 +28,7 @@ public class ShotController {
 	public int getTotalPins() {
 		int totalPins = 0;
 		for (Shot shot : shots) {
-			totalPins += shot.getKnockedOver();
+			totalPins += shot.getPins();
 		}
 		return totalPins;
 	}
@@ -49,10 +49,10 @@ public class ShotController {
 	    	
 	    	for(Shot shot : shots) {
 	    		//process shot type
-	    		totalScore += processShotType(shot.getType());
+//	    		totalScore += processShotType(shot.getType());
 	    		
 	    		//add knocked over pins
-	    		totalScore += shot.getKnockedOver();
+	    		totalScore += shot.getPins();
 	    	}
 	    }
 

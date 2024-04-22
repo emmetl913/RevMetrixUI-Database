@@ -11,43 +11,65 @@ public class ShotTest{
 	
 	@Before
 	public void SetUp() {
-		shot = new Shot();
+		shot = new Shot(0, 1, 1, 1, "", 1, "");
 	}
 	
 	@Test
-	public void testGetKnockedOver() {
-		shot = new Shot();
-		shot.setKnockedOver(4);
+	public void testPins() {
+		shot.setPins(7);
 		
-		assertEquals(4, shot.getKnockedOver());
+		assertEquals(7, shot.getPins());
 	}
 	
 	@Test
-	public void setKnockedOver() {
-		shot.setKnockedOver(7);
+	public void testBallID() {
+		shot.setBallID(0);
 		
-		assertEquals(7, shot.getKnockedOver());
+		assertEquals(0, shot.getBallID());
 	}
 	
 	@Test
-	public void testGetType() {
-		shot.setType("X");
-		assertEquals("X", shot.getType());
+	public void testSetSessionID() {
+		shot.setSessionID(4);
 		
-		shot.setType("F");
-		assertEquals("F", shot.getType());
-		
-		shot.setType("-");
-		assertEquals("-", shot.getType());
-		
-		shot.setType("/");
-		assertEquals("/", shot.getType());
+		assertEquals(4, shot.getSessionID());
 	}
 	
 	@Test
-	public void testSetBallName() {
-		shot.setBallName("ball");
+	public void testSetGameID() {
+		shot.setGameID(3);
 		
-		assertEquals("ball", shot.getBallName());
+		assertEquals(3, shot.getGameID());
 	}
+	
+	@Test
+	public void testSetFrameID() {
+		shot.setFrameID(7);
+		
+		assertEquals(7, shot.getFrameID());
+	}
+	
+	@Test
+	public void testShotNumber() {
+		shot.setShotNumber(1);
+		assertEquals(1, shot.getShotNumber());
+	}
+	
+	@Test
+	public void testCount() {
+		shot.setCount("2");
+		assertEquals("2", shot.getCount());
+	}
+	
+	@Test
+	public void testPinsLeft() {
+		shot.setPinsLeft("9");
+		assertEquals("9", shot.getPinsLeft());
+	}
+	
+//	@Test
+//	public void testShotType() {
+//		shot.setType("X");
+//		assertEquals("X", shot.getType());
+//	}
 }

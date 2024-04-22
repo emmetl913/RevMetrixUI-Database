@@ -107,20 +107,20 @@ public class ShotServlet extends HttpServlet {
 		}
 		
 		//add new frame object to the arraylist
-		frames.add(new Frame(1, 1));
+		frames.add(new Frame(0, 0, frameNumber));
 		
 		//update frame number in session
 		session.setAttribute("frameNumber", frameNumber);
 		
 		//get ballArsenal from the session
-		List<Ball> ballArsenal = (List<Ball>)session.getAttribute("ballArsenal");
-		
-		boolean containsAddBall = ballArsenal != null && ballArsenal.stream().anyMatch(ball -> "Add Ball".equals(ball.getName()));
-		
-		if(containsAddBall) {
-			resp.sendRedirect(req.getContextPath() + "/_view/ballArsenal.jsp");
-			return;
-		}
+//		List<Ball> ballArsenal = (List<Ball>)session.getAttribute("ballArsenal");
+//		
+//		boolean containsAddBall = ballArsenal != null && ballArsenal.stream().anyMatch(ball -> "Add Ball".equals(ball.getName()));
+//		
+//		if(containsAddBall) {
+//			resp.sendRedirect(req.getContextPath() + "/_view/ballArsenal.jsp");
+//			return;
+//		}
 		
 		req.setAttribute("userID", userID);
 		req.setAttribute("ballArsenal", ballArsenal);
@@ -200,7 +200,7 @@ public class ShotServlet extends HttpServlet {
 		//form submission = next Frame button
 		String ballName = req.getParameter("ball");
 		String shotType = req.getParameter("shotType");
-		int pins = Integer.parseInt(req.getParameter("pins"));
+		String pins = req.getParameter("pins");
 		
 //		String pinsParam = req.getParameter("pins");
 //		int pins = 0;
@@ -213,7 +213,7 @@ public class ShotServlet extends HttpServlet {
 //		}
 //		
 		//create a new Shot object with submitted data
-		Shot shot = new Shot(ballName, shotType, pins);
+		Shot shot = new Shot(0, 0, frameNumber, 1, "0", 0, pins);
 		
 		Frame frame = frameController.findOrCreateFrame(frames, frameNumber);
 		frame.addShot(shot);
