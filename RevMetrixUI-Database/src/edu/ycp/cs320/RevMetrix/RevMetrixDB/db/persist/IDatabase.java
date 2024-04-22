@@ -3,6 +3,9 @@ package edu.ycp.cs320.RevMetrix.RevMetrixDB.db.persist;
 import java.util.ArrayList;
 
 import edu.ycp.cs320.RevMetrix.model.Establishment;
+import edu.ycp.cs320.RevMetrix.model.Game;
+import edu.ycp.cs320.RevMetrix.model.Session;
+
 import java.util.List;
 
 import edu.ycp.cs320.RevMetrix.model.Account;
@@ -33,6 +36,8 @@ public interface IDatabase {
 	List<Account> getAccountByEmail(String email);
 	List<Ball> getBallsByAccountIdFromDB(int accountId);
 	List<Ball> getBallByName(String name);
+	List<Game> getGameBySessionID(int sessionID);
+	List<Session> getSessionByEventID(int eventID);
 
 	// Shot Level Methods
 	public Integer insertNewEvent(int eventID, int estbID, String name, int time, String type, int standing);

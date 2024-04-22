@@ -64,7 +64,7 @@ public class EventServlet extends HttpServlet {
         else {
         	events = model.getEvents();
         }
-        EstablishmentArray estaModel = new EstablishmentArray();
+        EstablishmentArray estaModel = new EstablishmentArray(0);
 		EstablishmentRegController estaController = new EstablishmentRegController();
 		estaController.setModel(estaModel);
         ArrayList<Establishment> estabs = estaModel.getEstablishments();
