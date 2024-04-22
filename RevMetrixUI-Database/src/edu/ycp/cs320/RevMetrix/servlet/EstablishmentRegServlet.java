@@ -42,8 +42,12 @@ public class EstablishmentRegServlet extends HttpServlet {
 		
 		ArrayList<Establishment> establishments = model.getEstablishments();
 		
-		for(Establishment esta : establishments) {
-			System.out.println(esta.getEstablishmentName());
+		try {
+			for(Establishment esta : establishments) {
+				System.out.println(esta.getEstablishmentName());
+			}
+		}catch(NullPointerException e) {
+			
 		}
 		
 		establishments = model.getEstablishments();
@@ -89,6 +93,7 @@ public class EstablishmentRegServlet extends HttpServlet {
 		if (req.getParameter("submitEstab") != null ) {
 			//System.out.println(model.getBallAtIndex(0).getName());
 			controller.addEstablishment(acc.getAccountId(),newEstablishmentName, newEstablishmentAddress);
+			
 		}
 		if(req.getParameter("submitRemoveEstab") != null) {
 			//controller.removeBall(removeBallName);
