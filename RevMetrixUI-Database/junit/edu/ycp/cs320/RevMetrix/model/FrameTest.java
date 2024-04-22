@@ -12,12 +12,12 @@ public class FrameTest{
 	
 	@Before
 	public void setUp() {
-		num = new Frame(1);
+		num = new Frame(1, 1, 1);
 	}
 	
 	@Test
 	public void testGetFrame() {
-		num = new Frame(1);
+//		num = new Frame(1, 1, 1);
 		assertEquals(1, num.getFrame());
 	}
 	
@@ -31,5 +31,24 @@ public class FrameTest{
 	public void testGetLane() {
 		num.setLaneNumber(4);
 		assertEquals(4, num.getLaneNumber());
+	}
+	
+	@Test
+	public void testGame() {
+		num.setGameID(3);
+		assertEquals(3, num.getGameID());
+	}
+	
+//	@Test
+//	public void setAddShot() {
+//		Shot shot = new Shot(1, 1, 1, 1, "0", 1, "2");
+//		num.addShot(shot);
+//		assertEquals(shot, num.getShot(0));
+//	}
+	
+	@Test
+	public void testLaneNumber() {
+		num.setLaneNumber(7);
+		assertEquals(7, num.getLaneNumber());
 	}
 }
