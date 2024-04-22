@@ -2,7 +2,6 @@ package edu.ycp.cs320.RevMetrix.servlet;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.List;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -10,7 +9,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import edu.ycp.cs320.RevMetrix.controller.GameController;
 import edu.ycp.cs320.RevMetrix.model.Account;
 import edu.ycp.cs320.RevMetrix.model.Game;
 
@@ -31,20 +29,56 @@ public class GameServlet extends HttpServlet {
 		}
 		System.out.println("Game Servlet: doGet");	
 		HttpSession session = req.getSession();
-	  
-		Account acc = (Account) session.getAttribute("currAccount");
-		System.out.print(acc.getAccountId());
-		GameController controller = new GameController();
-		
-		
+	    long createTime = session.getCreationTime();
+		   
+		// Get last access time of this Webpage.
+		long lastAccessTime = session.getLastAccessedTime();
 
-		for(Game game : games)
-		{
-			System.out.println(game.getGameID());
+
+		   // Check if this is new comer on your Webpage.
+		
+		String gamesListKey = new String("gamesListKey");
+		ArrayList<Game> games = (ArrayList<Game>)session.getAttribute(gamesListKey);
+		
+		// If first visit: new session id
+		if (session.isNew() ){
+		  //initialize the games list with 3 games
+	      if(games == null) {
+				games = new ArrayList<Game>();
+				
+				games.add(new Game(1, 1, 14, 2, 3));
+				games.add(new Game(1, 2, 22, 3, 4));
+				games.add(new Game(1, 3, 4, 4, 5));
+				session.setAttribute(gamesListKey, games);
+			}
+		} 
+		if(games == null) {
+			games = new ArrayList<Game>();
+			
+			games.add(new Game(1, 1, 14, 2, 3));
+			games.add(new Game(1, 2, 22, 3, 4));
+			games.add(new Game(1, 3, 4, 4, 5));
+			session.setAttribute(gamesListKey, games);
+		}
+		//Get model and userID from jsp
+		games = (ArrayList<Game>)session.getAttribute(gamesListKey);
+		//controller.setModel(model);
+		if(games != null) {
+			for(Game g: games) {
+				System.out.println(g.getLane());
+			}
 		}
 		
-		req.setAttribute("model", games);
-		
+        
+        //Initialize a Game that will be sent out to other portions of the website (currentGame)
+        Game currentGame = null;
+        
+        // Retrieve the value of the button clicked
+        String buttonValue = req.getParameter("gameStatus");
+        
+        
+		req.setAttribute("gameObjArr", games);
+		session.setAttribute(gamesListKey, games);
 		
 		// call JSP to generate empty form
 		req.getRequestDispatcher("/_view/game.jsp").forward(req, resp);
@@ -56,23 +90,13 @@ public class GameServlet extends HttpServlet {
 			throws ServletException, IOException {
 		System.out.println("Game Servlet: doPost");
 		
-		String errorMessage = null;
 		HttpSession session = req.getSession();
-	    
-		Account acc = (Account) session.getAttribute("currAccount");
-		System.out.print(acc.getAccountId());
-		Game model = new Game(0,0,0,0,0);
-		GameController controller = new GameController();
-		controller.setModel(model);
-		
-		List<Game> games = controller.getGames();
-		if(games == null)
-		{
-			games = new ArrayList<Game>();
-			games.add(new Game(0, 0, 0, 0, 0));
-		}
-		
-		
+	    long createTime = session.getCreationTime();
+		   
+		// Get last access time of this Webpage.
+		long lastAccessTime = session.getLastAccessedTime();
+		String userIDKey = new String("userID");
+		String userID = new String("ABCD");
 
 		   // Check if this is new comer on your Webpage.
 		

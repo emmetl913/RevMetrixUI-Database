@@ -3,10 +3,13 @@ package edu.ycp.cs320.RevMetrix.RevMetrixDB.db.persist;
 import java.util.ArrayList;
 
 import edu.ycp.cs320.RevMetrix.model.Establishment;
+<<<<<<< HEAD
 import edu.ycp.cs320.RevMetrix.model.Event;
 import edu.ycp.cs320.RevMetrix.model.Game;
 import edu.ycp.cs320.RevMetrix.model.Session;
 
+=======
+>>>>>>> parent of 93b877c (working on session page)
 import java.util.List;
 
 import edu.ycp.cs320.RevMetrix.model.Account;
@@ -29,10 +32,13 @@ public interface IDatabase {
 	List<Account> getAccountByEmail(String email);
 	List<Ball> getBallsByAccountIdFromDB(int accountId);
 	List<Ball> getBallByName(String name);
+<<<<<<< HEAD
 	public Integer removeBall(int accID, String name);
 
 	List<Game> getGameBySessionID(int sessionID);
 	List<Session> getSessionByEventID(int eventID);
+=======
+>>>>>>> parent of 93b877c (working on session page)
 
 	// Shot Level Methods
 	public Integer insertNewFrame(int gameID, int score, int frameNumber);

@@ -40,54 +40,7 @@ public class DerbyDatabase implements IDatabase {
 	}
 
 	private static final int MAX_ATTEMPTS = 10;	
-	@Override
-	public List<Game> getGameBySessionID(int sessionID)
-	{
-		return executeTransaction(new Transaction<List<Game>>() {
-			@Override
-			public List<Game> execute(Connection conn) throws SQLException 
-			{
-				PreparedStatement stmt = null;
-				ResultSet resultSet = null;
-				
-				try 
-				{
-					stmt = conn.prepareStatement(
-						" select * from games where session_id = ?"	
-					);
-					stmt.setInt(1, sessionID);
-					
-					List<Game> result = new ArrayList<Game>();
-					Boolean found = false;
-					
-					while(resultSet.next())
-					{
-						found = true;
-						
-						Game game = new Game(0, 0, 0, 0, 0);
-						loadGame(game, resultSet, 1);
-						result.add(game);
-					}
-					if (!found) {
-						System.out.println("No Games were found in the database");
-					}
-					return result;
-				} finally
-				{
-					DBUtil.closeQuietly(stmt);
-					DBUtil.closeQuietly(resultSet);
-				}
-			}
-		});
-		
-	}
-	private void loadGame(Game game, ResultSet resultSet, int index) throws SQLException {
-		game.setGameID(resultSet.getInt(index++));
-		game.setSessionID(resultSet.getInt(index++));
-		game.setLane(resultSet.getInt(index++));
-		game.setGameNumber(resultSet.getInt(index++));
-		game.setScore(resultSet.getInt(index++));
-	}
+	
 	@Override
 	public List<Establishment> getEstablishmentsByAccount(int accID) {
 		return executeTransaction(new Transaction<List<Establishment>>() {
@@ -777,59 +730,6 @@ public class DerbyDatabase implements IDatabase {
 				}
 			}
 		});
-	}
-	@Override
-	public List<Session> getSessionByEventID(int eventID) {
-		return executeTransaction(new Transaction<List<Session>>() {
-			@Override
-			public List<Session> execute(Connection conn) throws SQLException
-			{
-			PreparedStatement stmt1 = null;	
-			ResultSet resultSet1 = null;
-				
-				try
-				{
-					stmt1 = conn.prepareStatement(
-							"select * from sessions"+
-							" where sessions.event_id = ?"
-					);
-					
-					stmt1.setInt(1, eventID);
-					
-					List<Session> result = new ArrayList<Session>();
-					
-					resultSet1 = stmt1.executeQuery();
-					
-					Boolean found = false;
-				
-					while(resultSet1.next())
-					{
-						found = true;
-						Session session = new Session(0, 0, "", "", "", 0);
-						loadSession(session, resultSet1, 1);
-						//System.out.println("SKREET" + ball.getName());
-						result.add(session);
-					}
-					
-					return result;
-				} 
-				finally
-				{
-					DBUtil.closeQuietly(stmt1);
-					DBUtil.closeQuietly(resultSet1);
-				}
-		
-			}
-		});
-	}
-	private void loadSession(Session session, ResultSet resultSet, int index) throws SQLException {
-		//Proper order: ball id, accountid, weight, name, righthand, brand, color
-		session.setSessionID(resultSet.getInt(index++));
-		session.setEventID(resultSet.getInt(index++));
-		session.setTime(resultSet.getString(index++));
-		session.setOppType(resultSet.getString(index++));
-		session.setName(resultSet.getString(index++));
-		session.setScore(resultSet.getInt(index++));
 	}
 	@Override
 	public Integer insertNewFrame(int gameID, int score, int frameNumber) {
@@ -1554,6 +1454,13 @@ public class DerbyDatabase implements IDatabase {
 						insertShot.addBatch();
 					}
 					//insertNewShotWithFrameID(1, 1, 1, 1, "4", 6, "1234");
+					List<Shot> testShot = new ArrayList<Shot>();
+					int index = 1;
+					testShot = findAllShotsWithSessionID(index);
+					Shot shot = testShot.get(0);
+					System.out.println("Found shot with frameID: <"+shot.getFrameID()+"> "
+							+ "gameID: <"+shot.getGameID()+"> "
+									+ "sessionID: <"+shot.getSessionID()+"> :3");
 					
 					insertShot.executeBatch();
 					tablesPopulated += "Shots, ";
@@ -1717,6 +1624,5 @@ public class DerbyDatabase implements IDatabase {
 		// TODO Auto-generated method stub
 		return null;
 	}
-	
 	
 }

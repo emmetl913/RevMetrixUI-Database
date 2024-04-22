@@ -42,6 +42,9 @@ public class EstablishmentRegServlet extends HttpServlet {
 		
 		ArrayList<Establishment> establishments = model.getEstablishments();
 		
+		if(establishments == null) {
+			establishments.add(new Establishment(1, acc.getAccountId(),"Establishment Example", "500 Midlane Alley"));//int EstaId, int accountId, String establishmentName, String address
+		}
 		for(Establishment esta : establishments) {
 			System.out.println(esta.getEstablishmentName());
 		}
