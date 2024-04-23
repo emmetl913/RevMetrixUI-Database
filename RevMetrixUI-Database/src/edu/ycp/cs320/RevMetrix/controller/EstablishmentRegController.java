@@ -21,11 +21,8 @@ public class EstablishmentRegController {
 		db = DatabaseProvider.getInstance();		
 	}
 	
-	public Boolean removeEstablishment(int accID, String name) {
-		if(db.removeEstablishment(accID, name) == 1)
-			return true;
-		else
-			return false;
+	public void removeEstablishment(int accID, String name) {
+		db.removeEstablishment(accID, name);
 	}
 
 	public List<Establishment> getAllEstablishmentsForAccount(int accountId) {
@@ -59,8 +56,7 @@ public class EstablishmentRegController {
 	
 	//adds a ball to the arsenal with the name and color
 	public void addEstablishment(int acc, String name, String address) {
-		Establishment establishment = new Establishment(db.insertNewEstablishment(acc, name, address), acc, name, address);
-		model.addEstablishment(establishment);
+		db.insertNewEstablishment(acc, name, address);
 	}
 	
 	public void changeEstablishmentNameAtIndex(int index, String newName){
