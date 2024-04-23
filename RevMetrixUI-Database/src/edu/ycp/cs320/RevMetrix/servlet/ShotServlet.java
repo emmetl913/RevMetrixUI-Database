@@ -13,14 +13,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 import edu.ycp.cs320.RevMetrix.controller.FrameController;
-import edu.ycp.cs320.RevMetrix.controller.GameControllerReal;
+import edu.ycp.cs320.RevMetrix.controller.GameController;
 import edu.ycp.cs320.RevMetrix.controller.ShotController;
 import edu.ycp.cs320.RevMetrix.model.Shot;
 import edu.ycp.cs320.RevMetrix.model.Frame;
 import edu.ycp.cs320.RevMetrix.model.Ball;
 import edu.ycp.cs320.RevMetrix.model.BallArsenal;
-
-import edu.ycp.cs320.RevMetrix.controller.ShotController;
 
 
 public class ShotServlet extends HttpServlet {
@@ -152,7 +150,7 @@ public class ShotServlet extends HttpServlet {
 		
 		FrameController frameController = new FrameController();
 		ShotController controller = new ShotController();
-		GameControllerReal game = new GameControllerReal();
+		GameController game = new GameController();
 		
 		//get first and second shot from the user
 		String firstShotValue = req.getParameter("score-box1");

@@ -1,6 +1,7 @@
 /.metadata/
 bowlingBall.jpg
 *.csv
+*.log
 derby.log
 /bin/
 derby.log
