@@ -153,8 +153,8 @@ button {
 					  
 					  String is = ""+i;
 			%>
-			<option value=<%=is%>><%= game.getGameNumber() %> &nbsp&nbsp&nbsp|&nbsp&nbsp&nbsp Lane: <%=game.getLane()%> &nbsp&nbsp&nbsp|&nbsp&nbsp&nbsp # of Frames: <%=game.getFrameCount()%>
-			&nbsp&nbsp&nbsp|&nbsp&nbsp&nbsp Score: <%=game.getScore()%></option>
+			<option value=<%=is%>><%= game.getGameNumber() %> &nbsp&nbsp&nbsp|&nbsp&nbsp&nbsp Lane: <%=game.getLane()%>  
+				&nbsp&nbsp&nbsp|&nbsp&nbsp&nbsp Score: <%=game.getScore()%></option>
 		   <% 
 				 } } else {	%>
 					 <option value="${game.establishment}">No Establishments</option>

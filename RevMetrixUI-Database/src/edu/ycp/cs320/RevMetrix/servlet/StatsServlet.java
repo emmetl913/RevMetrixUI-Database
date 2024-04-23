@@ -98,9 +98,9 @@ public class StatsServlet extends HttpServlet {
 		if (session.isNew() ){
 	      session.setAttribute(userIDKey, userID);		  
 		  //initialize the games list with 3 games
-		  games.add(new Game(1,14));
-		  games.add(new Game(2,22));
-		  games.add(new Game(3,4));
+		  games.add(new Game(1,1,1,1,14));
+		//  games.add(new Game(2,22));
+		  //games.add(new Game(3,4));
 		  session.setAttribute(gamesListKey, games);
 		  
 		} 
@@ -140,8 +140,8 @@ public class StatsServlet extends HttpServlet {
         }
         if(req.getParameter("new") != null) {
         	//currentGame = selected game from dropdown
-        	games.add(new Game(games.size(),laneInput));
-        	currentGame = games.get(games.size()-1);
+        	//games.add(new Game(games.size(),laneInput));
+        	//currentGame = games.get(games.size()-1);
         }
 		req.setAttribute("gameObjArr", games);
 		session.setAttribute(gamesListKey, games);
