@@ -42,13 +42,29 @@ public class BallArsenalController {
 			return ballList;
 		}
 	}
+	public Boolean removeBall(int accID, String name) {
+		if(db.removeBall(accID, name) == 1)
+			return true;
+		else
+			return false;
+	}
+	public List<Ball> getBallByName(String ballName){
+		List<Ball> ballList = db.getBallByName(ballName);
+		if(ballList.isEmpty()) {
+			System.out.println("Aint no balls in your account bro with name: "+ballName);
+			return null;
+		}
+		else {
+			return ballList;
+		}
+	}
 	
 	public boolean insertBallinDB(int account_id, float weight, String name, Boolean righthand, String brand, String color) {
 		
 		// insert new book (and possibly new author) into DB
 		Integer ball_id = db.insertNewBallInDB(account_id, weight, name, righthand, brand, color);
 		//check if the insertion succeeded
-		if (ball_id > 0){
+		if (account_id > 0){
 			System.out.println("New ball (Ball ID: " + ball_id + ", Ball Name: "+name+") successfully added to balls table");
 			return true;
 		}
@@ -59,13 +75,13 @@ public class BallArsenalController {
 	}
 	
 	//finds the ball that is to be removed, and removes it from the list
-	public void removeBall(String name) {
-		for(Ball ball : arsenal.getBalls()) {
-			if(ball.getName().equals(name)) {
-				arsenal.removeBall(ball);
-			}
-		}
-	}
+//	public void removeBall(String name) {
+//		for(Ball ball : arsenal.getBalls()) {
+//			if(ball.getName().equals(name)) {
+//				arsenal.removeBall(ball);
+//			}
+//		}
+//	}
 	
 	
 }

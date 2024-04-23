@@ -21,7 +21,7 @@
 			body{
 				font-family: Arial, Helvetica, sans-serif;
 			}
-
+			
 			header {
     text-align: center;
     position: absolute;
@@ -36,10 +36,13 @@
 	            border: 1px solid #ccc;
 	            border-radius: 4px;
 	        }
-			.color-picker, input[type="number"]{
-			    height: 69px; 
-				width: 69px;
+			.color-picker{
+			    height: 50px; 
+				width: 70px;
 				vertical-align: middle;
+			}
+			input[type="number"]{
+				width: 180px;
 			}
 			
 			h1{
@@ -54,6 +57,10 @@
 
 			#add-ball-form, #remove-ball-form{
 				margin-bottom: 10px;
+			}
+			.error{
+				color: red; 
+	        	font-weight: bold;
 			}
 
 	.ball-box {
@@ -71,7 +78,7 @@
             background-color: white;
             box-shadow: 2px;
             /* Set fixed height for the container */
-            height: 360px;
+            height: 430px;
             /* Add scrollbar when content overflows */
             overflow: auto;            
         }
@@ -149,6 +156,8 @@
         border: 1px solid black; /* Add border around each ball section */
         margin-bottom: 10px; /* Add some space between ball sections */
         padding: 10px; /* Add padding inside each ball section */
+		background-color: white;
+
     }
 .ball-section:hover{
 	background-color: #33B5FF;
@@ -169,9 +178,7 @@ button:hover {
 	</head>
 
 	<body>
-		<c:if test="${! empty errorMessage}">
-			<div class="error">${errorMessage}</div>
-		</c:if>
+		
 
 		<div class="sidebar">
 		 <a href="${pageContext.servletContext.contextPath}/index">
@@ -190,6 +197,9 @@ button:hover {
 	          <input type="hidden" id="type" name="newType" value="">
 
 			<div class="ball-box" id="ballBoxDiv">
+				<c:if test="${! empty errorMessage}">
+					<div class="error">${errorMessage}</div>
+				</c:if>
 				<div id="add-ball-form">
 					<input type="text" name="ballName" placeholder="Ball Name">
 				    <input type="text" name="ballBrand" placeholder="Ball Brand"><br>
@@ -197,10 +207,10 @@ button:hover {
 				    <input type="color" name="ballColor" placeholder="Ball Color" class="color-picker">
 				    <br> 
 				    
-				    <button name="leftHand" type="button"onclick="setToLeft()">>Left Hand</button>
+				    <button name="leftHand" type="button"onclick="setToLeft()">Left Hand</button>
 				    <button name="rightHand" type="button"onclick="setToRight()">Right Hand</button>
 				    <br>
-				    
+				    <br>
 					<button text="Add Ball" name="addBall" type="submit" value="Register Ball">
 					Add Ball</button>
 					
@@ -208,7 +218,7 @@ button:hover {
 					
 				</div>
 				<div id="remove-ball-form">
-					<input type="text" name="removeBallName" placeholder="Ball Name to Remove">
+					<input type="text" name = "removeBallName"placeholder="Ball Name to Remove">
 					<button name="removeBall" type="submit" value="Remove Ball">
 					Remove Ball</button>
 				</div>
@@ -216,10 +226,13 @@ button:hover {
 					<% 
 			            if (balls != null && !balls.isEmpty()) {
 			                for (Ball ball : balls) {
+			                	String ballColor = ball.getColor();
 			        %>
-			        <div class="ball-section" onclick="selectBall ('<%= ball.getName() %>')"> <!-- change to ballId-->
-			            <p>Name: <%= ball.getName() %> RightHanded: <%= ball.getRightHanded()%> </p>
-			        </div>
+			        <div class="ball-section" onclick="selectBall ('<%= ball %>')"><!--  style="background-color: <%=ballColor%>;"-->
+			        
+			        <p>Name: <%= ball.getName() %> RightHanded: <%= ball.getRightHanded() %> </p>
+			    </div>
+
 			        <% 
 			                }
 			            } else { 
@@ -232,6 +245,11 @@ button:hover {
 			<input type="hidden" name="selectedBall" id="selectedBall" value="">
 		</form>
 		<script>
+		
+	    // JavaScript to set hover color for each ball section
+		//does not exist
+
+
 		 function selectBall(ballName) {
 		        document.getElementById('selectedBall').value = ballName;
 		        document.getElementById('ballArsenalForm').submit();

@@ -458,7 +458,7 @@
 				  for (int i =0; i < games.size(); i++) {
 					  Game game = games.get(i);
 			%>
-			<option><%= game.getGameNumber() %> &nbsp&nbsp&nbsp|&nbsp&nbsp&nbsp Lane: <%=game.getLane()%> &nbsp&nbsp&nbsp|&nbsp&nbsp&nbsp # of Frames: <%=game.getFrameCount()%>
+			<option><%= game.getGameNumber() %> &nbsp&nbsp&nbsp|&nbsp&nbsp&nbsp Lane: <%=game.getLane()%> &nbsp&nbsp&nbsp|&nbsp&nbsp&nbsp 
 			&nbsp&nbsp&nbsp|&nbsp&nbsp&nbsp Score: <%=game.getScore()%></option>
 		   <% 
 				 } } else {	%>

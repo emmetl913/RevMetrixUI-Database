@@ -37,18 +37,6 @@ public class EventServlet extends HttpServlet {
 		
 		Account acc = (Account) session.getAttribute("currAccount");
 
-		//controller.setModel(model);
-		Establishment e1 = new Establishment(0, 0, "Colony Park Lanes & Games", "1900 Pennsylvania Ave, York, PA 17404");
-
-		
-		ArrayList<Event> events = model.getEvents();
-        if(model.getEvents() == null) {
-        	events = new ArrayList<Event>();
-        	events.add(new Event(1, 1, "", 1, "", 1));
-		}
-        else {
-        	events = model.getEvents();
-        }
         EstablishmentArray estaModel = new EstablishmentArray(acc.getAccountId());
 		EstablishmentRegController estaController = new EstablishmentRegController();
 		estaController.setModel(estaModel);

@@ -2,7 +2,6 @@ package edu.ycp.cs320.RevMetrix.model;
 
 public class Game {
 	private int lane, gameNumber, score, gameID, sessionID;
-	
 
 	
 	public Game(int gameID, int sessionID, int currentLane, int gameNumber, int score) {

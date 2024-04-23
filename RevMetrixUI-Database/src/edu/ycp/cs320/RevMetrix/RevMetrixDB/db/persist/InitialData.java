@@ -190,14 +190,14 @@ public class InitialData {
 				List<String> tuple = readShots.next();
 				if (tuple == null)
 				{
-					System.out.println("It broke!");
+				//	System.out.println("It broke!");
 					break;
 				}
-				System.out.println(tuple);
+				//System.out.println(tuple);
 				Iterator<String> i = tuple.iterator();
 				
 				
-				int sessionID = Integer.parseInt(i.next());
+				int sessionID = Integer.parseInt(i.next()); //This is in the incorrect order compared to my table on DerbyDatabase -Brandon
 				int gameID = Integer.parseInt(i.next());
 				int frameID = Integer.parseInt(i.next());
 				int shotNumber = Integer.parseInt(i.next());
@@ -215,7 +215,6 @@ public class InitialData {
 			readShots.close();
 		}
 	}
-	
 	public static List<Ball> getBallArsenal() throws IOException
 	{
 		List<Ball> ballList = new ArrayList<Ball>();

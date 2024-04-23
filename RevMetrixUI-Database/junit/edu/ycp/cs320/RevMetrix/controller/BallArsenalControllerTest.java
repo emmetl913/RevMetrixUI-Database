@@ -36,10 +36,32 @@ public class BallArsenalControllerTest {
 	}
 	@Test
 	public void testGetBallByAccountID() {
-		ballList = controller.getBallByAccountId(1); 
+		ballList = controller.getBallByAccountId(2); 
+		assertTrue(ballList.get(0).getName().equals("BranBall"));
+	}
+	@Test
+	public void testGetBallByName() {
+		if(controller.getBallByName("8lbPurpleMary") == null) {
+			controller.insertBallinDB(1, 1, "8lbPurpleMary", true, "brand", "color");
+		}
+		ballList = controller.getBallByName("8lbPurpleMary");
 		assertTrue(ballList.get(0).getName().equals("8lbPurpleMary"));
 	}
-	
+	@Test
+	public void testDeleteBall() {
+		controller.insertBallinDB(1, 1, "8lbPurpleMary", true, "brand", "color");
+		System.out.println("inserted ball into database");
+		int ballExists = 0;
+		Boolean ballDeleted = false;
+		ballList = controller.getBallByName("8lbPurpleMary"); 
+
+		if(ballList.get(0).getName().equals("8lbPurpleMary") && ballList != null) {
+			ballExists++;
+			controller.removeBall(1, "8lbPurpleMary");
+			System.out.println("ball deleted");
+
+		}
+	}
 	
 	
 }
