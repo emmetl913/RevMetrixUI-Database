@@ -279,10 +279,10 @@
                 <div id="game-info">
                     <!-- no info, so it shows blank -->
                     <div class="game-box" id="gameNumber">
-                        <span>Game:   ${sessionScope.gameNumber}</span>
+                        <span>Game:   <%= session.getAttribute("gameNumber") %></span>
                     </div>
                     <div class="frame-box" id="frameNumber">
-                        <span>Frame: <%= request.getAttribute("frameNumber") %></span>
+                        <span>Frame: <%= session.getAttribute("frameNumber") %></span>
                     </div>
                     <!-- <div class="score-box">
                         <span>Total Score: ${sessionScope.totalScore}</span>
@@ -400,11 +400,6 @@
                 console.log("selectedScoreBox function called");
                 console.log("scoreBoxId: ", scoreBoxId);
 
-                //remove 'selected' class from all score boxes
-                // document.querySelectorAll('.score-box.selected').forEach(function(scoreBox){
-                //     scoreBox.classList.remove('selected');
-                // });
-
                 if(selectedScoreBoxId !== null){
                     const previousSelectedScoreBox = document.getElementById(selectedScoreBoxId);
                     if(previousSelectedScoreBox){
@@ -459,20 +454,20 @@
                             // // togglePin(pin);
                             // updateFirstShotDisplay();
 
-                            clickCount1++;
-                            if(clickCount1 === 1){
-                                console.log("clickCount1 = 1");
-                                resetSelectedScoreBox(firstScoreBox);
-                                console.log("reset score completed");
-                                firstShotScore = 0;
-                                updateFirstShotDisplay();
-                                console.log("update first shot display completed");
-                                clickCount1=0;
-                                // resetPinCounts();
-                                revertSelectedPinsColor(firstScoreBox);
-                                console.log("funtions completed");
-                                selectedPinsFirstShot = [];
-                            }
+                            // clickCount1++;
+                            // if(clickCount1 === 1){
+                            //     console.log("clickCount1 = 1");
+                            //     resetSelectedScoreBox(firstScoreBox);
+                            //     console.log("reset score completed");
+                            //     firstShotScore = 0;
+                            //     updateFirstShotDisplay();
+                            //     console.log("update first shot display completed");
+                            //     clickCount1=0;
+                            //     // resetPinCounts();
+                            //     revertSelectedPinsColor(firstScoreBox);
+                            //     console.log("funtions completed");
+                            //     selectedPinsFirstShot = [];
+                            // }
                             // return;
                         // }
 
@@ -494,22 +489,6 @@
                         // selectScoreBox('score-box2', 'selected-score-box');
                         if(secondScoreBox.classList.contains('selected')){
                             console.log("second score box selected");
-                            // secondScoreBox.classList.add('selected');
-                            // firstScoreBox.classList.remove('selected');
-
-                            // highlightSelectedScoreBox("score-box2");
-
-                            // secondShotScore = 0;
-
-                            // setSecondShot();
-
-                            // if(firstShotCount !== null){
-                            //     const maxPinsSecondShot = 10 - firstShotCount;
-
-                            //     if(secondShotScore > maxPinsSecondShot){
-                            //         setSpare();
-                            //     }
-                            // }
 
                             // updateSecondShotDisplay();
                             clickCount2++;
@@ -541,32 +520,6 @@
                         selectedPinsSecondShot = document.querySelectorAll('.selected-pin');
                         console.log("selected pins for second shot: ", selectedPinsSecondShot);
                     });
-
-                    // firstScoreBox.addEventListener("click", function() {
-                    //     if(firstScoreBox.classList.contains('selected')){
-                    //         initializeShots();
-                    //     }else{
-                    //         firstScoreBox.classList.add('selected');
-                    //         secondScoreBox.classList.remove('selected');
-                    //         highlightSelectedScoreBox("score-box1");
-                    //         initializeShots();
-                    //         selectedPinsFirstShot = document.querySelectorAll('.selected-pin');
-                    //         console.log("Selected pins for the first shot: ", selectedPinsFirstShot);
-                    //     }
-                    // });
-
-                    // secondScoreBox.addEventListener("click", function() {
-                    //     if(secondScoreBox.classList.contains('selected')){
-                    //         initializeShots();
-                    //     }else{
-                    //         secondScoreBox.classList.add('selected');
-                    //         firstScoreBox.classList.remove('selected');
-                    //         highlightSelectedScoreBox("score-box2");
-                    //         initializeShots();
-                    //         selectedPinsSecondShot = document.querySelectorAll('.selected-pin');
-                    //         console.log("Selected pins for the second shot: ", selectedPinsSecondShot);
-                    //     }
-                    // })
 
                     const nextFrameBtn = document.getElementById("nextFrameBtn");
                     if (nextFrameBtn) {
@@ -661,6 +614,7 @@
                     updateSecondShotDisplay();
                 }
 
+                updateSelectedPins();
             }
 
             //function to highlight the selected score box
@@ -1033,6 +987,22 @@
                     pin.style.color = 'black';
                 });
                 console.log("pins reverted");
+            }
+
+            function updateSelectedPins(){
+                var selectedPins1 = [];
+                var selectedPins2 = [];
+
+                document.querySelectorAll('.pin').forEach(pin => {
+                    if(pin.classList.contains('selected')){
+                        if(pin.dataset.box === '1'){
+                            selectedPins1.push(pin.id);
+                        }else if(pin.dataset.box === '2'){
+                            selectedPins2.push(pin.id);
+                        }
+                    }
+                });
+                console.log("Selected Pins updated");
             }
 
         </script>
