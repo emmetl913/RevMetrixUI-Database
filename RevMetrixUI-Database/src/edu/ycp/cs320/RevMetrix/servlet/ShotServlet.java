@@ -191,7 +191,7 @@ public class ShotServlet extends HttpServlet {
 			if(frameNumber != null && frameNumber > 1) {
 				frameNumber--;
 				
-				game.updateFormattedShots(session, frames);
+				//game.updateFormattedShots(session, frames);
 				System.out.print("Formatted shots updated successfully.");
 			}
 		}
@@ -236,9 +236,6 @@ public class ShotServlet extends HttpServlet {
 //		}else {
 //			errorMessage = "Session does not contain a valid Shot object";
 //		}
-		
-		Frame frame = new Frame(1, 1, 1);
-		ShotController controller = new ShotController();
 		   
 		// Get last access time of this Webpage.
 		long lastAccessTime = session.getLastAccessedTime();
@@ -246,44 +243,43 @@ public class ShotServlet extends HttpServlet {
 		String userID = new String("ABCD");
 
 		String shotKey = new String("shotKey");
-		ArrayList<Frame> frames = new ArrayList<Frame>();
 		
 		   // Check if this is new comer on your Webpage.
 		if (session.isNew() ){
 	      session.setAttribute(userIDKey, userID);
 	      
-	      frames.add(new Frame(1,1));
+	      frames.add(new Frame(1, 1, frameNumber));
 		  session.setAttribute(shotKey,  frames);
 		} 
 		
 		userID = (String)session.getAttribute(userIDKey);
 		frames = (ArrayList<Frame>)session.getAttribute(shotKey);
 		
-		//retreive or create a Frame object in the session
+		//retrieve or create a Frame object in the session
 		if(frames == null) {
 			frame = new Frame(0, 0, 0);
 		}
 	    
 		//prevents null pointer exceptions
-		//retreive shot details
-	    String ballName = req.getParameter("ball");
-	    String shotType = req.getParameter("shotType");
+//		//retreive shot details
+//	    String ballName = req.getParameter("ball");
+//	    String shotType = req.getParameter("shotType");
 	    
-	    String pinsParam = req.getParameter("pins");
-	    int pins = 0;
-	    Shot shot = new Shot(0, 0, 0, 0, "", 0, "");
+//	    String pinsParam = req.getParameter("pins");
+//	    int pins = 0;
+//	    Shot shot = new Shot(0, 0, 0, 0, "", 0, "");
 	    
-	    if(pinsParam != null) {
-	    	pins = Integer.parseInt(pinsParam);
-	    }
+//	    if(pinsParam != null) {
+//	    	pins = Integer.parseInt(pinsParam);
+//	    }
 	    
-	    if(ballName != null && shotType != null) {
-	    	shot.setBallName(ballName);
-	    	shot.setType(shotType);
+	    if(shot.getBallID() != 0 && shot.getPinsLeft() != "") {
+	    	shot.setBallID(shot.getBallID());;
+	    	shot.setPinsLeft(shot.getPinsLeft());
 	    }
 	    
 	    //creates a new shot object
-	    Shot shots = new Shot(ballName, shotType, pins);
+	    //Shot shots = new Shot(ballName, shotType, pins);
 	    
 	    //add the shot to the frame
 //	    if(frames != null) {
@@ -293,11 +289,11 @@ public class ShotServlet extends HttpServlet {
 //	    int firstShot = Integer.parseInt(req.getParameter("firstShot"));
 //	    int secondShot = Integer.parseInt(req.getParameter("secondShot"));
 //	   
-	    int totalScore = controller.calculateScore(session);
+	    totalScore = controller.calculateScore(session);
 	    session.setAttribute("totalScore", totalScore);
 	    
 	    if("incrementFrameNumber".equals(req.getParameter("action"))) {
-	    	Integer frameNumber = (Integer) session.getAttribute("frameNumber");
+	    	frameNumber = (Integer) session.getAttribute("frameNumber");
 	    	if(frameNumber == null) {
 		    	frameNumber = 1;	//initialize
 		    }else {
