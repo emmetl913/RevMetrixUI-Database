@@ -431,7 +431,31 @@ public class DerbyDatabase implements IDatabase {
 		});
 	}
 	
+	public Integer removeBall(int accID, String name) {
+		return executeTransaction(new Transaction<Integer>() {
+			@Override
+			public Integer execute(Connection conn) throws SQLException {
+				PreparedStatement stmt = null;
+				ResultSet resultSet = null;
+				
+				try {
+					stmt = conn.prepareStatement(
+							"delete from balls where name = ? and account_id = ?"
+					);
+					stmt.setString(1, name);
+					stmt.setInt(2, accID);
 
+					stmt.execute();
+					
+					return 1;
+				} finally {
+					DBUtil.closeQuietly(resultSet);
+					DBUtil.closeQuietly(stmt);
+				}
+			}
+		});
+	}
+	
 	@Override
 	public List<Ball> getBallByName(String name) {
 		return executeTransaction(new Transaction<List<Ball>>() {
@@ -1429,6 +1453,7 @@ public class DerbyDatabase implements IDatabase {
 						insertShot.setString(7, shot.getPinsLeft());
 						insertShot.addBatch();
 					}
+					//insertNewShotWithFrameID(1, 1, 1, 1, "4", 6, "1234");
 					
 					insertShot.executeBatch();
 					tablesPopulated += "Shots, ";
@@ -1587,8 +1612,15 @@ public class DerbyDatabase implements IDatabase {
 		
 	}
 
+	
 	@Override
-	public Integer insertNewBallInDB(float weight, String name, Boolean righthand, String brand, String color) {
+	public List<Game> getGameBySessionID(int sessionID) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public List<Session> getSessionByEventID(int eventID) {
 		// TODO Auto-generated method stub
 		return null;
 	}

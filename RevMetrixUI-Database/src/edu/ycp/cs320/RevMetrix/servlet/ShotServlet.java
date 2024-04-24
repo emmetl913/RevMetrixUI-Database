@@ -20,8 +20,6 @@ import edu.ycp.cs320.RevMetrix.model.Frame;
 import edu.ycp.cs320.RevMetrix.model.Ball;
 import edu.ycp.cs320.RevMetrix.model.BallArsenal;
 
-import edu.ycp.cs320.RevMetrix.controller.ShotController;
-
 
 public class ShotServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
