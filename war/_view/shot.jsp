@@ -258,7 +258,6 @@
              </a>
              <a href="${pageContext.servletContext.contextPath}/establishmentReg">Establishment Registration</a>
              <a href="${pageContext.servletContext.contextPath}/logIn">Sign Out</a>
-             <a href="${pageContext.servletContext.contextPath}/shot">Shot</a>
              <a href="${pageContext.servletContext.contextPath}/ballArsenal">Ball Arsenal</a>
              <a href="https://github.com/emmetl913/RevMetrixUI-Database">GitHub</a>
              <a class="dropbtn" href="#" onclick="toggleDropdown(), nextStep(1)">Start Bowling!</a>
@@ -305,31 +304,47 @@
 
                 <div class="triangle">
                     <div class="row">
-                        <div class="pin" onclick="togglePin(this)"><span>7</span></div>
-                        <div class="pin" onclick="togglePin(this)"><span>8</span></div>
-                        <div class="pin" onclick="togglePin(this)"><span>9</span></div>
-                        <div class="pin" onclick="togglePin(this)"><span>10</span></div>
+                        <div class="pin" id="7" onclick="togglePin(this)"><span>7</span></div>
+                        <div class="pin" id="8" onclick="togglePin(this)"><span>8</span></div>
+                        <div class="pin" id="9" onclick="togglePin(this)"><span>9</span></div>
+                        <div class="pin" id="0" onclick="togglePin(this)"><span>10</span></div>
                     </div>
                     <div class="row">
-                        <div class="pin" onclick="togglePin(this)"><span>4</span></div>
-                        <div class="pin" onclick="togglePin(this)"><span>5</span></div>
-                        <div class="pin" onclick="togglePin(this)"><span>6</span></div>
+                        <div class="pin" id="4" onclick="togglePin(this)"><span>4</span></div>
+                        <div class="pin" id="5" onclick="togglePin(this)"><span>5</span></div>
+                        <div class="pin" id="6" onclick="togglePin(this)"><span>6</span></div>
                     </div>
                     <div class="row">
-                        <div class="pin" onclick="togglePin(this)"><span>2</span></div>
-                        <div class="pin" onclick="togglePin(this)"><span>3</span></div>
+                        <div class="pin" id="2" onclick="togglePin(this)"><span>2</span></div>
+                        <div class="pin" id="3" onclick="togglePin(this)"><span>3</span></div>
                     </div>
                     <div class="row">
-                        <div class="pin" onclick="togglePin(this)"><span>1</span></div>
+                        <div class="pin" id="1" onclick="togglePin(this)"><span>1</span></div>
                     </div>
     
                     <div class="row">
                         <div id="shot-count"></div>
+                        <%
+                            Integer score1 = (Integer) session.getAttribute("score1");
+                            Integer score2 = (Integer) session.getAttribute("score2");
+                        %>
                         <div class="firstShot" id="score-box1" style="background-color: lightslategray;">
-                            ${formattedShots1}
+                            <% 
+                            if(score1 != null){
+                            %>
+                                <%= score1 %>
+                            <%
+                            }
+                            %>
                         </div>
                         <div class="secondShot" id="score-box2" style="background-color: lightslategray;">
-                            ${formattedShots2}
+                            <% 
+                            if(score2 != null){
+                            %>
+                                <%= score2 %>
+                            <%
+                            }
+                            %>
                         </div>
                     </div>
                 </div>

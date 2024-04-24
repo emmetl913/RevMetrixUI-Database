@@ -112,13 +112,7 @@ public class ShotServlet extends HttpServlet {
 		
 		//get ballArsenal from the session
 //		List<Ball> ballArsenal = (List<Ball>)session.getAttribute("ballArsenal");
-//		
-//		boolean containsAddBall = ballArsenal != null && ballArsenal.stream().anyMatch(ball -> "Add Ball".equals(ball.getName()));
-//		
-//		if(containsAddBall) {
-//			resp.sendRedirect(req.getContextPath() + "/_view/ballArsenal.jsp");
-//			return;
-//		}
+//
 		
 		req.setAttribute("userID", userID);
 		req.setAttribute("ballArsenal", ballArsenal);
@@ -153,24 +147,14 @@ public class ShotServlet extends HttpServlet {
 		GameController game = new GameController();
 		
 		//get first and second shot from the user
-		String firstShotValue = req.getParameter("score-box1");
-		String secondShotValue = req.getParameter("score-box2");
+		Integer score1 = (Integer) session.getAttribute("score1");
+		Integer score2 = (Integer) session.getAttribute("score2");
 		
-		boolean isFirstShotType = controller.isShotType(firstShotValue);
-		boolean isSecondShotType = controller.isShotType(secondShotValue);
-		
-		if(isFirstShotType) {
-			//function to handle shot types
-			controller.processShotType(firstShotValue);
-		}else {
-			int pinsKnockedOveFirst = Integer.parseInt(firstShotValue);
+		if(score1 == null) {
+			score1 = 0;
 		}
-		
-		if(isSecondShotType) {
-			//function to handle shot types
-			controller.processShotType(secondShotValue);
-		}else {
-			int pinsKnockedOverSecond = Integer.parseInt(secondShotValue);
+		if(score2 == null) {
+			score2 = 0;
 		}
 		
 		//handle form submission for next frame action
@@ -189,8 +173,7 @@ public class ShotServlet extends HttpServlet {
 			if(frameNumber != null && frameNumber > 1) {
 				frameNumber--;
 				
-				//game.updateFormattedShots(session, frames);
-				System.out.print("Formatted shots updated successfully.");
+				//DB implementation...
 			}
 		}
 		
@@ -218,8 +201,8 @@ public class ShotServlet extends HttpServlet {
 		
 		//add shot object to session
 		session.setAttribute("shot", shot);
-		session.setAttribute("firstShotCount", firstShotValue);
-		session.setAttribute("secondShotScore", secondShotValue);
+		session.setAttribute("score1", score1);
+		session.setAttribute("score2", score2);
 				
 		
 		//calculate the total score using the ShotController
@@ -228,12 +211,6 @@ public class ShotServlet extends HttpServlet {
 		
 		String errorMessage = null;
 		Object sessionShot = session.getAttribute("shotKey");
-		
-//		if(sessionShot instanceof Shot) {
-//			shot = (Shot) sessionShot;
-//		}else {
-//			errorMessage = "Session does not contain a valid Shot object";
-//		}
 		   
 		// Get last access time of this Webpage.
 		long lastAccessTime = session.getLastAccessedTime();
@@ -279,14 +256,6 @@ public class ShotServlet extends HttpServlet {
 	    //creates a new shot object
 	    //Shot shots = new Shot(ballName, shotType, pins);
 	    
-	    //add the shot to the frame
-//	    if(frames != null) {
-//	    	 frames.add(new Frame());
-//	    }
-	    
-//	    int firstShot = Integer.parseInt(req.getParameter("firstShot"));
-//	    int secondShot = Integer.parseInt(req.getParameter("secondShot"));
-//	   
 	    totalScore = controller.calculateScore(session);
 	    session.setAttribute("totalScore", totalScore);
 	    

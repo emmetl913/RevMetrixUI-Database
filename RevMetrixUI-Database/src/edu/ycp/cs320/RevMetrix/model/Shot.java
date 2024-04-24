@@ -4,7 +4,7 @@ import java.util.List;
 
 public class Shot{
 	private int pins, sessionID, gameID, frameID, shotNumber, ballID;
-	private String count, pinsLeft, type;
+	private String count, pinsLeft;
 	
 	//Constructor
 	public Shot(int sessionID, int gameID, int frameID, int shotNumber, String count, int ballID, String pinsLeft) {
@@ -15,7 +15,6 @@ public class Shot{
 		this.count = count;
 		this.ballID = ballID;
 		this.pinsLeft = pinsLeft;
-//		this.type = shotType;
 	}
 	
 	//pins
@@ -63,6 +62,7 @@ public class Shot{
 	{
 		this.shotNumber = num;
 	}
+	//pins knocked over for each shot
 	public String getCount()
 	{
 		return this.count;
@@ -80,7 +80,8 @@ public class Shot{
 	{
 		this.ballID = id;
 	}
-	//pins left standing
+	//pins left standing - shot types + number of pins
+	// in a string format
 	public String getPinsLeft()
 	{
 		return this.pinsLeft;
@@ -89,11 +90,4 @@ public class Shot{
 	{
 		this.pinsLeft = left;
 	}
-	//type
-//	public String getType() {
-//		return this.type;
-//	}
-//	public void setType(String shotType) {
-//		this.type = shotType;
-//	}
 }
