@@ -109,6 +109,23 @@
   div.content {margin-left: 0;}
 }
 
+.bottom-link {
+  position: absolute;
+  bottom: 20px; /* Adjust this value to raise or lower the link */
+  left: 0;
+  width: 84%; 
+  text-align: left;
+  }
+
+  .bottom-link2 {
+  position: absolute;
+  bottom: 60px; /* Adjust this value to raise or lower the link */
+  left: 0;
+  width: 84%; 
+  text-align: left;
+  }
+  
+
 
     </style>
 </head>
@@ -122,11 +139,12 @@
 			<img src="${pageContext.request.contextPath}/_view/BowlingBall.png"width="100" height="100">
 		  </a>
 	      <a href="${pageContext.servletContext.contextPath}/establishmentReg">Establishment Registration</a>
-		  <a href="${pageContext.servletContext.contextPath}/logIn">Sign Out</a>
-          <a href="${pageContext.servletContext.contextPath}/shot">Shot</a>
           <a href="${pageContext.servletContext.contextPath}/ballArsenal">Ball Arsenal</a>
-          <a href="https://github.com/emmetl913/RevMetrixUI-Database">GitHub</a>
           <a href="${pageContext.servletContext.contextPath}/startBowling">Start Bowling</a>
+
+          <a href="https://github.com/emmetl913/RevMetrixUI-Database"class="bottom-link2">GitHub</a>
+          <a href="${pageContext.servletContext.contextPath}/logIn"class="bottom-link">Sign Out</a>
+          
 		  </div>
       
     <div class="container">

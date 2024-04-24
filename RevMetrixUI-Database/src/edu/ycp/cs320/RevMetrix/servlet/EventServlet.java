@@ -115,7 +115,7 @@ public class EventServlet extends HttpServlet {
 		estabs = estaModel.getEstablishments();
         
 		events = model.getEvents();
-			
+		
 		req.setAttribute("errorMessage", errorMessage);
 		req.setAttribute("event", events);
 		req.setAttribute("esta", estabs);
