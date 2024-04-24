@@ -10,7 +10,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import edu.ycp.cs320.RevMetrix.controller.SessionController;
 import edu.ycp.cs320.RevMetrix.model.Session;
 
 public class SessionServlet extends HttpServlet{
@@ -27,22 +26,22 @@ public class SessionServlet extends HttpServlet{
 		System.out.println("Session Servlet: doGet");
 		
 		HttpSession session = req.getSession();
+		long createTime = session.getCreationTime();
 		
+		long lastAccessTime = session.getLastAccessedTime();
+		String userIDKey = new String("userID");
+		String userID = new String("ABCD");
 		
 		String sessionKey = new String("sessionKey");
-		Session model = (Session)session.getAttribute(sessionKey);
-		SessionController controller = new SessionController();
-		
+		Session model = null;
 		
 		if (session.isNew() ) 
 		{
-			if(model == null)
-			{
-				model = new Session(0, 0, "", "", "", 0);
-			}
+			session.setAttribute(userIDKey, userID);
 			session.setAttribute(sessionKey, model);
 		}
-		controller.setModel(model);
+		
+		userID = (String)session.getAttribute(userIDKey);
 		
 		if(model == null)
 		{
@@ -64,27 +63,23 @@ public class SessionServlet extends HttpServlet{
 		
 		String errorMessage = null;
 		
-		SessionController controller = new SessionController();
+		Session model = null;
 		
 		HttpSession session = req.getSession();
+		long createTime = session.getCreationTime();
+		
+		long lastAccessTime = session.getLastAccessedTime();
+		String userIDKey = new String("userID");
+		String userID = new String("ABCD");
+		
 		String sessionKey = new String("sessionKey");
-		Session model = (Session)session.getAttribute(sessionKey);
 		
-		if (session.isNew() )
-		{
-		      if(model == null)
-		      {
-		    	  model = new Session(0, 0, "", "", "", 0);
-		      }
-		      session.setAttribute(sessionKey, model);
-		} 
-		
-		if (model == null)
-		{
-			model = new Session(0, 0, "", "", "", 0);
-			session.setAttribute(sessionKey, model);
-		}
-		controller.setModel(model);
+		if (session.isNew() ){
+		      session.setAttribute(userIDKey, userID);
+			  session.setAttribute(sessionKey,  model);
+			} 
+		model = (Session)session.getAttribute(sessionKey);
+		userID = (String)session.getAttribute(userIDKey);
 		
 		String time = req.getParameter("timeType");
 		System.out.println(time);

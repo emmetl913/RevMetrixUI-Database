@@ -40,7 +40,7 @@ public class EstablishmentControllerTest{
 	
 	@Test
 	public void testAddEstaFromAccount() {
-		controller.insertNewEstablishment(1, "name", "address");
+		controller.insertNewEstablishment(1,1, "name", 1,"address",1);
 		
 		List<Establishment> testEsta = controller.getAllEstablishmentsForAccount(1);
 		

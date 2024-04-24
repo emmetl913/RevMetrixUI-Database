@@ -3,6 +3,10 @@ package edu.ycp.cs320.RevMetrix.RevMetrixDB.db.persist;
 import java.util.ArrayList;
 
 import edu.ycp.cs320.RevMetrix.model.Establishment;
+
+import edu.ycp.cs320.RevMetrix.model.Event;
+import edu.ycp.cs320.RevMetrix.model.Game;
+import edu.ycp.cs320.RevMetrix.model.Session;
 import edu.ycp.cs320.RevMetrix.model.Game;
 import edu.ycp.cs320.RevMetrix.model.Session;
 import edu.ycp.cs320.RevMetrix.model.Event;
@@ -14,7 +18,6 @@ import edu.ycp.cs320.RevMetrix.model.Ball;
 import edu.ycp.cs320.RevMetrix.model.Shot;
 
 public interface IDatabase {
-	public Integer insertNewBallInDB(float weight, String name, Boolean righthand, String brand, String color);
 	public Integer insertNewAccountinDB(String email, String password, String username);
 	public Integer insertNewBallInDB(int account_id, float weight, String name, Boolean righthand, String brand, String color);
 	
@@ -29,8 +32,12 @@ public interface IDatabase {
 	List<Account> getAccountByEmail(String email);
 	List<Ball> getBallsByAccountIdFromDB(int accountId);
 	List<Ball> getBallByName(String name);
+
+	public Integer removeBall(int accID, String name);
+
 	List<Game> getGameBySessionID(int sessionID);
 	List<Session> getSessionByEventID(int eventID);
+
 
 	// Shot Level Methods
 	public Integer insertNewFrame(int gameID, int score, int frameNumber);
