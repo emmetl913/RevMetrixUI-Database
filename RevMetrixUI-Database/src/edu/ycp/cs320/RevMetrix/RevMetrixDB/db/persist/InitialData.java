@@ -243,8 +243,12 @@ public class InitialData {
 				String name = i.next();
 				boolean rightHanded = Boolean.parseBoolean(i.next());
 				String brand = i.next();
-				String color = i.next();
-				Ball ball = new Ball(accountId, weight, name, rightHanded, brand, color);
+				String color1 = i.next();
+				String color2 = i.next();
+				String color3 = i.next();
+				String material = i.next();
+
+				Ball ball = new Ball(accountId, weight, name, rightHanded, brand, color1, color2, color3, material);
 				
 				ballList.add(ball);
 			}

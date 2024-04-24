@@ -483,7 +483,7 @@ public class DerbyDatabase implements IDatabase {
 					while(resultSet1.next())
 					{
 						found = true;
-						Ball ball = new Ball(0,0,"", true,"","" );
+						Ball ball = new Ball(0,0,"", true,"","", "","","");
 						loadBall(ball, resultSet1, 1);
 						
 						result.add(ball);
@@ -500,7 +500,7 @@ public class DerbyDatabase implements IDatabase {
 		});
 	}
 	@Override
-	public List<Ball> getBallsByAccountIdFromDB(int accountId) {
+	public List<Ball> getBallsByAccountID(int accountId) {
 		return executeTransaction(new Transaction<List<Ball>>() {
 			@Override
 			public List<Ball> execute(Connection conn) throws SQLException
@@ -551,11 +551,14 @@ public class DerbyDatabase implements IDatabase {
 		ball.setName(resultSet.getString(index++));
 		ball.setRightHanded(resultSet.getBoolean(index++));
 		ball.setBrand(resultSet.getString(index++));
-		ball.setColor(resultSet.getString(index++));
+		ball.setColor1(resultSet.getString(index++));
+		ball.setColor2(resultSet.getString(index++));
+		ball.setColor3(resultSet.getString(index++));
+		ball.setMaterial(resultSet.getString(index++));
 	}
 	
 	@Override
-	public Integer insertNewBallInDB(int account_id, float weight, String name, Boolean righthand, String brand, String color) {
+	public Integer insertNewBallInDB(int account_id, float weight, String name, Boolean righthand, String brand, String color1, String color2, String color3, String material) {
 		return executeTransaction(new Transaction<Integer>() {
 			@Override
 			public Integer execute(Connection conn) throws SQLException {
@@ -598,8 +601,8 @@ public class DerbyDatabase implements IDatabase {
 					{
 						
 						stmt2 = conn.prepareStatement(
-								"insert into balls (account_id, weight, name, righthand, brand, color)"
-								+ " values (?, ?, ?, ?, ?, ?)"
+								"insert into balls (account_id, weight, name, righthand, brand, color1, color2, color3, material)"
+								+ " values (?, ?, ?, ?, ?, ?, ?, ?, ?)"
 						);
 						//get current account_id
 						
@@ -609,7 +612,11 @@ public class DerbyDatabase implements IDatabase {
 						stmt2.setString(3, name);
 						stmt2.setBoolean(4, righthand);
 						stmt2.setString(5, brand);
-						stmt2.setString(6,color);
+						stmt2.setString(6,color1);
+						stmt2.setString(7,color2);
+						stmt2.setString(8,color3);
+						stmt2.setString(9, material);
+
 						stmt2.executeUpdate();
 						
 						// get the new ball_id
@@ -630,7 +637,8 @@ public class DerbyDatabase implements IDatabase {
 
 							System.out.println("New ball inserted. ball_id: "+ ball_id + 
 									" account_id: "+account_id+" weight: "+weight+" name: "+name+
-									" isRightHanded: " +righthand+ " brand: "+brand+" color: "+color);
+									" isRightHanded: " +righthand+ " brand: "+brand+" color: "+color1
+									+"color2: "+ color2+" color3: "+ color3+" material: "+material);
 						}
 					}
 					return ball_id;
@@ -1347,7 +1355,10 @@ public class DerbyDatabase implements IDatabase {
 							"  name varchar(70)," +
 							"  righthand boolean, " +
 							"  brand varchar(70)," +
-							"  color varchar(70)" +
+							"  color1 varchar(15)," +
+							"  color2 varchar(15)," +
+							"  color3 varchar(15)," +
+							"  material varchar(70)" +
 							")"//weight, name, righthand, brand, color
 					);
 
@@ -1536,16 +1547,20 @@ public class DerbyDatabase implements IDatabase {
 					tablesPopulated += "Sessions, ";
 
 					
-					insertBall= conn.prepareStatement("insert into balls (account_id, weight, name, righthand, brand, color) values (?, ?, ?, ?, ?, ?)");
+					insertBall= conn.prepareStatement("insert into balls (account_id, weight, name, righthand, brand, color1, color2, color3, material)" 
+							+ 	" values (?, ?, ?, ?, ?, ?, ?, ?, ?)");
 					for (Ball ball : ballList)
 					
 					{
-						insertBall.setInt(1, ball.getAccountId());					//ball id, accountid, weight, name, righthand, brand, color
+						insertBall.setInt(1, ball.getAccountId());					//ball id, accountid, weight, name, righthand, brand, color1, color2, color3, material
 						insertBall.setFloat(2, ball.getWeight());
 						insertBall.setString(3, ball.getName());
 						insertBall.setBoolean(4, ball.getRightHanded());
 						insertBall.setString(5, ball.getBrand());
-						insertBall.setString(6, ball.getColor());
+						insertBall.setString(6, ball.getColor1());
+						insertBall.setString(7, ball.getColor2());
+						insertBall.setString(8, ball.getColor3());
+						insertBall.setString(9, ball.getMaterial());
 						insertBall.addBatch();
 					}
 					//System.out.println("Balls table populated");

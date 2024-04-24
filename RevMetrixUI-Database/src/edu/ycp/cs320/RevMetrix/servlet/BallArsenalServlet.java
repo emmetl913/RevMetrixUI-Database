@@ -66,6 +66,7 @@ public class BallArsenalServlet extends HttpServlet {
         controller.setBalls(balls);
 		// Set the ArrayList as a request attribute
 		req.setAttribute("balls", balls);
+		//req.setAttribute("ballListSize", balls.size());
 		session.setAttribute(ballArsenalKey, model); //update session model
 
 		
@@ -123,7 +124,8 @@ public class BallArsenalServlet extends HttpServlet {
 		String newBallName = req.getParameter("ballName");
 		String newBallBrand = req.getParameter("ballBrand");
 		String newBallWeight = req.getParameter("ballWeight");
-		String newBallColor = req.getParameter("ballColor");
+		String newBallColor1 = req.getParameter("ballColor1");
+		String newBallColor2 = req.getParameter("ballColor2");
 		String newBallLeftHand = req.getParameter("leftHand");
 		String newBallRightHand = req.getParameter("rightHand");
 		String removeBallName = req.getParameter("removeBallName");
@@ -175,7 +177,8 @@ public class BallArsenalServlet extends HttpServlet {
 		    }
 		    if(hasSelectedHand && errorMessage == null) {
 				controller.insertBallinDB(currentAccount.getAccountId(), 
-				ballWeight, newBallName, rightHanded, newBallBrand, newBallColor);
+				ballWeight, newBallName, rightHanded, newBallBrand, newBallColor1,
+				newBallColor2, "#000000", "material");
 				errorMessage = "New ball: "+newBallName+" successfully added!";
 			}
 		}
@@ -224,6 +227,7 @@ public class BallArsenalServlet extends HttpServlet {
 		 balls = (ArrayList<Ball>) controller.getBallByAccountId(currentAccount.getAccountId());
 	     controller.setBalls(balls);
 		req.setAttribute("balls", balls);
+		req.setAttribute("ballListSize", balls.size());
 		//Update the current ball to the session account
 		session.setAttribute("currAccount", currentAccount);
 		

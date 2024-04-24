@@ -25,7 +25,7 @@ public class BallArsenalController {
 	}
 	//adds a ball to the arsenal with the name and color
 	public void addBall(String name) {
-		Ball ball = new Ball(0, 0, name, false, name, name);
+		Ball ball = new Ball(0, 0, name, false, name, name, "color2", "color3", "material");
 		arsenal.addBall(ball);
 	}
 	public void changeBallNameAtIndex(int index, String newName){
@@ -33,7 +33,7 @@ public class BallArsenalController {
 	}
 	
 	public List<Ball> getBallByAccountId(int accountId){
-		List<Ball> ballList = db.getBallsByAccountIdFromDB(accountId);
+		List<Ball> ballList = db.getBallsByAccountID(accountId);
 		if(ballList.isEmpty()) {
 			System.out.println("Aint no balls in your database bro for acc id: "+accountId);
 			return null;
@@ -59,10 +59,10 @@ public class BallArsenalController {
 		}
 	}
 	
-	public boolean insertBallinDB(int account_id, float weight, String name, Boolean righthand, String brand, String color) {
+	public boolean insertBallinDB(int account_id, float weight, String name, Boolean righthand, String brand, String color, String color2, String color3, String material) {
 		
 		// insert new book (and possibly new author) into DB
-		Integer ball_id = db.insertNewBallInDB(account_id, weight, name, righthand, brand, color);
+		Integer ball_id = db.insertNewBallInDB(account_id, weight, name, righthand, brand, color, color2, color3, material);
 		//check if the insertion succeeded
 		if (account_id > 0){
 			System.out.println("New ball (Ball ID: " + ball_id + ", Ball Name: "+name+") successfully added to balls table");
