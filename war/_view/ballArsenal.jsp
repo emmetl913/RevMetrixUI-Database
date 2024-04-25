@@ -7,6 +7,8 @@
 <%@ page import="edu.ycp.cs320.RevMetrix.model.BallArsenal" %>
 <%@ page import = "java.io.*,java.util.*" %>
 <%@ page import="javax.servlet.http.HttpSession" %>
+<%@ page import="com.google.gson.Gson" %>
+
 <%
 // Retrieve ArrayList from session attribute
 	//HttpSession session = request.getSession();
@@ -210,7 +212,8 @@ button:hover {
 					<input type="text" name="ballName" placeholder="Ball Name">
 				    <input type="text" name="ballBrand" placeholder="Ball Brand"><br>
 				    <input type="number" name="ballWeight" placeholder="Ball Weight (in pounds)" step="0.01" class="color-picker">
-				    <input type="color" name="ballColor" placeholder="Ball Color" class="color-picker">
+				    <input type="color" name="ballColor1" placeholder="Ball Color1" class="color-picker">
+				    <input type="color" name="ballColor2" placeholder="Ball Color2" class="color-picker">
 				    <br> 
 				    
 				    <button name="leftHand" type="button"onclick="setToLeft()">Left Hand</button>
@@ -231,17 +234,22 @@ button:hover {
 				<div id="ballsList"> &nbsp		
 					<% 
 			            if (balls != null && !balls.isEmpty()) {
+			            	int i = 0;
 			                for (Ball ball : balls) {
-			                	String ballColor = ball.getColor();
+			                	String ballColor = ball.getColor1();
 			        %>
 			        <div class="ball-section" onclick="selectBall ('<%= ball %>')"><!--  style="background-color: <%=ballColor%>;"-->
-				    <canvas id="shaderCanvas"></canvas>
-
-			        <p>Name: <%= ball.getName() %> RightHanded: <%= ball.getRightHanded() %> </p>
+				    <canvas id="shaderCanvas_<%=i%>" style="border-radius: 50%;"></canvas>
+				    
+			        <span style="font-size: smaller;">
+			        <p>Name: <%= ball.getName() %> | Weight: <%=ball.getWeight()%> |
+			        Brand: <%=ball.getBrand()%> | Righthand: <%= ball.getRightHanded() %> 
+			        </p>
+			        </span>
 
 			    </div>
 			  
-			        <% 
+			        <% 	i++; 
 			                }
 			            } else { 
 			        %>
@@ -271,12 +279,44 @@ button:hover {
 		</script>
 		<!--webGL Stuff-->
 		 <script src="https://cdnjs.cloudflare.com/ajax/libs/gl-matrix/2.8.1/gl-matrix-min.js"></script>
-		 <script >// Initialize WebGL context
-		 const canvas = document.getElementById('shaderCanvas');
-		 const gl = canvas.getContext('webgl');
+		 <script >
+		 //hex input color to rgb
+		 function hexToRgb(hex) {
+			    // Remove the '#' character if present
+			    hex = hex.replace('#', '');
 
+			    // Parse the hexadecimal color string into separate R, G, and B components
+			    const r = parseInt(hex.substring(0, 2), 16);
+			    const g = parseInt(hex.substring(2, 4), 16);
+			    const b = parseInt(hex.substring(4, 6), 16);
+
+			    // Return an object containing the R, G, and B values
+			    return { r, g, b };
+			}
+		 
+		 
+		 // Initialize WebGL context
+		 //const canvas = document.getElementById('shaderCanvas_1');
+		 var balls = <%= new Gson().toJson(balls) %>; // Convert Java ArrayList to JavaScript array
+		    
+		    balls.forEach(function(ball, index) {
+		        var canvas = document.getElementById('shaderCanvas_' + index);
+		        createCanvas(ball, canvas);
+		    });
+		
+		function createCanvas(ball, canvas) {
 		 // Vertex shader code
-		 const vertexShaderSource = `
+			const gl = canvas.getContext('webgl');
+			const ballColor1 = ball.color1;
+			const ballColor2 = ball.color2;
+			const outerColor = hexToRgb(ballColor1);
+			const innerColor = hexToRgb(ballColor2);
+			console.log(outerColor); 
+			console.log(innerColor);
+			// Get the uniform location for outerColor in your shader
+
+			
+			const vertexShaderSource = `
 		     attribute vec2 position;
 
 		     void main() {
@@ -287,7 +327,8 @@ button:hover {
 		 // Fragment shader code (replace with the provided ShaderToy shader code)
 		 const fragmentShaderSource = `
 		     precision mediump float;
-
+	         uniform vec3 outerColor; // Define uniform for outer color
+	         uniform vec3 innerColor;
 		     uniform float iTime;
 		     uniform vec2 iResolution;
 
@@ -362,9 +403,13 @@ button:hover {
 		         stripe = clamp(stripe, 0.0, 1.0);
 
 		         // Map stripe value to color gradient
-		         vec3 baseColor = vec3(.4,.1,.4); // Example color (reddish)
-		         vec3 blackColor = vec3(0.9, 0.8, 0.2); // Customizable black color
+		         vec3 baseColor =outerColor;//= vec3(.1,.1,.4); // Example color (reddish) //outer color
+		         vec3 blackColor = innerColor;//vec3(0.9, 0.1, 0.2); // Customizable black color inner color
+		         
+		         //get color from ball
+		         //vec3 outerColorVec = vec3(parseFloat(outerColor.r), parseFloat(outerColor.g), parseFloat(outerColor.b);
 
+		         
 		         // Weight the color based on intensity
 		         vec3 finalColor = weightedColor(stripe, baseColor, blackColor);
 
@@ -425,10 +470,18 @@ button:hover {
 
 		 //const size = Math.min(window.innerWidth, window.innerHeight);
 
+		//get location before rendering
+	     const outerColorLocation = gl.getUniformLocation(shaderProgram, 'outerColor');
+	     const innerColorLocation = gl.getUniformLocation(shaderProgram, 'innerColor');
+
+	     gl.uniform3fv(outerColorLocation, [outerColor.r / 255, outerColor.g / 255, outerColor.b / 255]);
+	     gl.uniform3fv(innerColorLocation, [innerColor.r / 255, innerColor.g / 255, innerColor.b / 255]);
+
+		 
 		 // Render function
 		 function render() {
 		     // Set canvas size
-		     canvas.width = 51.0;
+		     canvas.width = 52.0;
 		     canvas.height = 50.0;
 		     gl.viewport(0, 0, canvas.width, canvas.height);
 
@@ -436,9 +489,12 @@ button:hover {
 		     const scaleFactor = Math.min(canvas.width, canvas.height) / 2;
 
 		     // Set resolution and time uniforms
+		     gl.useProgram(shaderProgram);
+			
+
 		     gl.uniform2f(resolutionLocation, canvas.width, canvas.height);
 		     gl.uniform1f(timeLocation, performance.now() / 1000);
-
+		
 		     // Clear canvas
 		     gl.clearColor(0, 0, 0, 1);
 		     gl.clear(gl.COLOR_BUFFER_BIT);
@@ -451,7 +507,9 @@ button:hover {
 		 }
 
 		 // Start rendering
-		 render();</script>
+		 render();
+		}
+		</script>
 		 
 	</body>
 </html>
