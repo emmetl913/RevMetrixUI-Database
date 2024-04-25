@@ -15,7 +15,7 @@ public class BallArsenalControllerTest {
 	private BallArsenal model;
 	private BallArsenalController controller = new BallArsenalController();
 	List<Ball> ballList = new ArrayList<Ball>();
-	Ball b = new Ball(1,(float)1, "Basalt",true, "GregBall","Blue");
+	//Ball b = new Ball(1,(float)1, "Basalt",true, "GregBall","Blue");
 
 	
 	@Before
@@ -29,7 +29,7 @@ public class BallArsenalControllerTest {
 
 	}
 	@Test public void testInsertBall() {
-		controller.insertBallinDB(2, 1, "BranBall", true, "brand", "color");
+		controller.insertBallinDB(2, 1, "BranBall", true, "brand", "color", "color1","color2", "material");
 		ballList = controller.getBallByAccountId(2);
 		//System.out.println(ballList.get(0).getName());
 		assertTrue(ballList.get(0).getName().equals("BranBall"));
@@ -42,14 +42,14 @@ public class BallArsenalControllerTest {
 	@Test
 	public void testGetBallByName() {
 		if(controller.getBallByName("8lbPurpleMary") == null) {
-			controller.insertBallinDB(1, 1, "8lbPurpleMary", true, "brand", "color");
+			controller.insertBallinDB(1, 1, "8lbPurpleMary", true, "brand", "color","color","color","material");
 		}
 		ballList = controller.getBallByName("8lbPurpleMary");
 		assertTrue(ballList.get(0).getName().equals("8lbPurpleMary"));
 	}
 	@Test
 	public void testDeleteBall() {
-		controller.insertBallinDB(1, 1, "8lbPurpleMary", true, "brand", "color");
+		controller.insertBallinDB(1, 1, "8lbPurpleMary", true, "brand", "color", "color","color","material");
 		System.out.println("inserted ball into database");
 		int ballExists = 0;
 		Boolean ballDeleted = false;
@@ -62,6 +62,13 @@ public class BallArsenalControllerTest {
 
 		}
 	}
-	
+	@Test
+	public void testGetBallByBallID() {
+	//	if(controller.getBallByBallId(1) == null) {
+		//	controller.insertBallinDB(1, 1, "PurpleMary", true, "brand", "color","color","color","material");
+		//}
+		ballList = controller.getBallByBallId(1);
+		assertTrue(ballList.get(0).getName().equals("MagentaMary"));
+	}
 	
 }

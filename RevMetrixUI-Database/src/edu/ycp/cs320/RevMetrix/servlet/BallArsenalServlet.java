@@ -66,6 +66,8 @@ public class BallArsenalServlet extends HttpServlet {
         controller.setBalls(balls);
 		// Set the ArrayList as a request attribute
 		req.setAttribute("balls", balls);
+		//session.setAttribute("ballArsenal", balls);
+
 		//req.setAttribute("ballListSize", balls.size());
 		session.setAttribute(ballArsenalKey, model); //update session model
 
@@ -191,7 +193,6 @@ public class BallArsenalServlet extends HttpServlet {
 				  for(Ball ball: ballTestList) {
 					  if(ball.getAccountId() == currentAccount.getAccountId()) {
 						  controller.removeBall(currentAccount.getAccountId(),removeBallName);
-						  System.out.println("Sup bitch");
 					  }
 				  }
 			  }
@@ -207,14 +208,16 @@ public class BallArsenalServlet extends HttpServlet {
 		
 		try {
 			//Setting the selected ball to the currentBall on the currentACcount
-			if (selectedBall !=  null)
+			if (selectedBall !=  null && !selectedBall.equals(""))
 			{
 				//currenaccount.setball to selected ball then add to session
 				String tempBallName = selectedBall;
-				
-				Ball tempBall = new Ball(tempBallName);
+				//Ball tempBall = new Ball(tempBallName);
 				System.out.println(tempBallName);
-				currentAccount.setCurrentBall(tempBall);
+				//Ball id to int
+				int ballID = Integer.parseInt(selectedBall);
+				Ball currBall = controller.getBallByBallId(ballID).get(0);
+				currentAccount.setCurrentBall(currBall);
 			}
 			System.out.println("Account Current Ball: " + currentAccount.getCurrentBall().getName());
 		} catch(NullPointerException e)
@@ -227,6 +230,7 @@ public class BallArsenalServlet extends HttpServlet {
 		 balls = (ArrayList<Ball>) controller.getBallByAccountId(currentAccount.getAccountId());
 	     controller.setBalls(balls);
 		req.setAttribute("balls", balls);
+		//session.setAttribute("ballArsenal", balls);
 		req.setAttribute("ballListSize", balls.size());
 		//Update the current ball to the session account
 		session.setAttribute("currAccount", currentAccount);

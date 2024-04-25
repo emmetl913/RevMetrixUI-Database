@@ -42,6 +42,16 @@ public class BallArsenalController {
 			return ballList;
 		}
 	}
+	public List<Ball> getBallByBallId(int ballID){
+		List<Ball> ballList = db.getBallByBallID(ballID);
+		if(ballList.isEmpty()) {
+			System.out.println("Aint no balls in your database bro for acc id: "+ballID);
+			return null;
+		}
+		else {
+			return ballList;
+		}
+	}
 	public Boolean removeBall(int accID, String name) {
 		if(db.removeBall(accID, name) == 1)
 			return true;
