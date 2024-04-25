@@ -25,6 +25,7 @@
 				           
 	        body{
 				font-family: Arial, Helvetica, sans-serif;
+				background-color: darkgray;
 	        	display:flex;
             	
 			}
@@ -85,7 +86,7 @@
             border-radius: 5px;
             margin-bottom: 10px;
             background-color: white;
-            box-shadow: 2px;
+            box-shadow: 10px 10px 5px black;
             /* Set fixed height for the container */
             height: 430px;
             /* Add scrollbar when content overflows */
@@ -104,7 +105,7 @@
             border-radius: 5px;
             margin-bottom: 10px;
             background-color: white;
-            box-shadow: 2px;
+            box-shadow: 10px 10px 5px black;
             /* Set fixed height for the container */
             height: 350px;
             /* Add scrollbar when content overflows */
@@ -126,8 +127,9 @@
   position: fixed;
   top: 0;
   left: 0;
- background: linear-gradient(to bottom, rgba( 243, 0, 178, 1 ), rgba( 28, 144, 243, 1 ) 95%, rgba( 255, 255, 0, 1 ));
+  background: linear-gradient(to bottom, rgba( 243, 0, 178, 1 ), rgba( 28, 144, 243, 1 ) 95%, rgba( 255, 255, 0, 1 ));
   padding-top: 20px;
+  box-shadow: 10px 5px 5px rgba(0, 0, 0, 0.1);
 }
 
 /* Links in the sidebar */
@@ -196,7 +198,7 @@ button:hover {
           <a href="${pageContext.servletContext.contextPath}/shot">Shot</a>
           <a href="${pageContext.servletContext.contextPath}/ballArsenal">Ball Arsenal</a>
           <a href="https://github.com/emmetl913/RevMetrixUI-Database">GitHub</a>
-          <a href="${pageContext.servletContext.contextPath}/startBowling">Start Bowling</a>
+           <a href="${pageContext.servletContext.contextPath}/event">Start Bowling!</a>
 		  </div>
 	
 		<form id="ballArsenalForm" action="${pageContext.servletContext.contextPath}/ballArsenal" method="post">
