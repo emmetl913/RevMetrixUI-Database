@@ -53,7 +53,7 @@ public class Shot{
 	{
 		this.frameID = id;
 	}
-	//shot
+	//shot, either 1 or 2
 	public int getShotNumber()
 	{
 		return this.shotNumber;

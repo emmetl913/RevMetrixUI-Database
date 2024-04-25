@@ -21,6 +21,7 @@ import edu.ycp.cs320.RevMetrix.model.Account;
 import edu.ycp.cs320.RevMetrix.model.Ball;
 import edu.ycp.cs320.RevMetrix.model.BallArsenal;
 import edu.ycp.cs320.RevMetrix.model.Game;
+import edu.ycp.cs320.RevMetrix.model.Session;
 
 
 public class ShotServlet extends HttpServlet {
@@ -118,6 +119,11 @@ public class ShotServlet extends HttpServlet {
 			session.setAttribute("ballArsenalKey",  model);
 		}
 		
+		if(model == null) {
+			model = new BallArsenal();
+			session.setAttribute("ballArsenalKey",  model);
+		}
+		
 		BallArsenalController arsenal = new BallArsenalController();
 		arsenal.setModel(model);
 		ArrayList<Ball> balls = (ArrayList<Ball>) arsenal.getBallByAccountId(account.getAccountId());
@@ -130,7 +136,7 @@ public class ShotServlet extends HttpServlet {
 	@Override
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 	    
-		System.out.println("Game Servlet: doPost");
+		System.out.println("Shot Servlet: doPost");
 		
 		HttpSession session = req.getSession();
 		Account account = (Account) session.getAttribute("currAccount");
@@ -142,8 +148,6 @@ public class ShotServlet extends HttpServlet {
 		ArrayList<Frame> frames = (ArrayList<Frame>) session.getAttribute("frames");
 		Integer frameNumber = (Integer) session.getAttribute("frameNumber");
 		
-		Account currentAccount = (Account) session.getAttribute("currAccount");
-		
 		   // Check if this is new comer on your Webpage.
 		if (session.isNew() ){
 	      frames.add(new Frame(1, 1, frameNumber));
@@ -153,6 +157,8 @@ public class ShotServlet extends HttpServlet {
 		frames = (ArrayList<Frame>)session.getAttribute(shotKey);
 		
 		Game game = new Game(1, 1, 1, 1, 0);
+		//creates a new session
+		Session ses = new Session(0, 0, "","","",0);
 		
 		session.setAttribute("gameNumber", game.getGameNumber());
 		
@@ -164,17 +170,6 @@ public class ShotServlet extends HttpServlet {
 		
 		FrameController frameController = new FrameController();
 		ShotController controller = new ShotController();
-		
-		//get first and second shot from the user
-		Integer score1 = (Integer) session.getAttribute("score1");
-		Integer score2 = (Integer) session.getAttribute("score2");
-		
-		if(score1 == null) {
-			score1 = 0;
-		}
-		if(score2 == null) {
-			score2 = 0;
-		}
 		
 		//handle form submission for next frame action
 		String action = req.getParameter("action");
@@ -196,17 +191,30 @@ public class ShotServlet extends HttpServlet {
 			}
 		}
 		
-		String[] selectedPins1 = req.getParameterValues("selectedPins1");
-		String[] selectedPins2 = req.getParameterValues("selectedPins2");
+//		String[] selectedPins1 = req.getParameterValues("selectedPins1");
+//		String[] selectedPins2 = req.getParameterValues("selectedPins2");
+//		
+//		session.setAttribute("selectedPins1", selectedPins1);
+//		session.setAttribute("selectedPins2", selectedPins2);
 		
-		session.setAttribute("selectedPins1", selectedPins1);
-		session.setAttribute("selectedPins2", selectedPins2);
+		BallArsenalController ballArsenalController = new BallArsenalController();
 		
 		//get ball id from the jsp
 		String selectedBallId = req.getParameter("ballArsenalDropdown");
 		//get ball from ball ID - setCurrentBall(DB ball)
-//		currentAccount.setCurrentBall(selectedBallId);
-		session.setAttribute("currAccount", currentAccount);
+		int ballId = 0;
+		if(selectedBallId != null || !selectedBallId.equals("")) {
+			ballId = Integer.parseInt(selectedBallId);
+			System.out.println("Ball ID: " +ballId);
+		}else {
+			System.out.println("Selected ball is null. Ball Id = " +ballId);
+		}
+		//ballid ==0 error probably
+		List<Ball> ballList = ballArsenalController.getBallByBallId(ballId);
+		Ball ball = new Ball();
+		ball = ballList.get(0);
+		System.out.println("Ball name: " +ball);
+		account.setCurrentBall(ball);
 		
 		BallArsenal model = (BallArsenal)session.getAttribute("ballArsenalKey");
 		if(session.isNew()) {
@@ -219,41 +227,92 @@ public class ShotServlet extends HttpServlet {
 		ArrayList<Ball> balls = (ArrayList<Ball>) arsenal.getBallByAccountId(account.getAccountId());
 		arsenal.setBalls(balls);
 		
+		String shotNum = req.getParameter("shotNumber");
+		int shotNumber = 1;
+		
+		if(shotNum != null && !shotNum.isEmpty()) {
+			try {
+				shotNumber = Integer.parseInt(shotNum);
+				if(shotNumber == 1) {
+					
+				}else if(shotNumber == 2) {
+					
+				}
+			}catch (NumberFormatException e) {
+				System.err.println("Invalid shot number: " +shotNum);
+			}
+		}
+		
+		//get first and second shot from the user
+		//getParameter score1 and score2 from the score boxes
+//		Integer score1 = Integer.parseInt(req.getParameter("score1"));
+//		Integer score2 = Integer.parseInt(req.getParameter("score-box2"));
+//		Integer score1 = (Integer) session.getAttribute("score1");
+//		Integer score2 = (Integer) session.getAttribute("score2");
+		
+//		if(score1 == null) {
+//			score1 = 0;
+//		}
+//		if(score2 == null) {
+//			score2 = 0;
+//		}
+		
+//		System.out.println("score 1: " +score1);
+//		System.out.println("score 2: " +score2);
+		
+		
 		
 		//create a new Shot object with submitted data
 		//creating a new shot:
 		//sessionID, gameID, frameID, shotNumber, count, ballID, pinsLeft
-		Shot shot = new Shot(0, 0, 0, 1, "", 0, "");
+//		Shot shot = new Shot(0, 0, 0, 1, "", 0, "");
 		
-		Frame frame = frameController.findOrCreateFrame(frames, frameNumber);
-		frame.addShot(shot);
+//		Frame frame = frameController.findOrCreateFrame(frames, frameNumber);
+//		frame.addShot(shot);
 		
 		//add shot object to session
-		session.setAttribute("shot", shot);
-		session.setAttribute("score1", score1);
-		session.setAttribute("score2", score2);
+//		session.setAttribute("shot", shot);
+//		session.setAttribute("score1", score1);
+//		session.setAttribute("score2", score2);
 				
 		
 		//calculate the total score using the ShotController
-		int totalScore = controller.calculateScore(session);
-		session.setAttribute("totalScore", totalScore);
+//		int totalScore = controller.calculateScore(session);
+//		session.setAttribute("totalScore", totalScore);
 	    
 		//sets ball ID and pins left from the user input
-	    if(shot.getBallID() != 0 && shot.getPinsLeft() != "") {
-	    	shot.setBallID(shot.getBallID());;
-	    	shot.setPinsLeft(shot.getPinsLeft());
-	    }
+//	    if(shot.getBallID() != 0 && shot.getPinsLeft() != "") {
+//	    	shot.setBallID(shot.getBallID());;
+//	    	shot.setPinsLeft(shot.getPinsLeft());
+//	    }
 	    
 	    //creates a new shot object
 	    //Shot shots = new Shot(ballName, shotType, pins);
 	    
 	    //total score in frames or games????
-	    totalScore = controller.calculateScore(session);
-	    session.setAttribute("totalScore", totalScore);
+//	    totalScore = controller.calculateScore(session);
+//	    session.setAttribute("totalScore", totalScore);
 	    
 	    req.setAttribute("errorMessage", errorMessage);
-	    session.setAttribute(shotKey, shot);
+//	    session.setAttribute(shotKey, shot);
 	    
+	    session.setAttribute("currAccount", account);
+	    
+	    String pin1 = req.getParameter("pin1");
+	    String pin2 = req.getParameter("pin2");
+	    String pin3 = req.getParameter("pin3");
+	    String pin4 = req.getParameter("pin4");
+	    String pin5 = req.getParameter("pin5");
+	    String pin6 = req.getParameter("pin6");
+	    String pin7 = req.getParameter("pin7");
+	    String pin8 = req.getParameter("pin8");
+	    String pin9 = req.getParameter("pin9");
+	    String pin0 = req.getParameter("pin0");
+	    
+	    System.out.println("Pin1: "+pin1+" Pin2: "+pin2+" Pin3: "+pin3+" Pin4: "+pin4+
+	    		" Pin5: "+pin5+" Pin6: "+pin6+" Pin7: "+pin7+" Pin8: "+pin8+
+	    		" Pin9: "+pin9+ " Pin10: "+pin0);
+	  
 		req.getRequestDispatcher("/_view/shot.jsp").forward(req, resp);
 	}
 }

@@ -78,8 +78,8 @@
                 height: 45px;
                 border-radius: 50%;
                 border: 1px solid black;
-                background-color: white;
-                color: black;
+                background-color: black;
+                color: white;
                 display: flex;
                 justify-content: center;
                 align-items: center;
@@ -93,8 +93,8 @@
             }
 
             .pin.selected{
-                background-color: black;
-                color: white;
+                background-color: white;
+                color: black;
             }
 
             .triangle{
@@ -279,7 +279,7 @@
 
         <input type="hidden" id="selected-score-box">
 	
-		<form action="${pageContext.servletContext.contextPath}/shot" method="post">
+		<form id="shotForm" action="${pageContext.servletContext.contextPath}/shot" method="post" onsubmit="submitForm(event)">
             <div class="container">
                 <div id="game-info">
                     <!-- no info, so it shows blank -->
@@ -295,47 +295,46 @@
                 </div>
         
                 <!-- drop down menu - selecting a ball -->
-                <form action="ShotServlet" method="post" id="ball-form">
-                    <div class="dropdown">
-                        <select name="ballArsenalDropdown">
-                            <option value="">Select a ball...</option>
-                            <!-- <c:forEach var="ball" items="${ballArsenal}">
+                <div class="dropdown">
+                    <select name="ballArsenalDropdown">
+                        <option value="">Select a ball...</option>
+                        <!-- <c:forEach var="ball" items="${ballArsenal}">
                                 <option value="${ball.getBallId()}">${ball.getName()}</option>
                             </c:forEach> -->
-                            <%
-                                if (balls != null && !balls.isEmpty()) {
-                                    int i = 0;
-                                    for (Ball ball : balls) { %>
-                                        <option value=<%= ball.getBallId() %> > <%= ball.getName() %></option>
-                                    <% System.out.println(ball.getName());
-                                    }
-                                }else{%>
-                                    <p>There are no balls</p>
-                                <%}
-                            %>
-                            <!-- <option value="add">Add Ball... </option> -->
-                        </select>
-                    </div>
-                </form>
+                        <%
+                            if (balls != null && !balls.isEmpty()) {
+                                int i = 0;
+                                for (Ball ball : balls) { %>
+                                    <option value=<%= ball.getBallId() %> > <%= ball.getName() %></option>
+                                <% System.out.println(ball.getName());
+                                }
+                            }else{%>
+                                <p>There are no balls</p>
+                            <%}
+                        %>
+                        <!-- <option value="add">Add Ball... </option> -->
+                    </select>
+                </div>
+                
 
                 <div class="triangle">
                     <div class="row">
-                        <div class="pin" id="7" onclick="togglePin(this)"><span>7</span></div>
-                        <div class="pin" id="8" onclick="togglePin(this)"><span>8</span></div>
-                        <div class="pin" id="9" onclick="togglePin(this)"><span>9</span></div>
-                        <div class="pin" id="0" onclick="togglePin(this)"><span>10</span></div>
+                        <div class="pin" onclick="togglePin(this)"><input type="hidden" name ="pin7" id="7" value="up"><span>7</span></div>
+                        <div class="pin" onclick="togglePin(this)"><input type="hidden" name ="pin8" id="8" value="up"><span>8</span></div>
+                        <div class="pin" onclick="togglePin(this)"><input type="hidden" name ="pin9" id="9" value="up"><span>9</span></div>
+                        <div class="pin" onclick="togglePin(this)"><input type="hidden" name ="pin0" id="0" value="up"><span>10</span></div>
                     </div>
                     <div class="row">
-                        <div class="pin" id="4" onclick="togglePin(this)"><span>4</span></div>
-                        <div class="pin" id="5" onclick="togglePin(this)"><span>5</span></div>
-                        <div class="pin" id="6" onclick="togglePin(this)"><span>6</span></div>
+                        <div class="pin" onclick="togglePin(this)"><input type="hidden" name ="pin4" id="4" value="up"><span>4</span></div>
+                        <div class="pin" onclick="togglePin(this)"><input type="hidden" name ="pin5" id="5" value="up"><span>5</span></div>
+                        <div class="pin" onclick="togglePin(this)"><input type="hidden" name ="pin6" id="6" value="up"><span>6</span></div>
                     </div>
                     <div class="row">
-                        <div class="pin" id="2" onclick="togglePin(this)"><span>2</span></div>
-                        <div class="pin" id="3" onclick="togglePin(this)"><span>3</span></div>
+                        <div class="pin" onclick="togglePin(this)"><input type="hidden" name ="pin2" id="2" value="up"><span>2</span></div>
+                        <div class="pin" onclick="togglePin(this)"><input type="hidden" name ="pin3" id="3" value="up"><span>3</span></div>
                     </div>
                     <div class="row">
-                        <div class="pin" id="1" onclick="togglePin(this)"><span>1</span></div>
+                        <div class="pin" onclick="togglePin(this)"><input type="hidden" name ="pin1" id="1" value="up"><span>1</span></div>
                     </div>
     
                     <div class="row">
@@ -345,6 +344,7 @@
                             Integer score2 = (Integer) session.getAttribute("score2");
                         %>
                         <div class="firstShot" id="score-box1" style="background-color: lightslategray;">
+                            <input type="hidden" name="shotNumber" id="shotNumber" value="1">
                             <% 
                             if(score1 != null){
                             %>
@@ -354,6 +354,7 @@
                             %>
                         </div>
                         <div class="secondShot" id="score-box2" style="background-color: lightslategray;">
+                            <input type="hidden" name="shotNumber" id="shotNumber" value="2">
                             <% 
                             if(score2 != null){
                             %>
@@ -598,6 +599,19 @@
             let secondScoreBoxClicked = false;
 
             function togglePin(pin){
+                // var pinID = pin.id;
+                var hiddenVal = pin.querySelector('input[type="hidden"]');
+                // var pinValue = pin.getAttribute('value');
+                var pinValue = hiddenVal.value;
+
+                if(pinValue === 'up'){
+                    hiddenVal.setAttribute('value', 'down');
+                    console.log(hiddenVal, " pin changed to down");
+                }else if(pinValue === 'down'){
+                    hiddenVal.setAttribute('value', 'up');
+                    console.log(hiddenVal, " pin changed to up");
+                }
+
                 console.log("togglePin function called");
                 // const isLeave = pin.classList.toggle('selected');
                 const selectedScoreBox = getSelectedScoreBoxId();
@@ -613,16 +627,22 @@
                 console.log("isLeave: ", isLeave);
 
                 if(isLeave){
-                    pin.style.backgroundColor = 'black'
-                    pin.style.color = 'white';
-                }else{
                     pin.style.backgroundColor = 'white'
                     pin.style.color = 'black';
+                }else{
+                    pin.style.backgroundColor = 'black'
+                    pin.style.color = 'white';
                 }
 
                 // const pinsLeftStanding = calculateTotalPinsLeftStanding();
                 updateSelectedScoreBox(selectedScoreBox, null, calculateTotalPinsLeftStanding());
                 highlightSelectedScoreBox(selectedScoreBox);
+
+                if(selectedScoreBox === 'score-box1'){
+                    document.getElementById("shotNumber").value = 1;
+                }else if(selectScoreBox === 'score-box2'){
+                    document.getElementById("shotNumber").value = 2;
+                }
 
                 if(selectedScoreBox === "score-box2" && isLeave){
                     //const pinsLeftAfterFirstShot = calculatePinsLeftStandingAfterFirstShot(firstShotCount);
@@ -631,6 +651,28 @@
                 }
 
                 updateSelectedPins();
+                console.log("Current value of the pin: ", hiddenVal.getAttribute('value', 'up'));
+            }
+
+            function submitForm(event) {
+                event.preventDefault(); // Prevent the default form submission
+
+                var pinElements = document.querySelectorAll('.pin'); // Select all elements with class 'pin'
+                var pinValues = {}; // Object to store pin values
+
+                // Iterate over each pin element and get its value
+                pinElements.forEach(function(pinElement) {
+                    var pinId = pinElement.id;
+                    var pinValue = pinElement.getAttribute('value');
+                    pinValues[pinId] = pinValue;
+                });
+
+                // Print pin values to the console
+                console.log("Pin Values:");
+                console.log(pinValues);
+
+                // You can now proceed with form submission if needed
+                event.target.submit();
             }
 
             //function to highlight the selected score box
@@ -674,8 +716,8 @@
                 pins.forEach(function(pin){
                     pin.classList.remove('leave');
                     pin.classList.add('selected');
-                    pin.style.backgroundColor = 'black';
-                    pin.style.color = 'white';
+                    pin.style.backgroundColor = 'white';
+                    pin.style.color = 'black';
                 });
             }
 
@@ -999,8 +1041,8 @@
                 console.log("revert selected pins function called");
                 const selectedPins = scoreBox.querySelectorAll('${scoreBoxId} .pin.selected');
                 selectedPins.forEach(pin => {
-                    pin.style.backgroundColor = 'white';
-                    pin.style.color = 'black';
+                    pin.style.backgroundColor = 'black';
+                    pin.style.color = 'white';
                 });
                 console.log("pins reverted");
             }
