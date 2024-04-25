@@ -16,6 +16,7 @@ import edu.ycp.cs320.RevMetrix.controller.FrameController;
 import edu.ycp.cs320.RevMetrix.controller.ShotController;
 import edu.ycp.cs320.RevMetrix.model.Shot;
 import edu.ycp.cs320.RevMetrix.model.Frame;
+import edu.ycp.cs320.RevMetrix.model.Account;
 import edu.ycp.cs320.RevMetrix.model.Ball;
 import edu.ycp.cs320.RevMetrix.model.BallArsenal;
 import edu.ycp.cs320.RevMetrix.model.Game;
@@ -83,6 +84,12 @@ public class ShotServlet extends HttpServlet {
 //			//req.getRequestDispatcher("/_view/shot.jsp").forward(req, resp);
 //		}
 		
+		//get ball arsenal from the session
+		List<Ball> ballArsenal = (List<Ball>) session.getAttribute("ballArsenal");
+//		req.setAttribute("ballArsenal", ballArsenal);
+		
+		//write null test for ball arsenal...
+		
 		session.setAttribute("gameNumber", game.getGameNumber());
 		
 		if(frameNumber == null) {
@@ -91,7 +98,6 @@ public class ShotServlet extends HttpServlet {
 		}
 		
 		//initialize the frames ArrayList
-//		ArrayList<Frame> frames = (ArrayList<Frame>) session.getAttribute("frame");
 		if(frames == null) {
 			frames = new ArrayList<Frame>();
 			session.setAttribute("frames", frames);
@@ -114,12 +120,10 @@ public class ShotServlet extends HttpServlet {
 		//update frame number in session
 		session.setAttribute("frameNumber", frameNumber);
 		
-		//get ballArsenal from the session
-//		List<Ball> ballArsenal = (List<Ball>)session.getAttribute("ballArsenal");
-//
-		
+		//passes information to the jsp
 		req.setAttribute("userID", userID);
 		req.setAttribute("ballArsenal", ballArsenal);
+		req.setAttribute("gameNumber", game.getGameNumber());
 		req.setAttribute("frameNumber", frameNumber);	
 		
 		//if the frame is out of range, it sends an error message to the user
@@ -148,6 +152,8 @@ public class ShotServlet extends HttpServlet {
 		String shotKey = new String("shotKey");
 		ArrayList<Frame> frames = (ArrayList<Frame>) session.getAttribute("frames");
 		Integer frameNumber = (Integer) session.getAttribute("frameNumber");
+		
+		Account currentAccount = (Account) session.getAttribute("currAccount");
 		
 		   // Check if this is new comer on your Webpage.
 		if (session.isNew() ){
@@ -211,10 +217,15 @@ public class ShotServlet extends HttpServlet {
 		session.setAttribute("selectedPins2", selectedPins2);
 		
 		//get ball id from the jsp
-		String ballName = req.getParameter("ball");
+		String selectedBallId = req.getParameter("ballArsenalDropdown");
+		//get ball from ball ID
+//		currentAccount.setCurrentBall(selectedBallId);
+		session.setAttribute("currAccount", currentAccount);
 		
 		//create a new Shot object with submitted data
-		Shot shot = new Shot(0, 0, frameNumber, 1, "0", 0, "");
+		//creating a new shot:
+		//sessionID, gameID, frameID, shotNumber, count, ballID, pinsLeft
+		Shot shot = new Shot(0, 0, 0, 1, "", 0, "");
 		
 		Frame frame = frameController.findOrCreateFrame(frames, frameNumber);
 		frame.addShot(shot);

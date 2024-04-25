@@ -7,6 +7,13 @@
 <%@ page import="edu.ycp.cs320.RevMetrix.model.Ball" %>
 <%@ page import="java.util.ArrayList" %>
 
+<%
+// Retrieve ArrayList from session attribute
+    //HttpSession session = request.getSession();
+    BallArsenal model = (BallArsenal) session.getAttribute("ballArsenalKey");
+    ArrayList<Ball> balls = (model != null) ? model.getBalls() : null;
+%>
+
 <html>
     <head>
         <meta charset="UTF-8">
@@ -268,8 +275,6 @@
            <a href="${pageContext.servletContext.contextPath}/shot">>Shot</a>
                </div>
        </div>
-
-        <!-- gets variables from the servlet -->
         
 
         <input type="hidden" id="selected-score-box">
@@ -292,12 +297,23 @@
                 <!-- drop down menu - selecting a ball -->
                 <form action="ShotServlet" method="post" id="ball-form">
                     <div class="dropdown">
-                        <select name="ball">
+                        <select name="ballArsenalDropdown">
                             <option value="">Select a ball...</option>
-                            <c:forEach var="ball" items="${ballArsenal}">
-                                <option value="${ball.getId()}">${ball.getName()}</option>
-                            </c:forEach>
-                            <option value="add">Add Ball... </option>
+                            <!-- <c:forEach var="ball" items="${ballArsenal}">
+                                <option value="${ball.getBallId()}">${ball.getName()}</option>
+                            </c:forEach> -->
+                            <%
+                                if (balls != null && !balls.isEmpty()) {
+                                    int i = 0;
+                                    for (Ball ball : balls) { %>
+                                        <option value=<%= ball.getBallId() %> > <%= ball.getName() %></option>
+                                    <% System.out.println(ball.getName());
+                                    }
+                                }else{%>
+                                    <p>There are no balls</p>
+                                <%}
+                            %>
+                            <!-- <option value="add">Add Ball... </option> -->
                         </select>
                     </div>
                 </form>
