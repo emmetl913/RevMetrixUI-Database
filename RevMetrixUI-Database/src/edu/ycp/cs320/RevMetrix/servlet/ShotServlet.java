@@ -14,6 +14,7 @@ import java.util.List;
 
 import edu.ycp.cs320.RevMetrix.controller.FrameController;
 import edu.ycp.cs320.RevMetrix.controller.ShotController;
+import edu.ycp.cs320.RevMetrix.controller.BallArsenalController;
 import edu.ycp.cs320.RevMetrix.model.Shot;
 import edu.ycp.cs320.RevMetrix.model.Frame;
 import edu.ycp.cs320.RevMetrix.model.Account;
@@ -40,13 +41,7 @@ public class ShotServlet extends HttpServlet {
 		//getSession = creates information based on the user
 		
 		HttpSession session = req.getSession();
-		long createTime = session.getCreationTime();
-		
-		//get last access time of this webpage
-		long lastAccessTime = session.getLastAccessedTime();
-		String userIDKey = new String("userID");
-		String userID = (String) session.getAttribute("userID");
-		
+
 		//int gameNumber = (int) session.getAttribute("gameNumber");
 		Integer frameNumber = (Integer) session.getAttribute("frameNumber");
 		
@@ -56,7 +51,6 @@ public class ShotServlet extends HttpServlet {
 		Game game = new Game(1, 1, 1, 1, 0);
 //		
 		if(session.isNew()) {
-			session.setAttribute(userIDKey, userID);
 			//session.setAttribute(shotKey, model);
 //			if(frames == null) {
 //				frames = new ArrayList<Frame>();
@@ -72,21 +66,8 @@ public class ShotServlet extends HttpServlet {
 			session.setAttribute("frameNumber", frameNumber);
 		}
 		
-//		if(session.getAttribute("ballArsenal") == null || ((List<Ball>)session.getAttribute("ballArsenal")).isEmpty()) {
-//			resp.sendRedirect(req.getContextPath() + "/_view/ballArsenal.jsp");
-//		}else {
-//			//get ballArsenal from the session
-//			List<Ball> ballArsenal = (List<Ball>)session.getAttribute("ballArsenal");
-//			
-//			req.setAttribute("ballArsenal", ballArsenal);
-//			
-//			// call JSP to generate empty form
-//			//req.getRequestDispatcher("/_view/shot.jsp").forward(req, resp);
-//		}
-		
 		//get ball arsenal from the session
 		List<Ball> ballArsenal = (List<Ball>) session.getAttribute("ballArsenal");
-//		req.setAttribute("ballArsenal", ballArsenal);
 		
 		//write null test for ball arsenal...
 		
@@ -121,7 +102,6 @@ public class ShotServlet extends HttpServlet {
 		session.setAttribute("frameNumber", frameNumber);
 		
 		//passes information to the jsp
-		req.setAttribute("userID", userID);
 		req.setAttribute("ballArsenal", ballArsenal);
 		req.setAttribute("gameNumber", game.getGameNumber());
 		req.setAttribute("frameNumber", frameNumber);	
@@ -129,6 +109,19 @@ public class ShotServlet extends HttpServlet {
 		//if the frame is out of range, it sends an error message to the user
 		boolean outOfRange = (frameNumber < 1 || frameNumber > 10);
 		req.setAttribute("outOfRange", outOfRange);
+		
+		Account account = (Account) session.getAttribute("currAccount");
+		
+		BallArsenal model = (BallArsenal)session.getAttribute("ballArsenalKey");
+		if(session.isNew()) {
+			model = new BallArsenal();
+			session.setAttribute("ballArsenalKey",  model);
+		}
+		
+		BallArsenalController arsenal = new BallArsenalController();
+		arsenal.setModel(model);
+		ArrayList<Ball> balls = (ArrayList<Ball>) arsenal.getBallByAccountId(account.getAccountId());
+		arsenal.setBalls(balls);
 		
 		// call JSP to generate empty form
 		req.getRequestDispatcher("/_view/shot.jsp").forward(req, resp);
@@ -140,14 +133,10 @@ public class ShotServlet extends HttpServlet {
 		System.out.println("Game Servlet: doPost");
 		
 		HttpSession session = req.getSession();
+		Account account = (Account) session.getAttribute("currAccount");
 		
 		String errorMessage = null;
 		Object sessionShot = session.getAttribute("shotKey");
-		   
-		// Get last access time of this Webpage.
-		long lastAccessTime = session.getLastAccessedTime();
-		String userIDKey = new String("userID");
-		String userID = new String("ABCD");
 
 		String shotKey = new String("shotKey");
 		ArrayList<Frame> frames = (ArrayList<Frame>) session.getAttribute("frames");
@@ -157,13 +146,10 @@ public class ShotServlet extends HttpServlet {
 		
 		   // Check if this is new comer on your Webpage.
 		if (session.isNew() ){
-	      session.setAttribute(userIDKey, userID);
-	      
 	      frames.add(new Frame(1, 1, frameNumber));
 		  session.setAttribute(shotKey,  frames);
 		} 
 		
-		userID = (String)session.getAttribute(userIDKey);
 		frames = (ArrayList<Frame>)session.getAttribute(shotKey);
 		
 		Game game = new Game(1, 1, 1, 1, 0);
@@ -218,9 +204,21 @@ public class ShotServlet extends HttpServlet {
 		
 		//get ball id from the jsp
 		String selectedBallId = req.getParameter("ballArsenalDropdown");
-		//get ball from ball ID
+		//get ball from ball ID - setCurrentBall(DB ball)
 //		currentAccount.setCurrentBall(selectedBallId);
 		session.setAttribute("currAccount", currentAccount);
+		
+		BallArsenal model = (BallArsenal)session.getAttribute("ballArsenalKey");
+		if(session.isNew()) {
+			model = new BallArsenal();
+			session.setAttribute("ballArsenalKey",  model);
+		}
+		
+		BallArsenalController arsenal = new BallArsenalController();
+		arsenal.setModel(model);
+		ArrayList<Ball> balls = (ArrayList<Ball>) arsenal.getBallByAccountId(account.getAccountId());
+		arsenal.setBalls(balls);
+		
 		
 		//create a new Shot object with submitted data
 		//creating a new shot:
