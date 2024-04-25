@@ -20,6 +20,8 @@ public class EventController {
 		db = DatabaseProvider.getInstance();		
 	}
 	
+	
+	
 	public List<Event> getAllEventsForAccount(int accountId) {
 		
 		// get the list of (Author, Book) pairs from DB

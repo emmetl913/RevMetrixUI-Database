@@ -132,10 +132,10 @@ button {
           <a href="https://github.com/emmetl913/RevMetrixUI-Database">GitHub</a>
 		  <a class="dropbtn" href="#" onclick="toggleDropdown(), nextStep(1)">Start Bowling!</a>
 		  <div class="dropdown-content" id="myDropdown">
-		<a href="${pageContext.servletContext.contextPath}/event">>Event</a>
-		<a href="${pageContext.servletContext.contextPath}/session">>Session</a>
-		<a href="${pageContext.servletContext.contextPath}/game">>Game</a>
-		<a href="${pageContext.servletContext.contextPath}/shot">>Shot</a>
+		        <a href="${pageContext.servletContext.contextPath}/event">&nbsp&nbsp >Event</a>
+	        <a href="${pageContext.servletContext.contextPath}/session">&nbsp&nbsp >Session</a>
+	        <a href="${pageContext.servletContext.contextPath}/game">&nbsp&nbsp >Game</a>
+	        <a href="${pageContext.servletContext.contextPath}/shot">&nbsp&nbsp >Shot</a>
 	   	 </div>
 	</div>
 	<form id = "gameForm" action="${pageContext.servletContext.contextPath}/game" method="post">

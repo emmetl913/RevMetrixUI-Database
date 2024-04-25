@@ -1073,7 +1073,7 @@ public class DerbyDatabase implements IDatabase {
 	}
 	
 	@Override
-	public Integer insertNewSession(final int sessionID,final int eventID,final String time,final String oppType,final String oppName,final int score) {
+	public Integer insertNewSession(final int eventID, final String time,final String oppType,final String oppName,final int score) {
 		return executeTransaction(new Transaction<Integer>() {
 			@Override
 			public Integer execute(Connection conn) throws SQLException {
@@ -1102,16 +1102,16 @@ public class DerbyDatabase implements IDatabase {
 					if(resultSet1.next())
 					{
 						session_id = resultSet1.getInt(1);
-						System.out.println("Session <"+ sessionID +"> found with eventID <"+ eventID +">");
+						System.out.println("Session found with eventID <"+ eventID +">");
 					}
 					else 
 					{
-						System.out.println("Session <"+ sessionID +"> was not found");
+						System.out.println("Session was not found");
 					}
 					if(session_id <= 0)
 					{
 						stmt2 = conn.prepareStatement(
-								"insert into sessions (eventID, time, oppType, oppName, score) "
+								"insert into sessions (event_id, time, oppType, oppName, score) "
 								+ " values(?, ?, ?, ?, ?)"
 						);
 						stmt2.setInt(1, eventID);
@@ -1127,10 +1127,9 @@ public class DerbyDatabase implements IDatabase {
 						// get the new account_id
 						stmt3 = conn.prepareStatement(
 								"select * from sessions "
-								+ " where event_id = ? and session_id = ?"
+								+ " where event_id = ?"
 						);
 						stmt3.setInt(1, eventID);
-						stmt3.setInt(2, sessionID);
 						
 						resultSet3 = stmt3.executeQuery();
 						

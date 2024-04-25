@@ -35,7 +35,7 @@
             background-color: #fff;
             padding: 20px;
             border-radius: 8px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            box-shadow: 10px 10px 5px black;
         }
 
         label {
@@ -76,6 +76,7 @@
   left: 0;
   background: linear-gradient(to bottom, rgba( 243, 0, 178, 1 ), rgba( 28, 144, 243, 1 ) 95%, rgba( 255, 255, 0, 1 ));
   padding-top: 20px;
+  box-shadow: 10px 5px 5px rgba(0, 0, 0, 0.1);
 }
 
 /* Links in the sidebar */
@@ -127,10 +128,10 @@
           <a href="https://github.com/emmetl913/RevMetrixUI-Database">GitHub</a>
           <a class="dropbtn" href="#" onclick="toggleDropdown(), nextStep(1)">Start Bowling!</a>
 		      <div class="dropdown-content" id="myDropdown">
-	        <a href="${pageContext.servletContext.contextPath}/event">>Event</a>
-	        <a href="${pageContext.servletContext.contextPath}/session">>Session</a>
-	        <a href="${pageContext.servletContext.contextPath}/game">>Game</a>
-	        <a href="${pageContext.servletContext.contextPath}/shot">>Shot</a>
+	        <a href="${pageContext.servletContext.contextPath}/event">&nbsp&nbsp >Event</a>
+	        <a href="${pageContext.servletContext.contextPath}/session">&nbsp&nbsp >Session</a>
+	        <a href="${pageContext.servletContext.contextPath}/game">&nbsp&nbsp >Game</a>
+	        <a href="${pageContext.servletContext.contextPath}/shot">&nbsp&nbsp >Shot</a>
 	   	 </div>
 		  </div>
       
