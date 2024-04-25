@@ -66,6 +66,8 @@ public class BallArsenalServlet extends HttpServlet {
         controller.setBalls(balls);
 		// Set the ArrayList as a request attribute
 		req.setAttribute("balls", balls);
+		//session.setAttribute("ballArsenal", balls);
+
 		//req.setAttribute("ballListSize", balls.size());
 		session.setAttribute(ballArsenalKey, model); //update session model
 
@@ -227,6 +229,7 @@ public class BallArsenalServlet extends HttpServlet {
 		 balls = (ArrayList<Ball>) controller.getBallByAccountId(currentAccount.getAccountId());
 	     controller.setBalls(balls);
 		req.setAttribute("balls", balls);
+		//session.setAttribute("ballArsenal", balls);
 		req.setAttribute("ballListSize", balls.size());
 		//Update the current ball to the session account
 		session.setAttribute("currAccount", currentAccount);

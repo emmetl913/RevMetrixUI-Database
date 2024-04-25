@@ -1639,5 +1639,49 @@ public class DerbyDatabase implements IDatabase {
 		// TODO Auto-generated method stub
 		return null;
 	}
+
+	@Override
+	public List<Ball> getBallByBallID(int ballID) {
+		return executeTransaction(new Transaction<List<Ball>>() {
+			@Override
+			public List<Ball> execute(Connection conn) throws SQLException
+			{
+				PreparedStatement stmt1 = null;
+				
+				ResultSet resultSet1 = null;
+				
+				try
+				{
+					stmt1 = conn.prepareStatement(
+						"select * from balls"+
+						"  where balls.ball_id = ? "
+					);
+					stmt1.setInt(1, ballID);
+					
+					List<Ball> result = new ArrayList<Ball>();
+					
+					resultSet1 = stmt1.executeQuery();
+					
+					Boolean found = false;
+					
+					while(resultSet1.next())
+					{
+						found = true;
+						Ball ball = new Ball(0,0,"", true,"","", "","","");
+						loadBall(ball, resultSet1, 1);
+						
+						result.add(ball);
+					}
+					
+					return result;
+				} 
+				finally
+				{
+					DBUtil.closeQuietly(stmt1);
+					DBUtil.closeQuietly(resultSet1);
+				}
+			}
+		});
+	}
 	
 }
