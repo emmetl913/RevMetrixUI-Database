@@ -375,7 +375,7 @@
     
                 <div class="frame-buttons">
                     <button id="previousFrameBtn" name="action" type="button">Previous Frame</button>
-                    <button id="nextFrameBtn" name="action" type="button">Next Frame</button>
+                    <button id="nextFrameBtn" name="action" type="submit">Next Frame</button>
                 </div>
 
                 <div id="error-message" style="color: red;"></div>
