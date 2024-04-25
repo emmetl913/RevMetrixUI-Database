@@ -2,12 +2,12 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
 <%@ page import= "edu.ycp.cs320.RevMetrix.model.Event" %>
-<%@ page import="edu.ycp.cs320.RevMetrix.model.EventArray" %>
-
 <%@ page import= "edu.ycp.cs320.RevMetrix.model.Establishment" %>
-<%@ page import="edu.ycp.cs320.RevMetrix.model.EstablishmentArray" %>
-
 <%@ page import = "java.io.*,java.util.*"%>
+
+<%
+  ArrayList<Event> events = (ArrayList<Event>)request.getAttribute("event");
+%>
 
 <html>
 <head>
@@ -123,6 +123,12 @@
   width: 84%; 
   text-align: left;
   }
+
+  .ball-section {
+        border: 1px solid black; /* Add border around each ball section */
+        margin-bottom: 10px; /* Add some space between ball sections */
+        padding: 10px; /* Add padding inside each ball section */
+    }
   
 
 
@@ -150,43 +156,73 @@
           <a href="${pageContext.servletContext.contextPath}/logIn"class="bottom-link">Sign Out</a>
 	   	 </div>
 		  </div>
+
+      <h1>Event Page</h1>
       
     <div class="container">
-      <h2>Event Page</h2>
+      <h2>Pick Existing Event</h2>
         <form action="${pageContext.servletContext.contextPath}/event" method="post">
 
-          <label for="eventName">Event Name:</label>
-          <input type="text" name="eventName" size="12" value="${game.eventName}">
-
-          <input type="hidden" id="type" name="newType" value="">
-    
-          <label for="eventType">Event Type:</label>
-          <button text="Practice" name="practice" type="button" value="Practice" onclick="setToPractive()">Practice</button>
-          <button text="Tournament" name="tournament" type="button" value="Tournament"onclick="setToTournament()">Tournament</button>
-          <button text="Leauge" name="leauge" type="button" value="Leauge"onclick="setToLeauge()">League</button>
-    
-          <label for="establishment">Establishment Name/Location:</label>
-          <select name="establishment" id="establishment">
-          <%
-          ArrayList<Establishment> estabs = (ArrayList<Establishment>) request.getAttribute("esta");
-            if (estabs != null) {
-              for (Establishment establishment : estabs) {
+          <div id="ballsList"> &nbsp				
+            <% 
+                   
+                if (events != null) {
+                  for (Event event : events) {
            %>
-          <option value="<%= establishment.getEstablishmentName()%>"><%= establishment.getEstablishmentName()%></option>
+                 <div class="ball-section">
+                  <p>Name: <%= event.getEventName() %></p>
+                   <p>Establishment Name: <%= event.getEstablishmentStringName()%></p>
+               </div>
            <% 
-             } } else {	%>
-               <option>No Establishments</option>
+                 } } else {	%>
+                 <p>No events available.</p>
            <% } %>
-          </select>
-    
-                <label for="standing">Standing:</label>
-                <input type="text" name="standing" size="12" value="${game.standing}">
+           
+           </div>
     
           <tr>
             <td><a href="${pageContext.servletContext.contextPath}/session"><input type="Submit" id="sessionType" name="Submit" value="Submit"></a></td>
           </tr>
          </form>
 	 </div>
+
+   <div class="container">
+    <h2>Create Event</h2>
+    <form action="${pageContext.servletContext.contextPath}/event" method="post">
+
+      <label for="eventName">Event Name:</label>
+      <input type="text" name="eventName" size="12" value="${game.eventName}">
+
+      <input type="hidden" id="type" name="newType" value="">
+
+      <label for="eventType">Event Type:</label>
+      <button text="Practice" name="practice" type="button" value="Practice" onclick="setToPractive()">Practice</button>
+      <button text="Tournament" name="tournament" type="button" value="Tournament"onclick="setToTournament()">Tournament</button>
+      <button text="Leauge" name="leauge" type="button" value="Leauge"onclick="setToLeauge()">League</button>
+
+      <label for="establishment">Establishment Name/Location:</label>
+      <select name="establishment" id="establishment">
+      <%
+      ArrayList<Establishment> estabs = (ArrayList<Establishment>) request.getAttribute("esta");
+        if (estabs != null) {
+          for (Establishment establishment : estabs) {
+       %>
+      <option value="<%= establishment.getEstablishmentName()%>"><%= establishment.getEstablishmentName()%></option>
+       <% 
+         } } else {	%>
+           <option>No Establishments</option>
+       <% } %>
+      </select>
+
+            <label for="standing">Standing:</label>
+            <input type="text" name="standing" size="12" value="${game.standing}">
+
+      <tr>
+        <td><a href="${pageContext.servletContext.contextPath}/session"><input type="Submit" id="sessionType" name="Submit" value="Submit"></a></td>
+      </tr>
+     </form>
+</div>
+
     <script>
       var currentStep = 1;
       // Display current step
@@ -232,6 +268,10 @@
           document.getElementById("type").value = "Leauge";
         }
         
+        function selectBall(ballName) {
+       document.getElementById('selectedBall').value = ballName;
+       document.getElementById('ballArsenalForm').submit();
+   }
       </script>
 </body>
 </html>

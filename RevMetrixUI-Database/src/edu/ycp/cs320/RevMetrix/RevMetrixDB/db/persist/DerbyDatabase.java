@@ -89,6 +89,53 @@ public class DerbyDatabase implements IDatabase {
 	}
 	
 	@Override
+	public List<Establishment> getEstablishmentByAccountAndEstablishmentID(int accID, int estaID) {
+		return executeTransaction(new Transaction<List<Establishment>>() {
+			@Override
+			public List<Establishment> execute(Connection conn) throws SQLException {
+				PreparedStatement stmt = null;
+				ResultSet resultSet = null;
+				
+				try {
+					stmt = conn.prepareStatement(
+							"select * from establishments "+
+							"where account_id = ? and esta_id = ?"
+					);
+					stmt.setInt(1, accID);
+					stmt.setInt(2, estaID);
+					
+					
+					List<Establishment> result = new ArrayList<Establishment>();
+					
+					resultSet = stmt.executeQuery();
+					
+					// for testing that a result was returned
+					Boolean found = false;
+					
+					while (resultSet.next()) {
+						found = true;
+						
+						Establishment esta = new Establishment();
+						loadEstablishment(esta, resultSet, 1);
+						
+						result.add(esta);
+					}
+					
+					// check if any authors were found
+					if (!found) {
+						System.out.println("No Establishment were found in the database");
+					}
+					
+					return result;
+				} finally {
+					DBUtil.closeQuietly(resultSet);
+					DBUtil.closeQuietly(stmt);
+				}
+			}
+		});
+	}
+	
+	@Override
 	public List<Event> getEventsByAccount(int accID) {
 		return executeTransaction(new Transaction<List<Event>>() {
 			@Override

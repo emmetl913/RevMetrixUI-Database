@@ -2,12 +2,11 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
 <%@ page import= "edu.ycp.cs320.RevMetrix.model.Establishment" %>
-<%@ page import="edu.ycp.cs320.RevMetrix.model.EstablishmentArray" %>
+<%@ page import="edu.ycp.cs320.RevMetrix.controller.EstablishmentRegController" %>
 <%@ page import = "java.io.*,java.util.*"%>
 <%@ page import="javax.servlet.http.HttpSession" %>
 <%
-	EstablishmentArray model = (EstablishmentArray) request.getAttribute("estaArray");
-	ArrayList<Establishment> establishments = (model != null) ? model.getEstablishments() : null;
+  ArrayList<Establishment> establishments = (ArrayList<Establishment>)request.getAttribute("estaArray");
 %>
 
 <html>

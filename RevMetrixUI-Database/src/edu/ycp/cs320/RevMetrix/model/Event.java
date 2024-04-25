@@ -1,10 +1,13 @@
 package edu.ycp.cs320.RevMetrix.model;
+import java.util.ArrayList;
 
+import edu.ycp.cs320.RevMetrix.controller.EstablishmentRegController;
 
 public class Event {
 	private String eventName, type, standingString, establishmentString;
 	private int standing, eventID, estbID, time, accountID;
 	private Establishment establishment;
+	private EstablishmentRegController controller;
 	
 	public Event() {
 	}
@@ -17,7 +20,8 @@ public class Event {
 		this.time = time;
 		this.type = type;
 		this.standing = standing;
-		
+		controller = new EstablishmentRegController(accountID);
+		setEstablishment(controller.getEstablishmentByAccountAndEstablishmentID(accountID, eventID));
 		this.standingString = Integer.toString(standing);
 	}
 	

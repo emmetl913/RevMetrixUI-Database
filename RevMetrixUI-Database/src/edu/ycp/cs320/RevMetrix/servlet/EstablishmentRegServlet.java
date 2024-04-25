@@ -13,7 +13,6 @@ import javax.servlet.http.HttpSession;
 import edu.ycp.cs320.RevMetrix.controller.EstablishmentRegController;
 import edu.ycp.cs320.RevMetrix.model.Account;
 import edu.ycp.cs320.RevMetrix.model.Establishment;
-import edu.ycp.cs320.RevMetrix.model.EstablishmentArray;
 
 
 public class EstablishmentRegServlet extends HttpServlet {
@@ -34,13 +33,12 @@ public class EstablishmentRegServlet extends HttpServlet {
 		// If first visit: new session id
 		//Get model and userID from jsp
 	    
-	    
 		Account acc = (Account) session.getAttribute("currAccount");
-		EstablishmentArray model = new EstablishmentArray(acc.getAccountId());
-		EstablishmentRegController controller = new EstablishmentRegController();
+		Establishment model = new Establishment();
+		EstablishmentRegController controller = new EstablishmentRegController(acc.getAccountId());
 		controller.setModel(model);
 		
-		ArrayList<Establishment> establishments = model.getEstablishments();
+		ArrayList<Establishment> establishments = controller.getEstablishments();
 		
 		try {
 			for(Establishment esta : establishments) {
@@ -50,11 +48,11 @@ public class EstablishmentRegServlet extends HttpServlet {
 			
 		}
 		
-		establishments = model.getEstablishments();
+		establishments = controller.getEstablishments();
         
 		// Set the ArrayList as a request attribute
 		req.setAttribute("esta", establishments);
-		req.setAttribute("estaArray", model);
+		req.setAttribute("estaArray", controller.getEstablishments());
 		
 		// call JSP to generate empty form
 		req.getRequestDispatcher("/_view/establishmentReg.jsp").forward(req, resp);
@@ -73,14 +71,14 @@ public class EstablishmentRegServlet extends HttpServlet {
 
 		Account acc = (Account) session.getAttribute("currAccount");
 		System.out.print(acc.getAccountId());
-		EstablishmentArray model = new EstablishmentArray(acc.getAccountId());
-		EstablishmentRegController controller = new EstablishmentRegController();
+		Establishment model = new Establishment();
+		EstablishmentRegController controller = new EstablishmentRegController(acc.getAccountId());
 		controller.setModel(model);
 				
 				   // Check if this is new comer on your Webpage.
 				//end session shenanigans
 		
-        ArrayList<Establishment> establishments = model.getEstablishments(); //get ball ArrayList from session updated model
+        ArrayList<Establishment> establishments = controller.getEstablishments(); //get ball ArrayList from session updated model
 		if(establishments == null) {
 			establishments = new ArrayList<Establishment>();
 			establishments.add(new Establishment(0, 0, "FirstBall", "FirstAddress"));
@@ -100,11 +98,11 @@ public class EstablishmentRegServlet extends HttpServlet {
 			 controller.removeEstablishment(acc.getAccountId(), removeEstablishmentName);
 		}
 		
-        establishments = model.getEstablishments(); 
+        establishments = controller.getEstablishments(); 
 		
 		req.setAttribute("errorMessage", errorMessage);
 		req.setAttribute("esta", establishments);
-		req.setAttribute("estaArray", model);
+		req.setAttribute("estaArray", controller.getEstablishments());
 		req.getRequestDispatcher("/_view/establishmentReg.jsp").forward(req, resp);
 	}
 
