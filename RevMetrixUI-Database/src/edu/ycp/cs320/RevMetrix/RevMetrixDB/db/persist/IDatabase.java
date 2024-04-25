@@ -31,6 +31,7 @@ public interface IDatabase {
 	public List<Establishment> getEstablishmentsByAccount(int accID);
 	List<Account> getAccountByEmail(String email);
 	List<Ball> getBallsByAccountID(int accountId);
+	List<Ball> getBallByBallID(int ballID);
 	List<Ball> getBallByName(String name);
 
 	public Integer removeBall(int accID, String name);
