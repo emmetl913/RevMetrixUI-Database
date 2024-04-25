@@ -11,6 +11,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import edu.ycp.cs320.RevMetrix.controller.SessionController;
+import edu.ycp.cs320.RevMetrix.model.Account;
 import edu.ycp.cs320.RevMetrix.model.Session;
 
 public class SessionServlet extends HttpServlet{
@@ -25,33 +26,18 @@ public class SessionServlet extends HttpServlet{
         }
 		
 		System.out.println("Session Servlet: doGet");
-		
 		HttpSession session = req.getSession();
 		
+		Account acc = (Account) session.getAttribute("currAccount");
 		
-		String sessionKey = new String("sessionKey");
-		Session model = (Session)session.getAttribute(sessionKey);
+		
+		Session model = null;
 		SessionController controller = new SessionController();
-		
-		
-		if (session.isNew() ) 
-		{
-			if(model == null)
-			{
-				model = new Session(0, 0, "", "", "", 0);
-			}
-			session.setAttribute(sessionKey, model);
-		}
 		controller.setModel(model);
 		
-		if(model == null)
-		{
-			model = new Session(0, 0, "", "", "", 0);
-			session.setAttribute(sessionKey, model);
-		}
+		
 		
 		req.setAttribute("model", model);
-		session.setAttribute(sessionKey, model);
 		
 		req.getRequestDispatcher("/_view/session.jsp").forward(req, resp);
 	}
@@ -64,27 +50,15 @@ public class SessionServlet extends HttpServlet{
 		
 		String errorMessage = null;
 		
+		Session model = new Session(0, 0, "", "", "", 0);
 		SessionController controller = new SessionController();
 		
 		HttpSession session = req.getSession();
-		String sessionKey = new String("sessionKey");
-		Session model = (Session)session.getAttribute(sessionKey);
+		Account acc = (Account) session.getAttribute("currAccount");
+		int eventID = 0; //(int) session.getAttribute("currEventID");
 		
-		if (session.isNew() )
-		{
-		      if(model == null)
-		      {
-		    	  model = new Session(0, 0, "", "", "", 0);
-		      }
-		      session.setAttribute(sessionKey, model);
-		} 
-		
-		if (model == null)
-		{
-			model = new Session(0, 0, "", "", "", 0);
-			session.setAttribute(sessionKey, model);
-		}
 		controller.setModel(model);
+		
 		
 		String time = req.getParameter("timeType");
 		System.out.println(time);
@@ -95,6 +69,7 @@ public class SessionServlet extends HttpServlet{
 	        // Format the time using a DateTimeFormatter
 	        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("hh:mma");
 	        String formattedTime = currentTime.format(formatter);
+	        System.out.println(formattedTime);
 	        
 			model.setTime(formattedTime);
 		} else if ("Other Time".equals(time))
@@ -108,12 +83,15 @@ public class SessionServlet extends HttpServlet{
 		if ("Team Opponent".equals(bowlType)) {
 	        String opponentName = req.getParameter("opponentName");
 	        model.setOpp(opponentName);
+	        model.setOppType("team");
 		} else if ("Individual Opponent".equals(bowlType)) {
 	        String opponentName = req.getParameter("opponentName");
 	        model.setOpp(opponentName);
+	        model.setOppType("individual");
 	    } else if ("Solo Bowl".equals(bowlType)) {
 	    	String opponentName = "solo";
 	    	model.setOpp(opponentName);
+	    	model.setOppType("self");
 	    }
 	    
 
@@ -124,9 +102,9 @@ public class SessionServlet extends HttpServlet{
 		
 		req.setAttribute("errorMessage", errorMessage);
 		req.setAttribute("model", model);
-		session.setAttribute(sessionKey, model);
 		
 		if(req.getParameter("submit") != null) {
+			controller.insertNewSession(eventID, model.getTime(), model.getOppType(), model.getName(), 0);
     		req.getRequestDispatcher("/_view/game.jsp").forward(req, resp);
         }
 

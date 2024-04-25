@@ -1120,7 +1120,7 @@ public class DerbyDatabase implements IDatabase {
 	}
 	
 	@Override
-	public Integer insertNewSession(final int sessionID,final int eventID,final String time,final String oppType,final String oppName,final int score) {
+	public Integer insertNewSession(final int eventID, final String time,final String oppType,final String oppName,final int score) {
 		return executeTransaction(new Transaction<Integer>() {
 			@Override
 			public Integer execute(Connection conn) throws SQLException {
@@ -1149,16 +1149,16 @@ public class DerbyDatabase implements IDatabase {
 					if(resultSet1.next())
 					{
 						session_id = resultSet1.getInt(1);
-						System.out.println("Session <"+ sessionID +"> found with eventID <"+ eventID +">");
+						System.out.println("Session found with eventID <"+ eventID +">");
 					}
 					else 
 					{
-						System.out.println("Session <"+ sessionID +"> was not found");
+						System.out.println("Session was not found");
 					}
 					if(session_id <= 0)
 					{
 						stmt2 = conn.prepareStatement(
-								"insert into sessions (eventID, time, oppType, oppName, score) "
+								"insert into sessions (event_id, time, oppType, oppName, score) "
 								+ " values(?, ?, ?, ?, ?)"
 						);
 						stmt2.setInt(1, eventID);
@@ -1174,10 +1174,9 @@ public class DerbyDatabase implements IDatabase {
 						// get the new account_id
 						stmt3 = conn.prepareStatement(
 								"select * from sessions "
-								+ " where event_id = ? and session_id = ?"
+								+ " where event_id = ?"
 						);
 						stmt3.setInt(1, eventID);
-						stmt3.setInt(2, sessionID);
 						
 						resultSet3 = stmt3.executeQuery();
 						
@@ -1685,6 +1684,50 @@ public class DerbyDatabase implements IDatabase {
 	public List<Session> getSessionByEventID(int eventID) {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	@Override
+	public List<Ball> getBallByBallID(int ballID) {
+		return executeTransaction(new Transaction<List<Ball>>() {
+			@Override
+			public List<Ball> execute(Connection conn) throws SQLException
+			{
+				PreparedStatement stmt1 = null;
+				
+				ResultSet resultSet1 = null;
+				
+				try
+				{
+					stmt1 = conn.prepareStatement(
+						"select * from balls"+
+						"  where balls.ball_id = ? "
+					);
+					stmt1.setInt(1, ballID);
+					
+					List<Ball> result = new ArrayList<Ball>();
+					
+					resultSet1 = stmt1.executeQuery();
+					
+					Boolean found = false;
+					
+					while(resultSet1.next())
+					{
+						found = true;
+						Ball ball = new Ball(0,0,"", true,"","", "","","");
+						loadBall(ball, resultSet1, 1);
+						
+						result.add(ball);
+					}
+					
+					return result;
+				} 
+				finally
+				{
+					DBUtil.closeQuietly(stmt1);
+					DBUtil.closeQuietly(resultSet1);
+				}
+			}
+		});
 	}
 	
 }

@@ -16,37 +16,36 @@ public class SessionController {
 		DatabaseProvider.setInstance(new DerbyDatabase());
 		db = DatabaseProvider.getInstance();
 	}
+	
 	public void setModel(Session model)
 	{
 		this.model = model;
 	}
-	public List<Session> getSessionByEventID(int sessionID, int eventID, String time, String oppType, String oppName, int score)
+	
+	public List<Session> getSessionByEventID(int eventID)
 	{
-		List<Session> sessionList = db.getSessionByEventID(eventID);
-		if(sessionList.isEmpty())
+		List<Session> resultList = db.getSessionByEventID(eventID);
+		
+		if(resultList.isEmpty())
 		{
-			System.out.println("No session stupid");
+			System.out.println("Sessions for <"+eventID+"> not found");
 			return null;
-		}
-		else 
+		} else 
 		{
-			return sessionList;
+			return resultList;
 		}
 	}
-	
-	public boolean insertSessionInDB(int sessionID, int eventID, String time, String oppType, String oppName, int score)
+	public Integer insertNewSession(int eventID, String time, String oppType, String oppName, int score)
 	{
-		Integer session_id = db.insertNewSession(sessionID, eventID, time, oppType, oppName, score);
+		Integer newSession = db.insertNewSession(eventID, time, oppType, oppName, score);
 		
-		if (session_id > 0)
+		if (newSession == null)
 		{
-			System.out.println("New session (Session ID: " + session_id + ", Event ID: "+ eventID +" successfully added to db");
-			return true;
-		} 
-		else
+			System.out.println("Session for <"+eventID+"> insert failed");
+			return null;
+		} else
 		{
-			System.out.println("New session (Session ID: " + session_id + ", Event ID: "+ eventID +" failed to add to db");
-			return false;
+			return newSession;
 		}
 	}
 }

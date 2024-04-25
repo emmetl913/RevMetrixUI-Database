@@ -1,10 +1,11 @@
 <!DOCTYPE html>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
+
 <style>
 	body {
             font-family: Arial, sans-serif;
-            background-color: #f4f4f4;
+            background-color: darkgray;
             margin: 0;
             padding: 0;
 	}
@@ -83,3 +84,4 @@
 	</body>
 	
 </html>
+<script src="https://apis.google.com/js/platform.js" async defer></script>
