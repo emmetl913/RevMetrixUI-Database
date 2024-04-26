@@ -49,6 +49,6 @@ public interface IDatabase {
 	public Integer removeEstablishment(int accID, String name);
 	public List<Event> getEventsByAccount(int accID);
 	public Integer insertNewEvent(int accID, int estbID, String name, int time, String type, int standing);
-	public List<Establishment> getEstablishmentByAccountAndEstablishmentID(int accID, int estaID);
+	public Establishment getEstablishmentByAccountAndEstablishmentID(int accID, int estaID);
 	
 }

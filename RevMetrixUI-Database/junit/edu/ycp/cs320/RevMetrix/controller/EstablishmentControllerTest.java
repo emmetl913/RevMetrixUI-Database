@@ -11,15 +11,14 @@ import org.junit.Test;
 import java.util.List;
 
 import edu.ycp.cs320.RevMetrix.model.Establishment;
-import edu.ycp.cs320.RevMetrix.model.EstablishmentArray;
 
 public class EstablishmentControllerTest{
 	private EstablishmentRegController controller;
 
 	@Before
 	public void setUp() {
-		EstablishmentArray model = new EstablishmentArray(1);
-		controller = new EstablishmentRegController();
+		Establishment model = new Establishment();
+		controller = new EstablishmentRegController(1);
 		controller.setModel(model);
 	}
 	
@@ -34,8 +33,6 @@ public class EstablishmentControllerTest{
 		}
 		assertTrue(testEsta.get(0).getEstablishmentName().equals("Colony Park Lanes & Games"));
 		assertTrue(testEsta.get(1).getEstablishmentName().equals("Suburban Bowlerama"));
-
-		
 	}
 	
 	@Test
@@ -66,6 +63,18 @@ public class EstablishmentControllerTest{
 		}
 		
 		assertFalse(testEsta.get(testEsta.size()-1).getEstablishmentName().equals("name"));
+		
+	}
+	
+	@Test
+	public void testgetEstablishmentByAccountAndEstablishmentID() {
+		
+		Establishment testEsta = controller.getEstablishmentByAccountAndEstablishmentID(1, 1);
+		System.out.println("Test Get Establishment by Account and Estab ID:");
+		System.out.println(testEsta.getEstablishmentName());
+		
+		assertTrue(testEsta.getEstablishmentName().equals("Suburban Bowlerama"));
+));
 		
 	}
 

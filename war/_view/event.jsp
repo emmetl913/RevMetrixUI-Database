@@ -172,7 +172,7 @@
            %>
                  <div class="ball-section">
                   <p>Name: <%= event.getEventName() %></p>
-                   <p>Establishment Name: <%= event.getEstablishmentStringName()%></p>
+                   <p>Establishment Name: <%= event.getEstbID()%></p>
                </div>
            <% 
                  } } else {	%>
