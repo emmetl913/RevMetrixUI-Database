@@ -3,12 +3,8 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
 <%@ page import= "edu.ycp.cs320.RevMetrix.model.Event" %>
-<%@ page import="edu.ycp.cs320.RevMetrix.model.EventArray" %>
-
 <%@ page import= "edu.ycp.cs320.RevMetrix.model.Game" %>
 <%@ page import= "edu.ycp.cs320.RevMetrix.model.Establishment" %>
-<%@ page import="edu.ycp.cs320.RevMetrix.model.EstablishmentArray" %>
-
 <%@ page import = "java.io.*,java.util.*"%>
 <%@ page import="javax.servlet.http.HttpSession" %>
 
@@ -343,6 +339,21 @@
         #opponentInputRow {
             display: none;
         }
+		.bottom-link {
+  position: absolute;
+  bottom: 20px; /* Adjust this value to raise or lower the link */
+  left: 0;
+  width: 84%; 
+  text-align: left;
+  }
+
+  .bottom-link2 {
+  position: absolute;
+  bottom: 60px; /* Adjust this value to raise or lower the link */
+  left: 0;
+  width: 84%; 
+  text-align: left;
+  }
     </style>
 </head>
 <body>
@@ -357,17 +368,16 @@
 			<img src="${pageContext.request.contextPath}/_view/BowlingBall.png"width="100" height="100">
 		  </a>
 	      <a href="${pageContext.servletContext.contextPath}/establishmentReg">Establishment Registration</a>
-		  <a href="${pageContext.servletContext.contextPath}/logIn">Sign Out</a>
-          <a href="${pageContext.servletContext.contextPath}/shot">Shot</a>
           <a href="${pageContext.servletContext.contextPath}/ballArsenal">Ball Arsenal</a>
-          <a href="https://github.com/emmetl913/RevMetrixUI-Database">GitHub</a>
 		  <a class="dropbtn" href="#" onclick="toggleDropdown(), nextStep(1)">Start Bowling!</a>
 		  <div class="dropdown-content" id="myDropdown">
-		<a href="${pageContext.servletContext.contextPath}/event">>Event</a>
-		<a href="${pageContext.servletContext.contextPath}/session">>Session</a>
-		<a href="${pageContext.servletContext.contextPath}/game">>Game</a>
-		<a href="${pageContext.servletContext.contextPath}/shot">>Shot</a>
+		        <a href="${pageContext.servletContext.contextPath}/event">&nbsp&nbsp >Event</a>
+	        <a href="${pageContext.servletContext.contextPath}/session">&nbsp&nbsp >Session</a>
+	        <a href="${pageContext.servletContext.contextPath}/game">&nbsp&nbsp >Game</a>
+	        <a href="${pageContext.servletContext.contextPath}/shot">&nbsp&nbsp >Shot</a>
 	   	 </div>
+            <a href="https://github.com/emmetl913/RevMetrixUI-Database"class="bottom-link2">GitHub</a>
+            <a href="${pageContext.servletContext.contextPath}/logIn"class="bottom-link">Sign Out</a>
 	</div>
 <form id="session" action="${pageContext.servletContext.contextPath}/session" method="post">
 	<div class="container">

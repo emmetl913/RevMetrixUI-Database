@@ -10,6 +10,8 @@ import edu.ycp.cs320.RevMetrix.model.Session;
 import edu.ycp.cs320.RevMetrix.model.Game;
 import edu.ycp.cs320.RevMetrix.model.Session;
 import edu.ycp.cs320.RevMetrix.model.Event;
+import edu.ycp.cs320.RevMetrix.model.Game;
+import edu.ycp.cs320.RevMetrix.model.Session;
 
 import java.util.List;
 
@@ -27,7 +29,7 @@ public interface IDatabase {
 	
 	// Shot Level Methods
 	public Integer insertNewGame(int gameID, int sessionID, int currentLane, int gameNum, int score);
-	public Integer insertNewSession(int sessionID, int eventID, String time, String oppType, String oppName, int score);
+	public Integer insertNewSession(int eventID, String time, String oppType, String oppName, int score);
 	public List<Establishment> getEstablishmentsByAccount(int accID);
 	List<Account> getAccountByEmail(String email);
 	List<Ball> getBallsByAccountID(int accountId);
@@ -47,5 +49,6 @@ public interface IDatabase {
 	public Integer removeEstablishment(int accID, String name);
 	public List<Event> getEventsByAccount(int accID);
 	public Integer insertNewEvent(int accID, int estbID, String name, int time, String type, int standing);
+	public List<Establishment> getEstablishmentByAccountAndEstablishmentID(int accID, int estaID);
 	
 }

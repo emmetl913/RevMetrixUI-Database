@@ -15,7 +15,7 @@
 		<style type="text/css">
 		body {
             font-family: Arial, sans-serif;
-            background-color: #f4f4f4;
+            background-color: darkgray;
             margin: 0;
             padding: 0;
         }
@@ -26,7 +26,7 @@
             background-color: #fff;
             padding: 20px;
             border-radius: 8px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            box-shadow: 10px 10px 5px black;
         }
 
         label {
@@ -76,6 +76,7 @@
   left: 0;
   background: linear-gradient(to bottom, rgba( 243, 0, 178, 1 ), rgba( 28, 144, 243, 1 ) 95%, rgba( 255, 255, 0, 1 ));
   padding-top: 20px;
+  box-shadow: 10px 5px 5px rgba(0, 0, 0, 0.1);
 }
 
 /* Links in the sidebar */
@@ -107,6 +108,22 @@
   .sidebar a {float: left;}
   div.content {margin-left: 0;}
 }
+
+.bottom-link {
+  position: absolute;
+  bottom: 20px; /* Adjust this value to raise or lower the link */
+  left: 0;
+  width: 84%; 
+  text-align: left;
+  }
+
+  .bottom-link2 {
+  position: absolute;
+  bottom: 60px; /* Adjust this value to raise or lower the link */
+  left: 0;
+  width: 84%; 
+  text-align: left;
+  }
 		
 
 		</style>
@@ -122,11 +139,11 @@
 			<img src="${pageContext.request.contextPath}/_view/BowlingBall.png"width="100" height="100">
 		  </a>
 	      <a href="${pageContext.servletContext.contextPath}/establishmentReg">Establishment Registration</a>
-		  <a href="${pageContext.servletContext.contextPath}/logIn">Sign Out</a>
-          <a href="${pageContext.servletContext.contextPath}/shot">Shot</a>
           <a href="${pageContext.servletContext.contextPath}/ballArsenal">Ball Arsenal</a>
-          <a href="https://github.com/emmetl913/RevMetrixUI-Database">GitHub</a>
-          <a href="${pageContext.servletContext.contextPath}/event">Start Bowling!</a>
+          <a href="${pageContext.servletContext.contextPath}/event">Start Bowling</a>
+
+          <a href="https://github.com/emmetl913/RevMetrixUI-Database"class="bottom-link2">GitHub</a>
+          <a href="${pageContext.servletContext.contextPath}/logIn"class="bottom-link">Sign Out</a>
 		  </div>
 		  
 		  <div class="container">
