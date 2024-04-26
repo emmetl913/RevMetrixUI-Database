@@ -2,7 +2,7 @@ package edu.ycp.cs320.RevMetrix.model;
 
 
 public class Account {
-	private String userName, password, email;
+	private String userName, password, email, firstName, lastName;
 	private Ball currentBall;
 	private Event currentEvent;
 	private Session currentSession;
@@ -12,10 +12,12 @@ public class Account {
 	private Shot currentShot;
 	
 	
-	public Account(String Username, String Password, String Email) {
+	public Account(String Username, String Password, String Email, String firstName, String lastName) {
 		this.userName = Username;
 		this.password = Password;
 		this.email = Email;
+		this.firstName = firstName;
+		this.lastName = lastName;
 	}
 	
 	public Ball getCurrentBall()
@@ -60,6 +62,22 @@ public class Account {
 	public void setCurrentGame(Game currGame) {
 		// TODO Auto-generated method stub
 		currentGame = currGame;
+	}
+
+	public String getFirstName() {
+		return firstName;
+	}
+
+	public void setFirstName(String firstName) {
+		this.firstName = firstName;
+	}
+
+	public String getLastName() {
+		return lastName;
+	}
+
+	public void setLastName(String lastName) {
+		this.lastName = lastName;
 	}
 	
 

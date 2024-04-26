@@ -51,7 +51,7 @@ public class AccountServlet extends HttpServlet {
 
 		// holds the error message text, if there is any
 		String errorMessage = null;
-		Account model = new Account(null, null, null);
+		Account model = new Account(null, null, null, null, null);
 		AccountController controller = new AccountController();
 		controller.setModel(model);
 		

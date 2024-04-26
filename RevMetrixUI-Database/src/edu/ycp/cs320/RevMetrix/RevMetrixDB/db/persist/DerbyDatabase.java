@@ -325,7 +325,7 @@ public class DerbyDatabase implements IDatabase {
 					while(resultSet1.next())
 					{
 						found = true;
-						Account acc = new Account("", "", "");
+						Account acc = new Account("", "", "","","");
 						loadAccount(acc, resultSet1, 1);
 						
 						result.add(acc);
@@ -371,7 +371,7 @@ public class DerbyDatabase implements IDatabase {
 					while(resultSet1.next())
 					{
 						found = true;
-						Account acc = new Account("", "", "");
+						Account acc = new Account("", "", "","","");
 						loadAccount(acc, resultSet1, 1);
 						
 						result.add(acc);
@@ -414,7 +414,7 @@ public class DerbyDatabase implements IDatabase {
 					while(resultSet1.next())
 					{
 						found = true;
-						Account acc = new Account("", "", "");
+						Account acc = new Account("", "", "","","");
 						loadAccount(acc, resultSet1, 1);
 						
 						result.add(acc);
@@ -990,7 +990,7 @@ public class DerbyDatabase implements IDatabase {
 		});
 	}
 	@Override
-	public Integer insertNewAccountinDB(final String email, final String password, final String username)
+	public Integer insertNewAccount(final String email, final String password, final String username, String firstname, String lastname)
 	{
 		return executeTransaction(new Transaction<Integer>() {
 			@Override
@@ -1030,16 +1030,18 @@ public class DerbyDatabase implements IDatabase {
 					if(account_id <= 0)
 					{
 						stmt2 = conn.prepareStatement(
-								"insert into accounts (username, email, password) "
-								+ " values(?, ?, ?)"
+								"insert into accounts (username, email, password, firstname, lastname) "
+								+ " values(?, ?, ?, ?, ?)"
 						);
 						stmt2.setString(1, username);
 						stmt2.setString(2, email);
 						stmt2.setString(3, password);
+						stmt2.setString(4,  firstname);
+						stmt2.setString(5, lastname);
 						
 						stmt2.executeUpdate();
 						
-						System.out.println("New account <"+email+"> , <"+username+"> , <"+password+"> inserted into accounts");
+						System.out.println("New account <"+email+"> , <"+username+"> , <"+password+">, <"+firstname+"> , <"+lastname+"> inserted into accounts");
 						
 						// get the new account_id
 						stmt3 = conn.prepareStatement(
@@ -1240,6 +1242,8 @@ public class DerbyDatabase implements IDatabase {
 		account.setUsername(resultSet.getString(index++));
 		account.setPassword(resultSet.getString(index++));
 		account.setEmail(resultSet.getString(index++));
+		account.setFirstName(resultSet.getString(index++));
+		account.setLastName(resultSet.getString(index++));
 	}
 	
 	//  creates the Authors and Books tables
@@ -1324,7 +1328,9 @@ public class DerbyDatabase implements IDatabase {
 							"    generated always as identity (start with 1, increment by 1), " +
 							"  username varchar(70), " +
 							"  password varchar(25), " +
-							"  email varchar(70)" +
+							"  email varchar(70)," +
+							"  firstname varchar(70)," +
+							"  lastname varchar(70)" +
 							")"
 					);
  					stmt4.executeUpdate();
@@ -1494,12 +1500,14 @@ public class DerbyDatabase implements IDatabase {
 					insertEvent.executeBatch();
 					tablesPopulated += "Events, ";
 					
-					insertAccount = conn.prepareStatement("insert into accounts (username, password, email) values (?, ?, ?)");
+					insertAccount = conn.prepareStatement("insert into accounts (username, password, email, firstname, lastname) values (?, ?, ?, ?, ?)");
 					for (Account account : accountList)
 					{
 						insertAccount.setString(1, account.getUsername());
 						insertAccount.setString(2, account.getPassword());
 						insertAccount.setString(3, account.getEmail());
+						insertAccount.setString(4, account.getFirstName());
+						insertAccount.setString(5, account.getLastName());
 						insertAccount.addBatch();
 					}
 //					insertNewAccountinDB("email@gmail.com", "password1", "username1");

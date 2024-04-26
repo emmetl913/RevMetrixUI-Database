@@ -52,7 +52,7 @@ public class AccountSignUpServlet extends HttpServlet {
 		HttpSession session = req.getSession();
 
 		String errorMessage = null;
-		Account model = new Account(null, null, null);
+		Account model = new Account(null, null, null, null, null);
 		AccountController controller = new AccountController();
 		controller.setModel(model);
 		// result of calculation goes here
@@ -62,7 +62,9 @@ public class AccountSignUpServlet extends HttpServlet {
 		String email = req.getParameter("email");
 		String password = req.getParameter("password");
 		String password2 = req.getParameter("password2");
-		Account kevin=  new Account("Kevin", "Kevin1","KevinsEmail@gmail.com");
+		String firstname = req.getParameter("firstname");
+		String lastname = req.getParameter("lastname");
+		Account kevin=  new Account("Kevin", "Kevin1","KevinsEmail@gmail.com", "KevinFirstName", "KevinLastName");
 
 //		ArrayList<Account> accList = new ArrayList<Account>();
 //		if (session.isNew() ){
@@ -104,9 +106,10 @@ public class AccountSignUpServlet extends HttpServlet {
 		if(errorMessage == null && !signedUp) {
 			if(password.equals(password2)) {
 				controller.signUp(username, password, email); //create an account with SignUp
+				//ABOVE FUNCTION is deprecated (exists from the fake data era)
 				
 				//accList = (ArrayList<Account>)session.getAttribute("accountListKey");
-				controller.insertAccountinDB(email, password, username);
+				controller.insertAccount(email, password, username, firstname, lastname);
 				
 				//Pretty sure "accList" is deprecated now because the accs are stored in the db
 				//accList.add(new Account(username, password, email));
