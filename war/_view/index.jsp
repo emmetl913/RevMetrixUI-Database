@@ -153,6 +153,10 @@
 				<label>Username: <%= acc.getUsername()%> </label>
 	
 				<label>Email: <%= acc.getEmail()%> </label>
+				
+				<label>First Name: <%= acc.getFirstName()%> </label>
+				
+				<label>Last Name: <%= acc.getLastName()%> </label>
 	
 				<label>Events up soon:</label>
 				<p>Event1 = 3/3/2025</p>

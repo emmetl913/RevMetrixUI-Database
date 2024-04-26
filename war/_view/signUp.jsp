@@ -80,6 +80,14 @@
 					<td><input type="text" name="username" size="12" value="" /></td>
 				</tr>
 				<tr>
+					<td class="label">First Name: </td>
+					<td><input type="text" name="firstname" size="12" value="" /></td>
+				</tr>
+				<tr>
+					<td class="label">Last Name: </td>
+					<td><input type="text" name="lastname" size="12" value="" /></td>
+				</tr>
+				<tr>
 					<td class="label">Password: </td>
 					<td><input type="password" name="password" size="12" value="" /></td>
 				</tr>

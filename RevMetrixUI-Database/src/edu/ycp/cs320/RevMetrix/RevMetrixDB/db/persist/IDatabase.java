@@ -20,7 +20,7 @@ import edu.ycp.cs320.RevMetrix.model.Ball;
 import edu.ycp.cs320.RevMetrix.model.Shot;
 
 public interface IDatabase {
-	public Integer insertNewAccountinDB(String email, String password, String username);
+	public Integer insertNewAccount(String email, String password, String username, String firstname, String lastname);
 	public Integer insertNewBallInDB(int account_id, float weight, String name, Boolean righthand, String brand, String color1, String color2, String color3, String material);
 	
 	public List<Account> getAccountByUsernameAndPassword(String username, String password);

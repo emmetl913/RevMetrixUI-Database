@@ -50,10 +50,10 @@ public class AccountController {
 		this.model = model;
 	}
 	
-public boolean insertAccountinDB(String email, String password, String username) {
+public boolean insertAccount(String email, String password, String username, String firstname, String lastname) {
 		
 		// insert new book (and possibly new author) into DB
-		Integer account_id = db.insertNewAccountinDB(email, password, username);
+		Integer account_id = db.insertNewAccount(email, password, username, firstname, lastname);
 
 		// check if the insertion succeeded
 		if (account_id > 0)
