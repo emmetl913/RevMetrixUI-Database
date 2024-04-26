@@ -33,6 +33,7 @@ public class EstablishmentRegController {
 	
 	public Establishment getEstablishmentByAccountAndEstablishmentID(int accID, int estaID){
 		return (Establishment) db.getEstablishmentByAccountAndEstablishmentID(accID, estaID);
+		
 	}
 
 	public List<Establishment> getAllEstablishmentsForAccount(int accountId) {

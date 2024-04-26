@@ -123,7 +123,7 @@ public class DerbyDatabase implements IDatabase {
 					
 					// check if any authors were found
 					if (!found) {
-						System.out.println("No Establishment were found in the database");
+						System.out.println("No Establishment were found in the database at AccID and ESTAID");
 					}
 					
 					return result;
@@ -1649,7 +1649,7 @@ public class DerbyDatabase implements IDatabase {
 					DBUtil.closeQuietly(insertSession);
 					DBUtil.closeQuietly(insertGame);
 					
-					
+					DBUtil.closeQuietly(insertEstablishment);
 					DBUtil.closeQuietly(insertEvent);
 					DBUtil.closeQuietly(insertFrame);
 					DBUtil.closeQuietly(insertShot);
