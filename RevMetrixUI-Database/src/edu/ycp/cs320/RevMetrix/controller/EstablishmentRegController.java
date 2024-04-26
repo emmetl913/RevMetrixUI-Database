@@ -1,6 +1,5 @@
 package edu.ycp.cs320.RevMetrix.controller;
 import edu.ycp.cs320.RevMetrix.model.Establishment;
-import edu.ycp.cs320.RevMetrix.model.Establishment;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,14 +16,13 @@ public class EstablishmentRegController {
 	private int acc;
 	
 	public EstablishmentRegController(int acc) {
-		
 		DatabaseProvider.setInstance(new DerbyDatabase());
 		db = DatabaseProvider.getInstance();	
 		
 		this.acc = acc;
 		establishments = (ArrayList<Establishment>)getAllEstablishmentsForAccount(this.acc);
 		
-		// creating DB instance here	
+		// creating DB instance here
 	}
 	
 	public void removeEstablishment(int accID, String name) {
@@ -32,10 +30,8 @@ public class EstablishmentRegController {
 	}
 	
 	public Establishment getEstablishmentByAccountAndEstablishmentID(int accID, int estaID){
-		return (Establishment) db.getEstablishmentByAccountAndEstablishmentID(accID, estaID);
-		
+		return  db.getEstablishmentByAccountAndEstablishmentID(accID, estaID);
 	}
-
 	public List<Establishment> getAllEstablishmentsForAccount(int accountId) {
 	
 	// get the list of (Author, Book) pairs from DB

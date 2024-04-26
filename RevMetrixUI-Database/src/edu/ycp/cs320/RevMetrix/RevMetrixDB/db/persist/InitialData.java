@@ -38,7 +38,9 @@ public class InitialData {
 				String temp2 = i.next();
 				String temp3 = i.next();
 				String temp4 = i.next();
-				Account account = new Account(temp2, temp3, temp4);
+				String temp5 = i.next();
+				String temp6 = i.next();
+				Account account = new Account(temp2, temp3, temp4, temp5, temp6);
 
 				accountList.add(account);
 			}
