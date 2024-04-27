@@ -3,7 +3,6 @@ package edu.ycp.cs320.RevMetrix.servlet;
 import java.io.IOException;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -13,11 +12,9 @@ import javax.servlet.http.HttpSession;
 
 import edu.ycp.cs320.RevMetrix.model.Account;
 import edu.ycp.cs320.RevMetrix.model.Establishment;
-import edu.ycp.cs320.RevMetrix.controller.BallArsenalController;
 import edu.ycp.cs320.RevMetrix.controller.EstablishmentRegController;
 import edu.ycp.cs320.RevMetrix.controller.EventController;
 import edu.ycp.cs320.RevMetrix.model.Event;
-import edu.ycp.cs320.RevMetrix.model.Game;
 
 public class EventServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
@@ -52,7 +49,6 @@ public class EventServlet extends HttpServlet {
 		
 		//session.setAttribute("currEventID", );
 
-		
 		// call JSP to generate empty form
 		req.getRequestDispatcher("/_view/event.jsp").forward(req, resp);
 	}

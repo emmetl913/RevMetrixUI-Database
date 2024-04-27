@@ -89,10 +89,10 @@ public class DerbyDatabase implements IDatabase {
 	}
 	
 	@Override
-	public List<Establishment> getEstablishmentByAccountAndEstablishmentID(int accID, int estaID) {
-		return executeTransaction(new Transaction<List<Establishment>>() {
+	public Establishment getEstablishmentByAccountAndEstablishmentID(int accID, int estaID) {
+		return executeTransaction(new Transaction<Establishment>() {
 			@Override
-			public List<Establishment> execute(Connection conn) throws SQLException {
+			public Establishment execute(Connection conn) throws SQLException {
 				PreparedStatement stmt = null;
 				ResultSet resultSet = null;
 				
@@ -105,7 +105,7 @@ public class DerbyDatabase implements IDatabase {
 					stmt.setInt(2, estaID);
 					
 					
-					List<Establishment> result = new ArrayList<Establishment>();
+					Establishment result = new Establishment();
 					
 					resultSet = stmt.executeQuery();
 					
@@ -118,7 +118,7 @@ public class DerbyDatabase implements IDatabase {
 						Establishment esta = new Establishment();
 						loadEstablishment(esta, resultSet, 1);
 						
-						result.add(esta);
+						result = esta;
 					}
 					
 					// check if any authors were found
