@@ -5,7 +5,7 @@
 <%@ page import = "java.io.*,java.util.*"%>
 <%@ page import="javax.servlet.http.HttpSession" %>
 <%
-	ArrayList<Game> games = (ArrayList<Game>)session.getAttribute("gamesListKey");
+	List<Game> games = (List<Game>)session.getAttribute("gamesListKey");
 	//ArrayList<Ball> games = (model != null) ? model.getBalls() : null;
 
 %>
