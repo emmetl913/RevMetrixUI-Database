@@ -11,9 +11,9 @@
 
 <%
 // Retrieve ArrayList from session attribute
-//HttpSession session = request.getSession();
-BallArsenal model = (BallArsenal) session.getAttribute("ballArsenalKey");
-ArrayList<Ball> balls = (model != null) ? model.getBalls() : null;
+	//HttpSession session = request.getSession();
+	BallArsenal model = (BallArsenal) session.getAttribute("ballArsenalKey");
+	ArrayList<Ball> balls = (model != null) ? model.getBalls() : null;
 %>
 
 <html lang="en">
@@ -25,8 +25,9 @@ ArrayList<Ball> balls = (model != null) ? model.getBalls() : null;
 				           
 	        body{
 				font-family: Arial, Helvetica, sans-serif;
-				background-color: darkgray;
 	        	display:flex;
+								background-color: darkgray;
+
             	
 			}
 			#shaderCanvas {
@@ -61,25 +62,19 @@ ArrayList<Ball> balls = (model != null) ? model.getBalls() : null;
 				text-align: center;
 			}
 
-h1{
-font-size: 50px;
-color: black;
-text-align: center;
-}
+			#ball-list{
+				margin-top: 20px;
+			}
 
-#ball-list{
-margin-top: 20px;
-}
+			#add-ball-form, #remove-ball-form{
+				margin-bottom: 10px;
+			}
+			.error{
+				color: red; 
+	        	font-weight: bold;
+			}
 
-#add-ball-form, #remove-ball-form{
-margin-bottom: 10px;
-}
-.error{
-color: red;
-        font-weight: bold;
-}
-
-.ball-box {
+	.ball-box {
             width: 800px;
             align-items: center;
             text-align: center;
@@ -92,7 +87,7 @@ color: red;
             border-radius: 5px;
             margin-bottom: 10px;
             background-color: white;
-            box-shadow: 10px 10px 5px black;
+			box-shadow: 10px 10px 5px black;
             /* Set fixed height for the container */
             height: 430px;
             /* Add scrollbar when content overflows */
@@ -111,22 +106,22 @@ color: red;
             border-radius: 5px;
             margin-bottom: 10px;
             background-color: white;
-            box-shadow: 10px 10px 5px black;
-            /* Set fixed height for the container */
+			box-shadow: 10px 10px 5px black;
+			/* Set fixed height for the container */
             height: 350px;
             /* Add scrollbar when content overflows */
             overflow: auto;
-background-color: green;
-           
+			background-color: green;
+            
         }
 
-.bowling-ball-img{
-width: 150px; /*Adjust the size of the image*/
-height: auto;
-margin-bottom: 10px;
-}
+			.bowling-ball-img{
+				width: 150px;	/*Adjust the size of the image*/
+				height: auto;
+				margin-bottom: 10px;
+			}
 
-/* Style for the black sidebar */
+			/* Style for the black sidebar */
 .sidebar {
   height: 100%;
   width: 250px;
@@ -173,11 +168,11 @@ margin-bottom: 10px;
         border: 1px solid black; /* Add border around each ball section */
         margin-bottom: 10px; /* Add some space between ball sections */
         padding: 10px; /* Add padding inside each ball section */
-background-color: white;
+		background-color: white;
 
     }
 .ball-section:hover{
-background-color: #33B5FF;
+	background-color: #33B5FF;
 }
 button {
     background-color: #4caf50;
@@ -191,29 +186,27 @@ button {
 button:hover {
     background-color: #45a049;
 }
-</style>
-</head>
+		</style>
+	</head>
 
-<body>
-<div class="sidebar">
-<a href="${pageContext.servletContext.contextPath}/index">
-<img src="${pageContext.request.contextPath}/_view/BowlingBall.png"width="100" height="100">
- </a>
-     <a href="${pageContext.servletContext.contextPath}/establishmentReg">Establishment Registration</a>
- <a href="${pageContext.servletContext.contextPath}/logIn">Sign Out</a>
+	<body>
+		<div class="sidebar">
+		 <a href="${pageContext.servletContext.contextPath}/index">
+			<img src="${pageContext.request.contextPath}/_view/BowlingBall.png"width="100" height="100">
+		  </a>
+	      <a href="${pageContext.servletContext.contextPath}/establishmentReg">Establishment Registration</a>
+		  <a href="${pageContext.servletContext.contextPath}/logIn">Sign Out</a>
           <a href="${pageContext.servletContext.contextPath}/shot">Shot</a>
           <a href="${pageContext.servletContext.contextPath}/ballArsenal">Ball Arsenal</a>
           <a href="https://github.com/emmetl913/RevMetrixUI-Database">GitHub</a>
-           <a href="${pageContext.servletContext.contextPath}/event">Start Bowling!</a>
+          <a href="${pageContext.servletContext.contextPath}/startBowling">Start Bowling</a>
 		  </div>
 	
 		<form id="ballArsenalForm" action="${pageContext.servletContext.contextPath}/ballArsenal" method="post">
 			<header><h1>Bowling Ball Arsenal</h1></header>	
 	          <input type="hidden" id="type" name="newType" value="">
 
-<form id="ballArsenalForm" action="${pageContext.servletContext.contextPath}/ballArsenal" method="post">
-<header><h1>Bowling Ball Arsenal</h1></header>
-         <input type="hidden" id="type" name="newType" value="">
+			<div class="ball-box" id="ballBoxDiv">
 
 				<c:if test="${! empty errorMessage}">
 					<div class="error">${errorMessage}</div>
@@ -257,311 +250,269 @@ button:hover {
 			        </p>
 			        </span>
 
-<c:if test="${! empty errorMessage}">
-<div class="error">${errorMessage}</div>
-</c:if>
-<div id="add-ball-form">
-<input type="text" name="ballName" placeholder="Ball Name">
-   <input type="text" name="ballBrand" placeholder="Ball Brand"><br>
-   <input type="number" name="ballWeight" placeholder="Ball Weight (in pounds)" step="0.01" class="color-picker">
-   <input type="color" name="ballColor1" placeholder="Ball Color1" class="color-picker">
-   <input type="color" name="ballColor2" placeholder="Ball Color2" class="color-picker">
-   <br>
-   
-   <button name="leftHand" type="button"onclick="setToLeft()">Left Hand</button>
-   <button name="rightHand" type="button"onclick="setToRight()">Right Hand</button>
-   <br>
-   <br>
-<button text="Add Ball" name="addBall" type="submit" value="Register Ball">
-Add Ball</button>
+			    </div>
+			  
+			        <% 	i++; 
+			                }
+			            } else { 
+			        %>
+			        <p>You don't have any balls yet. </p>
+			        <p> If you had two you could be a real boy.</p>
+			        <% } 		session.setAttribute("ballArsenalKey", model);%> 
+				</div>
+			</div>
 
+			<input type="hidden" name="selectedBall" id="selectedBall" value="">
+		</form>
+		
+		
+		<script>
+	    // JavaScript to set hover color for each ball section
+			//does not exist
+		 function selectBall(ballName) {
+		        document.getElementById('selectedBall').value = ballName;
+		        document.getElementById('ballArsenalForm').submit();
+		    }
+		 function setToLeft() {
+	          document.getElementById("type").value = "left";
+	        }
+		 function setToRight() {
+	          document.getElementById("type").value = "right";
+	        }
+		</script>
+		<!--webGL Stuff-->
+		 <script src="https://cdnjs.cloudflare.com/ajax/libs/gl-matrix/2.8.1/gl-matrix-min.js"></script>
+		 <script >
+		 //hex input color to rgb
+		 function hexToRgb(hex) {
+			    // Remove the '#' character if present
+			    hex = hex.replace('#', '');
 
+			    // Parse the hexadecimal color string into separate R, G, and B components
+			    const r = parseInt(hex.substring(0, 2), 16);
+			    const g = parseInt(hex.substring(2, 4), 16);
+			    const b = parseInt(hex.substring(4, 6), 16);
 
-</div>
-<div id="remove-ball-form">
-<input type="text" name = "removeBallName"placeholder="Ball Name to Remove">
-<button name="removeBall" type="submit" value="Remove Ball">
-Remove Ball</button>
-</div>
-<div id="ballsList"> &nbsp
-<%
-           if (balls != null && !balls.isEmpty()) {
-            int i = 0;
-               for (Ball ball : balls) {
-                String ballColor = ball.getColor1();
-       %>
-       <div class="ball-section" onclick="selectBall ('<%= ball %>')"><!--  style="background-color: <%=ballColor%>;"-->
-   <canvas id="shaderCanvas_<%=i%>" style="border-radius: 50%;"></canvas>
-   
-       <span style="font-size: smaller;">
-       <p>Name: <%= ball.getName() %> | Weight: <%=ball.getWeight()%> |
-       Brand: <%=ball.getBrand()%> | Righthand: <%= ball.getRightHanded() %>
-       </p>
-       </span>
+			    // Return an object containing the R, G, and B values
+			    return { r, g, b };
+			}
+		 
+		 
+		 // Initialize WebGL context
+		 //const canvas = document.getElementById('shaderCanvas_1');
+		 var balls = <%= new Gson().toJson(balls) %>; // Convert Java ArrayList to JavaScript array
+		    
+		    balls.forEach(function(ball, index) {
+		        var canvas = document.getElementById('shaderCanvas_' + index);
+		        createCanvas(ball, canvas);
+		    });
+		
+		function createCanvas(ball, canvas) {
+		 // Vertex shader code
+			const gl = canvas.getContext('webgl');
+			const ballColor1 = ball.color1;
+			const ballColor2 = ball.color2;
+			const outerColor = hexToRgb(ballColor1);
+			const innerColor = hexToRgb(ballColor2);
+			console.log(outerColor); 
+			console.log(innerColor);
+			// Get the uniform location for outerColor in your shader
 
-   </div>
- 
-       <% i++;
-               }
-           } else {
-       %>
-       <p>You don't have any balls yet. </p>
-       <p> If you had two you could be a real boy.</p>
-       <% } session.setAttribute("ballArsenalKey", model);%>
-</div>
-</div>
+			
+			const vertexShaderSource = `
+		     attribute vec2 position;
 
-<input type="hidden" name="selectedBall" id="selectedBall" value="">
-</form>
+		     void main() {
+		         gl_Position = vec4(position, 0.0, 1.0);
+		     }
+		 `;
 
+		 // Fragment shader code (replace with the provided ShaderToy shader code)
+		 const fragmentShaderSource = `
+		     precision mediump float;
+	         uniform vec3 outerColor; // Define uniform for outer color
+	         uniform vec3 innerColor;
+		     uniform float iTime;
+		     uniform vec2 iResolution;
 
-<script>
-   // JavaScript to set hover color for each ball section
-//does not exist
-function selectBall(ballName) {
-       document.getElementById('selectedBall').value = ballName;
-       document.getElementById('ballArsenalForm').submit();
-   }
-function setToLeft() {
-         document.getElementById("type").value = "left";
-       }
-function setToRight() {
-         document.getElementById("type").value = "right";
-       }
-</script>
-<!--webGL Stuff-->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/gl-matrix/2.8.1/gl-matrix-min.js"></script>
-<script >
-//hex input color to rgb
-function hexToRgb(hex) {
-   // Remove the '#' character if present
-   hex = hex.replace('#', '');
+		     // Permutation table
+		     vec3 permute(vec3 x) {
+		         return mod((x * 34.0 + 1.0) * x, 289.0);
+		     }
 
-   // Parse the hexadecimal color string into separate R, G, and B components
-   const r = parseInt(hex.substring(0, 2), 16);
-   const g = parseInt(hex.substring(2, 4), 16);
-   const b = parseInt(hex.substring(4, 6), 16);
+		     // Simplex 2D noise function
+		     float snoise(vec2 v) {
+		        const vec4 C = vec4(0.211324865405187,  // (3.0-sqrt(3.0))/6.0
+		                         0.366025403784439,  // 0.5*(sqrt(3.0)-1.0)
+		                        -0.577350269189626,  // -1.0 + 2.0 * C.x
+		                         0.024390243902439); // 1.0 / 41.0
+		     vec2 i = floor(v + dot(v, C.yy));
+		     vec2 x0 = v - i + dot(i, C.xx);
+		     vec2 i1;
+		     i1 = (x0.x > x0.y) ? vec2(1.0, 0.0) : vec2(0.0, 1.0);
+		     vec4 x12 = x0.xyxy + C.xxzz;
+		     x12.xy -= i1;
+		     i = mod(i, 289.0);
+		     vec3 p = permute(permute(i.y + vec3(0.0, i1.y, 1.0))
+		         + i.x + vec3(0.0, i1.x, 1.0));
+		     vec3 m = max(0.5 - vec3(dot(x0, x0), dot(x12.xy, x12.xy),
+		                              dot(x12.zw, x12.zw)), 0.0);
+		     m = m * m;
+		     m = m * m;
+		     vec3 x = 2.0 * fract(p * C.www) - 1.0;
+		     vec3 h = abs(x) - 0.5;
+		     vec3 ox = floor(x + 0.5);
+		     vec3 a0 = x - ox;
+		     m *= 1.79284291400159 - 0.85373472095314 * (a0 * a0 + h * h);
+		     vec3 g;
+		     g.x = a0.x * x0.x + h.x * x0.y;
+		     g.yz = a0.yz * x12.xz + h.yz * x12.yw;
+		     return 130.0 * dot(m, g);
+		     }
 
-   // Return an object containing the R, G, and B values
-   return { r, g, b };
-}
+		     // Swirly noise function
+		     float swirlyNoise(vec2 p) {
+		         return snoise(p * 3.5 + vec2(0.0, iTime * 1.5));
+		     }
 
+		     // Weighted color function
+		     vec3 weightedColor(float intensity, vec3 baseColor, vec3 blackColor) {
+		         return mix(blackColor, baseColor, intensity);
+		     }
 
-// Initialize WebGL context
-//const canvas = document.getElementById('shaderCanvas_1');
-var balls = <%= new Gson().toJson(balls) %>; // Convert Java ArrayList to JavaScript array
-   
-   balls.forEach(function(ball, index) {
-       var canvas = document.getElementById('shaderCanvas_' + index);
-       createCanvas(ball, canvas);
-   });
+		     void main() {
+		         vec2 uv = gl_FragCoord.xy / iResolution.xy; // Normalize coordinates
 
-function createCanvas(ball, canvas) {
-// Vertex shader code
-const gl = canvas.getContext('webgl');
-const ballColor1 = ball.color1;
-const ballColor2 = ball.color2;
-const outerColor = hexToRgb(ballColor1);
-const innerColor = hexToRgb(ballColor2);
-console.log(outerColor);
-console.log(innerColor);
-// Get the uniform location for outerColor in your shader
+		         // Rotate UV coordinates by 90 degrees
+		         uv = vec2(uv.y, uv.x);
 
+		         // Create waves using sine function
+		         float wave = sin(uv.x * 20.0 + iTime * 2.0) * 0.01;
 
-const vertexShaderSource = `
-    attribute vec2 position;
+		         // Add swirly noise
+		         float noise = swirlyNoise(uv * 4.0);
 
-    void main() {
-        gl_Position = vec4(position, 0.0, 1.0);
-    }
-`;
+		         // Calculate distance from center
+		         vec2 center = vec2(0.5, 0.5);
+		         float dist = length(uv - center);
 
-// Fragment shader code (replace with the provided ShaderToy shader code)
-const fragmentShaderSource = `
-    precision mediump float;
-        uniform vec3 outerColor; // Define uniform for outer color
-        uniform vec3 innerColor;
-    uniform float iTime;
-    uniform vec2 iResolution;
+		         // Create black and white stripes based on distance from center
+		         float stripe = smoothstep(0.01 + wave, 0.99 + wave, dist);
 
-    // Permutation table
-    vec3 permute(vec3 x) {
-        return mod((x * 34.0 + 1.0) * x, 289.0);
-    }
+		         // Combine stripe with noise
+		         stripe += noise * 0.2;
 
-    // Simplex 2D noise function
-    float snoise(vec2 v) {
-       const vec4 C = vec4(0.211324865405187,  // (3.0-sqrt(3.0))/6.0
-                        0.366025403784439,  // 0.5*(sqrt(3.0)-1.0)
-                       -0.577350269189626,  // -1.0 + 2.0 * C.x
-                        0.024390243902439); // 1.0 / 41.0
-    vec2 i = floor(v + dot(v, C.yy));
-    vec2 x0 = v - i + dot(i, C.xx);
-    vec2 i1;
-    i1 = (x0.x > x0.y) ? vec2(1.0, 0.0) : vec2(0.0, 1.0);
-    vec4 x12 = x0.xyxy + C.xxzz;
-    x12.xy -= i1;
-    i = mod(i, 289.0);
-    vec3 p = permute(permute(i.y + vec3(0.0, i1.y, 1.0))
-        + i.x + vec3(0.0, i1.x, 1.0));
-    vec3 m = max(0.5 - vec3(dot(x0, x0), dot(x12.xy, x12.xy),
-                             dot(x12.zw, x12.zw)), 0.0);
-    m = m * m;
-    m = m * m;
-    vec3 x = 2.0 * fract(p * C.www) - 1.0;
-    vec3 h = abs(x) - 0.5;
-    vec3 ox = floor(x + 0.5);
-    vec3 a0 = x - ox;
-    m *= 1.79284291400159 - 0.85373472095314 * (a0 * a0 + h * h);
-    vec3 g;
-    g.x = a0.x * x0.x + h.x * x0.y;
-    g.yz = a0.yz * x12.xz + h.yz * x12.yw;
-    return 130.0 * dot(m, g);
-    }
+		         // Clamp stripe to range [0, 1]
+		         stripe = clamp(stripe, 0.0, 1.0);
 
-    // Swirly noise function
-    float swirlyNoise(vec2 p) {
-        return snoise(p * 3.5 + vec2(0.0, iTime * 1.5));
-    }
+		         // Map stripe value to color gradient
+		         vec3 baseColor =outerColor;//= vec3(.1,.1,.4); // Example color (reddish) //outer color
+		         vec3 blackColor = innerColor;//vec3(0.9, 0.1, 0.2); // Customizable black color inner color
+		         
+		         //get color from ball
+		         //vec3 outerColorVec = vec3(parseFloat(outerColor.r), parseFloat(outerColor.g), parseFloat(outerColor.b);
 
-    // Weighted color function
-    vec3 weightedColor(float intensity, vec3 baseColor, vec3 blackColor) {
-        return mix(blackColor, baseColor, intensity);
-    }
+		         
+		         // Weight the color based on intensity
+		         vec3 finalColor = weightedColor(stripe, baseColor, blackColor);
 
-    void main() {
-        vec2 uv = gl_FragCoord.xy / iResolution.xy; // Normalize coordinates
+		         // Output color
+		         gl_FragColor = vec4(finalColor, 1.0);
+		     }
+		 `;
 
-        // Rotate UV coordinates by 90 degrees
-        uv = vec2(uv.y, uv.x);
+		 // Compile shader function
+		 function compileShader(gl, source, type) {
+		     const shader = gl.createShader(type);
+		     gl.shaderSource(shader, source);
+		     gl.compileShader(shader);
+		     if (!gl.getShaderParameter(shader, gl.COMPILE_STATUS)) {
+		         console.error('Shader compilation error:', gl.getShaderInfoLog(shader));
+		         gl.deleteShader(shader);
+		         return null;
+		     }
+		     return shader;
+		 }
 
-        // Create waves using sine function
-        float wave = sin(uv.x * 20.0 + iTime * 2.0) * 0.01;
+		 // Create vertex and fragment shaders
+		 const vertexShader = compileShader(gl, vertexShaderSource, gl.VERTEX_SHADER);
+		 const fragmentShader = compileShader(gl, fragmentShaderSource, gl.FRAGMENT_SHADER);
 
-        // Add swirly noise
-        float noise = swirlyNoise(uv * 4.0);
+		 // Create shader program
+		 const shaderProgram = gl.createProgram();
+		 gl.attachShader(shaderProgram, vertexShader);
+		 gl.attachShader(shaderProgram, fragmentShader);
+		 gl.linkProgram(shaderProgram);
 
-        // Calculate distance from center
-        vec2 center = vec2(0.5, 0.5);
-        float dist = length(uv - center);
+		 // Check if shader program creation was successful
+		 if (!gl.getProgramParameter(shaderProgram, gl.LINK_STATUS)) {
+		     console.error('Shader program linking error:', gl.getProgramInfoLog(shaderProgram));
+		 }
 
-        // Create black and white stripes based on distance from center
-        float stripe = smoothstep(0.01 + wave, 0.99 + wave, dist);
+		 // Use shader program
+		 gl.useProgram(shaderProgram);
 
-        // Combine stripe with noise
-        stripe += noise * 0.2;
+		 // Get attribute and uniform locations
+		 const positionLocation = gl.getAttribLocation(shaderProgram, 'position');
+		 const resolutionLocation = gl.getUniformLocation(shaderProgram, 'iResolution');
+		 const timeLocation = gl.getUniformLocation(shaderProgram, 'iTime');
 
-        // Clamp stripe to range [0, 1]
-        stripe = clamp(stripe, 0.0, 1.0);
+		 // Set up vertex buffer with positions for a square
+		 const positionBuffer = gl.createBuffer();
+		 gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
+		 gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([
+		     -1, -1,
+		     1, -1,
+		     -1, 1,
+		     1, 1
+		 ]), gl.STATIC_DRAW);
 
-        // Map stripe value to color gradient
-        vec3 baseColor =outerColor;//= vec3(.1,.1,.4); // Example color (reddish) //outer color
-        vec3 blackColor = innerColor;//vec3(0.9, 0.1, 0.2); // Customizable black color inner color
-       
-        //get color from ball
-        //vec3 outerColorVec = vec3(parseFloat(outerColor.r), parseFloat(outerColor.g), parseFloat(outerColor.b);
+		 // Update vertex attribute pointer
+		 gl.enableVertexAttribArray(positionLocation);
+		 gl.vertexAttribPointer(positionLocation, 2, gl.FLOAT, false, 0, 0);
 
-       
-        // Weight the color based on intensity
-        vec3 finalColor = weightedColor(stripe, baseColor, blackColor);
+		 //const size = Math.min(window.innerWidth, window.innerHeight);
 
-        // Output color
-        gl_FragColor = vec4(finalColor, 1.0);
-    }
-`;
+		//get location before rendering
+	     const outerColorLocation = gl.getUniformLocation(shaderProgram, 'outerColor');
+	     const innerColorLocation = gl.getUniformLocation(shaderProgram, 'innerColor');
 
-// Compile shader function
-function compileShader(gl, source, type) {
-    const shader = gl.createShader(type);
-    gl.shaderSource(shader, source);
-    gl.compileShader(shader);
-    if (!gl.getShaderParameter(shader, gl.COMPILE_STATUS)) {
-        console.error('Shader compilation error:', gl.getShaderInfoLog(shader));
-        gl.deleteShader(shader);
-        return null;
-    }
-    return shader;
-}
+	     gl.uniform3fv(outerColorLocation, [outerColor.r / 255, outerColor.g / 255, outerColor.b / 255]);
+	     gl.uniform3fv(innerColorLocation, [innerColor.r / 255, innerColor.g / 255, innerColor.b / 255]);
 
-// Create vertex and fragment shaders
-const vertexShader = compileShader(gl, vertexShaderSource, gl.VERTEX_SHADER);
-const fragmentShader = compileShader(gl, fragmentShaderSource, gl.FRAGMENT_SHADER);
+		 
+		 // Render function
+		 function render() {
+		     // Set canvas size
+		     canvas.width = 52.0;
+		     canvas.height = 50.0;
+		     gl.viewport(0, 0, canvas.width, canvas.height);
 
-// Create shader program
-const shaderProgram = gl.createProgram();
-gl.attachShader(shaderProgram, vertexShader);
-gl.attachShader(shaderProgram, fragmentShader);
-gl.linkProgram(shaderProgram);
+		     // Calculate scaling factor to fit shader content in circular canvas
+		     const scaleFactor = Math.min(canvas.width, canvas.height) / 2;
 
-// Check if shader program creation was successful
-if (!gl.getProgramParameter(shaderProgram, gl.LINK_STATUS)) {
-    console.error('Shader program linking error:', gl.getProgramInfoLog(shaderProgram));
-}
+		     // Set resolution and time uniforms
+		     gl.useProgram(shaderProgram);
+			
 
-// Use shader program
-gl.useProgram(shaderProgram);
+		     gl.uniform2f(resolutionLocation, canvas.width, canvas.height);
+		     gl.uniform1f(timeLocation, performance.now() / 1000);
+		
+		     // Clear canvas
+		     gl.clearColor(0, 0, 0, 1);
+		     gl.clear(gl.COLOR_BUFFER_BIT);
 
-// Get attribute and uniform locations
-const positionLocation = gl.getAttribLocation(shaderProgram, 'position');
-const resolutionLocation = gl.getUniformLocation(shaderProgram, 'iResolution');
-const timeLocation = gl.getUniformLocation(shaderProgram, 'iTime');
+		     // Draw
+		     gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
 
-// Set up vertex buffer with positions for a square
-const positionBuffer = gl.createBuffer();
-gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
-gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([
-    -1, -1,
-    1, -1,
-    -1, 1,
-    1, 1
-]), gl.STATIC_DRAW);
+		     // Request next frame
+		     requestAnimationFrame(render);
+		 }
 
-// Update vertex attribute pointer
-gl.enableVertexAttribArray(positionLocation);
-gl.vertexAttribPointer(positionLocation, 2, gl.FLOAT, false, 0, 0);
-
-//const size = Math.min(window.innerWidth, window.innerHeight);
-
-//get location before rendering
-    const outerColorLocation = gl.getUniformLocation(shaderProgram, 'outerColor');
-    const innerColorLocation = gl.getUniformLocation(shaderProgram, 'innerColor');
-
-    gl.uniform3fv(outerColorLocation, [outerColor.r / 255, outerColor.g / 255, outerColor.b / 255]);
-    gl.uniform3fv(innerColorLocation, [innerColor.r / 255, innerColor.g / 255, innerColor.b / 255]);
-
-
-// Render function
-function render() {
-    // Set canvas size
-    canvas.width = 52.0;
-    canvas.height = 50.0;
-    gl.viewport(0, 0, canvas.width, canvas.height);
-
-    // Calculate scaling factor to fit shader content in circular canvas
-    const scaleFactor = Math.min(canvas.width, canvas.height) / 2;
-
-    // Set resolution and time uniforms
-    gl.useProgram(shaderProgram);
-
-
-    gl.uniform2f(resolutionLocation, canvas.width, canvas.height);
-    gl.uniform1f(timeLocation, performance.now() / 1000);
-
-    // Clear canvas
-    gl.clearColor(0, 0, 0, 1);
-    gl.clear(gl.COLOR_BUFFER_BIT);
-
-    // Draw
-    gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
-
-    // Request next frame
-    requestAnimationFrame(render);
-}
-
-// Start rendering
-render();
-}
-</script>
-
-</body>
+		 // Start rendering
+		 render();
+		}
+		</script>
+		 
+	</body>
 </html>
