@@ -129,6 +129,39 @@ public class ShotServlet extends HttpServlet {
 		ArrayList<Ball> balls = (ArrayList<Ball>) arsenal.getBallByAccountId(account.getAccountId());
 		arsenal.setBalls(balls);
 		
+//		ShotController controller = new ShotController();
+		
+		String shotNum = req.getParameter("shotNumber");
+	    System.out.println("Shot Num: " +shotNum);
+//		
+//		if(shotNum != null && !shotNum.isEmpty()) {
+//			try {
+//				int shotNumber = Integer.parseInt(shotNum);
+//				String scoreBox = controller.getScoreBox(shotNumber, req);
+//				
+//				System.out.println("Shot Number: " +shotNumber);
+//				System.out.print("Score Box Value: " +scoreBox);
+////
+////				String pin1 = req.getParameter("pin1");
+////			    String pin2 = req.getParameter("pin2");
+////			    String pin3 = req.getParameter("pin3");
+////			    String pin4 = req.getParameter("pin4");
+////			    String pin5 = req.getParameter("pin5");
+////			    String pin6 = req.getParameter("pin6");
+////			    String pin7 = req.getParameter("pin7");
+////			    String pin8 = req.getParameter("pin8");
+////			    String pin9 = req.getParameter("pin9");
+////			    String pin0 = req.getParameter("pin0");
+////					
+////				System.out.println("Shot Number: "+shotNumber);
+////				
+////				//calculates the score in the frame - pins only
+////				System.out.println("Score: " +controller.calculateScore(pin1, pin2, pin3, pin4, pin5, pin6, pin7, pin8, pin9, pin0));
+//			}catch (NumberFormatException e) {
+//				System.err.println("Invalid shot number: " +shotNum);
+//			}
+//		}
+		
 		// call JSP to generate empty form
 		req.getRequestDispatcher("/_view/shot.jsp").forward(req, resp);
 	}
@@ -180,12 +213,14 @@ public class ShotServlet extends HttpServlet {
 			}else if(frameNumber <= 10) {
 				frameNumber++; //increment frame number is not exceeding 10
 			}
+			System.out.println("Frame Number: " +frameNumber);
 			session.setAttribute("frameNumber", frameNumber);
 		}
 		
 		if("previousFrameBtn".equals(action)) {
 			if(frameNumber != null && frameNumber > 1) {
 				frameNumber--;
+				System.out.println("Previous frame number: " +frameNumber);
 				
 				//DB implementation...
 			}
@@ -201,23 +236,49 @@ public class ShotServlet extends HttpServlet {
 		
 		//get ball id from the jsp
 		String selectedBallId = req.getParameter("ballArsenalDropdown");
+		System.out.println("Selected Ball ID: " +selectedBallId);
+		
 		//get ball from ball ID - setCurrentBall(DB ball)
 		int ballId = 0;
-		if(selectedBallId != null || !selectedBallId.equals("")) {
+		//ballid ==0 error probably
+		List<Ball> ballList = null;
+		Ball ball = new Ball();
+		
+		if(selectedBallId == null || selectedBallId.isEmpty()) {
+			System.out.println("Ball ID is null or empty");
+		}else {
 			ballId = Integer.parseInt(selectedBallId);
 			System.out.println("Ball ID: " +ballId);
-		}else {
-			System.out.println("Selected ball is null. Ball Id = " +ballId);
 		}
-		//ballid ==0 error probably
-		List<Ball> ballList = ballArsenalController.getBallByBallId(ballId);
-		Ball ball = new Ball();
-		ball = ballList.get(0);
-		System.out.println("Ball name: " +ball);
-		account.setCurrentBall(ball);
+
+//		try {
+//			if(selectedBallId != null && !selectedBallId.equals("")) {
+//				ballId = Integer.parseInt(selectedBallId);
+//				System.out.println("Ball ID: " +ballId);
+//			}else {
+//				System.out.println("Selected ball is null. Ball Id = " +ballId);
+//			}
+//		}catch(NumberFormatException e) {
+//			System.out.println("Error parsing selected ball ID: " +e.getMessage());
+//		}
+		
+		if(ballId != 0) {
+			ballList = ballArsenalController.getBallByBallId(ballId);
+			if(ballList != null && !ballList.isEmpty()) {
+				ball = ballList.get(0);
+				System.out.println("Ball name: " +ball.getName());
+			}else {
+				System.out.println("No ball found with ID: " +ball.getBallId());
+			}
+		}
+		
+		if(ball.getBallId() != 0) {
+//			System.out.println("Ball Name: " +ball.getName());
+			account.setCurrentBall(ball);
+		}
 		
 		BallArsenal model = (BallArsenal)session.getAttribute("ballArsenalKey");
-		if(session.isNew()) {
+		if(model == null) {
 			model = new BallArsenal();
 			session.setAttribute("ballArsenalKey",  model);
 		}
@@ -226,22 +287,6 @@ public class ShotServlet extends HttpServlet {
 		arsenal.setModel(model);
 		ArrayList<Ball> balls = (ArrayList<Ball>) arsenal.getBallByAccountId(account.getAccountId());
 		arsenal.setBalls(balls);
-		
-		String shotNum = req.getParameter("shotNumber");
-		int shotNumber = 1;
-		
-		if(shotNum != null && !shotNum.isEmpty()) {
-			try {
-				shotNumber = Integer.parseInt(shotNum);
-				if(shotNumber == 1) {
-					
-				}else if(shotNumber == 2) {
-					
-				}
-			}catch (NumberFormatException e) {
-				System.err.println("Invalid shot number: " +shotNum);
-			}
-		}
 		
 		//get first and second shot from the user
 		//getParameter score1 and score2 from the score boxes
@@ -260,7 +305,17 @@ public class ShotServlet extends HttpServlet {
 //		System.out.println("score 1: " +score1);
 //		System.out.println("score 2: " +score2);
 		
-		
+//		if(shotNumber == 1 || shotNumber == 2) {
+//			String score = req.getParameter("score-box" +shotNumber);
+//			int scoreValue;
+//			
+//			try {
+//				scoreValue = Integer.parseInt(score);
+//				System.out.println("Score: " +scoreValue);
+//			}catch(NumberFormatException e) {
+//				scoreValue = 0;
+//			}
+//		}
 		
 		//create a new Shot object with submitted data
 		//creating a new shot:
@@ -309,9 +364,53 @@ public class ShotServlet extends HttpServlet {
 	    String pin9 = req.getParameter("pin9");
 	    String pin0 = req.getParameter("pin0");
 	    
-	    System.out.println("Pin1: "+pin1+" Pin2: "+pin2+" Pin3: "+pin3+" Pin4: "+pin4+
-	    		" Pin5: "+pin5+" Pin6: "+pin6+" Pin7: "+pin7+" Pin8: "+pin8+
-	    		" Pin9: "+pin9+ " Pin10: "+pin0);
+	    //calculates the total number of pins knocked down
+	    System.out.println("Total pins knocked down: " +controller.calculatePinsKnockedDown(pin1, pin2, pin3, pin4, pin5, pin6, pin7, pin8, pin9, pin0));
+//	    
+//	    System.out.println("Pin1: "+pin1+" Pin2: "+pin2+" Pin3: "+pin3+" Pin4: "+pin4+
+//	    		" Pin5: "+pin5+" Pin6: "+pin6+" Pin7: "+pin7+" Pin8: "+pin8+
+//	    		" Pin9: "+pin9+ " Pin10: "+pin0);
+	    
+	    String shotNum = req.getParameter("shotNumber");
+	    System.out.println("Shot Num: " +shotNum);
+	    
+	    if(shotNum != null) {
+	    	System.out.println("Received shot number: " +shotNum);
+	    	
+	    	resp.setStatus(HttpServletResponse.SC_OK);
+	    }else {
+	    	System.err.println("No shot number received");
+	    	
+	    	resp.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+	    }
+//		
+//		if(shotNum != null && !shotNum.isEmpty()) {
+//			try {
+//				int shotNumber = Integer.parseInt(shotNum);
+//				String scoreBox = controller.getScoreBox(shotNumber, req);
+//				
+//				System.out.println("Shot Number: " +shotNumber);
+//				System.out.print("Score Box Value: " +scoreBox);
+////
+////				String pin1 = req.getParameter("pin1");
+////			    String pin2 = req.getParameter("pin2");
+////			    String pin3 = req.getParameter("pin3");
+////			    String pin4 = req.getParameter("pin4");
+////			    String pin5 = req.getParameter("pin5");
+////			    String pin6 = req.getParameter("pin6");
+////			    String pin7 = req.getParameter("pin7");
+////			    String pin8 = req.getParameter("pin8");
+////			    String pin9 = req.getParameter("pin9");
+////			    String pin0 = req.getParameter("pin0");
+////					
+////				System.out.println("Shot Number: "+shotNumber);
+////				
+////				//calculates the score in the frame - pins only
+////				System.out.println("Score: " +controller.calculateScore(pin1, pin2, pin3, pin4, pin5, pin6, pin7, pin8, pin9, pin0));
+//			}catch (NumberFormatException e) {
+//				System.err.println("Invalid shot number: " +shotNum);
+//			}
+//		}
 	  
 		req.getRequestDispatcher("/_view/shot.jsp").forward(req, resp);
 	}

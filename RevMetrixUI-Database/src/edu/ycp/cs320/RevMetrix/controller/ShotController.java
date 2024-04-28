@@ -3,6 +3,7 @@ package edu.ycp.cs320.RevMetrix.controller;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import edu.ycp.cs320.RevMetrix.model.Shot;
@@ -33,32 +34,57 @@ public class ShotController {
 		return totalPins;
 	}
 	
-	public int calculateScore(HttpSession session) {
-	    List<Shot> shots = new ArrayList<>();
-	    Integer frameNumber = (Integer) session.getAttribute("frameNumber");
-	    int totalScore = 0;
-	    
-	    if(frameNumber != null) {
-	    	//retrieve all shots from the user's session
-	    	for(int i=1; i<frameNumber; i++) {
-	    		Shot shot = (Shot) session.getAttribute("shot" + i);
-	    		if(shot != null) {
-	    			shots.add(shot);
-	    		}
-	    	}
-	    	
-	    	for(Shot shot : shots) {
-	    		//process shot type
-//	    		totalScore += processShotType(shot.getType());
-	    		
-	    		//add knocked over pins
-	    		totalScore += shot.getPins();
-	    	}
-	    }
-
-	    return totalScore;
+//	public int calculateScore(HttpSession session) {
+//	    List<Shot> shots = new ArrayList<>();
+//	    Integer frameNumber = (Integer) session.getAttribute("frameNumber");
+//	    int totalScore = 0;
+//	    
+//	    if(frameNumber != null) {
+//	    	//retrieve all shots from the user's session
+//	    	for(int i=1; i<frameNumber; i++) {
+//	    		Shot shot = (Shot) session.getAttribute("shot" + i);
+//	    		if(shot != null) {
+//	    			shots.add(shot);
+//	    		}
+//	    	}
+//	    	
+//	    	for(Shot shot : shots) {
+//	    		//process shot type
+////	    		totalScore += processShotType(shot.getType());
+//	    		
+//	    		//add knocked over pins
+//	    		totalScore += shot.getPins();
+//	    	}
+//	    }
+//
+//	    return totalScore;
+//	}
+	
+	public int calculatePinsKnockedDown(String... pins) {
+		int score = 0;
+		
+		for(String pin : pins) {
+			if("down".equals(pin)) {
+				score++;
+			}
+		}
+		
+		return score;
 	}
 
+	public String getScoreBox(int shotNumber, HttpServletRequest req) {
+		String scoreBox = "";
+		
+		String scoreBoxId = (shotNumber == 1) ? "score-box1" : "score-box2";
+		
+		String scoreBoxValue = req.getParameter(scoreBoxId);
+		if(scoreBoxValue != null) {
+			scoreBox = scoreBoxValue;
+		}
+		
+		return scoreBox;
+	}
+	
 	public void reset() {
 		shots.clear();
 	}
