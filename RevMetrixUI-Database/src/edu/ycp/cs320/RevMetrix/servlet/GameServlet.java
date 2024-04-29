@@ -66,7 +66,7 @@ public class GameServlet extends HttpServlet {
 		
 		controller.setModel(model);
         String gamesListKey = new String("gamesListKey");
-		List<Game> games = (List<Game>)session.getAttribute(gamesListKey);
+		List<Game> games = controller.getGameBySessionID(0);
         // Retrieve the value of the button clicked
         String buttonValue = req.getParameter("gameStatus");
         
@@ -84,9 +84,11 @@ public class GameServlet extends HttpServlet {
         //Make a new game and add it to game list
         if(req.getParameter("select") != null) {
         	//currentGame = games.get(selectedIndex);
-
-        	currentGame = games.get(Integer.parseInt(dropDownValue));
-           // System.out.println("Game at index: x" +" selected: " + dropDownValue);
+        	if(dropDownValue != null)
+        	{
+        		currentGame = games.get(Integer.parseInt(dropDownValue));
+        	}
+        	// System.out.println("Game at index: x" +" selected: " + dropDownValue);
         	System.out.println(currentGame.getLane());
         	
         	req.setAttribute("gameObjArr", games);
@@ -97,8 +99,8 @@ public class GameServlet extends HttpServlet {
         }
         if(req.getParameter("new") != null) {
         	//currentGame = selected game from dropdown
+        
         	
-        	currentGame = games.get(games.size()-1);
         	controller.insertNewGame(currentGame.getGameID(), currentGame.getSessionID(), currentGame.getLane(), currentGame.getGameNumber(), currentGame.getScore());
         	req.setAttribute("gameObjArr", games);
     		session.setAttribute(gamesListKey, games);
