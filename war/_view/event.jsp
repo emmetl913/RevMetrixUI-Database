@@ -23,7 +23,7 @@
             padding: 0;
         }
 
-        .ball-section {
+        .event-section {
         border: 1px solid black; /* Add border around each ball section */
         margin-bottom: 10px; /* Add some space between ball sections */
         padding: 10px; /* Add padding inside each ball section */
@@ -124,15 +124,6 @@
   width: 84%; 
   text-align: left;
   }
-
-  .ball-section {
-        border: 1px solid black; /* Add border around each ball section */
-        margin-bottom: 10px; /* Add some space between ball sections */
-        padding: 10px; /* Add padding inside each ball section */
-    }
-  
-
-
     </style>
 </head>
 <body>
@@ -164,13 +155,13 @@
       <h2>Pick Existing Event</h2>
         <form action="${pageContext.servletContext.contextPath}/event" method="post">
 
-          <div id="ballsList"> &nbsp				
+          <div id="eventsList"> &nbsp				
             <% 
                    
                 if (events != null) {
                   for (Event event : events) {
            %>
-                 <div class="ball-section" onclick= "selectEvent ('<%= event.getEventID() %>')">
+                 <div class="event-section" onclick= "selectEvent ('<%= event.getEventID() %>')">
                   <p>Name: <%= event.getEventName() %></p>
                    <p>Establishment Name: <%= event.getEstbID()%></p>
                </div>
@@ -192,7 +183,10 @@
     <form action="${pageContext.servletContext.contextPath}/event" method="post">
 
       <label for="eventName">Event Name:</label>
-      <input type="text" name="eventName" size="12" value="${game.eventName}">
+      <input type="text" name="eventName" size="12" value="">
+
+      <label for="eventdate">Event Date:</label>
+      <input type="text" name="eventdate" size="12" value="">
 
       <input type="hidden" id="type" name="newType" value="">
 

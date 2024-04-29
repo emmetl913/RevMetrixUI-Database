@@ -2,13 +2,14 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
 <%@ page import= "edu.ycp.cs320.RevMetrix.model.Account" %>
+<%@ page import= "edu.ycp.cs320.RevMetrix.model.Event" %>
 <%@ page import = "java.io.*,java.util.*"%>
 <%@ page import="javax.servlet.http.HttpSession" %>
 
 <%
 	Account acc = (Account)session.getAttribute("currAccount");
+  ArrayList<Event> events = (ArrayList<Event>)request.getAttribute("event");
 %>
-
 <html>
 	<head>
 		<title>Index page</title>
@@ -124,6 +125,12 @@
   width: 84%; 
   text-align: left;
   }
+
+  .event-section {
+        border: 1px solid black; /* Add border around each ball section */
+        margin-bottom: 10px; /* Add some space between ball sections */
+        padding: 10px; /* Add padding inside each ball section */
+    }
 		
 
 		</style>
@@ -159,9 +166,22 @@
 				<label>Last Name: <%= acc.getLastName()%> </label>
 	
 				<label>Events up soon:</label>
-				<p>Event1 = 3/3/2025</p>
-				<p>Event2 = 3/3/2026</p>
-				<p>Event3 = 3/3/2027</p>
+				<div id="eventList"> &nbsp				
+          <% 
+                 
+              if (events != null) {
+                for (Event event : events) {
+         %>
+               <div class="event-section">
+                <p>Name: <%= event.getEventName() %></p>
+                 <p>Establishment Name: <%= event.getTime()%></p>
+             </div>
+         <% 
+               } } else {	%>
+               <p>No events available.</p>
+         <% } %>
+         
+         </div>
 		</div>
 	</body>
 </html>

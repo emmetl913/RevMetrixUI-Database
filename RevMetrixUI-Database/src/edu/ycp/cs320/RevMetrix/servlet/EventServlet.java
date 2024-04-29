@@ -97,6 +97,7 @@ public class EventServlet extends HttpServlet {
 				String newEventName = req.getParameter("eventName");
 				int newStanding = Integer.valueOf(req.getParameter("standing"));
 				String EstaName = req.getParameter("establishment");
+				String EstaDate = req.getParameter("eventdate");
 		        String type = null;
 		        int esstabID = -1;
 				
@@ -110,16 +111,15 @@ public class EventServlet extends HttpServlet {
 					type = null;
 				}
 				
+				
 				for(Establishment esta : estabs) {
 					if(EstaName.equals(esta.getEstablishmentName()))
 						esstabID = esta.getEstaId();
 				}
-			Integer eventID = controller.addEvent(acc.getAccountId(), esstabID , 9, newEventName,type, newStanding);
+			Integer eventID = controller.addEvent(acc.getAccountId(), esstabID , EstaDate, newEventName,type, newStanding);
 			session.setAttribute("eventID", eventID);	
 			
-			controller.addEvent(acc.getAccountId(), esstabID , 9, newEventName,type, newStanding);
-			System.out.print("Account id:"+acc.getAccountId()+" esstabID:" + esstabID+" time:" + " 9 " +" newEventName:" + newEventName+" type:" + type+" newStanding:" + newStanding);
-
+			controller.addEvent(acc.getAccountId(), esstabID , EstaDate, newEventName,type, newStanding);
 			}catch(NullPointerException e) {
 				errorMessage = "Invalid Input";
 			}
