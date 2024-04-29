@@ -62,7 +62,7 @@ public class GameServlet extends HttpServlet {
 		
 		HttpSession session = req.getSession();
 		Account acc = (Account) session.getAttribute("currAccount");
-		int sessionID = 0;
+		Integer sessionID = (Integer) session.getAttribute("sessionID");
 		
 		controller.setModel(model);
         String gamesListKey = new String("gamesListKey");
@@ -75,7 +75,7 @@ public class GameServlet extends HttpServlet {
         Integer laneInput = getIntegerFromParameter(req.getParameter("laneInput"));
         
         if(laneInput == null) {
-        	laneInput = 0;
+        	laneInput = -1;
         }
         model.setLane(laneInput);
         
@@ -101,7 +101,7 @@ public class GameServlet extends HttpServlet {
         	//currentGame = selected game from dropdown
         
         	
-        	controller.insertNewGame(currentGame.getGameID(), currentGame.getSessionID(), currentGame.getLane(), currentGame.getGameNumber(), currentGame.getScore());
+        	controller.insertNewGame(currentGame.getGameID(), sessionID, currentGame.getLane(), currentGame.getGameNumber(), currentGame.getScore());
         	req.setAttribute("gameObjArr", games);
     		session.setAttribute(gamesListKey, games);
     		session.setAttribute("currentGame", currentGame);

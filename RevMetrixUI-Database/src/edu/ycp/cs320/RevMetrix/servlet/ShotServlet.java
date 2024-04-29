@@ -140,6 +140,7 @@ public class ShotServlet extends HttpServlet {
 		
 		HttpSession session = req.getSession();
 		
+		Integer gameID = (Integer)session.getAttribute("gameID");
 		ArrayList<Frame> frames = (ArrayList<Frame>) session.getAttribute("frames");
 		if(frames == null) {
 			frames = new ArrayList<Frame>();
