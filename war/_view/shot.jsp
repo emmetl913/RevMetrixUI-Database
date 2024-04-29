@@ -284,6 +284,15 @@
         
 
         <input type="hidden" id="selected-score-box">
+	
+		<form id="shotForm" method="post">
+            <input type="hidden" id="ballIdInput" name="ballId" value="">
+            <input type="hidden" id="selectedScoreBox" name="selectedScoreBox" value="">
+            <input type="hidden" id="pinsKnockedDown" name="pinsKnockedDown" value="">
+            <input type="hidden" id="shotType" name="shotType" value="">
+            <input type="hidden" id="previousFrame" name="PreviousFrame" value="">
+            <input type="hidden" id="nextFrame" name="nextFrame" value="">
+        </form>
 
         <div class="container">
             <div id="game-info">
@@ -298,36 +307,24 @@
                     <span>Total Score: ${sessionScope.totalScore}</span>
                 </div> -->
             </div>
-        </div>
-	
-		<form id="ballForm" method="post">
-            <div class="container">
-        
-                <!-- drop down menu - selecting a ball -->
-                <div class="dropdown">
-                    <select name="ballArsenalDropdown" id="ballArsenalDropdown">
-                        <option value="">Select a ball...</option>
-                        <%
-                            if (balls != null && !balls.isEmpty()) {
-                                int i = 0;
-                                for (Ball ball : balls) { %>
-                                    <option value=<%= ball.getBallId() %> > <%= ball.getName() %></option>
-                                <% System.out.println(ball.getName());
-                                }
-                            }else{%>
-                                <p>There are no balls</p>
-                            <%}
-                        %>
-                         <!-- <option value="add">Add Ball... </option>-->
-                    </select>
-                </div>
-            
-                <input type="hidden" id="ballIdInput" name="ballId" value="">
-                <input type="hidden" id="shotNumberInput" name="shotNumber" value="">
+            <!-- drop down menu - selecting a ball -->
+            <div class="dropdown">
+                <select name="ballArsenalDropdown" id="ballArsenalDropdown">
+                    <option value="">Select a ball...</option>
+                    <%
+                        if (balls != null && !balls.isEmpty()) {
+                            int i = 0;
+                            for (Ball ball : balls) { %>
+                                <option value=<%= ball.getBallId() %> > <%= ball.getName() %></option>
+                            <% System.out.println(ball.getName());
+                            }
+                        }else{%>
+                            <p>There are no balls</p>
+                        <%}
+                    %>
+                     <!-- <option value="add">Add Ball... </option>-->
+                </select>
             </div>
-        </form>
-
-        <div class="container">
             <div class="triangle">
                 <div class="row">
                     <div class="pin" onclick="togglePin(this)"><input type="hidden" name ="pin7" id="7" value="up"><span>7</span></div>
@@ -444,6 +441,16 @@
                 console.log("Current value of the pin: ", hiddenVal.getAttribute('value', 'up'));
             }
 
+            document.getElementById("previousFrame").addEventListener("click", function(){
+                document.getElementById("previousFrame").value = "true";
+                document.getElementById("shotForm").submit();
+            });
+
+            document.getElementById("nextFrame").addEventListener("click", function() {
+                document.getElementById("nextFrame").value = "true";
+                document.getElementById("shotForm").submit();
+            });
+
             //selects first and second shot
             document.addEventListener("DOMContentLoaded", function(){
                 var scoreBoxes = document.querySelectorAll(".firstShot, .secondShot");
@@ -483,15 +490,15 @@
                     if(selectedBallId){
                         console.log("Selected Ball ID: ", selectedBallId);
                         // sendBallIdToServlet(selectedBallId);
-                        document.querySelector('#ballForm input[name="selectedBallId"]');
-                        document.getElementById("ballForm").submit();
+                        document.querySelector('#shotForm input[name="selectedBallId"]');
+                        document.getElementById("shotForm").submit();
                     }
                 });
             });
 
             //submits the ball information without refreshing the page
             document.addEventListener("DOMContentLoaded", function(){
-                var ballForm = document.getElementById("ballForm");
+                var ballForm = document.getElementById("shotForm");
                 ballForm.addEventListener("submit", function(event){
                     event.preventDefault();
 
@@ -564,24 +571,6 @@
                 xhr.send(params);
             }
 
-            // function sendBallIdToServlet(ballId){
-
-            //     var xhr = new XMLHttpRequest();
-            //     var url = "${pageContext.servletContext.contextPath}/shot";
-
-            //     xhr.open("POST", url, true);
-            //     xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-            //     xhr.onreadystatechange = function(){
-            //         if(xhr.readyState === XMLHttpRequest.DONE){
-            //             if(xhr.status === 200){
-            //                 console.lof("Ball ID sent successfully");
-            //             }else{
-            //                 console.error("Failed to send ball ID. Status: ", xhr.status);
-            //             }
-            //         }
-            //     };
-            //     xhr.send();
-            // }
         </script>
     </body>
 </html>

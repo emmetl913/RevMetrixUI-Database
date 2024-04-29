@@ -3,7 +3,6 @@ package edu.ycp.cs320.RevMetrix.servlet;
 import java.io.IOException;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -13,13 +12,9 @@ import javax.servlet.http.HttpSession;
 
 import edu.ycp.cs320.RevMetrix.model.Account;
 import edu.ycp.cs320.RevMetrix.model.Establishment;
-import edu.ycp.cs320.RevMetrix.model.EstablishmentArray;
-import edu.ycp.cs320.RevMetrix.controller.BallArsenalController;
 import edu.ycp.cs320.RevMetrix.controller.EstablishmentRegController;
 import edu.ycp.cs320.RevMetrix.controller.EventController;
 import edu.ycp.cs320.RevMetrix.model.Event;
-import edu.ycp.cs320.RevMetrix.model.EventArray;
-import edu.ycp.cs320.RevMetrix.model.Game;
 
 public class EventServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
@@ -37,21 +32,23 @@ public class EventServlet extends HttpServlet {
 		
 		Account acc = (Account) session.getAttribute("currAccount");
 
-        EstablishmentArray estaModel = new EstablishmentArray(acc.getAccountId());
-		EstablishmentRegController estaController = new EstablishmentRegController();
+        Establishment estaModel = new Establishment();
+		EstablishmentRegController estaController = new EstablishmentRegController(acc.getAccountId());
 		estaController.setModel(estaModel);
 		
-		EventArray model = new EventArray();
-		EventController controller = new EventController();
+		Event model = new Event();
+		EventController controller = new EventController(acc.getAccountId());
 		controller.setModel(model);
 		
-        ArrayList<Establishment> estabs = estaModel.getEstablishments();
+        ArrayList<Establishment> estabs = estaController.getEstablishments();
         
-		ArrayList<Event> events = model.getEvents();
+		ArrayList<Event> events = controller.getEvents();
 		// Set the ArrayList as a request attribute
 		req.setAttribute("event", events);
 		req.setAttribute("esta", estabs);
 		
+		//session.setAttribute("currEventID", );
+
 		// call JSP to generate empty form
 		req.getRequestDispatcher("/_view/event.jsp").forward(req, resp);
 	}
@@ -60,19 +57,25 @@ public class EventServlet extends HttpServlet {
 	@Override
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException {
+		
+		if(!AccountServlet.validLogin()) {
+            req.getRequestDispatcher("/_view/logIn.jsp").forward(req, resp);
+        }
+		
 		System.out.println("Event Servlet: doPost");
 		String errorMessage = null;
-
-		EventArray model = new EventArray();
-		EventController controller = new EventController();
-				
-		// Get session creation time.
+		
 		HttpSession session = req.getSession();
 		Account acc = (Account) session.getAttribute("currAccount");
 
+		Event model = new Event();
+		EventController controller = new EventController(acc.getAccountId());
+				
+		// Get session creation time.
+
 		
 		controller.setModel(model);
-		ArrayList<Event> events = model.getEvents();
+		ArrayList<Event> events = controller.getEvents();
         
 		//on button press
 		String newEventName = req.getParameter("eventName");
@@ -81,10 +84,10 @@ public class EventServlet extends HttpServlet {
         String type = null;
         int esstabID = -1;
         
-        EstablishmentArray estaModel = new EstablishmentArray(acc.getAccountId());
-		EstablishmentRegController estaController = new EstablishmentRegController();
+        Establishment estaModel = new Establishment();
+		EstablishmentRegController estaController = new EstablishmentRegController(acc.getAccountId());
 		estaController.setModel(estaModel);
-        ArrayList<Establishment> estabs = estaModel.getEstablishments(); //get ball ArrayList from session updated model
+        ArrayList<Establishment> estabs = estaController.getEstablishments(); //get ball ArrayList from session updated model
 		
         
 		
@@ -112,10 +115,10 @@ public class EventServlet extends HttpServlet {
 			errorMessage = "Invalid Input";
 		}
 		
-		estabs = estaModel.getEstablishments();
+		estabs = estaController.getEstablishments();
         
-		events = model.getEvents();
-			
+		events = controller.getEvents();
+		
 		req.setAttribute("errorMessage", errorMessage);
 		req.setAttribute("event", events);
 		req.setAttribute("esta", estabs);

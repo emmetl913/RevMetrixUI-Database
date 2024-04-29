@@ -1,8 +1,7 @@
 package edu.ycp.cs320.RevMetrix.controller;
 import edu.ycp.cs320.RevMetrix.model.Establishment;
-import edu.ycp.cs320.RevMetrix.model.EstablishmentArray;
-import edu.ycp.cs320.RevMetrix.model.Establishment;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import edu.ycp.cs320.RevMetrix.RevMetrixDB.db.persist.DatabaseProvider;
@@ -11,30 +10,46 @@ import edu.ycp.cs320.RevMetrix.RevMetrixDB.db.persist.IDatabase;
 
 
 public class EstablishmentRegController {
-	private EstablishmentArray model;
+	private Establishment model;
+	private ArrayList<Establishment> establishments;
 	private IDatabase db = null;
+	private int acc;
 	
-	public EstablishmentRegController() {
+	public EstablishmentRegController(int acc) {
+		DatabaseProvider.setInstance(new DerbyDatabase());
+		db = DatabaseProvider.getInstance();	
+		
+		this.acc = acc;
+		establishments = (ArrayList<Establishment>)getAllEstablishmentsForAccount(this.acc);
 		
 		// creating DB instance here
-		DatabaseProvider.setInstance(new DerbyDatabase());
-		db = DatabaseProvider.getInstance();		
 	}
 	
 	public void removeEstablishment(int accID, String name) {
 		db.removeEstablishment(accID, name);
 	}
-
+	
+	public Establishment getEstablishmentByAccountAndEstablishmentID(int accID, int estaID){
+		return  db.getEstablishmentByAccountAndEstablishmentID(accID, estaID);
+	}
 	public List<Establishment> getAllEstablishmentsForAccount(int accountId) {
 	
 	// get the list of (Author, Book) pairs from DB
-	List<Establishment> estaList = db.getEstablishmentsByAccount(accountId);
+		List<Establishment> estaList = new ArrayList<Establishment>();
+		try
+		{
+			estaList = db.getEstablishmentsByAccount(accountId);
+			// return Esta for this title
+				return estaList;
+		}catch(NullPointerException e) {
+			
+		}
+		
+		if (estaList.isEmpty()) {
+			System.out.println("Establishments for <" + accountId + "> dont exist");
+			return null;
+		}
 	
-	if (estaList.isEmpty()) {
-		System.out.println("Establishments for <" + accountId + "> dont exist");
-		return null;
-	}
-	// return Esta for this title
 		return estaList;
 	}
 	
@@ -50,7 +65,7 @@ public class EstablishmentRegController {
 			return newEsta;
 		}
 	
-	public void setModel(EstablishmentArray model) {
+	public void setModel(Establishment model) {
 		this.model = model;
 	}
 	
@@ -59,8 +74,9 @@ public class EstablishmentRegController {
 		db.insertNewEstablishment(acc, name, address);
 	}
 	
-	public void changeEstablishmentNameAtIndex(int index, String newName){
-		model.getEstablishmentAtIndex(index).setEstablishmentName(newName);
+	public ArrayList<Establishment> getEstablishments(){
+		establishments = (ArrayList<Establishment>) getAllEstablishmentsForAccount(acc);
+		return establishments;
 	}
 		
 }

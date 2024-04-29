@@ -1,32 +1,45 @@
 package edu.ycp.cs320.RevMetrix.controller;
+import java.util.ArrayList;
 import java.util.List;
 
 import edu.ycp.cs320.RevMetrix.RevMetrixDB.db.persist.DatabaseProvider;
 import edu.ycp.cs320.RevMetrix.RevMetrixDB.db.persist.DerbyDatabase;
 import edu.ycp.cs320.RevMetrix.model.Establishment;
 import edu.ycp.cs320.RevMetrix.model.Event;
-import edu.ycp.cs320.RevMetrix.model.EventArray;
 import edu.ycp.cs320.RevMetrix.RevMetrixDB.db.persist.IDatabase;
 
 
 public class EventController {
-	private EventArray event;
+	private Event event;
+	private ArrayList<Event> events;
 	private IDatabase db = null;
+	private int acc;
 	
-	public EventController() {
+	public EventController(int acc) {
+		
+		DatabaseProvider.setInstance(new DerbyDatabase());
+		db = DatabaseProvider.getInstance();	
+		
+		this.acc = acc;
+		events = (ArrayList<Event>)getAllEventsForAccount(acc);
 		
 		// creating DB instance here
-		DatabaseProvider.setInstance(new DerbyDatabase());
-		db = DatabaseProvider.getInstance();		
+		
 	}
 	
 	
 	
 	public List<Event> getAllEventsForAccount(int accountId) {
 		
-		// get the list of (Author, Book) pairs from DB
-		List<Event> eventList = db.getEventsByAccount(accountId);
+		List<Event> eventList = new ArrayList<Event>();
 		
+		try
+		{
+			eventList = db.getEventsByAccount(accountId);
+			return eventList;
+		}catch(NullPointerException e) {
+			
+		}
 		if (eventList.isEmpty()) {
 			System.out.println("Establishments for <" + accountId + "> dont exist");
 			return null;
@@ -50,24 +63,23 @@ public class EventController {
 				return newEvent;
 	}
 
-	public void setModel(EventArray model) {
+	public void setModel(Event model) {
 		this.event = model;
+	}
+	public ArrayList<Event> getEvents(){
+		events = (ArrayList<Event>)getAllEventsForAccount(acc);
+		return events;
 	}
 	//adds a ball to the arsenal with the name and color
 	public void addEvent(int acc_id, int estb_id, int time, String name, String type, int standing) {
-		Event event = new Event(db.insertNewEvent(acc_id, estb_id, name, time, type, standing),acc_id, estb_id, name, time, type, standing);
-		this.event.addEvent(event);
-	}
-	public void changeEventNameAtIndex(int index, String newName){
-		event.getEventAtIndex(index).setName(newName);
+		db.insertNewEvent(acc_id, estb_id, name, time, type, standing);
 	}
 	//finds the ball that is to be removed, and removes it from the list
-	public void removeEvent(String name) {
-		for(Event event : this.event.getEvents()) {
-			if(event.getEventName().equals(name)) {
-				this.event.removeEvent(event);
-			}
-		}
-	}
+//	public void removeEvent(String name) {
+//		for(Event event : this.event.getEvents()) {
+//			if(event.getEventName().equals(name)) {
+//				this.event.removeEvent(event);
+//			}
+//		}
 	
 }

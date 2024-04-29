@@ -2,12 +2,12 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
 <%@ page import= "edu.ycp.cs320.RevMetrix.model.Event" %>
-<%@ page import="edu.ycp.cs320.RevMetrix.model.EventArray" %>
-
 <%@ page import= "edu.ycp.cs320.RevMetrix.model.Establishment" %>
-<%@ page import="edu.ycp.cs320.RevMetrix.model.EstablishmentArray" %>
-
 <%@ page import = "java.io.*,java.util.*"%>
+
+<%
+  ArrayList<Event> events = (ArrayList<Event>)request.getAttribute("event");
+%>
 
 <html>
 <head>
@@ -109,6 +109,29 @@
   div.content {margin-left: 0;}
 }
 
+.bottom-link {
+  position: absolute;
+  bottom: 20px; /* Adjust this value to raise or lower the link */
+  left: 0;
+  width: 84%; 
+  text-align: left;
+  }
+
+  .bottom-link2 {
+  position: absolute;
+  bottom: 60px; /* Adjust this value to raise or lower the link */
+  left: 0;
+  width: 84%; 
+  text-align: left;
+  }
+
+  .ball-section {
+        border: 1px solid black; /* Add border around each ball section */
+        margin-bottom: 10px; /* Add some space between ball sections */
+        padding: 10px; /* Add padding inside each ball section */
+    }
+  
+
 
     </style>
 </head>
@@ -122,55 +145,85 @@
 			<img src="${pageContext.request.contextPath}/_view/BowlingBall.png"width="100" height="100">
 		  </a>
 	      <a href="${pageContext.servletContext.contextPath}/establishmentReg">Establishment Registration</a>
-		    <a href="${pageContext.servletContext.contextPath}/logIn">Sign Out</a>
-          <a href="${pageContext.servletContext.contextPath}/shot">Shot</a>
           <a href="${pageContext.servletContext.contextPath}/ballArsenal">Ball Arsenal</a>
-          <a href="https://github.com/emmetl913/RevMetrixUI-Database">GitHub</a>
           <a class="dropbtn" href="#" onclick="toggleDropdown(), nextStep(1)">Start Bowling!</a>
 		      <div class="dropdown-content" id="myDropdown">
-	        <a href="${pageContext.servletContext.contextPath}/event">&nbsp&nbsp >Event</a>
-	        <a href="${pageContext.servletContext.contextPath}/session">&nbsp&nbsp >Session</a>
-	        <a href="${pageContext.servletContext.contextPath}/game">&nbsp&nbsp >Game</a>
-	        <a href="${pageContext.servletContext.contextPath}/shot">&nbsp&nbsp >Shot</a>
+	        <a href="${pageContext.servletContext.contextPath}/event">>Event</a>
+	        <a href="${pageContext.servletContext.contextPath}/session">>Session</a>
+	        <a href="${pageContext.servletContext.contextPath}/game">>Game</a>
+	        <a href="${pageContext.servletContext.contextPath}/shot">>Shot</a>
+
+          <a href="https://github.com/emmetl913/RevMetrixUI-Database"class="bottom-link2">GitHub</a>
+          <a href="${pageContext.servletContext.contextPath}/logIn"class="bottom-link">Sign Out</a>
 	   	 </div>
 		  </div>
+
+      <h1>Event Page</h1>
       
     <div class="container">
-      <h2>Event Page</h2>
+      <h2>Pick Existing Event</h2>
         <form action="${pageContext.servletContext.contextPath}/event" method="post">
 
-          <label for="eventName">Event Name:</label>
-          <input type="text" name="eventName" size="12" value="${game.eventName}">
-
-          <input type="hidden" id="type" name="newType" value="">
-    
-          <label for="eventType">Event Type:</label>
-          <button text="Practice" name="practice" type="button" value="Practice" onclick="setToPractive()">Practice</button>
-          <button text="Tournament" name="tournament" type="button" value="Tournament"onclick="setToTournament()">Tournament</button>
-          <button text="Leauge" name="leauge" type="button" value="Leauge"onclick="setToLeauge()">League</button>
-    
-          <label for="establishment">Establishment Name/Location:</label>
-          <select name="establishment" id="establishment">
-          <%
-          ArrayList<Establishment> estabs = (ArrayList<Establishment>) request.getAttribute("esta");
-            if (estabs != null) {
-              for (Establishment establishment : estabs) {
+          <div id="ballsList"> &nbsp				
+            <% 
+                   
+                if (events != null) {
+                  for (Event event : events) {
            %>
-          <option value="<%= establishment.getEstablishmentName()%>"><%= establishment.getEstablishmentName()%></option>
+                 <div class="ball-section">
+                  <p>Name: <%= event.getEventName() %></p>
+                   <p>Establishment Name: <%= event.getEstbID()%></p>
+               </div>
            <% 
-             } } else {	%>
-               <option>No Establishments</option>
+                 } } else {	%>
+                 <p>No events available.</p>
            <% } %>
-          </select>
-    
-                <label for="standing">Standing:</label>
-                <input type="text" name="standing" size="12" value="${game.standing}">
+           
+           </div>
     
           <tr>
             <td><a href="${pageContext.servletContext.contextPath}/session"><input type="Submit" id="sessionType" name="Submit" value="Submit"></a></td>
           </tr>
          </form>
 	 </div>
+
+   <div class="container">
+    <h2>Create Event</h2>
+    <form action="${pageContext.servletContext.contextPath}/event" method="post">
+
+      <label for="eventName">Event Name:</label>
+      <input type="text" name="eventName" size="12" value="${game.eventName}">
+
+      <input type="hidden" id="type" name="newType" value="">
+
+      <label for="eventType">Event Type:</label>
+      <button text="Practice" name="practice" type="button" value="Practice" onclick="setToPractive()">Practice</button>
+      <button text="Tournament" name="tournament" type="button" value="Tournament"onclick="setToTournament()">Tournament</button>
+      <button text="Leauge" name="leauge" type="button" value="Leauge"onclick="setToLeauge()">League</button>
+
+      <label for="establishment">Establishment Name/Location:</label>
+      <select name="establishment" id="establishment">
+      <%
+      ArrayList<Establishment> estabs = (ArrayList<Establishment>) request.getAttribute("esta");
+        if (estabs != null) {
+          for (Establishment establishment : estabs) {
+       %>
+      <option value="<%= establishment.getEstablishmentName()%>"><%= establishment.getEstablishmentName()%></option>
+       <% 
+         } } else {	%>
+           <option>No Establishments</option>
+       <% } %>
+      </select>
+
+            <label for="standing">Standing:</label>
+            <input type="text" name="standing" size="12" value="${game.standing}">
+
+      <tr>
+        <td><a href="${pageContext.servletContext.contextPath}/session"><input type="Submit" id="sessionType" name="Submit" value="Submit"></a></td>
+      </tr>
+     </form>
+</div>
+
     <script>
       var currentStep = 1;
       // Display current step
@@ -216,6 +269,10 @@
           document.getElementById("type").value = "Leauge";
         }
         
+        function selectBall(ballName) {
+       document.getElementById('selectedBall').value = ballName;
+       document.getElementById('ballArsenalForm').submit();
+   }
       </script>
 </body>
 </html>

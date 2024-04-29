@@ -25,8 +25,9 @@
 				           
 	        body{
 				font-family: Arial, Helvetica, sans-serif;
-				background-color: darkgray;
 	        	display:flex;
+								background-color: darkgray;
+
             	
 			}
 			#shaderCanvas {
@@ -86,7 +87,7 @@
             border-radius: 5px;
             margin-bottom: 10px;
             background-color: white;
-            box-shadow: 10px 10px 5px black;
+			box-shadow: 10px 10px 5px black;
             /* Set fixed height for the container */
             height: 430px;
             /* Add scrollbar when content overflows */
@@ -105,8 +106,8 @@
             border-radius: 5px;
             margin-bottom: 10px;
             background-color: white;
-            box-shadow: 10px 10px 5px black;
-            /* Set fixed height for the container */
+			box-shadow: 10px 10px 5px black;
+			/* Set fixed height for the container */
             height: 350px;
             /* Add scrollbar when content overflows */
             overflow: auto;
@@ -198,7 +199,7 @@ button:hover {
           <a href="${pageContext.servletContext.contextPath}/shot">Shot</a>
           <a href="${pageContext.servletContext.contextPath}/ballArsenal">Ball Arsenal</a>
           <a href="https://github.com/emmetl913/RevMetrixUI-Database">GitHub</a>
-           <a href="${pageContext.servletContext.contextPath}/event">Start Bowling!</a>
+          <a href="${pageContext.servletContext.contextPath}/startBowling">Start Bowling</a>
 		  </div>
 	
 		<form id="ballArsenalForm" action="${pageContext.servletContext.contextPath}/ballArsenal" method="post">
