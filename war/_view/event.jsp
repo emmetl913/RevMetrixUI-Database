@@ -23,7 +23,7 @@
             padding: 0;
         }
 
-        .event-section {
+        .ball-section {
         border: 1px solid black; /* Add border around each ball section */
         margin-bottom: 10px; /* Add some space between ball sections */
         padding: 10px; /* Add padding inside each ball section */
@@ -125,7 +125,7 @@
   text-align: left;
   }
 
-  .event-section {
+  .ball-section {
         border: 1px solid black; /* Add border around each ball section */
         margin-bottom: 10px; /* Add some space between ball sections */
         padding: 10px; /* Add padding inside each ball section */
@@ -159,18 +159,20 @@
 		  </div>
 
       <h1>Event Page</h1>
+      
     <div class="container">
       <h2>Pick Existing Event</h2>
-        <form id="SubmitEvent" action="${pageContext.servletContext.contextPath}/event" method="post">
-          <div id="eventList"> &nbsp				
+        <form action="${pageContext.servletContext.contextPath}/event" method="post">
+
+          <div id="ballsList"> &nbsp				
             <% 
                    
                 if (events != null) {
                   for (Event event : events) {
            %>
-                 <div class="event-section" onclick="selectEvent ('<%= event.getEstaId() %>')">
+                 <div class="ball-section">
                   <p>Name: <%= event.getEventName() %></p>
-                   <p>Establishment Name: <%= event.getEstablishmentStringName()%></p>
+                   <p>Establishment Name: <%= event.getEstbID()%></p>
                </div>
            <% 
                  } } else {	%>
@@ -178,11 +180,9 @@
            <% } %>
            
            </div>
-
-           <input type="hidden" id="selectedEvent" name="selectedEvent">
     
           <tr>
-            <td><a href="${pageContext.servletContext.contextPath}/session"><input type="Submit" id="SubmitCurrentEvent" name="SubmitCurrentEvent" value="Submit"></a></td>
+            <td><a href="${pageContext.servletContext.contextPath}/session"><input type="Submit" id="sessionType" name="Submit" value="Submit"></a></td>
           </tr>
          </form>
 	 </div>
@@ -219,7 +219,7 @@
             <input type="text" name="standing" size="12" value="${game.standing}">
 
       <tr>
-        <td><a href="${pageContext.servletContext.contextPath}/session"><input type="Submit" id="createNewEvent" name="createNewEvent" value="Submit"></a></td>
+        <td><a href="${pageContext.servletContext.contextPath}/session"><input type="Submit" id="sessionType" name="Submit" value="Submit"></a></td>
       </tr>
      </form>
 </div>
@@ -268,11 +268,11 @@
         function setToLeauge() {
           document.getElementById("type").value = "Leauge";
         }
-        function selectEvent(event) {
-          document.getElementById('selectedEvent').value = event;
-
+        
+        function selectBall(ballName) {
+       document.getElementById('selectedBall').value = ballName;
+       document.getElementById('ballArsenalForm').submit();
    }
-
       </script>
 </body>
 </html>
