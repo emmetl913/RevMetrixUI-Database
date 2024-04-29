@@ -170,7 +170,7 @@
                 if (events != null) {
                   for (Event event : events) {
            %>
-                 <div class="ball-section">
+                 <div class="ball-section" onclick= "selectEvent ('<%= event.getEventID() %>')">
                   <p>Name: <%= event.getEventName() %></p>
                    <p>Establishment Name: <%= event.getEstbID()%></p>
                </div>
@@ -180,9 +180,9 @@
            <% } %>
            
            </div>
-    
+           <input type="hidden" id="selectedEvent" name="selectedEvent">
           <tr>
-            <td><a href="${pageContext.servletContext.contextPath}/session"><input type="Submit" id="sessionType" name="Submit" value="Submit"></a></td>
+            <td><a href="${pageContext.servletContext.contextPath}/session"><input type="Submit" id="SubmitCurrentEvent" name="SubmitCurrentEvent" value="Submit"></a></td>
           </tr>
          </form>
 	 </div>
@@ -269,10 +269,9 @@
           document.getElementById("type").value = "Leauge";
         }
         
-        function selectBall(ballName) {
-       document.getElementById('selectedBall').value = ballName;
-       document.getElementById('ballArsenalForm').submit();
-   }
+        function selectEvent(event) {
+    document.getElementById('selectedEvent').value = event;
+}
       </script>
 </body>
 </html>

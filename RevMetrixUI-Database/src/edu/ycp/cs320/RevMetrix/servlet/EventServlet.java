@@ -83,13 +83,12 @@ public class EventServlet extends HttpServlet {
 		EstablishmentRegController estaController = new EstablishmentRegController(acc.getAccountId());
 		estaController.setModel(estaModel);
         ArrayList<Establishment> estabs = estaController.getEstablishments(); //get ball ArrayList from session updated model
-		
 	    String selectedEvent = req.getParameter("selectedEvent");
 
 		
 		if(selectedEvent != null) {
 			Integer eventID = getIntegerFromParameter(req.getParameter("selectedEvent"));
-			Event currentEvent = events.get(eventID-1);
+			session.setAttribute("eventID", eventID);	
 			
 			//set Event Seession stuff here
 		}else {
@@ -116,8 +115,8 @@ public class EventServlet extends HttpServlet {
 						esstabID = esta.getEstaId();
 				}
 			Integer eventID = controller.addEvent(acc.getAccountId(), esstabID , 9, newEventName,type, newStanding);
-		
-			session.setAttribute("eventID", eventID);			
+			session.setAttribute("eventID", eventID);	
+			
 			controller.addEvent(acc.getAccountId(), esstabID , 9, newEventName,type, newStanding);
 			System.out.print("Account id:"+acc.getAccountId()+" esstabID:" + esstabID+" time:" + " 9 " +" newEventName:" + newEventName+" type:" + type+" newStanding:" + newStanding);
 
@@ -132,21 +131,20 @@ public class EventServlet extends HttpServlet {
 		//on button press
 		
 		estabs = estaController.getEstablishments();
-        
 		events = controller.getEvents();
-		
-		
 		
 		req.setAttribute("errorMessage", errorMessage);
 		req.setAttribute("event", events);
 		req.setAttribute("esta", estabs);
 		
-		if(req.getParameter("Submit") != null) {
+		if(req.getParameter("Submit") != null || req.getParameter("SubmitCurrentEvent") != null) {
     		req.getRequestDispatcher("/_view/session.jsp").forward(req, resp);
+    		System.out.print("This is my event ID "+session.getAttribute("eventID"));
+        }else {
+    		req.getRequestDispatcher("/_view/event.jsp").forward(req, resp);
         }
         
 		
-		req.getRequestDispatcher("/_view/event.jsp").forward(req, resp);
 	}
 	
 	private Integer getIntegerFromParameter(String s) {
