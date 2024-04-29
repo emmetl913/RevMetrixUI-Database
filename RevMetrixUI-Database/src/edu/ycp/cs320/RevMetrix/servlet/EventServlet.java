@@ -108,8 +108,10 @@ public class EventServlet extends HttpServlet {
 					esstabID = esta.getEstaId();
 			}
 						
-		controller.addEvent(acc.getAccountId(), esstabID , 9, newEventName,type, newStanding);
-		System.out.print("Account id:"+acc.getAccountId()+" esstabID:" + esstabID+" time:" + " 9 " +" newEventName:" + newEventName+" type:" + type+" newStanding:" + newStanding);
+		Integer eventID = controller.addEvent(acc.getAccountId(), esstabID , 9, newEventName,type, newStanding);
+		
+		session.setAttribute("eventID", eventID);
+		System.out.print("Account id:"+acc.getAccountId()+" esstabID:" + esstabID+" time:" + " 9 " +" newEventName:" + newEventName+" type:" + type+" newStanding:" + newStanding+ " New Event ID:"+eventID);
 
 		}catch(NullPointerException e) {
 			errorMessage = "Invalid Input";
