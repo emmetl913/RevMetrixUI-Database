@@ -7,6 +7,7 @@ public class Frame{
 	private int gameID, score, frameNumber;
 	private ArrayList<Shot> shots;
 	private int laneNumber;
+	private int frameID;
 	
 	public Frame(int gameID, int score, int frameNumber) {
 		this.frameNumber = frameNumber;
@@ -26,9 +27,9 @@ public class Frame{
 	{
 		return this.frameNumber;
 	}
-	public void setFrameNumber(int id)
+	public void setFrameNumber(int frameNumber)
 	{
-		this.frameNumber = id;
+		this.frameNumber = frameNumber;
 	}
 	public int getScore()
 	{
@@ -89,5 +90,13 @@ public class Frame{
 	
 	public void resetShots() {
 		shots.clear();
+	}
+
+	public int getFrameID() {
+		return frameID;
+	}
+
+	public void setFrameID(int frameID) {
+		this.frameID = frameID;
 	}
 }

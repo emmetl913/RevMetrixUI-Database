@@ -334,6 +334,7 @@ public class DerbyDatabase implements IDatabase {
 
 	}
 	private void loadShot(Shot shot, ResultSet resultSet, int index) throws SQLException {
+		shot.setShotID(resultSet.getInt(index++));
 		shot.setFrameID(resultSet.getInt(index++));
 		shot.setGameID(resultSet.getInt(index++));
 		shot.setSessionID(resultSet.getInt(index++));
@@ -604,6 +605,50 @@ public class DerbyDatabase implements IDatabase {
 		ball.setColor3(resultSet.getString(index++));
 		ball.setMaterial(resultSet.getString(index++));
 	}
+	@Override
+	public List<Shot> getShotByFrameID(int frameID){
+		return executeTransaction(new Transaction<List<Shot>>() {
+			@Override
+			public List<Shot> execute(Connection conn) throws SQLException
+			{
+				PreparedStatement stmt1 = null;
+				
+				ResultSet resultSet1 = null;
+				
+				try
+				{
+					stmt1 = conn.prepareStatement(
+							"select * from shots"+
+							" where shots.frame_id = ?"
+					);
+					
+					stmt1.setInt(1, frameID);
+					
+					List<Shot> result = new ArrayList<Shot>();
+					
+					resultSet1 = stmt1.executeQuery();
+					
+					Boolean found = false;
+				
+					while(resultSet1.next())
+					{
+						found = true;
+						Shot shot = new Shot();
+						loadShot(shot, resultSet1, 1);
+						//System.out.println("SKREET" + ball.getName());
+						result.add(shot);
+					}
+					
+					return result;
+				} 
+				finally
+				{
+					DBUtil.closeQuietly(stmt1);
+					DBUtil.closeQuietly(resultSet1);
+				}
+			}
+		});
+	}
 	
 	@Override
 	public Integer insertNewBallInDB(int account_id, float weight, String name, Boolean righthand, String brand, String color1, String color2, String color3, String material) {
@@ -787,6 +832,7 @@ public class DerbyDatabase implements IDatabase {
 			}
 		});
 	}
+	
 	@Override
 	public Integer insertNewFrame(int gameID, int score, int frameNumber) {
 		return executeTransaction(new Transaction<Integer>() {
@@ -866,6 +912,57 @@ public class DerbyDatabase implements IDatabase {
 				}
 			}
 		});
+	}
+	@Override
+	public List<Frame> getFrameByGameID(int gameID) {
+		return executeTransaction(new Transaction<List<Frame>>() {
+			@Override
+			public List<Frame> execute(Connection conn) throws SQLException
+			{
+				PreparedStatement stmt1 = null;
+				
+				ResultSet resultSet1 = null;
+				
+				try
+				{
+					stmt1 = conn.prepareStatement(
+							"select * from frames"+
+							" where frame.game_id = ?"
+					);
+					
+					stmt1.setInt(1, gameID);
+					
+					List<Frame> result = new ArrayList<Frame>();
+					
+					resultSet1 = stmt1.executeQuery();
+					
+					Boolean found = false;
+				
+					while(resultSet1.next())
+					{
+						found = true;
+						Frame frame = new Frame(0,0,0);
+						loadFrame(frame, resultSet1, 1);
+						//System.out.println("SKREET" + ball.getName());
+						result.add(frame);
+					}
+					
+					return result;
+				} 
+				finally
+				{
+					DBUtil.closeQuietly(stmt1);
+					DBUtil.closeQuietly(resultSet1);
+				}
+			}
+		});
+	}
+	private void loadFrame(Frame frame, ResultSet resultSet, int index) throws SQLException {
+		//Proper order: ball id, accountid, weight, name, righthand, brand, color
+		frame.setFrameID(resultSet.getInt(index++));
+		frame.setGameID(resultSet.getInt(index++));
+		frame.setScore(resultSet.getInt(index++));
+		frame.setFrameNumber(resultSet.getInt(index++));
 	}
 	@Override 
 	public Integer insertNewGame(final int gameID, final int sessionID, final int currentLane, final int gameNum, final int score )

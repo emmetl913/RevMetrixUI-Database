@@ -5,6 +5,7 @@ import java.util.List;
 public class Shot{
 	private int pins, sessionID, gameID, frameID, shotNumber, ballID, count;
 	private String leave, pinsLeft;
+	private int shotID;
 	
 	//Constructor
 	public Shot(int sessionID, int gameID, int frameID, int shotNumber, int count, int ballID, String pinsLeft, String leave) {
@@ -18,6 +19,10 @@ public class Shot{
 		this.leave = leave;
 	}
 	
+	public Shot() {
+		// TODO Auto-generated constructor stub
+	}
+
 	//pins
 	public int getPins()
 	{
@@ -96,5 +101,13 @@ public class Shot{
 
 	public void setLeave(String leave) {
 		this.leave = leave;
+	}
+
+	public int getShotID() {
+		return shotID;
+	}
+
+	public void setShotID(int shotID) {
+		this.shotID = shotID;
 	}
 }

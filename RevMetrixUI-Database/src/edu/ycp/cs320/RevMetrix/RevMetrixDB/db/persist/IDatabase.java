@@ -1,20 +1,13 @@
 package edu.ycp.cs320.RevMetrix.RevMetrixDB.db.persist;
 
 import java.util.ArrayList;
-
-import edu.ycp.cs320.RevMetrix.model.Establishment;
-
-import edu.ycp.cs320.RevMetrix.model.Event;
-import edu.ycp.cs320.RevMetrix.model.Game;
-import edu.ycp.cs320.RevMetrix.model.Session;
-import edu.ycp.cs320.RevMetrix.model.Game;
-import edu.ycp.cs320.RevMetrix.model.Session;
-import edu.ycp.cs320.RevMetrix.model.Event;
-import edu.ycp.cs320.RevMetrix.model.Game;
-import edu.ycp.cs320.RevMetrix.model.Session;
-
 import java.util.List;
 
+import edu.ycp.cs320.RevMetrix.model.Establishment;
+import edu.ycp.cs320.RevMetrix.model.Event;
+import edu.ycp.cs320.RevMetrix.model.Frame;
+import edu.ycp.cs320.RevMetrix.model.Game;
+import edu.ycp.cs320.RevMetrix.model.Session;
 import edu.ycp.cs320.RevMetrix.model.Account;
 import edu.ycp.cs320.RevMetrix.model.Ball;
 import edu.ycp.cs320.RevMetrix.model.Shot;
@@ -44,7 +37,12 @@ public interface IDatabase {
 
 	// Shot Level Methods
 	public Integer insertNewFrame(int gameID, int score, int frameNumber);
+	List<Frame> getFrameByGameID(int gameID);
+
+	List<Shot> getShotByFrameID(int frameID);
 	public Integer insertNewShotWithFrameID(int sessionID, int gameID, int frameID, int shotNumber, String count, int ballID, String pinsLeft);
+	
+	
 	public Integer insertNewEstablishment(int account_id, String name, String address);
 	public Integer removeEstablishment(int accID, String name);
 	public List<Event> getEventsByAccount(int accID);

@@ -7,6 +7,12 @@
 <%@ page import="edu.ycp.cs320.RevMetrix.model.Ball" %>
 <%@ page import="java.util.ArrayList" %>
 
+<%
+// Retrieve ArrayList from session attribute
+    BallArsenal model = (BallArsenal) session.getAttribute("ballArsenalKey");
+    ArrayList<Ball> balls = (model != null) ? model.getBalls() : null;
+%>
+
 <html>
     <head>
         <meta charset="UTF-8">
@@ -71,8 +77,8 @@
                 height: 45px;
                 border-radius: 50%;
                 border: 1px solid black;
-                background-color: white;
-                color: black;
+                background-color: black;
+                color: white;
                 display: flex;
                 justify-content: center;
                 align-items: center;
@@ -86,8 +92,8 @@
             }
 
             .pin.selected{
-                background-color: black;
-                color: white;
+                background-color: white;
+                color: black;
             }
 
             .triangle{
@@ -245,21 +251,6 @@
                     float: left;
                 }
             }
-            .bottom-link {
-  position: absolute;
-  bottom: 20px; /* Adjust this value to raise or lower the link */
-  left: 0;
-  width: 84%; 
-  text-align: left;
-  }
-
-  .bottom-link2 {
-  position: absolute;
-  bottom: 60px; /* Adjust this value to raise or lower the link */
-  left: 0;
-  width: 84%; 
-  text-align: left;
-  }
         </style>
     </head>
     <body>
@@ -272,33 +263,30 @@
                <img src="${pageContext.request.contextPath}/_view/BowlingBall.png"width="100" height="100">
              </a>
              <a href="${pageContext.servletContext.contextPath}/establishmentReg">Establishment Registration</a>
+             <a href="${pageContext.servletContext.contextPath}/logIn">Sign Out</a>
              <a href="${pageContext.servletContext.contextPath}/ballArsenal">Ball Arsenal</a>
+             <a href="https://github.com/emmetl913/RevMetrixUI-Database">GitHub</a>
              <a class="dropbtn" href="#" onclick="toggleDropdown(), nextStep(1)">Start Bowling!</a>
              <div class="dropdown-content" id="myDropdown">
            <a href="${pageContext.servletContext.contextPath}/event">>Event</a>
            <a href="${pageContext.servletContext.contextPath}/session">>Session</a>
            <a href="${pageContext.servletContext.contextPath}/game">>Game</a>
            <a href="${pageContext.servletContext.contextPath}/shot">>Shot</a>
-
-           <a href="https://github.com/emmetl913/RevMetrixUI-Database"class="bottom-link2">GitHub</a>
-          <a href="${pageContext.servletContext.contextPath}/logIn"class="bottom-link">Sign Out</a>
                </div>
        </div>
-
-        <!-- gets variables from the servlet -->
         
 
         <input type="hidden" id="selected-score-box">
 	
-		<form action="${pageContext.servletContext.contextPath}/shot" method="post">
+		<form id="shotForm" action="${pageContext.servletContext.contextPath}/shot" method="post" onsubmit="submitForm(event)">
             <div class="container">
                 <div id="game-info">
                     <!-- no info, so it shows blank -->
                     <div class="game-box" id="gameNumber">
-                        <span>Game:   ${sessionScope.gameNumber}</span>
+                        <span>Game:   <%= session.getAttribute("gameNumber") %></span>
                     </div>
                     <div class="frame-box" id="frameNumber">
-                        <span>Frame: <%= request.getAttribute("frameNumber") %></span>
+                        <span>Frame: <%= session.getAttribute("frameNumber") %></span>
                     </div>
                     <!-- <div class="score-box">
                         <span>Total Score: ${sessionScope.totalScore}</span>
@@ -306,45 +294,73 @@
                 </div>
         
                 <!-- drop down menu - selecting a ball -->
-                <form action="ShotServlet" method="post" id="ball-form">
-                    <div class="dropdown">
-                        <select name="ball">
-                            <option value="">Select a ball...</option>
-                            <c:forEach var="ball" items="${ballArsenal}">
-                                <option value="${ball.getId()}">${ball.getName()}</option>
-                            </c:forEach>
-                            <option value="add">Add Ball... </option>
-                        </select>
-                    </div>
-                </form>
+                <div class="dropdown">
+                    <select name="ballArsenalDropdown">
+                        <option value="">Select a ball...</option>
+                        <!-- <c:forEach var="ball" items="${ballArsenal}">
+                                <option value="${ball.getBallId()}">${ball.getName()}</option>
+                            </c:forEach> -->
+                        <%
+                            if (balls != null && !balls.isEmpty()) {
+                                int i = 0;
+                                for (Ball ball : balls) { %>
+                                    <option value=<%= ball.getBallId() %> > <%= ball.getName() %></option>
+                                <% System.out.println(ball.getName());
+                                }
+                            }else{%>
+                                <p>There are no balls</p>
+                            <%}
+                        %>
+                        <!-- <option value="add">Add Ball... </option> -->
+                    </select>
+                </div>
+                
 
                 <div class="triangle">
                     <div class="row">
-                        <div class="pin" onclick="togglePin(this)"><span>7</span></div>
-                        <div class="pin" onclick="togglePin(this)"><span>8</span></div>
-                        <div class="pin" onclick="togglePin(this)"><span>9</span></div>
-                        <div class="pin" onclick="togglePin(this)"><span>10</span></div>
+                        <div class="pin" onclick="togglePin(this)"><input type="hidden" name ="pin7" id="7" value="up"><span>7</span></div>
+                        <div class="pin" onclick="togglePin(this)"><input type="hidden" name ="pin8" id="8" value="up"><span>8</span></div>
+                        <div class="pin" onclick="togglePin(this)"><input type="hidden" name ="pin9" id="9" value="up"><span>9</span></div>
+                        <div class="pin" onclick="togglePin(this)"><input type="hidden" name ="pin0" id="0" value="up"><span>10</span></div>
                     </div>
                     <div class="row">
-                        <div class="pin" onclick="togglePin(this)"><span>4</span></div>
-                        <div class="pin" onclick="togglePin(this)"><span>5</span></div>
-                        <div class="pin" onclick="togglePin(this)"><span>6</span></div>
+                        <div class="pin" onclick="togglePin(this)"><input type="hidden" name ="pin4" id="4" value="up"><span>4</span></div>
+                        <div class="pin" onclick="togglePin(this)"><input type="hidden" name ="pin5" id="5" value="up"><span>5</span></div>
+                        <div class="pin" onclick="togglePin(this)"><input type="hidden" name ="pin6" id="6" value="up"><span>6</span></div>
                     </div>
                     <div class="row">
-                        <div class="pin" onclick="togglePin(this)"><span>2</span></div>
-                        <div class="pin" onclick="togglePin(this)"><span>3</span></div>
+                        <div class="pin" onclick="togglePin(this)"><input type="hidden" name ="pin2" id="2" value="up"><span>2</span></div>
+                        <div class="pin" onclick="togglePin(this)"><input type="hidden" name ="pin3" id="3" value="up"><span>3</span></div>
                     </div>
                     <div class="row">
-                        <div class="pin" onclick="togglePin(this)"><span>1</span></div>
+                        <div class="pin" onclick="togglePin(this)"><input type="hidden" name ="pin1" id="1" value="up"><span>1</span></div>
                     </div>
     
                     <div class="row">
                         <div id="shot-count"></div>
+                        <%
+                            Integer score1 = (Integer) session.getAttribute("score1");
+                            Integer score2 = (Integer) session.getAttribute("score2");
+                        %>
                         <div class="firstShot" id="score-box1" style="background-color: lightslategray;">
-                            ${formattedShots1}
+                            <input type="hidden" name="shotNumber" id="shotNumber" value="1">
+                            <% 
+                            if(score1 != null){
+                            %>
+                                <%= score1 %>
+                            <%
+                            }
+                            %>
                         </div>
                         <div class="secondShot" id="score-box2" style="background-color: lightslategray;">
-                            ${formattedShots2}
+                            <input type="hidden" name="shotNumber" id="shotNumber" value="2">
+                            <% 
+                            if(score2 != null){
+                            %>
+                                <%= score2 %>
+                            <%
+                            }
+                            %>
                         </div>
                     </div>
                 </div>
@@ -400,11 +416,6 @@
                 console.log("selectedScoreBox function called");
                 console.log("scoreBoxId: ", scoreBoxId);
 
-                //remove 'selected' class from all score boxes
-                // document.querySelectorAll('.score-box.selected').forEach(function(scoreBox){
-                //     scoreBox.classList.remove('selected');
-                // });
-
                 if(selectedScoreBoxId !== null){
                     const previousSelectedScoreBox = document.getElementById(selectedScoreBoxId);
                     if(previousSelectedScoreBox){
@@ -459,20 +470,20 @@
                             // // togglePin(pin);
                             // updateFirstShotDisplay();
 
-                            clickCount1++;
-                            if(clickCount1 === 1){
-                                console.log("clickCount1 = 1");
-                                resetSelectedScoreBox(firstScoreBox);
-                                console.log("reset score completed");
-                                firstShotScore = 0;
-                                updateFirstShotDisplay();
-                                console.log("update first shot display completed");
-                                clickCount1=0;
-                                // resetPinCounts();
-                                revertSelectedPinsColor(firstScoreBox);
-                                console.log("funtions completed");
-                                selectedPinsFirstShot = [];
-                            }
+                            // clickCount1++;
+                            // if(clickCount1 === 1){
+                            //     console.log("clickCount1 = 1");
+                            //     resetSelectedScoreBox(firstScoreBox);
+                            //     console.log("reset score completed");
+                            //     firstShotScore = 0;
+                            //     updateFirstShotDisplay();
+                            //     console.log("update first shot display completed");
+                            //     clickCount1=0;
+                            //     // resetPinCounts();
+                            //     revertSelectedPinsColor(firstScoreBox);
+                            //     console.log("funtions completed");
+                            //     selectedPinsFirstShot = [];
+                            // }
                             // return;
                         // }
 
@@ -494,22 +505,6 @@
                         // selectScoreBox('score-box2', 'selected-score-box');
                         if(secondScoreBox.classList.contains('selected')){
                             console.log("second score box selected");
-                            // secondScoreBox.classList.add('selected');
-                            // firstScoreBox.classList.remove('selected');
-
-                            // highlightSelectedScoreBox("score-box2");
-
-                            // secondShotScore = 0;
-
-                            // setSecondShot();
-
-                            // if(firstShotCount !== null){
-                            //     const maxPinsSecondShot = 10 - firstShotCount;
-
-                            //     if(secondShotScore > maxPinsSecondShot){
-                            //         setSpare();
-                            //     }
-                            // }
 
                             // updateSecondShotDisplay();
                             clickCount2++;
@@ -541,32 +536,6 @@
                         selectedPinsSecondShot = document.querySelectorAll('.selected-pin');
                         console.log("selected pins for second shot: ", selectedPinsSecondShot);
                     });
-
-                    // firstScoreBox.addEventListener("click", function() {
-                    //     if(firstScoreBox.classList.contains('selected')){
-                    //         initializeShots();
-                    //     }else{
-                    //         firstScoreBox.classList.add('selected');
-                    //         secondScoreBox.classList.remove('selected');
-                    //         highlightSelectedScoreBox("score-box1");
-                    //         initializeShots();
-                    //         selectedPinsFirstShot = document.querySelectorAll('.selected-pin');
-                    //         console.log("Selected pins for the first shot: ", selectedPinsFirstShot);
-                    //     }
-                    // });
-
-                    // secondScoreBox.addEventListener("click", function() {
-                    //     if(secondScoreBox.classList.contains('selected')){
-                    //         initializeShots();
-                    //     }else{
-                    //         secondScoreBox.classList.add('selected');
-                    //         firstScoreBox.classList.remove('selected');
-                    //         highlightSelectedScoreBox("score-box2");
-                    //         initializeShots();
-                    //         selectedPinsSecondShot = document.querySelectorAll('.selected-pin');
-                    //         console.log("Selected pins for the second shot: ", selectedPinsSecondShot);
-                    //     }
-                    // })
 
                     const nextFrameBtn = document.getElementById("nextFrameBtn");
                     if (nextFrameBtn) {
@@ -629,6 +598,19 @@
             let secondScoreBoxClicked = false;
 
             function togglePin(pin){
+                // var pinID = pin.id;
+                var hiddenVal = pin.querySelector('input[type="hidden"]');
+                // var pinValue = pin.getAttribute('value');
+                var pinValue = hiddenVal.value;
+
+                if(pinValue === 'up'){
+                    hiddenVal.setAttribute('value', 'down');
+                    console.log(hiddenVal, " pin changed to down");
+                }else if(pinValue === 'down'){
+                    hiddenVal.setAttribute('value', 'up');
+                    console.log(hiddenVal, " pin changed to up");
+                }
+
                 console.log("togglePin function called");
                 // const isLeave = pin.classList.toggle('selected');
                 const selectedScoreBox = getSelectedScoreBoxId();
@@ -644,16 +626,22 @@
                 console.log("isLeave: ", isLeave);
 
                 if(isLeave){
-                    pin.style.backgroundColor = 'black'
-                    pin.style.color = 'white';
-                }else{
                     pin.style.backgroundColor = 'white'
                     pin.style.color = 'black';
+                }else{
+                    pin.style.backgroundColor = 'black'
+                    pin.style.color = 'white';
                 }
 
                 // const pinsLeftStanding = calculateTotalPinsLeftStanding();
                 updateSelectedScoreBox(selectedScoreBox, null, calculateTotalPinsLeftStanding());
                 highlightSelectedScoreBox(selectedScoreBox);
+
+                if(selectedScoreBox === 'score-box1'){
+                    document.getElementById("shotNumber").value = 1;
+                }else if(selectScoreBox === 'score-box2'){
+                    document.getElementById("shotNumber").value = 2;
+                }
 
                 if(selectedScoreBox === "score-box2" && isLeave){
                     //const pinsLeftAfterFirstShot = calculatePinsLeftStandingAfterFirstShot(firstShotCount);
@@ -661,6 +649,29 @@
                     updateSecondShotDisplay();
                 }
 
+                updateSelectedPins();
+                console.log("Current value of the pin: ", hiddenVal.getAttribute('value', 'up'));
+            }
+
+            function submitForm(event) {
+                event.preventDefault(); // Prevent the default form submission
+
+                var pinElements = document.querySelectorAll('.pin'); // Select all elements with class 'pin'
+                var pinValues = {}; // Object to store pin values
+
+                // Iterate over each pin element and get its value
+                pinElements.forEach(function(pinElement) {
+                    var pinId = pinElement.id;
+                    var pinValue = pinElement.getAttribute('value');
+                    pinValues[pinId] = pinValue;
+                });
+
+                // Print pin values to the console
+                console.log("Pin Values:");
+                console.log(pinValues);
+
+                // You can now proceed with form submission if needed
+                event.target.submit();
             }
 
             //function to highlight the selected score box
@@ -704,8 +715,8 @@
                 pins.forEach(function(pin){
                     pin.classList.remove('leave');
                     pin.classList.add('selected');
-                    pin.style.backgroundColor = 'black';
-                    pin.style.color = 'white';
+                    pin.style.backgroundColor = 'white';
+                    pin.style.color = 'black';
                 });
             }
 
@@ -1029,10 +1040,26 @@
                 console.log("revert selected pins function called");
                 const selectedPins = scoreBox.querySelectorAll('${scoreBoxId} .pin.selected');
                 selectedPins.forEach(pin => {
-                    pin.style.backgroundColor = 'white';
-                    pin.style.color = 'black';
+                    pin.style.backgroundColor = 'black';
+                    pin.style.color = 'white';
                 });
                 console.log("pins reverted");
+            }
+
+            function updateSelectedPins(){
+                var selectedPins1 = [];
+                var selectedPins2 = [];
+
+                document.querySelectorAll('.pin').forEach(pin => {
+                    if(pin.classList.contains('selected')){
+                        if(pin.dataset.box === '1'){
+                            selectedPins1.push(pin.id);
+                        }else if(pin.dataset.box === '2'){
+                            selectedPins2.push(pin.id);
+                        }
+                    }
+                });
+                console.log("Selected Pins updated");
             }
 
         </script>
