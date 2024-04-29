@@ -168,7 +168,7 @@
                 if (events != null) {
                   for (Event event : events) {
            %>
-                 <div class="event-section" onclick="selectEvent ('<%= event %>')">
+                 <div class="event-section" onclick="selectEvent ('<%= event.getEstaId() %>')">
                   <p>Name: <%= event.getEventName() %></p>
                    <p>Establishment Name: <%= event.getEstablishmentStringName()%></p>
                </div>

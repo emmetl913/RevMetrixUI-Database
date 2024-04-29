@@ -88,7 +88,10 @@ public class EventServlet extends HttpServlet {
 
 		
 		if(selectedEvent != null) {
+			Integer eventID = getIntegerFromParameter(req.getParameter("selectedEvent"));
+			Event currentEvent = events.get(eventID-1);
 			
+			//set Event Seession stuff here
 		}else {
 			try {
 				
@@ -119,6 +122,9 @@ public class EventServlet extends HttpServlet {
 			}catch(NullPointerException e) {
 				errorMessage = "Invalid Input";
 			}
+			
+			//set Event Seession stuff here
+
 		}
         
 		//on button press
@@ -127,15 +133,25 @@ public class EventServlet extends HttpServlet {
         
 		events = controller.getEvents();
 		
+		
+		
 		req.setAttribute("errorMessage", errorMessage);
 		req.setAttribute("event", events);
 		req.setAttribute("esta", estabs);
-
+		
 		if(req.getParameter("Submit") != null) {
     		req.getRequestDispatcher("/_view/session.jsp").forward(req, resp);
         }
         
 		
 		req.getRequestDispatcher("/_view/event.jsp").forward(req, resp);
+	}
+	
+	private Integer getIntegerFromParameter(String s) {
+		if (s == null || s.equals("")) {
+			return null;
+		} else {
+			return Integer.parseInt(s);
+		}
 	}
 }
