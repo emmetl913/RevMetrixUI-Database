@@ -3,11 +3,11 @@ package edu.ycp.cs320.RevMetrix.model;
 import java.util.List;
 
 public class Shot{
-	private int pins, sessionID, gameID, frameID, shotNumber, ballID;
-	private String count, pinsLeft, type;
+	private int pins, sessionID, gameID, frameID, shotNumber, ballID, count;
+	private String leave, pinsLeft;
 	
 	//Constructor
-	public Shot(int sessionID, int gameID, int frameID, int shotNumber, String count, int ballID, String pinsLeft) {
+	public Shot(int sessionID, int gameID, int frameID, int shotNumber, int count, int ballID, String pinsLeft, String leave) {
 		this.sessionID = sessionID;
 		this.gameID = gameID;
 		this.frameID = frameID;
@@ -15,7 +15,7 @@ public class Shot{
 		this.count = count;
 		this.ballID = ballID;
 		this.pinsLeft = pinsLeft;
-//		this.type = shotType;
+		this.leave = leave;
 	}
 	
 	//pins
@@ -63,11 +63,11 @@ public class Shot{
 	{
 		this.shotNumber = num;
 	}
-	public String getCount()
+	public int getCount()
 	{
 		return this.count;
 	}
-	public void setCount(String count)
+	public void setCount(int count)
 	{
 		this.count = count;
 	}
@@ -89,11 +89,12 @@ public class Shot{
 	{
 		this.pinsLeft = left;
 	}
-	//type
-//	public String getType() {
-//		return this.type;
-//	}
-//	public void setType(String shotType) {
-//		this.type = shotType;
-//	}
+
+	public String getLeave() {
+		return leave;
+	}
+
+	public void setLeave(String leave) {
+		this.leave = leave;
+	}
 }

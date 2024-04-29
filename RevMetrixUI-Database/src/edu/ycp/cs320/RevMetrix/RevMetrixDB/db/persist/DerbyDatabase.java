@@ -318,7 +318,7 @@ public class DerbyDatabase implements IDatabase {
 					while(resultSet1.next())
 					{
 						found = true;
-						Shot shot = new Shot(0,0,0,0, "", 0, "");
+						Shot shot = new Shot(0,0,0,0, 0, 0, "", "");
 						loadShot(shot, resultSet1, 1);
 						result.add(shot);
 					}
@@ -338,9 +338,10 @@ public class DerbyDatabase implements IDatabase {
 		shot.setGameID(resultSet.getInt(index++));
 		shot.setSessionID(resultSet.getInt(index++));
 		shot.setShotNumber(resultSet.getInt(index++));
-		shot.setCount(resultSet.getString(index++));
+		shot.setCount(resultSet.getInt(index++));
 		shot.setBallID(resultSet.getInt(index++));
 		shot.setPinsLeft(resultSet.getString(index++));
+		shot.setLeave(resultSet.getString(index++));
 	}
 	
 	@Override
@@ -1320,10 +1321,17 @@ public class DerbyDatabase implements IDatabase {
 						+ " game_id integer,"
 						+ " session_id integer,"
 						+ " shot_number integer,"
-						+ " count varchar(10000),"
+						+ " count integer,"
 						+ " ball_id integer,"
-						+ " pins_left varchar(10)"
+						+ " pins_left varchar(10),"
+						+ " leave varchar(2)"
 						+ ")"	
+						
+						//Count is an int that is the count of pins knocked down on that shot
+						// pinsleft = "x", "124", "/", 
+						//leave is = to "no", "s", or "w" this is so we can get whether a shot is going to be a split or washout or not
+						//if spare attempt is true but leave = 's' or 'w' then we subtract those from spare attempts
+						
 					);
 					stmt8.executeUpdate();
 					tablesCreated += "Shots, ";
@@ -1511,9 +1519,10 @@ public class DerbyDatabase implements IDatabase {
 						insertShot.setInt(2, shot.getGameID());
 						insertShot.setInt(3, shot.getSessionID());
 						insertShot.setInt(4, shot.getShotNumber());
-						insertShot.setString(5, shot.getCount());
+						insertShot.setInt(5, shot.getCount());
 						insertShot.setInt(6, shot.getBallID());
 						insertShot.setString(7, shot.getPinsLeft());
+						insertShot.setString(8, shot.getLeave());
 						insertShot.addBatch();
 					}
 					//insertNewShotWithFrameID(1, 1, 1, 1, "4", 6, "1234");
