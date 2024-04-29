@@ -285,7 +285,7 @@
 
         <input type="hidden" id="selected-score-box">
 	
-		<form id="shotForm" method="post">
+		<form id="shotForm" action="${pageContext.servletContext.contextPath}/shot" method="post">
             <input type="hidden" id="ballIdInput" name="ballId" value="">
             <input type="hidden" id="selectedScoreBox" name="selectedScoreBox" value="">
             <input type="hidden" id="pinsKnockedDown" name="pinsKnockedDown" value="">
@@ -348,14 +348,18 @@
             <div class="row">
                 <div id="shot-count"></div>
                     <div class="score-box-form" data-shot="1">
-                        <div class="firstShot" id="score-box1" style="background-color: lightslategray;">
-                            <input type="hidden" id="shotNumber1" name="shotNumber" value="1">
-                        </div>
+                        <form id="scoreBoxForm1" method="post">
+                            <div class="firstShot" id="score-box1">
+                                <input type="hidden" id="shotNumber1" name="shotNumber" value="1">
+                            </div>
+                        </form>
                     </div>
                     <div class="score-box-form" data-shot="2">
-                        <div class="secondShot" id="score-box2" style="background-color: lightslategray;">
-                            <input type="hidden" id="shotNumber2" name="shotNumber" value="2">
-                        </div>
+                        <form id="scoreBoxForm2" method="post">
+                            <div class="secondShot" id="score-box2">
+                                <input type="hidden" id="shotNumber2" name="shotNumber" value="2">
+                            </div>
+                        </form>
                     </div>
                 </div>
             </div>
@@ -367,9 +371,11 @@
                 <div class="spare" onclick="setSpare()"><span>/</span></div>
             </div>
     
-            <div class="frame-buttons">
-                <button id="previousFrameBtn" name="action" type="button">Previous Frame</button>
-                <button id="nextFrameBtn" name="action" type="button">Next Frame</button>
+            <div class="row">
+                <div class="frame-buttons">
+                    <button id="previousFrameBtn" name="action" type="button">Previous Frame</button>
+                    <button id="nextFrameBtn" name="action" type="button">Next Frame</button>
+                </div>
             </div>
     
             <div id="error-message" style="color: red;"></div>
@@ -452,33 +458,73 @@
             });
 
             //selects first and second shot
+            // document.addEventListener("DOMContentLoaded", function(){
+            //     var scoreBoxes = document.querySelectorAll(".firstShot, .secondShot");
+
+            //     scoreBoxes.forEach(function(scoreBox){
+            //         scoreBox.addEventListener("click", function(){
+            //             scoreBoxes.forEach(function(box){
+            //                 box.classList.remove("selected");
+            //             });
+
+            //             scoreBox.classList.add("selected");
+
+            //             var scoreBoxId = scoreBox.id;
+
+            //             if(shotNumberInput){
+            //                 sendShotNumberToServlet(scoreBoxId);
+            //             }else{
+            //                 console.error("Score box ID is missing");
+            //             }
+            //         });
+            //     });
+            // });
+
+            //makes the first shot highlighted when the user loads the page
             document.addEventListener("DOMContentLoaded", function(){
-                var scoreBoxes = document.querySelectorAll(".firstShot, .secondShot");
-
-                scoreBoxes.forEach(function(scoreBox){
-                    scoreBox.addEventListener("click", function(){
-                        scoreBoxes.forEach(function(box){
-                            box.classList.remove("selected");
-                        });
-
-                        scoreBox.classList.add("selected");
-
-                        var shotNumberInput = document.querySelector('input[name="shotNumber"]');
-
-                        if(shotNumberInput){
-                            shotNumberInput.value = scoreBox.dataset.shot;
-                        }else{
-                            console.error("Could not find 'shotNumber' input element");
-                        }
-                    });
-                });
+                var firstScoreBox = document.getElementById("score-box1");
+                if(firstScoreBox){
+                    highlightScoreBox(firstScoreBox);
+                }
             });
 
             //allows the user to click the first and second score box
-            document.querySelectorAll('.score-box-form').forEach(function(scoreBoxForm){
-                scoreBoxForm.addEventListener('click', function(){
-                    var shotNumber = this.dataset.shot;
-                    sendShotNumberToServlet(shotNumber);
+            document.addEventListener("DOMContentLoaded", function(){
+                document.querySelectorAll('.score-box-form').forEach(function(scoreBoxForm){
+                    scoreBoxForm.addEventListener('click', function(){
+                        var form = this.querySelector('form');  //get the parent form element
+                        var formId = form.id;
+                        var shotNumber = this.dataset.shot;
+                        console.log("Form ID: ", formId);
+                        console.log("Shot number: ", shotNumber);
+
+                        var selectedScoreBoxId = "score-box" + shotNumber;
+
+                        var allScoreBoxes = document.querySelectorAll('.firstShot, .secondShot');
+                        allScoreBoxes.forEach(function(scoreBox){
+                            scoreBox.style.backgroundColor = 'lightslategray';
+                            scoreBox.style.color = 'black';
+                        });
+
+                        var selectedScoreBox = document.getElementById(selectedScoreBoxId);
+                        if(selectedScoreBox){
+                            highlightScoreBox(selectedScoreBox);
+                        }else{
+                            console.error("Score box not found with ID: ", selectedScoreBoxId);
+                        }
+
+                        var hiddenInput = document.getElementById('selectedScoreBox');
+                        console.log("Hidden input: ", hiddenInput);
+
+                        if(hiddenInput){
+                            hiddenInput.value = selectedScoreBoxId;
+
+                            // document.getElementById(formId).submit();
+                        }else{
+                            console.error("Hidden input field not found in form with ID: ", formId);
+                            console.log("Form content: ", form.innterHTML);
+                        }
+                    });
                 });
             });
 
@@ -491,30 +537,30 @@
                         console.log("Selected Ball ID: ", selectedBallId);
                         // sendBallIdToServlet(selectedBallId);
                         document.querySelector('#shotForm input[name="selectedBallId"]');
-                        document.getElementById("shotForm").submit();
+                        //document.getElementById("shotForm").submit();
                     }
                 });
             });
 
             //submits the ball information without refreshing the page
-            document.addEventListener("DOMContentLoaded", function(){
-                var ballForm = document.getElementById("shotForm");
-                ballForm.addEventListener("submit", function(event){
-                    event.preventDefault();
+            // document.addEventListener("DOMContentLoaded", function(){
+            //     var ballForm = document.getElementById("shotForm");
+            //     ballForm.addEventListener("submit", function(event){
+            //         event.preventDefault();
 
-                    var selectedBallId = document.querySelector('#ballArsenalDropdown');
-                    var shotNumber = getSelectedScoreBoxId();
+            //         var selectedBallId = document.querySelector('#ballArsenalDropdown');
+            //         var shotNumber = getSelectedScoreBoxId();
 
-                    if(selectedBallId && shotNumber){
-                        document.querySelector('#ballIdInput').value = selectedBallId;
-                        document.querySelector('input[name="shotNumber"]').value = shotNumber;
+            //         if(selectedBallId && shotNumber){
+            //             document.querySelector('#ballIdInput').value = selectedBallId;
+            //             document.querySelector('input[name="shotNumber"]').value = shotNumber;
 
-                        ballForm.submit();
-                    }else{
-                        console.log("Selected ball ID or shot number is missing");
-                    }
-                })
-            });
+            //             ballForm.submit();
+            //         }else{
+            //             console.log("Selected ball ID or shot number is missing");
+            //         }
+            //     })
+            // });
 
             //submits the next frame form so it resets the page and changes the frame number
             function submitForm(event) {
@@ -547,29 +593,52 @@
                 console.log("Selected Score Box: ", selectedScoreBox);
                 if(selectedScoreBox){
                     console.log("ID: ", selectedScoreBox.id);
+
+                    //remove all highligh from score boxes
+                    const allScoreBoxes = document.querySelectorAll('.firstShot, .secondShot');
+                    allScoreBoxes.forEach(function(scoreBox){
+                        scoreBox.style.backgroundColor = 'lightslategray';
+                        scoreBox.style.color = 'black';
+                    });
+                    highlightScoreBox(selectedScoreBox);
                     return selectedScoreBox.id;
                 }
             }
 
-            function sendShotNumberToServlet(scoreBoxId) {
-                var xhr = new XMLHttpRequest();
-                var url = "${pageContext.servletContext.contextPath}/shot";
-                var params = "scoreBoxId=" +scoreBoxId;
-
-                xhr.open("POST", url, true);
-                xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-                xhr.onreadystatechange = function() {
-                    if (xhr.readyState === XMLHttpRequest.DONE) {
-                        if (xhr.status === 200) {
-                            console.log("Shot number sent successfully.");
-                        } else {
-                            console.error("Failed to send shot number. Status:", xhr.status);
-                        }
-                    }
-                };
-                // xhr.send("shotNumber=" + encodeURIComponent(shotNumber));
-                xhr.send(params);
+            function highlightScoreBox(scoreBox){
+                scoreBox.style.backgroundColor = 'orange';
+                scoreBox.style.color = 'black';
             }
+
+            // function sendShotNumberToServlet(scoreBoxId) {
+            //     // var form = document.getElementById("shotForm");
+            //     // var selectedScoreBoxInput = form.querySelector('input[name="selectedScoreBox"]');
+
+            //     // if(selectedScoreBoxInput){
+            //     //     selectedScoreBoxInput.value = scoreBoxId;
+            //     //     form.submit();
+            //     // }else{
+            //     //     console.error("Hidden value field for selected score box not found");
+            //     // }
+
+            //     //creates new form element and sets the form's method and action attributes
+            //     var form = document.createElement('form');
+            //     form.setAttribute("method", "post");
+            //     form.setAttribute("action", "${pageContext.servletContext.contextPath}/shot");
+
+            //     var input = document.createElement('input');
+            //     input.setAttribute("type", "hidden");
+            //     input.setAttribute("name", "selectedScoreBoxId");
+            //     input.setAttribute("value", scoreBoxId);
+
+            //     //append input elements from the form
+            //     form.appendChild(input);
+
+            //     //append the form to the document body
+            //     document.body.appendChild(form);
+
+            //     form.submit();
+            // }
 
         </script>
     </body>
