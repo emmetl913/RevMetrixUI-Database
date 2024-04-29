@@ -231,7 +231,8 @@ public class BallArsenalServlet extends HttpServlet {
 	     controller.setBalls(balls);
 		req.setAttribute("balls", balls);
 		//session.setAttribute("ballArsenal", balls);
-		req.setAttribute("ballListSize", balls.size());
+
+		//req.setAttribute("ballListSize", balls.size());
 		//Update the current ball to the session account
 		session.setAttribute("currAccount", currentAccount);
 		
