@@ -271,7 +271,7 @@ public class InitialData {
 					break;
 				}
 				Iterator<String> i = tuple.iterator();
-
+				System.out.println(tuple);
 				// read author ID from CSV file, but don't use it
 				// it's there for reference purposes, just make sure that it is correct
 				// when setting up the BookAuthors CSV file

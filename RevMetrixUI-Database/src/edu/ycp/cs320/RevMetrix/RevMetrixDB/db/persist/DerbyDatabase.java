@@ -123,7 +123,7 @@ public class DerbyDatabase implements IDatabase {
 					
 					// check if any authors were found
 					if (!found) {
-						System.out.println("No Establishment were found in the database");
+						System.out.println("No Establishment were found in the database at AccID and ESTAID");
 					}
 					
 					return result;
@@ -887,7 +887,7 @@ public class DerbyDatabase implements IDatabase {
 				{
 					stmt1 = conn.prepareStatement(
 							"select game_id from games"
-							+ " where session_id = ? "
+							+ " where session_id = ?"
 					);
 					
 					stmt1.setInt(1, sessionID);
@@ -906,8 +906,8 @@ public class DerbyDatabase implements IDatabase {
 					if(game_id <= 0)
 					{
 						stmt2 = conn.prepareStatement(
-								"insert into games (sessionID, currentLane, gameNumber, score) "
-								+ " values(?, ?, ?, ?, ?)"
+								"insert into games (session_id, currentLane, gameNumber, score) "
+								+ " values(?, ?, ?, ?)"
 						);
 						stmt2.setInt(1, sessionID);
 						stmt2.setInt(2, currentLane);
@@ -1657,7 +1657,7 @@ public class DerbyDatabase implements IDatabase {
 					DBUtil.closeQuietly(insertSession);
 					DBUtil.closeQuietly(insertGame);
 					
-					
+					DBUtil.closeQuietly(insertEstablishment);
 					DBUtil.closeQuietly(insertEvent);
 					DBUtil.closeQuietly(insertFrame);
 					DBUtil.closeQuietly(insertShot);

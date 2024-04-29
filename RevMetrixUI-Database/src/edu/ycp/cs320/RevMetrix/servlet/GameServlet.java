@@ -2,6 +2,7 @@ package edu.ycp.cs320.RevMetrix.servlet;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -9,6 +10,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import edu.ycp.cs320.RevMetrix.controller.GameController;
 import edu.ycp.cs320.RevMetrix.model.Account;
 import edu.ycp.cs320.RevMetrix.model.Game;
 
@@ -29,56 +31,20 @@ public class GameServlet extends HttpServlet {
 		}
 		System.out.println("Game Servlet: doGet");	
 		HttpSession session = req.getSession();
-	    long createTime = session.getCreationTime();
-		   
-		// Get last access time of this Webpage.
-		long lastAccessTime = session.getLastAccessedTime();
-
-
-		   // Check if this is new comer on your Webpage.
+	   
+		Account acc = (Account) session.getAttribute("currAccount");
 		
-		String gamesListKey = new String("gamesListKey");
-		ArrayList<Game> games = (ArrayList<Game>)session.getAttribute(gamesListKey);
+		Game model = null;
+		GameController controller = new GameController();
+		controller.setModel(model);
 		
-		// If first visit: new session id
-		if (session.isNew() ){
-		  //initialize the games list with 3 games
-	      if(games == null) {
-				games = new ArrayList<Game>();
-				
-				games.add(new Game(1, 1, 14, 2, 3));
-				games.add(new Game(1, 2, 22, 3, 4));
-				games.add(new Game(1, 3, 4, 4, 5));
-				session.setAttribute(gamesListKey, games);
-			}
-		} 
-		if(games == null) {
-			games = new ArrayList<Game>();
-			
-			games.add(new Game(1, 1, 14, 2, 3));
-			games.add(new Game(1, 2, 22, 3, 4));
-			games.add(new Game(1, 3, 4, 4, 5));
-			session.setAttribute(gamesListKey, games);
-		}
-		//Get model and userID from jsp
-		games = (ArrayList<Game>)session.getAttribute(gamesListKey);
-		//controller.setModel(model);
-		if(games != null) {
-			for(Game g: games) {
-				System.out.println(g.getLane());
-			}
-		}
+		List<Game> resultList = controller.getGameBySessionID(1);
 		
-        
-        //Initialize a Game that will be sent out to other portions of the website (currentGame)
-        Game currentGame = null;
-        
-        // Retrieve the value of the button clicked
-        String buttonValue = req.getParameter("gameStatus");
-        
-        
-		req.setAttribute("gameObjArr", games);
-		session.setAttribute(gamesListKey, games);
+		String gameListKey = "gameListKey";
+		
+		req.setAttribute("gameObjArr", resultList);
+		session.setAttribute(gameListKey, resultList);
+		req.setAttribute("game", model);
 		
 		// call JSP to generate empty form
 		req.getRequestDispatcher("/_view/game.jsp").forward(req, resp);
@@ -90,74 +56,39 @@ public class GameServlet extends HttpServlet {
 			throws ServletException, IOException {
 		System.out.println("Game Servlet: doPost");
 		
+		Game currentGame = new Game(0, 0, 0, 0, 0);
+		Game model = new Game(0, 0, 0, 0, 0);
+		GameController controller = new GameController();
+		
 		HttpSession session = req.getSession();
-	    long createTime = session.getCreationTime();
-		   
-		// Get last access time of this Webpage.
-		long lastAccessTime = session.getLastAccessedTime();
-		String userIDKey = new String("userID");
-		String userID = new String("ABCD");
-
-		   // Check if this is new comer on your Webpage.
+		Account acc = (Account) session.getAttribute("currAccount");
+		int sessionID = 0;
 		
-		String gamesListKey = new String("gamesListKey");
-		ArrayList<Game> games = (ArrayList<Game>)session.getAttribute(gamesListKey);
-		
-		// If first visit: new session id
-		if (session.isNew() ){
-		  //initialize the games list with 3 games
-		  games.add(new Game(1, 1, 14, 2, 3));
-		  games.add(new Game(1, 2, 22, 3, 4));
-		  games.add(new Game(1, 3, 4, 4, 5));
-		  session.setAttribute(gamesListKey, games);
-		  
-		} 
-		if(games == null) {
-			games = new ArrayList<Game>();
-			
-			games.add(new Game(1, 1, 14, 2, 3));
-			games.add(new Game(1, 2, 22, 3, 4));
-			games.add(new Game(1, 3, 4, 4, 5));
-			session.setAttribute(gamesListKey, games);
-		}
-		//Get model and userID from jsp
-		userID = (String)session.getAttribute(userIDKey);
-		games = (ArrayList<Game>)session.getAttribute(gamesListKey);
-		//controller.setModel(model);
-//		if(games != null) {
-//			for(Game g: games) {
-//				System.out.println(g.getLane());
-//			}
-//		}
-		
-        
-        //Initialize a Game that will be sent out to other portions of the website (currentGame)
-        Game currentGame = null;
-        
+		controller.setModel(model);
+        String gamesListKey = new String("gamesListKey");
+		List<Game> games = controller.getGameBySessionID(0);
         // Retrieve the value of the button clicked
         String buttonValue = req.getParameter("gameStatus");
         
-        // Check which button was clicked
-//        if ("startNewGame".equals(buttonValue)) {
-//        	Game g = new Game(games.size()+1,1);
-//        	games.add(g); //game gets added to the end of the list //dont worry that the gameNumber will repeat.
-//        	//Eventually it won't because it will take database values
-//        	currentGame = g;
-//        	System.out.println(g.getGameNumber());
-//        }
+       
         
         Integer laneInput = getIntegerFromParameter(req.getParameter("laneInput"));
+        
         if(laneInput == null) {
         	laneInput = 0;
         }
+        model.setLane(laneInput);
+        
         String dropDownValue = req.getParameter("gameDropDown");
       //  Integer selectedIndex = Integer.parseInt(dropdownValue);
         //Make a new game and add it to game list
         if(req.getParameter("select") != null) {
         	//currentGame = games.get(selectedIndex);
-
-        	currentGame = games.get(Integer.parseInt(dropDownValue));
-           // System.out.println("Game at index: x" +" selected: " + dropDownValue);
+        	if(dropDownValue != null)
+        	{
+        		currentGame = games.get(Integer.parseInt(dropDownValue));
+        	}
+        	// System.out.println("Game at index: x" +" selected: " + dropDownValue);
         	System.out.println(currentGame.getLane());
         	
         	req.setAttribute("gameObjArr", games);
@@ -168,9 +99,9 @@ public class GameServlet extends HttpServlet {
         }
         if(req.getParameter("new") != null) {
         	//currentGame = selected game from dropdown
+        
         	
-        	currentGame = games.get(games.size()-1);
-        	
+        	controller.insertNewGame(currentGame.getGameID(), currentGame.getSessionID(), currentGame.getLane(), currentGame.getGameNumber(), currentGame.getScore());
         	req.setAttribute("gameObjArr", games);
     		session.setAttribute(gamesListKey, games);
     		session.setAttribute("currentGame", currentGame);
@@ -180,9 +111,7 @@ public class GameServlet extends HttpServlet {
         
         
         req.setAttribute("gameObjArr", games);
-		session.setAttribute(gamesListKey, games);
 		session.setAttribute("currentGame", currentGame);
-		Account acc = (Account)session.getAttribute("currAccount");
 		acc.setCurrentGame((Game)session.getAttribute("currentGame"));
 		session.setAttribute("currAccount", acc);
 

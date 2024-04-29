@@ -8,7 +8,7 @@ public class Account {
 	private Session currentSession;
 	private Game currentGame;
 	private int accountId; 
-	//private Frame currentFrame;
+	private Frame currentFrame;
 	private Shot currentShot;
 	
 	
@@ -60,7 +60,6 @@ public class Account {
 	}
 
 	public void setCurrentGame(Game currGame) {
-		// TODO Auto-generated method stub
 		currentGame = currGame;
 	}
 
@@ -79,7 +78,42 @@ public class Account {
 	public void setLastName(String lastName) {
 		this.lastName = lastName;
 	}
-	
+
+	public Event getCurrentEvent() {
+		return currentEvent;
+	}
+
+	public void setCurrentEvent(Event currentEvent) {
+		this.currentEvent = currentEvent;
+	}
+
+	public Session getCurrentSession() {
+		return currentSession;
+	}
+
+	public void setCurrentSession(Session currentSession) {
+		this.currentSession = currentSession;
+	}
+
+	public Shot getCurrentShot() {
+		return currentShot;
+	}
+
+	public void setCurrentShot(Shot currentShot) {
+		this.currentShot = currentShot;
+	}
+
+	public Frame getCurrentFrame() {
+		return currentFrame;
+	}
+
+	public void setCurrentFrame(Frame currentFrame) {
+		this.currentFrame = currentFrame;
+	}
+
+	public Game getCurrentGame() {
+		return currentGame;
+	}	
 
 	
 }
