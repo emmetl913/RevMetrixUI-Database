@@ -247,6 +247,8 @@ button:hover {
 			            	int i = 0;
 			                for (Ball ball : balls) {
 			                	String ballColor = ball.getColor1();
+                            }
+                        }
 			        %>
 			        <div class="ball-section" onclick="selectBall ('<%= ball.getBallId() %>')"><!--  style="background-color: <%=ballColor%>;"-->
 				    <canvas id="shaderCanvas_<%=i%>" style="border-radius: 50%;"></canvas>

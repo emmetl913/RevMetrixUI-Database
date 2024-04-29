@@ -32,6 +32,7 @@ public class EstablishmentRegController {
 	public Establishment getEstablishmentByAccountAndEstablishmentID(int accID, int estaID){
 		return  db.getEstablishmentByAccountAndEstablishmentID(accID, estaID);
 	}
+	
 	public List<Establishment> getAllEstablishmentsForAccount(int accountId) {
 	
 	// get the list of (Author, Book) pairs from DB

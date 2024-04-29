@@ -70,50 +70,58 @@ public class EventServlet extends HttpServlet {
 
 		Event model = new Event();
 		EventController controller = new EventController(acc.getAccountId());
+		
+		
 				
 		// Get session creation time.
 
 		
 		controller.setModel(model);
 		ArrayList<Event> events = controller.getEvents();
-        
-		//on button press
-		String newEventName = req.getParameter("eventName");
-		int newStanding = Integer.valueOf(req.getParameter("standing"));
-		String EstaName = req.getParameter("establishment");
-        String type = null;
-        int esstabID = -1;
-        
-        Establishment estaModel = new Establishment();
+		
+		Establishment estaModel = new Establishment();
 		EstablishmentRegController estaController = new EstablishmentRegController(acc.getAccountId());
 		estaController.setModel(estaModel);
         ArrayList<Establishment> estabs = estaController.getEstablishments(); //get ball ArrayList from session updated model
 		
-        
-		
-		try {
-			
-			if (req.getParameter("newType").equals("Practice")) {
-				type = "practice";
-			} else if (req.getParameter("newType").equals("Tournament")) {
-				type = "tournament";
-			} else if (req.getParameter("newType").equals("Leauge")) {
-				type = "leauge";
-			} else {
-				type = null;
-			}
-			
-			for(Establishment esta : estabs) {
-				if(EstaName.equals(esta.getEstablishmentName()))
-					esstabID = esta.getEstaId();
-			}
-						
-		controller.addEvent(acc.getAccountId(), esstabID , 9, newEventName,type, newStanding);
-		System.out.print("Account id:"+acc.getAccountId()+" esstabID:" + esstabID+" time:" + " 9 " +" newEventName:" + newEventName+" type:" + type+" newStanding:" + newStanding);
+	    String selectedEvent = req.getParameter("selectedEvent");
 
-		}catch(NullPointerException e) {
-			errorMessage = "Invalid Input";
+		
+		if(selectedEvent != null) {
+			
+		}else {
+			try {
+				
+				String newEventName = req.getParameter("eventName");
+				int newStanding = Integer.valueOf(req.getParameter("standing"));
+				String EstaName = req.getParameter("establishment");
+		        String type = null;
+		        int esstabID = -1;
+				
+				if (req.getParameter("newType").equals("Practice")) {
+					type = "practice";
+				} else if (req.getParameter("newType").equals("Tournament")) {
+					type = "tournament";
+				} else if (req.getParameter("newType").equals("Leauge")) {
+					type = "leauge";
+				} else {
+					type = null;
+				}
+				
+				for(Establishment esta : estabs) {
+					if(EstaName.equals(esta.getEstablishmentName()))
+						esstabID = esta.getEstaId();
+				}
+							
+			controller.addEvent(acc.getAccountId(), esstabID , 9, newEventName,type, newStanding);
+			System.out.print("Account id:"+acc.getAccountId()+" esstabID:" + esstabID+" time:" + " 9 " +" newEventName:" + newEventName+" type:" + type+" newStanding:" + newStanding);
+
+			}catch(NullPointerException e) {
+				errorMessage = "Invalid Input";
+			}
 		}
+        
+		//on button press
 		
 		estabs = estaController.getEstablishments();
         
