@@ -743,7 +743,7 @@ public class DerbyDatabase implements IDatabase {
 					if(shot_id <= 0)
 					{
 						stmt2 = conn.prepareStatement(
-								"insert into shots (frame_id, game_id, session_id, shot_number, count, ball_id, pins_left) values (?, ?, ?, ?, ?, ?, ?) "
+								"insert into shots (frame_id, game_id, session_id, shot_number, count, ball_id, pins_left, leave) values (?, ?, ?, ?, ?, ?, ?, ?) "
 						);
 						stmt2.setInt(1, frameID);
 						stmt2.setInt(2, gameID);
@@ -1512,7 +1512,7 @@ public class DerbyDatabase implements IDatabase {
 				String tablesPopulated = "Tables Populated: ";
 				
 				try {
-					insertShot = conn.prepareStatement("insert into shots (frame_id, game_id, session_id, shot_number, count, ball_id, pins_left) values (?, ?, ?, ?, ?, ?, ?)");
+					insertShot = conn.prepareStatement("insert into shots (frame_id, game_id, session_id, shot_number, count, ball_id, pins_left, leave) values (?, ?, ?, ?, ?, ?, ?, ?)");
 					for(Shot shot : shotList)
 					{
 						insertShot.setInt(1, shot.getFrameID());
