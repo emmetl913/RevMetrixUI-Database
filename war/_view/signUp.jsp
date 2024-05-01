@@ -6,7 +6,7 @@
   <style>
         body {
             font-family: Arial, sans-serif;
-            background-color: #f4f4f4;
+            background-color: darkgray;
             margin: 0;
             padding: 0;
         }
@@ -17,7 +17,7 @@
             background-color: #fff;
             padding: 20px;
             border-radius: 8px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            box-shadow: 10px 10px 5px black;
         }
 
         label {
@@ -73,27 +73,27 @@
 			<table>
 				<tr>
 					<td class="label">Email: </td>
-					<td><input type="text" name="email" size="12" value="" /></td>
+					<td><input type="text" name="email" size="12" value="${email}" /></td>
 				</tr>
 				<tr>
 					<td class="label">Username: </td>
-					<td><input type="text" name="username" size="12" value="" /></td>
+					<td><input type="text" name="username" size="12" value="${username}" /></td>
 				</tr>
 				<tr>
 					<td class="label">First Name: </td>
-					<td><input type="text" name="firstname" size="12" value="" /></td>
+					<td><input type="text" name="firstname" size="12" value="${firstname}" /></td>
 				</tr>
 				<tr>
 					<td class="label">Last Name: </td>
-					<td><input type="text" name="lastname" size="12" value="" /></td>
+					<td><input type="text" name="lastname" size="12" value="${lastname}" /></td>
 				</tr>
 				<tr>
 					<td class="label">Password: </td>
-					<td><input type="password" name="password" size="12" value="" /></td>
+					<td><input type="password" name="password" size="12" value="${password}" /></td>
 				</tr>
 				<tr>
 					<td class="label">Confirm Password: </td>
-					<td><input type="password" name="password2" size="12" value="" /></td>
+					<td><input type="password" name="password2" size="12" value="${password2}" /></td>
 				</tr>
 			</table>
 			<input name="signUp" type="submit" value="Sign Up!" />

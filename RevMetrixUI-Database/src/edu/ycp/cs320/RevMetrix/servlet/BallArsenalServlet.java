@@ -134,6 +134,11 @@ public class BallArsenalServlet extends HttpServlet {
 		boolean rightHanded = true;
 		float ballWeight = 0;
 
+		req.setAttribute("ballName", req.getParameter("ballName"));
+		req.setAttribute("ballBrand", req.getParameter("ballBrand"));
+		req.setAttribute("ballWeight", req.getParameter("ballWeight"));
+		req.setAttribute("ballColor1", req.getParameter("ballColor1"));
+		req.setAttribute("ballColor2", req.getParameter("ballColor2"));
 		//on button press
 		if (req.getParameter("addBall") != null ) {
 			  Boolean hasSelectedHand = false;
@@ -224,7 +229,6 @@ public class BallArsenalServlet extends HttpServlet {
 		{
 			System.out.println("you are dumb you should've figured this out by now dumbass");
 		}
-		
 		
 		req.setAttribute("errorMessage", errorMessage);
 		 balls = (ArrayList<Ball>) controller.getBallByAccountId(currentAccount.getAccountId());

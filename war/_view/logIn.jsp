@@ -16,7 +16,7 @@
             background-color: #fff;
             padding: 20px;
             border-radius: 8px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            box-shadow: 10px 10px 5px black;
     }
 
 	label {
@@ -70,11 +70,11 @@
 			<table>
 				<tr>
 					<td class="label">Username: </td>
-					<td><input type="text" name="username" size="12" value="" autocomplete="off" /></td>
+					<td><input type="text" name="username" size="12" value="${username}" autocomplete="off" /></td>
 				</tr>
 				<tr>
 					<td class="label">Password: </td>
-					<td><input type="password" name="password" size="12" value="" autocomplete="off" /></td>
+					<td><input type="password" name="password" size="12" value="${password}" autocomplete="off" /></td>
 				</tr>
 				</table>
 			<input name="logIn" type="submit" value="Log In!">

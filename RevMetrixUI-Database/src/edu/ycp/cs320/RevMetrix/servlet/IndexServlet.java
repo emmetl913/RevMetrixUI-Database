@@ -43,7 +43,18 @@ public class IndexServlet extends HttpServlet {
 	@Override
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException {
+		System.out.println("Index Servlet: doPost");
 		
+		HttpSession session = req.getSession();		
+		Account acc = (Account) session.getAttribute("currAccount");
+
+		Event model = new Event();
+		EventController controller = new EventController(acc.getAccountId());
+		controller.setModel(model);
+		ArrayList<Event> events = controller.getEvents();
+		
+		req.setAttribute("event", events);
+		req.getRequestDispatcher("/_view/index.jsp").forward(req, resp);
 		
 	}
 	
