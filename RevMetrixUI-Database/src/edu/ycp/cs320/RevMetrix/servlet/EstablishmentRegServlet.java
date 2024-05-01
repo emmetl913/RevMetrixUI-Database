@@ -94,8 +94,8 @@ public class EstablishmentRegServlet extends HttpServlet {
 		if (req.getParameter("submitEstab") != null ) {
 			//System.out.println(model.getBallAtIndex(0).getName());
 			controller.addEstablishment(acc.getAccountId(),newEstablishmentName, newEstablishmentAddress);
-			
 		}
+		
 		if(req.getParameter("submitRemoveEstab") != null) {
 			//controller.removeBall(removeBallName);
 			 controller.removeEstablishment(acc.getAccountId(), removeEstablishmentName);

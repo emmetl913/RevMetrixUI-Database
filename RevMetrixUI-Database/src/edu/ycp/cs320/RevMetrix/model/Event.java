@@ -4,15 +4,15 @@ import java.util.ArrayList;
 import edu.ycp.cs320.RevMetrix.controller.EstablishmentRegController;
 
 public class Event {
-	private String eventName, type, standingString, establishmentString;
-	private int standing, eventID, estbID, time, accountID;
+	private String eventName, type, standingString, establishmentString, time;
+	private int standing, eventID, estbID, accountID;
 	private Establishment establishment;
 	private EstablishmentRegController controller;
 	
 	public Event() {
 	}
 	
-	public Event(int eventID, int accountID, int estbID, String name, int time, String type, int standing) {
+	public Event(int eventID, int accountID, int estbID, String name, String time, String type, int standing) {
 		this.accountID = accountID;
 		this.eventID = eventID;
 		this.estbID = estbID;
@@ -25,11 +25,11 @@ public class Event {
 		this.standingString = Integer.toString(standing);
 	}
 	
-	public int getTime()
+	public String getTime()
 	{
 		return this.time;
 	}
-	public void setTime(int time)
+	public void setTime(String time)
 	{
 		this.time = time;
 	}

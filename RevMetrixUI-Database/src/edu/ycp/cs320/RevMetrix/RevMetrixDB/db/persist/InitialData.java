@@ -133,7 +133,7 @@ public class InitialData {
 				int accID = Integer.parseInt(i.next());
 				int estbID = Integer.parseInt(i.next());
 				String name = i.next();
-				int time = Integer.parseInt(i.next());
+				String time = i.next();
 				String type = i.next();
 				int standing = Integer.parseInt(i.next());
 				
