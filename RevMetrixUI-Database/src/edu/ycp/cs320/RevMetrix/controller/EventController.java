@@ -48,7 +48,7 @@ public class EventController {
 			return eventList;
 		}
 		
-	public Integer insertNewEvent(int acc_id, int estb_id, String name, int time, String type, int standing) {
+	public Integer insertNewEvent(int acc_id, int estb_id, String name, String time, String type, int standing) {
 					
 			//acc_id, estb_id, name, time, type, standing
 			
@@ -71,9 +71,10 @@ public class EventController {
 		return events;
 	}
 	//adds a ball to the arsenal with the name and color
-	public void addEvent(int acc_id, int estb_id, int time, String name, String type, int standing) {
-		db.insertNewEvent(acc_id, estb_id, name, time, type, standing);
+	public Integer addEvent(int acc_id, int estb_id, String time, String name, String type, int standing) {
+		return db.insertNewEvent(acc_id, estb_id, name, time, type, standing);
 	}
+	
 	//finds the ball that is to be removed, and removes it from the list
 //	public void removeEvent(String name) {
 //		for(Event event : this.event.getEvents()) {

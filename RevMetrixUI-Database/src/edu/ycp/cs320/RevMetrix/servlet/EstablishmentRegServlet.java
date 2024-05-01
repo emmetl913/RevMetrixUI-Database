@@ -2,7 +2,6 @@ package edu.ycp.cs320.RevMetrix.servlet;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Iterator;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -62,6 +61,10 @@ public class EstablishmentRegServlet extends HttpServlet {
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException {
 		
+		if(!AccountServlet.validLogin()) {
+            req.getRequestDispatcher("/_view/logIn.jsp").forward(req, resp);
+        }
+		
 		System.out.println("establishmentReg Servlet: doPost");
 		
 		
@@ -91,8 +94,8 @@ public class EstablishmentRegServlet extends HttpServlet {
 		if (req.getParameter("submitEstab") != null ) {
 			//System.out.println(model.getBallAtIndex(0).getName());
 			controller.addEstablishment(acc.getAccountId(),newEstablishmentName, newEstablishmentAddress);
-			
 		}
+		
 		if(req.getParameter("submitRemoveEstab") != null) {
 			//controller.removeBall(removeBallName);
 			 controller.removeEstablishment(acc.getAccountId(), removeEstablishmentName);

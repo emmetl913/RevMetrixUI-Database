@@ -123,7 +123,7 @@ public class DerbyDatabase implements IDatabase {
 					
 					// check if any authors were found
 					if (!found) {
-						System.out.println("No Establishment were found in the database");
+						System.out.println("No Establishment were found in the database at AccID and ESTAID");
 					}
 					
 					return result;
@@ -985,7 +985,7 @@ public class DerbyDatabase implements IDatabase {
 				{
 					stmt1 = conn.prepareStatement(
 							"select game_id from games"
-							+ " where session_id = ? "
+							+ " where session_id = ?"
 					);
 					
 					stmt1.setInt(1, sessionID);
@@ -1004,8 +1004,8 @@ public class DerbyDatabase implements IDatabase {
 					if(game_id <= 0)
 					{
 						stmt2 = conn.prepareStatement(
-								"insert into games (sessionID, currentLane, gameNumber, score) "
-								+ " values(?, ?, ?, ?, ?)"
+								"insert into games (session_id, currentLane, gameNumber, score) "
+								+ " values(?, ?, ?, ?)"
 						);
 						stmt2.setInt(1, sessionID);
 						stmt2.setInt(2, currentLane);
@@ -1048,7 +1048,7 @@ public class DerbyDatabase implements IDatabase {
 	}
 	
 	@Override
-	public Integer insertNewEvent(int accID, int estbID, String name, int time, String type, int standing) {
+	public Integer insertNewEvent(int accID, int estbID, String name, String time, String type, int standing) {
 		return executeTransaction(new Transaction<Integer>() {
 			@Override
 			public Integer execute(Connection conn) throws SQLException {
@@ -1072,7 +1072,7 @@ public class DerbyDatabase implements IDatabase {
 					
 					stmt1.setInt(1, accID);
 					stmt1.setString(2, name);
-					stmt1.setInt(3, time);
+					stmt1.setString(3, time);
 					
 					resultSet1 = stmt1.executeQuery();
 					
@@ -1094,7 +1094,7 @@ public class DerbyDatabase implements IDatabase {
 						stmt2.setInt(1, accID);
 						stmt2.setInt(2, estbID);
 						stmt2.setString(3, name);
-						stmt2.setInt(4, time);
+						stmt2.setString(4, time);
 						stmt2.setString(5, type);
 						stmt2.setInt(6, standing);
 						
@@ -1110,7 +1110,7 @@ public class DerbyDatabase implements IDatabase {
 								
 						stmt3.setInt(1, accID);
 						stmt3.setString(2, name);
-						stmt3.setInt(3, time);
+						stmt3.setString(3, time);
 						
 						resultSet3 = stmt3.executeQuery();
 						
@@ -1375,7 +1375,7 @@ public class DerbyDatabase implements IDatabase {
 		event.setAccount(resultSet.getInt(index++));
 		event.setEstbID(resultSet.getInt(index++));
 		event.setName(resultSet.getString(index++));
-		event.setTime(resultSet.getInt(index++));
+		event.setTime(resultSet.getString(index++));
 		event.setType(resultSet.getString(index++));
 		event.setStanding(resultSet.getInt(index++));
 
@@ -1452,7 +1452,7 @@ public class DerbyDatabase implements IDatabase {
 							" acc_id integer," +
 							" estb_id integer,"+
 							" name varchar(40),"+
-							" time integer,"+
+							" time varchar(40),"+
 							" type varchar(40),"+
 							" standing integer"+
 							")"
@@ -1644,7 +1644,7 @@ public class DerbyDatabase implements IDatabase {
 						insertEvent.setInt(1, event.getAccount());
 						insertEvent.setInt(2, event.getEstbID());
 						insertEvent.setString(3, event.getEventName());
-						insertEvent.setInt(4, event.getTime());
+						insertEvent.setString(4, event.getTime());
 						insertEvent.setString(5, event.getType());
 						insertEvent.setInt(6, event.getStanding());
 						insertEvent.addBatch();
@@ -1763,7 +1763,7 @@ public class DerbyDatabase implements IDatabase {
 					DBUtil.closeQuietly(insertSession);
 					DBUtil.closeQuietly(insertGame);
 					
-					
+					DBUtil.closeQuietly(insertEstablishment);
 					DBUtil.closeQuietly(insertEvent);
 					DBUtil.closeQuietly(insertFrame);
 					DBUtil.closeQuietly(insertShot);
@@ -1843,5 +1843,4 @@ public class DerbyDatabase implements IDatabase {
 			}
 		});
 	}
-	
 }
