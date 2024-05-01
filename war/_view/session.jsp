@@ -44,7 +44,7 @@
             background-color: #fff;
             padding: 20px;
             border-radius: 8px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            box-shadow: 10px 10px 5px black;
         }
 
         label {
@@ -162,126 +162,10 @@
         }
         body {
             font-family: Arial, sans-serif;
-            background-color: #f4f4f4;
+            background-color: darkgray;
             margin: 0;
             padding: 0;
-		}
-        /* Styling for the shot level */
-        .shotHeader{
-        	margin-right: 20px;
-        	display: flex;
-        	align-items: center;
-        	justify-content: center;
-        	position: relative;
-        	font-size: 28px;
-        	font-weight: bold;
-        }
-        .shotHeader label{
-        	margin-right: 10px;
-        	text-align: center;
-        }
-        .shotHeader input {
-        	border: 2px #000000;
-        	text-align: center;
-        	font-weight: bold;
-        }
-        .row {
-        	display: flex;
-        	justify-content: center;
-        }
-        .pin {
-            width: 30px;
-            height: 30px;
-            border: 2px #000000;
-            border-radius: 50%;
-            margin: 5px;
-            display: flex;
-            align-items: center;
-            margin-top: 50px;
-        }
-
-        .row{
-            display: flex;
-            justify-content: center;
-        }
-
-        .circle{
-            width: 45px;
-            height: 45px;
-            border-radius: 50%;
-            border: 1px solid black;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            margin: 5px;
-            cursor: pointer;
-            font-weight: 900;
-        }
-
-        .circle.selected{
-            background-color: black;
-            color: white;
-        }
-
-        .shot-buttons{
-            margin-top: 20px;
-        }
-
-        .shot-button{
-            margin: 5px;
-            padding: 10px 20px;
-            font-size: 16px;
-            cursor: pointer;
-            font-weight: 900;
-        }
-
-        #game-info{
-            display: inline-block;
-            justify-content: center;
-            align-items: center;
-            margin-bottom: 20px;
-            margin-top: 10px;
-            margin-right: 15px;
-            font-size: 24px;
-            font-weight: 900;
-        }
-
-        .frame-buttons{
-            margin-top: 5px;
-        }
-
-        .frame-buttons button{
-            margin: 25px;
-        }
-
-        .game-number{
-            margin-right: 30px;
-            border: 1px solid black;
-            padding: 5px;
-            padding-left: 25px;
-            padding-right: 25px;
-        }
-
-        .frame-number{
-            border: 1px solid black;
-            padding: 5px;
-            padding-left: 25px;
-            padding-right: 25px;
-        }
-
-        .color-box{
-            width: 40px;
-            height: 40px;
-            background-color: gray;
-            border: 2px solid black;
-            cursor: pointer;
-            margin: 20px;
-        }
-
-        .selected{
-            background-color: orange;
-        }
-
+        }  
         		/* Style for the black sidebar */
 	.sidebar {
 	height: 100%;
@@ -361,7 +245,7 @@
 <c:if test="${! empty errorMessage}">
 	<div class="error">${errorMessage}</div>
 </c:if>
-	<input type="hidden" name="step" id="step" value="1">
+	<!-- <input type="hidden" name="step" id="step" value="1"> -->
 	<!-- Side bar, duh -->
 	<div class="sidebar">
 		 <a href="${pageContext.servletContext.contextPath}/index">
@@ -369,7 +253,7 @@
 		  </a>
 	      <a href="${pageContext.servletContext.contextPath}/establishmentReg">Establishment Registration</a>
           <a href="${pageContext.servletContext.contextPath}/ballArsenal">Ball Arsenal</a>
-		  <a class="dropbtn" href="#" onclick="toggleDropdown(), nextStep(1)">Start Bowling!</a>
+		  <a class="dropbtn" href="#" onclick="toggleDropdown(), nextStep(1)">Start Bowling</a>
 		  <div class="dropdown-content" id="myDropdown">
 		        <a href="${pageContext.servletContext.contextPath}/event">&nbsp&nbsp >Event</a>
 	        <a href="${pageContext.servletContext.contextPath}/session">&nbsp&nbsp >Session</a>
@@ -380,7 +264,16 @@
             <a href="${pageContext.servletContext.contextPath}/logIn"class="bottom-link">Sign Out</a>
 	</div>
 <form id="session" action="${pageContext.servletContext.contextPath}/session" method="post">
+	<div class="container"> 
+		<h2>Pick an existing session</h2>
+		
+		 <input type="hidden" id="selectedSession" name="selectedSession">
+		 <tr>
+            <td><a href="${pageContext.servletContext.contextPath}/game"><input type="Submit" id="SubmitCurrentSession" name="SubmitCurrentSession" value="Submit"></a></td>
+         </tr>
+	</div>
 	<div class="container">
+		<h2>Start a new session</h2>
 		<div class="active">
 			<th>Location: </th>
 			<th>Total Score: </th>

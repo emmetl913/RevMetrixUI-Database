@@ -26,7 +26,7 @@
 	        body{
 				font-family: Arial, Helvetica, sans-serif;
 	        	display:flex;
-								background-color: darkgray;
+				background-color: darkgray;
 
             	
 			}
@@ -35,9 +35,10 @@
 	        }
 			header {
 				text-align: center;
-				position: absolute;
-				top: 10px; /* Adjust the top position as needed */
-				width: 100%; /* Ensure the header spans the full width */
+				padding-left: 400px;
+				max-width: 600px;
+				margin: 50px auto;
+				width: 100%;  /* Ensure the header spans the full width */
 			}
 			input {
 	            width: 70%;
@@ -151,7 +152,21 @@
   margin-left: 250px; /* Same width as the sidebar */
   padding: 20px;
 }
- 
+.bottom-link {
+  position: absolute;
+  bottom: 20px; /* Adjust this value to raise or lower the link */
+  left: 0;
+  width: 84%; 
+  text-align: left;
+  }
+
+  .bottom-link2 {
+  position: absolute;
+  bottom: 60px; /* Adjust this value to raise or lower the link */
+  left: 0;
+  width: 84%; 
+  text-align: left;
+  }
    
 
 /* Responsive layout - when the screen is less than 600px wide, make the sidebar and the main content stack on top of each other */
@@ -190,33 +205,34 @@ button:hover {
 	</head>
 
 	<body>
-		<div class="sidebar">
-		 <a href="${pageContext.servletContext.contextPath}/index">
+		<<div class="sidebar">
+			<a href="${pageContext.servletContext.contextPath}/index">
 			<img src="${pageContext.request.contextPath}/_view/BowlingBall.png"width="100" height="100">
 		  </a>
 	      <a href="${pageContext.servletContext.contextPath}/establishmentReg">Establishment Registration</a>
-		  <a href="${pageContext.servletContext.contextPath}/logIn">Sign Out</a>
-          <a href="${pageContext.servletContext.contextPath}/shot">Shot</a>
           <a href="${pageContext.servletContext.contextPath}/ballArsenal">Ball Arsenal</a>
-          <a href="https://github.com/emmetl913/RevMetrixUI-Database">GitHub</a>
-          <a href="${pageContext.servletContext.contextPath}/startBowling">Start Bowling</a>
+          <a href="${pageContext.servletContext.contextPath}/event">Start Bowling</a>
+
+          <a href="https://github.com/emmetl913/RevMetrixUI-Database"class="bottom-link2">GitHub</a>
+          <a href="${pageContext.servletContext.contextPath}/logIn"class="bottom-link">Sign Out</a>
 		  </div>
 	
 		<form id="ballArsenalForm" action="${pageContext.servletContext.contextPath}/ballArsenal" method="post">
-			<header><h1>Bowling Ball Arsenal</h1></header>	
+			
 	          <input type="hidden" id="type" name="newType" value="">
-
+			
 			<div class="ball-box" id="ballBoxDiv">
 
 				<c:if test="${! empty errorMessage}">
 					<div class="error">${errorMessage}</div>
 				</c:if>
 				<div id="add-ball-form">
-					<input type="text" name="ballName" placeholder="Ball Name">
-				    <input type="text" name="ballBrand" placeholder="Ball Brand"><br>
-				    <input type="number" name="ballWeight" placeholder="Ball Weight (in pounds)" step="0.01" class="color-picker">
-				    <input type="color" name="ballColor1" placeholder="Ball Color1" class="color-picker">
-				    <input type="color" name="ballColor2" placeholder="Ball Color2" class="color-picker">
+				<h2>Ball Arsenal</h2>
+					<input type="text" name="ballName" value="${ballName}" placeholder="Ball Name">
+				    <input type="text" name="ballBrand" value="${ballBrand}" placeholder="Ball Brand"><br>
+				    <input type="number" name="ballWeight" value="${ballWeight}" placeholder="Ball Weight (in pounds)" step="0.01" class="color-picker">
+				    <input type="color" name="ballColor1" value="${ballColor1}" placeholder="Ball Color1" class="color-picker">
+				    <input type="color" name="ballColor2" value="${ballColor2}" placeholder="Ball Color2" class="color-picker">
 				    <br> 
 				    
 				    <button name="leftHand" type="button"onclick="setToLeft()">Left Hand</button>
@@ -240,8 +256,6 @@ button:hover {
 			            	int i = 0;
 			                for (Ball ball : balls) {
 			                	String ballColor = ball.getColor1();
-                            }
-                        }
 			        %>
 			        <div class="ball-section" onclick="selectBall ('<%= ball.getBallId() %>')"><!--  style="background-color: <%=ballColor%>;"-->
 				    <canvas id="shaderCanvas_<%=i%>" style="border-radius: 50%;"></canvas>

@@ -174,7 +174,7 @@
          %>
                <div class="event-section">
                 <p>Name: <%= event.getEventName() %></p>
-                 <p>Establishment Name: <%= event.getTime()%></p>
+                 <p>Date: <%= event.getTime()%></p>
              </div>
          <% 
                } } else {	%>

@@ -16,7 +16,7 @@
     <style>
         body {
             font-family: Arial, sans-serif;
-            background-color: #f4f4f4;
+            background-color: darkgray;
             margin: 0;
             padding: 0;
         }
@@ -39,7 +39,7 @@ button {
             background-color: #fff;
             padding: 20px;
             border-radius: 8px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            box-shadow: 10px 10px 5px black;
         }
 
         label {
@@ -142,7 +142,7 @@ button {
 		  </a>
 	      <a href="${pageContext.servletContext.contextPath}/establishmentReg">Establishment Registration</a>
           <a href="${pageContext.servletContext.contextPath}/ballArsenal">Ball Arsenal</a>
-		  <a class="dropbtn" href="#" onclick="toggleDropdown(), nextStep(1)">Start Bowling!</a>
+		  <a class="dropbtn" href="#" onclick="toggleDropdown(), nextStep(1)">Start Bowling</a>
 		  <div class="dropdown-content" id="myDropdown">
 		        <a href="${pageContext.servletContext.contextPath}/event">&nbsp&nbsp >Event</a>
 	        <a href="${pageContext.servletContext.contextPath}/session">&nbsp&nbsp >Session</a>
