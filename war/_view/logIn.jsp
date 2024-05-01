@@ -70,11 +70,11 @@
 			<table>
 				<tr>
 					<td class="label">Username: </td>
-					<td><input type="text" name="username" size="12" value="" autocomplete="off" /></td>
+					<td><input type="text" name="username" size="12" value="${username}" autocomplete="off" /></td>
 				</tr>
 				<tr>
 					<td class="label">Password: </td>
-					<td><input type="password" name="password" size="12" value="" autocomplete="off" /></td>
+					<td><input type="password" name="password" size="12" value="${password}" autocomplete="off" /></td>
 				</tr>
 				</table>
 			<input name="logIn" type="submit" value="Log In!">

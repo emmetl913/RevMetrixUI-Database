@@ -70,10 +70,11 @@ public class AccountServlet extends HttpServlet {
 				//set our current account to the successfully logged in account
 				session.setAttribute("currAccount", acc);
 			}
-		}
-		if(!validLogin) {
-			errorMessage = "Username or password is incorrect.";
-			System.out.println("Aint no thing to it bbg"); //Error messages arent showing up
+			else if (!validLogin)
+			{
+				errorMessage = "Username or password is incorrect.";
+				System.out.println("Incorrect Username or Passwords\n"); //Error messages arent showing up
+			}
 		}
 		
 		
@@ -83,6 +84,8 @@ public class AccountServlet extends HttpServlet {
 			//errorMessage = " ";
 		}
 		
+		req.setAttribute("username", req.getParameter("username"));
+		req.setAttribute("password", req.getParameter("password"));
 
 		if (req.getParameter("logIn") != null && validLogin) {
 			req.setAttribute("errorMessage", errorMessage);

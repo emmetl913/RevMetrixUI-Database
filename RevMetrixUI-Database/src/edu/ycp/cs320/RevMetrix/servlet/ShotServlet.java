@@ -236,8 +236,7 @@ public class ShotServlet extends HttpServlet {
 //			errorMessage = "Session does not contain a valid Shot object";
 //		}
 		
-		Frame frame = new Frame(1, 1, 1);
-		ShotController controller = new ShotController();
+	
 		   
 		// Get last access time of this Webpage.
 		long lastAccessTime = session.getLastAccessedTime();
@@ -245,13 +244,12 @@ public class ShotServlet extends HttpServlet {
 		String userID = new String("ABCD");
 
 		String shotKey = new String("shotKey");
-		ArrayList<Frame> frames = new ArrayList<Frame>();
 		
 		   // Check if this is new comer on your Webpage.
 		if (session.isNew() ){
 	      session.setAttribute(userIDKey, userID);
 	      
-	      frames.add(new Frame(1,1));
+
 		  session.setAttribute(shotKey,  frames);
 		} 
 		
@@ -265,24 +263,12 @@ public class ShotServlet extends HttpServlet {
 	    
 		//prevents null pointer exceptions
 		//retreive shot details
-	    String ballName = req.getParameter("ball");
-	    String shotType = req.getParameter("shotType");
+	  
 	    
 	    String pinsParam = req.getParameter("pins");
-	    int pins = 0;
-	    Shot shot = new Shot(0, 0, 0, 0, "", 0, "");
+
 	    
-	    if(pinsParam != null) {
-	    	pins = Integer.parseInt(pinsParam);
-	    }
-	    
-	    if(ballName != null && shotType != null) {
-	    	shot.setBallName(ballName);
-	    	shot.setType(shotType);
-	    }
-	    
-	    //creates a new shot object
-	    Shot shots = new Shot(ballName, shotType, pins);
+	  
 	    
 	    //add the shot to the frame
 //	    if(frames != null) {
@@ -292,11 +278,11 @@ public class ShotServlet extends HttpServlet {
 //	    int firstShot = Integer.parseInt(req.getParameter("firstShot"));
 //	    int secondShot = Integer.parseInt(req.getParameter("secondShot"));
 //	   
-	    int totalScore = controller.calculateScore(session);
+	 
 	    session.setAttribute("totalScore", totalScore);
 	    
 	    if("incrementFrameNumber".equals(req.getParameter("action"))) {
-	    	Integer frameNumber = (Integer) session.getAttribute("frameNumber");
+	    	
 	    	if(frameNumber == null) {
 		    	frameNumber = 1;	//initialize
 		    }else {
