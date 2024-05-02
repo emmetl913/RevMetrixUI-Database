@@ -21,7 +21,7 @@ public interface IDatabase {
 	public List<Shot> findAllShotsWithSessionID(int sessionID);
 	
 	// Shot Level Methods
-	public Integer insertNewGame(int gameID, int sessionID, int currentLane, int gameNum, int score);
+	public Integer insertNewGame(int sessionID, int currentLane, int gameNum, int score);
 	public Integer insertNewSession(int eventID, String time, String oppType, String oppName, int score);
 	public List<Establishment> getEstablishmentsByAccount(int accID);
 	List<Account> getAccountByEmail(String email);

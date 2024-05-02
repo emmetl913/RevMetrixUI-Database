@@ -46,10 +46,7 @@ public class ShotServlet extends HttpServlet {
 		FrameController fc = new FrameController();
 		Game currentGame = (Game)session.getAttribute("currentGame");
 		List<Frame> frameList = fc.getFrameByGameID(currentGame.getGameID());
-		//DOESNT WORK BECAUSE INSERT GAME FUNCTION IN GAME SERVLET HAS A GAMEID AS PARAMETER? SUSSY BAKA 
-		for(Frame frame: frameList) {
-			System.out.println(frame.getFrameID());
-		}
+		
 		
 		// call JSP to generate empty form
 		req.getRequestDispatcher("/_view/shot.jsp").forward(req, resp);
@@ -70,11 +67,17 @@ public class ShotServlet extends HttpServlet {
 		HttpSession session = req.getSession();
 		Account account = (Account) session.getAttribute("currAccount");
 		
-		
+		//Load frames from gameID
+		FrameController fc = new FrameController();
+		Game currentGame = (Game)session.getAttribute("currentGame");
+		List<Frame> frameList = fc.getFrameByGameID(currentGame.getGameID());
+//		for(Frame frame: frameList) {
+//				System.out.println(frame.getFrameID() + "frame# - " +frame.getFrameNumber());
+//		}
 		
 		//The value from the shot box right below the 1 pin (will be an int, "X", "/", "F", "-")
-		String shotReturn = req.getParameter("shotReturn");
-		System.out.println("Shot count: "+ shotReturn);
+		String shotBox = req.getParameter("shotBox");
+		System.out.println("Shot count: "+ shotBox);
 
 		//ONLY EVER ACCESS INDICIES 1-10
 		int pins[] = returnPinValues(req); 

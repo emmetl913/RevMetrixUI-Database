@@ -26,13 +26,13 @@ public class GameController{
 	{
 		this.model = model;
 	}
-	public Integer insertNewGame(int gameID, int sessionID, int currentLane, int gameNum, int score)
+	public Integer insertNewGame(int sessionID, int currentLane, int gameNum, int score)
 	{
-		Integer newGame = db.insertNewGame(gameID, sessionID, currentLane, gameNum, score);
+		Integer newGame = db.insertNewGame(sessionID, currentLane, gameNum, score);
 		
 		if(newGame == null)
 		{
-			System.out.println("Games for <"+gameID+"> failed to insert");
+			System.out.println("Game for sessionID: <"+sessionID+"> failed to insert");
 			return null;
 		} else
 		{
@@ -45,7 +45,7 @@ public class GameController{
 		
 		if(resultList == null)
 		{
-			System.out.println("Games for <"+sessionID+"> not found");
+			System.out.println("Games for sessionID: <"+sessionID+"> not found");
 			return null;
 		} else 
 		{

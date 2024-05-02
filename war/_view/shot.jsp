@@ -384,7 +384,7 @@
 							<div class="pin" onclick="togglePin(this)"><input type="hidden" name="pin1" value="up"><span>1</span></div>
 						</div>
 						<div class="row">
-							<div class="shot" name"shotReturn"onClick=""><span>Shot!</span></div>
+							<div class="shot" name"shotBox" value="0" onClick=""><span>Shot!</span></div>
 						</div>
 						<div class="row">
 							<div class="foul" onclick="setFoul()"><span>F</span></div>

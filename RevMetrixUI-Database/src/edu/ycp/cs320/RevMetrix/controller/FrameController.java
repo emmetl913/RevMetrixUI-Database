@@ -20,18 +20,19 @@ public class FrameController{
 		db = DatabaseProvider.getInstance();
 	}
 	
-public boolean insertNewFrame(int game_id, int frameNumber) {
+public Integer insertNewFrame(int game_id, int frameNumber) {
 		
 		// insert new frame with score -1 to show frame has not been played
 		Integer frame_id = db.insertNewFrame(game_id, -1 , frameNumber);
 		//check if the insertion succeeded
-		if (game_id > 0){
-			System.out.println("New frame (frame ID: " + frame_id +") successfully added to balls table");
-			return true;
+		if (frame_id > 0){
+			System.out.println("New frame (frame ID: " + frame_id +", #: "+frameNumber+") successfully added to frames table.");
+			return frame_id;
+			//it only inserts the first frame...
 		}
 		else{
-			System.out.println("Failed to insert (Ball ID: " + frame_id + ") to balls table");
-			return false;
+			System.out.println("Failed to insert (frame ID: " + frame_id + ") to frames table");
+			return null;
 		}
 	}
 

@@ -853,17 +853,18 @@ public class DerbyDatabase implements IDatabase {
 				{
 					stmt1 = conn.prepareStatement(
 							"select frame_id from frames"
-							+ " where game_id = ? "
+							+ " where game_id = ? and frame_number = ? "
 					);
 					
 					stmt1.setInt(1, gameID);
-					
+					stmt1.setInt(2, frameNumber);
+
 					resultSet1 = stmt1.executeQuery();
 					
 					if(resultSet1.next())
 					{
 						frame_id = resultSet1.getInt(1);
-						System.out.println("Frame <"+ frame_id +"> found with gameID <"+ gameID +">");
+						System.out.println("Frame <"+ frame_id +"> found with gameID <"+ gameID +"> and frame# <"+frameNumber+">" );
 					}
 					else 
 					{
@@ -886,10 +887,10 @@ public class DerbyDatabase implements IDatabase {
 						// get the new account_id
 						stmt3 = conn.prepareStatement(
 								"select * from frames "
-								+ " where game_id = ? and frame_id = ?"
+								+ " where game_id = ? and frame_number = ?"
 						);
 						stmt3.setInt(1, gameID);
-						stmt3.setInt(2, frame_id);
+						stmt3.setInt(2, frameNumber);
 						
 						resultSet3 = stmt3.executeQuery();
 						
@@ -927,7 +928,7 @@ public class DerbyDatabase implements IDatabase {
 				{
 					stmt1 = conn.prepareStatement(
 							"select * from frames"+
-							" where frame.game_id = ?"
+							" where frames.game_id = ?"
 					);
 					
 					stmt1.setInt(1, gameID);
@@ -965,7 +966,7 @@ public class DerbyDatabase implements IDatabase {
 		frame.setFrameNumber(resultSet.getInt(index++));
 	}
 	@Override 
-	public Integer insertNewGame(final int gameID, final int sessionID, final int currentLane, final int gameNum, final int score )
+	public Integer insertNewGame(final int sessionID, final int currentLane, final int gameNum, final int score )
 	{
 		return executeTransaction(new Transaction<Integer>() {
 			@Override
@@ -1021,7 +1022,7 @@ public class DerbyDatabase implements IDatabase {
 								"select * from games "
 								+ " where game_id = ? and session_id = ?"
 						);
-						stmt3.setInt(1, gameID);
+						stmt3.setInt(1, game_id);
 						stmt3.setInt(2, sessionID);
 						
 						resultSet3 = stmt3.executeQuery();
