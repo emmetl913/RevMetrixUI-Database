@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import edu.ycp.cs320.RevMetrix.controller.FrameController;
 import edu.ycp.cs320.RevMetrix.controller.GameController;
 import edu.ycp.cs320.RevMetrix.model.Account;
 import edu.ycp.cs320.RevMetrix.model.Game;
@@ -105,6 +106,12 @@ public class GameServlet extends HttpServlet {
         	req.setAttribute("gameObjArr", games);
     		session.setAttribute(gamesListKey, games);
     		session.setAttribute("currentGame", currentGame);
+    		
+    		//Initialize Game with frames
+    		FrameController fc = new FrameController();
+    		for(int i = 1; i <= 12; i++) {
+    			fc.insertNewFrame(currentGame.getGameID(), i);
+    		}
     		req.getRequestDispatcher("/_view/shot.jsp").forward(req, resp);
 
         }
@@ -115,6 +122,9 @@ public class GameServlet extends HttpServlet {
 		acc.setCurrentGame((Game)session.getAttribute("currentGame"));
 		session.setAttribute("currAccount", acc);
 
+		
+	
+		
 		// call JSP to generate empty form
 		req.getRequestDispatcher("/_view/game.jsp").forward(req, resp);
 	}
