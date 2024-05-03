@@ -22,7 +22,7 @@ public interface IDatabase {
 	
 	// Shot Level Methods
 	public Integer insertNewGame(int sessionID, int currentLane, int gameNum, int score);
-	public Integer insertNewSession(int eventID, String time, String oppType, String oppName, int score);
+	public Integer insertNewSession(int eventID, String time, String date, String oppType, String oppName, int score);
 	public List<Establishment> getEstablishmentsByAccount(int accID);
 	List<Account> getAccountByEmail(String email);
 	List<Ball> getBallsByAccountID(int accountId);

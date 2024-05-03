@@ -359,7 +359,7 @@ public class DerbyDatabase implements IDatabase {
 				{
 					stmt1 = conn.prepareStatement(
 						"select * from accounts"+
-						"  where accounts.username = ? "+
+						"  where accounts.username = ?"+
 						"  and accounts.password = ?"
 					);
 					stmt1.setString(1, username);
@@ -1324,7 +1324,7 @@ public class DerbyDatabase implements IDatabase {
 	}
 	
 	@Override
-	public Integer insertNewSession(final int eventID, final String time,final String oppType,final String oppName,final int score) {
+	public Integer insertNewSession(int eventID, String time, String date, String oppType, String oppName, int score) {
 		return executeTransaction(new Transaction<Integer>() {
 			@Override
 			public Integer execute(Connection conn) throws SQLException {
@@ -1362,18 +1362,19 @@ public class DerbyDatabase implements IDatabase {
 					if(session_id <= 0)
 					{
 						stmt2 = conn.prepareStatement(
-								"insert into sessions (event_id, time, oppType, oppName, score) "
+								"insert into sessions (event_id, time, date, oppType, oppName, score) "
 								+ " values(?, ?, ?, ?, ?)"
 						);
 						stmt2.setInt(1, eventID);
 						stmt2.setString(2, time);
-						stmt2.setString(3, oppType);
-						stmt2.setString(4, oppName);
-						stmt2.setInt(5, score);
+						stmt2.setString(3, date);
+						stmt2.setString(4, oppType);
+						stmt2.setString(5, oppName);
+						stmt2.setInt(6, score);
 						
 						stmt2.executeUpdate();
 						
-						System.out.println("New session <"+eventID+"> , <"+time+"> , <"+oppType+"> , <"+oppName+">, <"+score+"> inserted into sessoins");
+						System.out.println("New session <"+eventID+"> , <"+time+"> , <"+date+"> , <"+oppType+"> , <"+oppName+">, <"+score+"> inserted into sessoins");
 						
 						// get the new account_id
 						stmt3 = conn.prepareStatement(
@@ -1797,14 +1798,15 @@ public class DerbyDatabase implements IDatabase {
 					
 					tablesPopulated += "Games, ";
 					
-					insertSession = conn.prepareStatement("insert into sessions (event_id, time, oppType, oppName, score) values (?, ?, ?, ?, ?)");
+					insertSession = conn.prepareStatement("insert into sessions (event_id, time, date, oppType, oppName, score) values (?, ?, ?, ?, ?, ?)");
 					for (Session session : seshList)
 					{
 						insertSession.setInt(1, session.getEventID());
 						insertSession.setString(2, session.getTime());
-						insertSession.setString(3, session.getOppType());
-						insertSession.setString(4, session.getOpponent());
-						insertSession.setInt(5, session.getScore());
+						insertSession.setString(3, session.getDate());
+						insertSession.setString(4, session.getOppType());
+						insertSession.setString(5, session.getOpponent());
+						insertSession.setInt(6, session.getScore());
 						insertSession.addBatch();
 					}
 					insertSession.executeBatch();

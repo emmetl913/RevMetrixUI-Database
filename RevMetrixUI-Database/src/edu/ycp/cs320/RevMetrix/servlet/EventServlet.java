@@ -160,7 +160,7 @@ public class EventServlet extends HttpServlet {
 		
 		if(req.getParameter("Submit") != null || req.getParameter("SubmitCurrentEvent") != null && errorMessage == null) {
     		req.getRequestDispatcher("/_view/session.jsp").forward(req, resp);
-    		System.out.print("This is my event ID "+session.getAttribute("eventID"));
+    		System.out.println("This is my event ID "+session.getAttribute("eventID"));
         }else {
     		req.getRequestDispatcher("/_view/event.jsp").forward(req, resp);
         }

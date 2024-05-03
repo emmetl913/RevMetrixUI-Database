@@ -105,7 +105,8 @@ public class SessionServlet extends HttpServlet{
 		req.setAttribute("model", model);
 		
 		if(req.getParameter("submit") != null) {
-			Integer sessionID = controller.insertNewSession(eventID, model.getTime(), model.getOppType(), model.getName(), 0);
+			System.out.println("Submit button is pressed");
+			Integer sessionID = controller.insertNewSession(eventID, model.getTime(), model.getDate(), model.getOppType(), model.getName(), 0);
     		session.setAttribute("sessionID", sessionID);
     		System.out.println("SessionID: "+ sessionID);
 			req.getRequestDispatcher("/_view/game.jsp").forward(req, resp);
