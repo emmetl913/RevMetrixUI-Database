@@ -40,7 +40,7 @@ public interface IDatabase {
 	List<Frame> getFrameByGameID(int gameID);
 
 	List<Shot> getShotByFrameID(int frameID);
-	public Integer insertNewShotWithFrameID(int sessionID, int gameID, int frameID, int shotNumber, String count, int ballID, String pinsLeft);
+	public Integer insertNewShotWithFrameID(int sessionID, int gameID, int frameID, int shotNumber, int count, int ballID, String pinsLeft);
 	
 	
 	public Integer insertNewEstablishment(int account_id, String name, String address);

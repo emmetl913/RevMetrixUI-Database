@@ -12,6 +12,7 @@
     BallArsenal model = (BallArsenal) session.getAttribute("ballArsenalKey");
     ArrayList<Ball>
     balls = (model != null) ? model.getBalls() : null;
+	//Frame<List> frames = (Frame<List>)session.getAttribute("frameList");
 %>
 <html lang="en">
 	<head>
@@ -351,7 +352,7 @@
 								<% } 
 								else { %>
 									<div class="score-box-left"><%= frameNum + 1%></div>
-									<div class="score-box-right"><%= frameNum% + 2%></div>
+									<div class="score-box-right"><%= frameNum + 2%></div>
 								<% } %>
 								 
 								<!-- framescore goes below-->

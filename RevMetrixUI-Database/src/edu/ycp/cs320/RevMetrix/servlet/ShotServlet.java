@@ -2,7 +2,6 @@ package edu.ycp.cs320.RevMetrix.servlet;
 
 import java.io.IOException;
 
-import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -21,15 +20,14 @@ import edu.ycp.cs320.RevMetrix.model.Account;
 import edu.ycp.cs320.RevMetrix.model.Ball;
 import edu.ycp.cs320.RevMetrix.model.BallArsenal;
 import edu.ycp.cs320.RevMetrix.model.Game;
-import edu.ycp.cs320.RevMetrix.model.Session;
 
 
 public class ShotServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	
-
 	private int currentScore;
 	private int currentShotNumber;
+	private int currentFrameNumber;
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException {
@@ -70,10 +68,24 @@ public class ShotServlet extends HttpServlet {
 		//Load frames from gameID
 		FrameController fc = new FrameController();
 		Game currentGame = (Game)session.getAttribute("currentGame");
+		int sessionID = (int)session.getAttribute("sessionID");
+
 		List<Frame> frameList = fc.getFrameByGameID(currentGame.getGameID());
+		
+		//add test shot to first frame
+		Shot testShot1 = new Shot(sessionID, currentGame.getGameID(), frameList.get(0).getFrameID(), 1,5, 1, "12345", "");
+		frameList.get(0).setShot1(testShot1);
+		
+		//Now lets assign existing shots to their frames while we use this frameList
+		assignShotsToFrames(frameList);
 //		for(Frame frame: frameList) {
-//				System.out.println(frame.getFrameID() + "frame# - " +frame.getFrameNumber());
+//			System.out.println(frame.getFrameID() + "frame# - " +frame.getFrameNumber());
+//			if(frame.getShot1()!=null) {
+//				System.out.println(frame.getShot1().getCount() + " <-- Count should be 5");
+//			}
 //		}
+		setCurrentFrameNumberAndShotNumber(frameList);
+		
 		
 		//The value from the shot box right below the 1 pin (will be an int, "X", "/", "F", "-")
 		String shotBox = req.getParameter("shotBox");
@@ -88,21 +100,11 @@ public class ShotServlet extends HttpServlet {
 		}
 		
 		
+		session.setAttribute("frameList", frameList);
 		req.setAttribute("errorMessage", errorMessage);
 		req.getRequestDispatcher("/_view/shot.jsp").forward(req, resp);
 	}
-	private int loadActiveFrame(List<Frame> frames) {
-		int frameNumber = -1;
-		for(int i = 0; i < 12; i++) {
-			if(frames.get(i).getScore() == -2) {
-				frameNumber = frames.get(i).getFrameNumber();
-			}
-			if(frameNumber != -1) {
-				break;
-			}
-		} //now frame number = active frame 		
-		return frameNumber;
-	}
+
 	private void updateStrikeorSpareFrames(List<Frame> frames) {
 		//for all frameScores == -3 check to see if their score can be finalized
 				for(int i =0; i<10; i++) { //this way frame 10 can access frame 12 with out an out of bounds
@@ -151,7 +153,7 @@ public class ShotServlet extends HttpServlet {
 					}
 				}
 	}
-	private int[] returnPinValues(HttpServletRequest req){ //1 is down 0 is up
+	private int[] returnPinValues(HttpServletRequest req){ //1 is down 0 is up. Pins[1]-Pins[10] are proper index
         int[] pins = new int[12]; //silly goose error means have array even bigger than needed
         for(int i = 1; i <= 10; i++) {
         	//System.out.println(("pin"+i));
@@ -164,4 +166,43 @@ public class ShotServlet extends HttpServlet {
         }
 		return pins;
 	} 
+	private void assignShotsToFrames(List<Frame> frames) {
+		ShotController sc = new ShotController();
+		for(Frame frame: frames) {
+			List<Shot> shots = sc.getShotByFrameID(frame.getFrameID());
+			if(shots != null) {
+				if(shots.get(0) != null) {
+					frame.setShot1(shots.get(0));
+				}
+				if(shots.get(1) != null) {
+					frame.setShot2(shots.get(1));
+				}
+			}
+		}
+	}
+	private void setCurrentFrameNumberAndShotNumber(List<Frame> frames) {
+		boolean goNextFrame = true;
+			for(Frame frame: frames) {
+				if(goNextFrame) {
+					Shot shot1 = frame.getShot1();
+					Shot shot2 = frame.getShot2();
+					if(shot1 == null) {
+						//This must be the current shot and frame
+						currentFrameNumber = frame.getFrameNumber();
+						currentShotNumber = 1;
+						goNextFrame = false;
+					}
+					if(shot1 != null && !shot1.getPinsLeft().equals("X")) { 
+						if(shot2 != null){
+							//goNextFrame stays true
+						}
+						else { //shot2 is null and no strike so we play here 
+							currentFrameNumber = frame.getFrameNumber();
+							currentShotNumber = 2;
+							goNextFrame = false;
+						}
+					}
+				}
+			}
+	}
 }

@@ -749,7 +749,7 @@ public class DerbyDatabase implements IDatabase {
 		});
 	}
 	@Override
-	public Integer insertNewShotWithFrameID(int sessionID, int gameID, int frameID, int shotNumber, String count, int ballID,
+	public Integer insertNewShotWithFrameID(int sessionID, int gameID, int frameID, int shotNumber, int count, int ballID,
 			String pinsLeft) {
 		return executeTransaction(new Transaction<Integer>() {
 			@Override
@@ -794,7 +794,7 @@ public class DerbyDatabase implements IDatabase {
 						stmt2.setInt(2, gameID);
 						stmt2.setInt(3, sessionID);
 						stmt2.setInt(4, shotNumber);
-						stmt2.setString(5, count);
+						stmt2.setInt(5, count);
 						stmt2.setInt(6, ballID);
 						stmt2.setString(7, pinsLeft);
 						
@@ -897,7 +897,7 @@ public class DerbyDatabase implements IDatabase {
 						if (resultSet3.next())
 						{
 							frame_id = resultSet3.getInt(1);
-							System.out.println("New frame <"+frame_id+"> , <"+gameID+" ID: "+frame_id);
+							System.out.println("New frameID = <"+frame_id+"> , <"+gameID+"> ID: "+frame_id +"Frame#: " + frameNumber);
 						}
 					}
 					return frame_id;
@@ -1020,10 +1020,11 @@ public class DerbyDatabase implements IDatabase {
 						// get the new account_id
 						stmt3 = conn.prepareStatement(
 								"select * from games "
-								+ " where game_id = ? and session_id = ?"
+								+ " where session_id = ? and currentLane = ? and gameNumber = ?"
 						);
-						stmt3.setInt(1, game_id);
-						stmt3.setInt(2, sessionID);
+						stmt3.setInt(1, sessionID);
+						stmt3.setInt(2, currentLane);
+						stmt3.setInt(3,  gameNum);
 						
 						resultSet3 = stmt3.executeQuery();
 						
