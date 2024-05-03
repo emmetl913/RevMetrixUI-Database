@@ -204,11 +204,12 @@ public class InitialData {
 				int gameID = Integer.parseInt(i.next());
 				int frameID = Integer.parseInt(i.next());
 				int shotNumber = Integer.parseInt(i.next());
-				String count = i.next();
+				int count = Integer.parseInt(i.next());
 				int ballID = Integer.parseInt(i.next());
 				String pinsLeft = i.next();
+				String leave = i.next();
 				
-				Shot shot = new Shot(sessionID, gameID, frameID, shotNumber, count, ballID, pinsLeft);
+				Shot shot = new Shot(sessionID, gameID, frameID, shotNumber, count, ballID, pinsLeft, leave);
 				
 				shotList.add(shot);
 			}
