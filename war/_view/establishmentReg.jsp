@@ -129,9 +129,6 @@
     </style>
 </head>
 <body>
-    <c:if test="${! empty errorMessage}">
-        <div class="error">${errorMessage}</div>
-    </c:if>
 
     <div class="sidebar">
 		<a href="${pageContext.servletContext.contextPath}/index">
@@ -148,6 +145,9 @@
       
     <div class="container">
         <h2>Add Establishment Registration</h2>
+        <c:if test="${! empty errorMessage}">
+			<div class="error">${errorMessage}</div>
+		</c:if>
         <form action="${pageContext.servletContext.contextPath}/establishmentReg" method="post">
             <label>Establishment Name:</label>
             <input type="text" name="establishmentName" size="12">

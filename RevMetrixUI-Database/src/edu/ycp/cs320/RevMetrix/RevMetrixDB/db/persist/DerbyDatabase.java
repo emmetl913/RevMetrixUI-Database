@@ -546,6 +546,109 @@ public class DerbyDatabase implements IDatabase {
 			}
 		});
 	}
+	
+	@Override
+	public List<Game> getGameBySessionID(int sessionID) {
+		return executeTransaction(new Transaction<List<Game>>() {
+			@Override
+			public List<Game> execute(Connection conn) throws SQLException
+			{
+				PreparedStatement stmt1 = null;
+				
+				ResultSet resultSet1 = null;
+				
+				try
+				{
+					stmt1 = conn.prepareStatement(
+							"select * from games"
+							+" where games.session_id = ?"
+					);
+					stmt1.setInt(1, sessionID);
+					
+					List<Game> result = new ArrayList<Game>();
+					
+					resultSet1 = stmt1.executeQuery();
+					
+					Boolean found = false;
+					
+					while(resultSet1.next())
+					{
+						found = true;
+						Game game = new Game(0, 0, 0, 0, 0);
+						loadGame(game, resultSet1, 1);
+						//System.out.println("SKREET" + ball.getName());
+						result.add(game);
+					}
+					
+					return result;
+				} finally
+				{
+					DBUtil.closeQuietly(stmt1);
+					DBUtil.closeQuietly(resultSet1);
+				}
+			}
+		});
+	}
+	private void loadGame(Game game, ResultSet resultSet, int index) throws SQLException {
+		game.setGameID(resultSet.getInt(index++));
+		game.setSessionID(resultSet.getInt(index++));
+		game.setLane(resultSet.getInt(index++));
+		game.setGameNumber(resultSet.getInt(index++));
+		game.setScore(resultSet.getInt(index++));
+	}
+	
+	
+	@Override
+	public List<Session> getSessionByEventID(int eventID) {
+		return executeTransaction(new Transaction<List<Session>>() {
+			@Override
+			public List<Session> execute(Connection conn) throws SQLException
+			{
+				PreparedStatement stmt1 = null;
+				
+				ResultSet resultSet1 = null;
+				
+				try
+				{
+					stmt1 = conn.prepareStatement(
+							"select * from sessions"
+							+" where sessions.event_id = ?"
+					);
+					stmt1.setInt(1, eventID);
+					
+					List<Session> result = new ArrayList<Session>();
+					
+					resultSet1 = stmt1.executeQuery();
+					
+					Boolean found = false;
+					
+					while(resultSet1.next())
+					{
+						found = true;
+						Session session = new Session(0, 0, "", "", "", "", 0);
+						loadSession(session, resultSet1, 1);
+						//System.out.println("SKREET" + ball.getName());
+						result.add(session);
+					}
+					
+					return result;
+				} finally
+				{
+					DBUtil.closeQuietly(stmt1);
+					DBUtil.closeQuietly(resultSet1);
+				}
+			}
+		});
+	}
+	private void loadSession(Session session, ResultSet resultSet, int index) throws SQLException {
+		session.setSessionID(resultSet.getInt(index++));
+		session.setEventID(resultSet.getInt(index++));
+		session.setTime(resultSet.getString(index++));
+		session.setDate(resultSet.getString(index++));
+		session.setOppType(resultSet.getString(index++));
+		session.setOpp(resultSet.getString(index++));
+		session.setScore(resultSet.getInt(index++));
+	}
 	@Override
 	public List<Ball> getBallsByAccountID(int accountId) {
 		return executeTransaction(new Transaction<List<Ball>>() {
@@ -1389,6 +1492,7 @@ public class DerbyDatabase implements IDatabase {
 							" generated always as identity (start with 1, increment by 1), " +
 							" event_id integer," +
 							" time varchar(25)," +
+							" date varchar(8)," +
 							" oppType varchar(30)," +
 							" oppName varchar(50)," +
 							" score integer" +
@@ -1679,19 +1783,6 @@ public class DerbyDatabase implements IDatabase {
 		
 		
 		
-	}
-
-	
-	@Override
-	public List<Game> getGameBySessionID(int sessionID) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public List<Session> getSessionByEventID(int eventID) {
-		// TODO Auto-generated method stub
-		return null;
 	}
 
 	@Override

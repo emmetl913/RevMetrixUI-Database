@@ -99,12 +99,13 @@ public class InitialData {
 				
 				int seshID = sessionID++;
 				int eventID = Integer.parseInt(i.next());
-				String dateTime = i.next();
+				String time = i.next();
+				String date = i.next();
 				String oppType = i.next();
 				String oppName = i.next();
 				int score = Integer.parseInt(i.next());
 				
-				Session session = new Session(seshID, eventID, dateTime, oppType, oppName, score);
+				Session session = new Session(seshID, eventID, time, date, oppType, oppName, score);
 				
 				sessionList.add(session);
 			}

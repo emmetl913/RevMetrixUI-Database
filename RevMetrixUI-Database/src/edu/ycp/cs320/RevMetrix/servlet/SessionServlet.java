@@ -50,7 +50,7 @@ public class SessionServlet extends HttpServlet{
 		
 		String errorMessage = null;
 		
-		Session model = new Session(0, 0, "", "", "", 0);
+		Session model = new Session(0, 0, "", "", "", "", 0);
 		SessionController controller = new SessionController();
 		
 		HttpSession session = req.getSession();
