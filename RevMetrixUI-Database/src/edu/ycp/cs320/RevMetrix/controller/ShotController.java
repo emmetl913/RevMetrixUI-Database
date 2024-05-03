@@ -34,7 +34,7 @@ public class ShotController {
 			return frameList;
 		}
 	}
-	public boolean insertNewShot(int sessionID, int gameID, int frameID, int shotNumber, String count, int ballID, String pinsLeft) {
+	public boolean insertNewShot(int sessionID, int gameID, int frameID, int shotNumber, int count, int ballID, String pinsLeft) {
 		
 		// insert new book (and possibly new author) into DB
 		Integer ball_id = db.insertNewShotWithFrameID(sessionID, gameID, frameID, shotNumber, count,ballID, pinsLeft);

@@ -26,7 +26,7 @@ public Integer insertNewFrame(int game_id, int frameNumber) {
 		Integer frame_id = db.insertNewFrame(game_id, -1 , frameNumber);
 		//check if the insertion succeeded
 		if (frame_id > 0){
-			System.out.println("New frame (frame ID: " + frame_id +", #: "+frameNumber+") successfully added to frames table.");
+			//System.out.println("New frame (frame ID: " + frame_id +", #: "+frameNumber+") successfully added to frames table.");
 			return frame_id;
 			//it only inserts the first frame...
 		}
