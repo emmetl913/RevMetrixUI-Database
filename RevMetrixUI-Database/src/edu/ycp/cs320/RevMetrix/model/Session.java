@@ -20,6 +20,9 @@ public class Session {
 		this.opp = opp;
 		this.score = score;
 	}
+	public Session() {
+		// TODO Auto-generated constructor stub
+	}
 	// Getters
 	public String getDate()
 	{

@@ -12,6 +12,10 @@ public class Game {
 		this.score = score;
 	}
 	
+	public Game() {
+		// TODO Auto-generated constructor stub
+	}
+
 	public int getLane() {
 		return lane;
 	}

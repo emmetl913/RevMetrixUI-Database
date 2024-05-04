@@ -137,7 +137,8 @@
 		  </a>
 	      <a href="${pageContext.servletContext.contextPath}/establishmentReg">Establishment Registration</a>
           <a href="${pageContext.servletContext.contextPath}/ballArsenal">Ball Arsenal</a>
-          <a class="dropbtn" href="#" onclick="toggleDropdown(), nextStep(1)">Start Bowling</a>
+          <a href="${pageContext.servletContext.contextPath}/stats">Stats</a>
+          <a class="dropbtn" href="#" onclick="toggleDropdown(), nextStep(1)">Start Bowling!</a>
 		      <div class="dropdown-content" id="myDropdown">
 	        <a href="${pageContext.servletContext.contextPath}/event">>Event</a>
 	        <a href="${pageContext.servletContext.contextPath}/session">>Session</a>
