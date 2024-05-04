@@ -1342,29 +1342,10 @@ public class DerbyDatabase implements IDatabase {
 				// try to find account_id in db
 				try
 				{
-					stmt1 = conn.prepareStatement(
-							"select session_id from sessions"
-							+ " where event_id = ?"
-					);
 					
-					stmt1.setInt(1, eventID);
-					
-					resultSet1 = stmt1.executeQuery();
-					
-					if(resultSet1.next())
-					{
-						session_id = resultSet1.getInt(1);
-						System.out.println("Session found with eventID <"+ eventID +">");
-					}
-					else 
-					{
-						System.out.println("Session was not found");
-					}
-					if(session_id <= 0)
-					{
 						stmt2 = conn.prepareStatement(
 								"insert into sessions (event_id, time, date, oppType, oppName, score) "
-								+ " values(?, ?, ?, ?, ?)"
+								+ " values(?, ?, ?, ?, ?, ?)"
 						);
 						stmt2.setInt(1, eventID);
 						stmt2.setString(2, time);
@@ -1375,7 +1356,7 @@ public class DerbyDatabase implements IDatabase {
 						
 						stmt2.executeUpdate();
 						
-						System.out.println("New session <"+eventID+"> , <"+time+"> , <"+date+"> , <"+oppType+"> , <"+oppName+">, <"+score+"> inserted into sessoins");
+						System.out.println("New session <"+eventID+"> , <"+time+"> , <"+date+"> , <"+oppType+"> , <"+oppName+">, <"+score+"> inserted into sessions");
 						
 						// get the new account_id
 						stmt3 = conn.prepareStatement(
@@ -1389,10 +1370,10 @@ public class DerbyDatabase implements IDatabase {
 						if (resultSet3.next())
 						{
 							session_id = resultSet3.getInt(1);
-							System.out.println("New session  <"+eventID+"> , <"+time+"> , <"+oppType+"> , <"+oppName+">, <"+score+"> ID:"+session_id);
+							System.out.println("New session  <"+session_id+">");
 						}
-					}
-					return session_id;
+					
+						return session_id;
 				}
 				finally 
 				{

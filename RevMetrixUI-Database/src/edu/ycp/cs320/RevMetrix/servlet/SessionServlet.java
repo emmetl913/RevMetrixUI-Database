@@ -2,6 +2,7 @@ package edu.ycp.cs320.RevMetrix.servlet;
 
 import java.io.IOException;
 import java.time.LocalTime;
+import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
 import javax.servlet.ServletException;
@@ -66,16 +67,24 @@ public class SessionServlet extends HttpServlet{
 		if ("Current Time".equals(time))
 		{
 			LocalTime currentTime = LocalTime.now();
-
+			LocalDate currentDate = LocalDate.now();
 	        // Format the time using a DateTimeFormatter
 	        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("hh:mma");
+	        DateTimeFormatter formatter1 = DateTimeFormatter.ofPattern("MMddyyyy");
+	        String formattedDate = currentDate.format(formatter1);
 	        String formattedTime = currentTime.format(formatter);
-	        System.out.println(formattedTime);
+	        
+	        System.out.println(formattedTime + " " + formattedDate);
 	        
 			model.setTime(formattedTime);
+			model.setDate(formattedDate);
 		} else if ("Other Time".equals(time))
 		{
-			model.setTime(req.getParameter("inputTime"));
+			LocalDate currentDate = LocalDate.now();
+	        DateTimeFormatter formatter1 = DateTimeFormatter.ofPattern("MMddyyyy");
+	        String formattedDate = currentDate.format(formatter1);
+	        model.setDate(formattedDate);
+	        model.setTime(req.getParameter("inputTime"));
 		}
 		
 		

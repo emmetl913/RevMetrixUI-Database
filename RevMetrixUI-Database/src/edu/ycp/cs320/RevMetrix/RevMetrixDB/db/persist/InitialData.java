@@ -97,7 +97,7 @@ public class InitialData {
 				}
 				Iterator<String> i = tuple.iterator();
 				
-				int seshID = sessionID++;
+				
 				int eventID = Integer.parseInt(i.next());
 				String time = i.next();
 				String date = i.next();
@@ -105,7 +105,7 @@ public class InitialData {
 				String oppName = i.next();
 				int score = Integer.parseInt(i.next());
 				
-				Session session = new Session(seshID, eventID, time, date, oppType, oppName, score);
+				Session session = new Session(sessionID++, eventID, time, date, oppType, oppName, score);
 				
 				sessionList.add(session);
 			}
