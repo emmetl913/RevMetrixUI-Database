@@ -89,6 +89,52 @@ public class DerbyDatabase implements IDatabase {
 	}
 	
 	@Override
+	public ArrayList<Integer> getSessionsByEvent(int eventID) {
+		return executeTransaction(new Transaction<ArrayList<Integer>>() {
+			@Override
+			public ArrayList<Integer> execute(Connection conn) throws SQLException {
+				PreparedStatement stmt = null;
+				ResultSet resultSet = null;
+				
+				try {
+					stmt = conn.prepareStatement(
+							"select * from sessions "+
+							"where event_id = ?"
+					);
+					stmt.setInt(1, eventID);
+					
+					
+					ArrayList<Integer> result = new ArrayList<Integer>();
+					
+					resultSet = stmt.executeQuery();
+					
+					// for testing that a result was returned
+					Boolean found = false;
+					
+					while (resultSet.next()) {
+						found = true;
+						
+						Session sess = new Session();
+						loadSession(sess, resultSet, 1);
+						
+						result.add(sess.getSessionID());
+					}
+					
+					// check if any authors were found
+					if (!found) {
+						System.out.println("No Establishment were found in the database");
+					}
+					
+					return result;
+				} finally {
+					DBUtil.closeQuietly(resultSet);
+					DBUtil.closeQuietly(stmt);
+				}
+			}
+		});
+	}
+	
+	@Override
 	public Establishment getEstablishmentByAccountAndEstablishmentID(int accID, int estaID) {
 		return executeTransaction(new Transaction<Establishment>() {
 			@Override
@@ -163,6 +209,140 @@ public class DerbyDatabase implements IDatabase {
 						loadEvent(event, resultSet, 1);
 						
 						result.add(event);
+					}
+					
+					// check if any authors were found
+					if (!found) {
+						System.out.println("No Events were found in the database");
+					}
+					
+					return result;
+				} finally {
+					DBUtil.closeQuietly(resultSet);
+					DBUtil.closeQuietly(stmt);
+				}
+			}
+		});
+	}
+	
+	@Override
+	public String getEventNameByAccount(int accID, int eventID) {
+		return executeTransaction(new Transaction<String>() {
+			@Override
+			public String execute(Connection conn) throws SQLException {
+				PreparedStatement stmt = null;
+				ResultSet resultSet = null;
+				
+				try {
+					stmt = conn.prepareStatement(
+							"select * from events "+
+							"where acc_id = ? and event_id = ?"
+					);
+					stmt.setInt(1, accID);
+					stmt.setInt(2, eventID);
+					
+					String result = "";
+					resultSet = stmt.executeQuery();
+					
+					// for testing that a result was returned
+					Boolean found = false;
+					
+					while (resultSet.next()) {
+						found = true;
+						Event event = new Event();
+						loadEvent(event, resultSet, 1);
+						
+						result = event.getEventName();
+					}
+					
+					// check if any authors were found
+					if (!found) {
+						System.out.println("No Events were found in the database");
+					}
+					
+					return result;
+				} finally {
+					DBUtil.closeQuietly(resultSet);
+					DBUtil.closeQuietly(stmt);
+				}
+			}
+		});
+	}
+	
+	@Override
+	public Integer getCurrentGameLane(int gameID) {
+		return executeTransaction(new Transaction<Integer>() {
+			@Override
+			public Integer execute(Connection conn) throws SQLException {
+				PreparedStatement stmt = null;
+				ResultSet resultSet = null;
+				
+				try {
+					stmt = conn.prepareStatement(
+							"select * from games "+
+							"where game_id = ?"
+					);
+					stmt.setInt(1, gameID);
+					
+					int result = -1;
+					resultSet = stmt.executeQuery();
+					
+					// for testing that a result was returned
+					Boolean found = false;
+					
+					while (resultSet.next()) {
+						found = true;
+						Game game = new Game();
+						loadGame(game, resultSet, 1);
+						
+						result = game.getLane();
+					}
+					
+					// check if any authors were found
+					if (!found) {
+						System.out.println("No Events were found in the database");
+					}
+					
+					return result;
+				} finally {
+					DBUtil.closeQuietly(resultSet);
+					DBUtil.closeQuietly(stmt);
+				}
+			}
+		});
+	}
+	
+	@Override
+	public Integer[] getGamesBySessions(int sessionID) {
+		return executeTransaction(new Transaction<Integer[]>() {
+			@Override
+			public Integer[] execute(Connection conn) throws SQLException {
+				PreparedStatement stmt = null;
+				ResultSet resultSet = null;
+				
+				try {
+					stmt = conn.prepareStatement(
+							"select * from games "+
+							"where session_id = ?"
+					);
+					stmt.setInt(1, sessionID);
+					
+					Integer result[] = new Integer[3];
+					resultSet = stmt.executeQuery();
+					
+					// for testing that a result was returned
+					Boolean found = false;
+					
+					int i = 0;
+					
+					while (resultSet.next()) {
+						
+						found = true;
+						Game game = new Game();
+						loadGame(game, resultSet, 1);
+						
+						result[i] = game.getScore();
+						i++;
 					}
 					
 					// check if any authors were found
@@ -341,6 +521,15 @@ public class DerbyDatabase implements IDatabase {
 		shot.setCount(resultSet.getString(index++));
 		shot.setBallID(resultSet.getInt(index++));
 		shot.setPinsLeft(resultSet.getString(index++));
+	}
+	
+	private void loadGame(Game game, ResultSet resultSet, int index) throws SQLException {
+		game.setGameID(resultSet.getInt(index++));
+		game.setSessionID(resultSet.getInt(index++));
+		game.setLane(resultSet.getInt(index++));
+		game.setGameNumber(resultSet.getInt(index++));
+		game.setScore(resultSet.getInt(index++));
+		
 	}
 	
 	@Override
@@ -1263,6 +1452,16 @@ public class DerbyDatabase implements IDatabase {
 
 		return conn;
 	}
+			
+	private void loadSession(Session session, ResultSet resultSet, int index) throws SQLException {
+		session.setSessionID(resultSet.getInt(index++));
+		session.setEventID(resultSet.getInt(index++));
+		session.setTime(resultSet.getString(index++));
+		session.setOppType(resultSet.getString(index++));
+		session.setOpp(resultSet.getString(index++));
+		session.setScore(resultSet.getInt(index++));
+
+		}
 	
 	private void loadEstablishment(Establishment establishment, ResultSet resultSet, int index) throws SQLException {
 		establishment.setEstaId(resultSet.getInt(index++));
@@ -1311,7 +1510,7 @@ public class DerbyDatabase implements IDatabase {
 
 				String tablesCreated = "Tables Created: ";
 			
-				try { 
+				try {
 					stmt8 = conn.prepareStatement(
 						"create table shots ("
 						+ " shot_id integer primary key"

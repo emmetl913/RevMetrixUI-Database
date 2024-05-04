@@ -1,17 +1,11 @@
 <!DOCTYPE html>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
-<%@ page import= "edu.ycp.cs320.lab02.model.Game" %>
-<%@ page import= "edu.ycp.cs320.lab02.model.Event" %>
-
+<%@ page import= "edu.ycp.cs320.RevMetrix.model.stat" %>
 <%@ page import = "java.io.*,java.util.*"%>
-<%@ page import="javax.servlet.http.HttpSession" %>
-<%
-	ArrayList<Event> events = (ArrayList<Event>)session.getAttribute("eventsListKey");
-	ArrayList<Game> games = (ArrayList<Game>)session.getAttribute("gamesListKey");
-	//ArrayList<Ball> games = (model != null) ? model.getBalls() : null;
 
-%>
+
+
 <html>
 <head>
 
@@ -74,47 +68,81 @@ button {
         .error {
 			color: red;
 		}
-		.sidebar {
-	height: 100%;
-	width: 250px;
-	position: fixed;
-	top: 0;
-	left: 0;
-	background-color: black;
-	padding-top: 20px;
-	}
-	.number-input{
-		width: 100px;
-	}
-	/* Links in the sidebar */
-	.sidebar a {
-	padding: 10px 20px;
-	text-decoration: none;
-	color: white;
-	display: block;
-	}
+		/* Style for the black sidebar */
+        .sidebar {
+  height: 100%;
+  width: 250px;
+  position: fixed;
+  top: 0;
+  left: 0;
+  background: linear-gradient(to bottom, rgba( 243, 0, 178, 1 ), rgba( 28, 144, 243, 1 ) 95%, rgba( 255, 255, 0, 1 ));
+  padding-top: 20px;
+  box-shadow: 10px 5px 5px rgba(0, 0, 0, 0.1);
+}
 
-	/* Change color of links on hover */
-	.sidebar a:hover {
-	background-color: #333;
-	}
+/* Links in the sidebar */
+.sidebar a {
+  padding: 10px 20px;
+  text-decoration: none;
+  color: white;
+  display: block;
+}
 
-	/* Style the main content */
-	.main-content {
-	margin-left: 250px; /* Same width as the sidebar */
-	padding: 20px;
-	}
+/* Change color of links on hover */
+.sidebar a:hover {
+  background-color: #333;
+}
 
-	/* Responsive layout - when the screen is less than 600px wide, make the sidebar and the main content stack on top of each other */
-	@media screen and (max-width: 600px) {
-	.sidebar {
-		width: 100%;
-		height: auto;
-		position: relative;
-	}
-	.sidebar a {float: left;}
-	div.content {margin-left: 0;}
-	}
+/* Style the main content */
+.main-content {
+  margin-left: 250px; /* Same width as the sidebar */
+  padding: 20px;
+}
+
+/* Responsive layout - when the screen is less than 600px wide, make the sidebar and the main content stack on top of each other */
+@media screen and (max-width: 600px) {
+  .sidebar {
+    width: 100%;
+    height: auto;
+    position: relative;
+  }
+  .sidebar a {float: left;}
+  div.content {margin-left: 0;}
+}
+
+.bottom-link {
+  position: absolute;
+  bottom: 20px; /* Adjust this value to raise or lower the link */
+  left: 0;
+  width: 84%; 
+  text-align: left;
+  }
+
+  .bottom-link2 {
+  position: absolute;
+  bottom: 60px; /* Adjust this value to raise or lower the link */
+  left: 0;
+  width: 84%; 
+  text-align: left;
+  }
+
+	table {
+            border-collapse: collapse;
+            width: 100%;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: center;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+        .total-score {
+            font-weight: bold;
+            background-color: #ffe6cc;
+        }
+
     </style>
 </head>
 <body>
@@ -125,51 +153,64 @@ button {
 	<input type="hidden" name="step" id="step" value="1">
 	<!-- Side bar, duh -->
 	<div class="sidebar">
-		 <a href="${pageContext.servletContext.contextPath}/index">
+		<a href="${pageContext.servletContext.contextPath}/index">
 			<img src="${pageContext.request.contextPath}/_view/BowlingBall.png"width="100" height="100">
 		  </a>
 	      <a href="${pageContext.servletContext.contextPath}/establishmentReg">Establishment Registration</a>
-		  <a href="${pageContext.servletContext.contextPath}/logIn">Sign Out</a>
-          <a href="${pageContext.servletContext.contextPath}/shot">Shot</a>
           <a href="${pageContext.servletContext.contextPath}/ballArsenal">Ball Arsenal</a>
-          <a href="https://github.com/emmetl913/RevMetrixUI-Database">GitHub</a>
-		 <a class="dropbtn" href="#" onclick="toggleDropdown(), nextStep(1)">Start Bowling!</a>
-		 <div class="dropdown-content" id="myDropdown">
-	        <a href="#" onclick="showContent('event')">Event</a>
-	        <a href="#" onclick="showContent('session')">Session</a>
-	        <a href="#" onclick="showContent('game')">Game</a>
-			<a href="#" onclick="showContent('frame')">Frame</a>
-	        <a href="#" onclick="showContent('shot')">Shot</a>
+		  <a href="${pageContext.servletContext.contextPath}/stats">Stats</a>
+          <a href="${pageContext.servletContext.contextPath}/startBowling">Start Bowling</a>
+		  
+          <a href="https://github.com/emmetl913/RevMetrixUI-Database"class="bottom-link2">GitHub</a>
+          <a href="${pageContext.servletContext.contextPath}/logIn"class="bottom-link">Sign Out</a>
 	   	 </div>
-	</div>
+		  </div>
 	<form id = "gameForm" action="${pageContext.servletContext.contextPath}/stats" method="post">
 	<div class="container">
 	
 		<!-- Game Page -->
 			<h1>Stats Page!</h1> 
 			<tr>
-				
-				<!-- All stats that need an event will be displayed below>
-				<!-- First They must choose an event-->
-				
-				<select>
-				<%
-					if(events!=null) {
-						for(int i = 0; i < events.size();i++) {
-							events.get(i);
-							String is = ""+i; //for getting index of choice
-						
-							
-						}
-					}
-				%>
-				</select>
+
 				<button id="submitButton" type="submit" id="gameStatus" name="dont" value="leagueAverage">Get League Average</button>
 				&nbsp
 			  	<button id="submitButton1"type="submit" id="gameStatus" name="worry" value="startNewGame"> Start New Game</button>
 			</tr> 
 		</div>
 		</form>
-	
+
+	<div class="container">
+		<table>
+			<thead>
+				<tr>
+					<th>DATE</th>
+					<th>LGE (League)</th>
+					<th>LANES</th>
+					<th>1</th>
+					<th>2</th>
+					<th>3</th>
+					<th>SERIES</th>
+					<th>TOTAL GAMES</th>
+					<th>AVERAGE</th>
+				</tr>
+			</thead>
+			<tbody>
+				<% ArrayList<stat> sessionTable = (ArrayList<stat>)request.getAttribute("sessionTable");
+          for (stat s : sessionTable) { %>
+       <tr>
+           <td><%= s.getDate() %></td>
+           <td><%= s.getLeague() %></td>
+           <td><%= s.getLanes() %></td>
+           <td><%= s.getGames1() %></td>
+           <td><%= s.getGames2() %></td>
+           <td><%= s.getGames3() %></td>
+           <td><%= s.getSeries() %></td>
+           <td><%= s.getTotalGame() %></td>
+           <td><%= s.getAvg() %></td>
+       </tr>
+       <% } %>
+			</tbody>
+		</table>
+	</div>
 </body>
 </html>
