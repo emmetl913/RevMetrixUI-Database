@@ -525,14 +525,7 @@ public class DerbyDatabase implements IDatabase {
 		shot.setLeave(resultSet.getString(index++));
 	}
 	
-	private void loadGame(Game game, ResultSet resultSet, int index) throws SQLException {
-		game.setGameID(resultSet.getInt(index++));
-		game.setSessionID(resultSet.getInt(index++));
-		game.setLane(resultSet.getInt(index++));
-		game.setGameNumber(resultSet.getInt(index++));
-		game.setScore(resultSet.getInt(index++));
-		
-	}
+	
 	
 	@Override
 	public List<Account> getAccountByUsernameAndPassword(String username, String password) {
@@ -816,7 +809,7 @@ public class DerbyDatabase implements IDatabase {
 					while(resultSet1.next())
 					{
 						found = true;
-						Session session = new Session(0, 0, "", "", "", "", 0);
+						Session session = new Session(0, 0, "", "", "", 0);
 						loadSession(session, resultSet1, 1);
 						//System.out.println("SKREET" + ball.getName());
 						result.add(session);
@@ -831,15 +824,7 @@ public class DerbyDatabase implements IDatabase {
 			}
 		});
 	}
-	private void loadSession(Session session, ResultSet resultSet, int index) throws SQLException {
-		session.setSessionID(resultSet.getInt(index++));
-		session.setEventID(resultSet.getInt(index++));
-		session.setTime(resultSet.getString(index++));
-		session.setDate(resultSet.getString(index++));
-		session.setOppType(resultSet.getString(index++));
-		session.setOpp(resultSet.getString(index++));
-		session.setScore(resultSet.getInt(index++));
-	}
+	
 	@Override
 	public List<Ball> getBallsByAccountID(int accountId) {
 		return executeTransaction(new Transaction<List<Ball>>() {
@@ -1514,7 +1499,7 @@ public class DerbyDatabase implements IDatabase {
 	}
 	
 	@Override
-	public Integer insertNewSession(int eventID, String time, String date, String oppType, String oppName, int score) {
+	public Integer insertNewSession(int eventID, String time, String oppType, String oppName, int score) {
 		return executeTransaction(new Transaction<Integer>() {
 			@Override
 			public Integer execute(Connection conn) throws SQLException {
@@ -1528,31 +1513,54 @@ public class DerbyDatabase implements IDatabase {
 				
 				Integer session_id = -1;
 				
-				// try to find account_id in db
 				try
 				{
+					stmt1 = conn.prepareStatement(
+							"select session_id from sessions where "
+							+ " event_id = ? and time = ? and oppType = ? and oppName = ? and score = ?"
+					);
+					stmt1.setInt(1, eventID);
+					stmt1.setString(2, time);
+					stmt1.setString(3, oppType);
+					stmt1.setString(4, oppName);
+					stmt1.setInt(5, score);
+					resultSet1 = stmt1.executeQuery();
 					
+					if(resultSet1.next())
+					{
+						session_id = resultSet1.getInt(1);
+						System.out.println("Session <"+ time +"> found with id: "+session_id);
+					}
+					else 
+					{
+						System.out.println("Session <"+ time +"> was not found");
+					}
+					if(session_id <= 0)
+					{
 						stmt2 = conn.prepareStatement(
-								"insert into sessions (event_id, time, date, oppType, oppName, score) "
-								+ " values(?, ?, ?, ?, ?, ?)"
+								"insert into sessions (event_id, time, oppType, oppName, score) "
+								+ " values(?, ?, ?, ?, ?) "
 						);
 						stmt2.setInt(1, eventID);
 						stmt2.setString(2, time);
-						stmt2.setString(3, date);
-						stmt2.setString(4, oppType);
-						stmt2.setString(5, oppName);
-						stmt2.setInt(6, score);
+						stmt2.setString(3, oppType);
+						stmt2.setString(4, oppName);
+						stmt2.setInt(5, score);
 						
 						stmt2.executeUpdate();
 						
-						System.out.println("New session <"+eventID+"> , <"+time+"> , <"+date+"> , <"+oppType+"> , <"+oppName+">, <"+score+"> inserted into sessions");
+						System.out.println("New session <"+eventID+"><"+time+"> , <"+oppType+"> , <"+oppName+">, <"+score+"> inserted into sessions");
 						
 						// get the new account_id
 						stmt3 = conn.prepareStatement(
 								"select * from sessions "
-								+ " where event_id = ?"
+								+ " where event_id = ? and time = ? and oppType = ? and oppName = ? and score = ? "
 						);
 						stmt3.setInt(1, eventID);
+						stmt3.setString(2, time);
+						stmt3.setString(3, oppType);
+						stmt3.setString(4, oppName);
+				 		stmt3.setInt(5, score);
 						
 						resultSet3 = stmt3.executeQuery();
 						
@@ -1561,7 +1569,7 @@ public class DerbyDatabase implements IDatabase {
 							session_id = resultSet3.getInt(1);
 							System.out.println("New session  <"+session_id+">");
 						}
-					
+					}
 						return session_id;
 				}
 				finally 
@@ -1646,7 +1654,7 @@ public class DerbyDatabase implements IDatabase {
 		session.setOpp(resultSet.getString(index++));
 		session.setScore(resultSet.getInt(index++));
 
-		}
+	}
 	
 	private void loadEstablishment(Establishment establishment, ResultSet resultSet, int index) throws SQLException {
 		establishment.setEstaId(resultSet.getInt(index++));
@@ -1682,6 +1690,7 @@ public class DerbyDatabase implements IDatabase {
 			@Override
 			public Boolean execute(Connection conn) throws SQLException {
 			
+				PreparedStatement stmt9 = null;
 				PreparedStatement stmt8 = null;
 				PreparedStatement stmt7 = null;
 				PreparedStatement stmt6 = null;
@@ -1696,6 +1705,9 @@ public class DerbyDatabase implements IDatabase {
 				String tablesCreated = "Tables Created: ";
 			
 				try {
+					
+					
+					
 					stmt8 = conn.prepareStatement(
 						"create table shots ("
 						+ " shot_id integer primary key"
@@ -1780,7 +1792,6 @@ public class DerbyDatabase implements IDatabase {
 							" generated always as identity (start with 1, increment by 1), " +
 							" event_id integer," +
 							" time varchar(25)," +
-							" date varchar(8)," +
 							" oppType varchar(30)," +
 							" oppName varchar(50)," +
 							" score integer" +
@@ -1823,6 +1834,17 @@ public class DerbyDatabase implements IDatabase {
 					stmt1.executeUpdate();
 										
 					tablesCreated += "Establishments, ";
+					
+					stmt9 = conn.prepareStatement(
+							"create table eventSessions ("
+								+" event_id integer constraint event_id references events,"
+								+ " session_id integer constraint session_id references sessions"
+								+ ")"
+					);
+					
+					stmt9.executeUpdate();
+					tablesCreated += "eventSessions, ";
+					
 					System.out.println(tablesCreated);
 					
 					return true;
@@ -1979,15 +2001,14 @@ public class DerbyDatabase implements IDatabase {
 					
 					tablesPopulated += "Games, ";
 					
-					insertSession = conn.prepareStatement("insert into sessions (event_id, time, date, oppType, oppName, score) values (?, ?, ?, ?, ?, ?)");
+					insertSession = conn.prepareStatement("insert into sessions (event_id, time, oppType, oppName, score) values (?, ?, ?, ?, ?)");
 					for (Session session : seshList)
 					{
 						insertSession.setInt(1, session.getEventID());
 						insertSession.setString(2, session.getTime());
-						insertSession.setString(3, session.getDate());
-						insertSession.setString(4, session.getOppType());
-						insertSession.setString(5, session.getOpponent());
-						insertSession.setInt(6, session.getScore());
+						insertSession.setString(3, session.getOppType());
+						insertSession.setString(4, session.getOpponent());
+						insertSession.setInt(5, session.getScore());
 						insertSession.addBatch();
 					}
 					insertSession.executeBatch();

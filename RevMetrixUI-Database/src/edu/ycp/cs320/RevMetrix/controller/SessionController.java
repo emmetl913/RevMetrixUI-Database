@@ -35,9 +35,9 @@ public class SessionController {
 			return resultList;
 		}
 	}
-	public Integer insertNewSession(int eventID, String time, String date, String oppType, String oppName, int score)
+	public Integer insertNewSession(int eventID, String time, String oppType, String oppName, int score)
 	{
-		Integer newSession = db.insertNewSession(eventID, time, date, oppType, oppName, score);
+		Integer newSession = db.insertNewSession(eventID, time,  oppType, oppName, score);
 		
 		if (newSession == null)
 		{

@@ -91,7 +91,7 @@ public class AccountServlet extends HttpServlet {
 			req.setAttribute("errorMessage", errorMessage);
 			req.setAttribute("game", model);
 			//session.setAttribute("accountListKey", accList);	
-			req.getRequestDispatcher("/_view/index.jsp").forward(req, resp);
+			resp.sendRedirect(req.getContextPath() + "/index");
 		}
 		else if (req.getParameter("registerButton") != null) {
 			req.setAttribute("errorMessage", errorMessage);

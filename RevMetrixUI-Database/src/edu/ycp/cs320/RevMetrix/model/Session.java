@@ -10,12 +10,11 @@ public class Session {
 	private ArrayList<Game> games;
 	
 	
-	public Session(int sessionId, int eventID, String time, String date, String oppType, String opp, int score)
+	public Session(int sessionId, int eventID, String time, String oppType, String opp, int score)
 	{
 		this.sessionID = sessionId;
 		this.eventID = eventID;
 		this.time = time;
-		this.date = date;
 		this.oppType = oppType;
 		this.opp = opp;
 		this.score = score;
