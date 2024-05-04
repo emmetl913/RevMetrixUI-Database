@@ -601,6 +601,7 @@
 						} else {
 							// Set the pin to down
 							pinElement.classList.add('down');
+							pinElement.classList.add('locked');
 							pinElement.querySelector('input[type="hidden"]').value = "down";
 						}
 					});
