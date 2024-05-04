@@ -18,7 +18,7 @@
 
         body {
             font-family: Arial, sans-serif;
-            background-color: #f4f4f4;
+            background-color: darkgray;
             margin: 0;
             padding: 0;
         }

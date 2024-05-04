@@ -76,13 +76,18 @@ public class AccountSignUpServlet extends HttpServlet {
 //			session.setAttribute("accountListKey", accList);		
 //		}
 		
+		req.setAttribute("email", req.getParameter("email"));
+		req.setAttribute("username", req.getParameter("username"));
+		req.setAttribute("firstname", req.getParameter("firstname"));
+		req.setAttribute("lastname", req.getParameter("lastname"));
+		req.setAttribute("password", req.getParameter("password"));
+		req.setAttribute("password2", req.getParameter("password2"));
+		
 		// check for errors in the form data before using is in a calculation
-		if (username.length() < 5 || password.length()<5 || password2.length() < 5) {
+		if (username.length() < 5 || password.length()<5 || password2.length() < 5 || username != "" || password != "") {
 			errorMessage = "Please enter a username and/or password that are both longer than 5 characters";
 		}
-		
-	
-		
+
 		//Check to see if the account already exists in the database by username
 		if(errorMessage == null) {
 			List<Account> existingAccount = controller.getAccountByUsername(username);
@@ -92,7 +97,6 @@ public class AccountSignUpServlet extends HttpServlet {
 				
 			}
 		}
-		
 		//Check to see if the account already exists in the database by email
 		if(errorMessage == null) {
 			List<Account> existingAccountEmail = controller.getAccountByEmail(email);
