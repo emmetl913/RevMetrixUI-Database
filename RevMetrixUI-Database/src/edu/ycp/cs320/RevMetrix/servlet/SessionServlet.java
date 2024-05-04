@@ -55,8 +55,9 @@ public class SessionServlet extends HttpServlet{
 		
 		HttpSession session = req.getSession();
 		Account acc = (Account) session.getAttribute("currAccount");
-		int eventID = 0; //(int) session.getAttribute("currEventID");
+		Integer eventID = (Integer) session.getAttribute("eventID"); //(int) session.getAttribute("currEventID");
 		
+		model.setEventID(eventID);
 		controller.setModel(model);
 		
 		
@@ -104,11 +105,13 @@ public class SessionServlet extends HttpServlet{
 		req.setAttribute("model", model);
 		
 		if(req.getParameter("submit") != null) {
-			controller.insertNewSession(eventID, model.getTime(), model.getOppType(), model.getName(), 0);
-    		req.getRequestDispatcher("/_view/game.jsp").forward(req, resp);
+			Integer sessionID = controller.insertNewSession(eventID, model.getTime(), model.getOppType(), model.getName(), 0);
+    		session.setAttribute("sessionID", sessionID);
+    		System.out.println("SessionID: "+ sessionID);
+			req.getRequestDispatcher("/_view/game.jsp").forward(req, resp);
         }
-
+		else {
 		
-		req.getRequestDispatcher("/_view/session.jsp").forward(req, resp);
+		req.getRequestDispatcher("/_view/session.jsp").forward(req, resp);}
 	}
 }

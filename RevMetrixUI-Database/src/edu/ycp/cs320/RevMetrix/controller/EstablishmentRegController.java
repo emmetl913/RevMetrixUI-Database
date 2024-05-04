@@ -32,6 +32,7 @@ public class EstablishmentRegController {
 	public Establishment getEstablishmentByAccountAndEstablishmentID(int accID, int estaID){
 		return  db.getEstablishmentByAccountAndEstablishmentID(accID, estaID);
 	}
+	
 	public List<Establishment> getAllEstablishmentsForAccount(int accountId) {
 	
 	// get the list of (Author, Book) pairs from DB
@@ -53,7 +54,7 @@ public class EstablishmentRegController {
 		return estaList;
 	}
 	
-	public Integer insertNewEstablishment(int account_id, int estb_id, String name, int time, String type, int standing) {
+	public Integer insertNewEstablishment(int account_id, int estb_id, String name, String time, String type, int standing) {
 		// get the list of (Author, Book) pairs from DB
 		Integer newEsta = db.insertNewEvent(account_id, estb_id, name, time, type, standing);
 		

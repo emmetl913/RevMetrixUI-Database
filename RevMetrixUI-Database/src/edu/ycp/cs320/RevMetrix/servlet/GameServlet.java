@@ -2,6 +2,7 @@ package edu.ycp.cs320.RevMetrix.servlet;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -9,6 +10,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import edu.ycp.cs320.RevMetrix.controller.FrameController;
+import edu.ycp.cs320.RevMetrix.controller.GameController;
 import edu.ycp.cs320.RevMetrix.model.Account;
 import edu.ycp.cs320.RevMetrix.model.Game;
 
@@ -16,9 +19,6 @@ import edu.ycp.cs320.RevMetrix.model.Game;
 public class GameServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	
-	//Important information: 
-	//		currentGame is not being used by other functions
-	//		This will be main data to implement into the database
 	
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp)
@@ -27,167 +27,129 @@ public class GameServlet extends HttpServlet {
 		if(!AccountServlet.validLogin()) {
 			req.getRequestDispatcher("/_view/logIn.jsp").forward(req, resp);
 		}
+		else {
 		System.out.println("Game Servlet: doGet");	
 		HttpSession session = req.getSession();
-	    long createTime = session.getCreationTime();
-		   
-		// Get last access time of this Webpage.
-		long lastAccessTime = session.getLastAccessedTime();
-
-
-		   // Check if this is new comer on your Webpage.
+	   
+		Account acc = (Account) session.getAttribute("currAccount");
 		
-		String gamesListKey = new String("gamesListKey");
-		ArrayList<Game> games = (ArrayList<Game>)session.getAttribute(gamesListKey);
+		Game model = null;
+		GameController controller = new GameController();
+		controller.setModel(model);
 		
-		// If first visit: new session id
-		if (session.isNew() ){
-		  //initialize the games list with 3 games
-	      if(games == null) {
-				games = new ArrayList<Game>();
-				
-				games.add(new Game(1, 1, 14, 2, 3));
-				games.add(new Game(1, 2, 22, 3, 4));
-				games.add(new Game(1, 3, 4, 4, 5));
-				session.setAttribute(gamesListKey, games);
-			}
-		} 
-		if(games == null) {
-			games = new ArrayList<Game>();
-			
-			games.add(new Game(1, 1, 14, 2, 3));
-			games.add(new Game(1, 2, 22, 3, 4));
-			games.add(new Game(1, 3, 4, 4, 5));
-			session.setAttribute(gamesListKey, games);
-		}
-		//Get model and userID from jsp
-		games = (ArrayList<Game>)session.getAttribute(gamesListKey);
-		//controller.setModel(model);
-		if(games != null) {
-			for(Game g: games) {
-				System.out.println(g.getLane());
-			}
-		}
+		Integer sessionID = (Integer) session.getAttribute("sessionID");
+		List<Game> resultList = controller.getGameBySessionID(sessionID);
 		
-        
-        //Initialize a Game that will be sent out to other portions of the website (currentGame)
-        Game currentGame = null;
-        
-        // Retrieve the value of the button clicked
-        String buttonValue = req.getParameter("gameStatus");
-        
-        
-		req.setAttribute("gameObjArr", games);
-		session.setAttribute(gamesListKey, games);
+		String gameListKey = "gameListKey";
+		
+//		req.setAttribute("gameObjArr", resultList);
+		session.setAttribute(gameListKey, resultList);
+		req.setAttribute("game", model);
 		
 		// call JSP to generate empty form
 		req.getRequestDispatcher("/_view/game.jsp").forward(req, resp);
+		}
 	}
 	
 	
 	@Override
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException {
+		if(!AccountServlet.validLogin()) {
+			req.getRequestDispatcher("/_view/logIn.jsp").forward(req, resp);
+		}
 		System.out.println("Game Servlet: doPost");
 		
+		String errorMessage = null;
+		
+		Game currentGame = new Game(0, 0, 0, 0, 0);
+		Game invalidGame = currentGame; 
+		GameController controller = new GameController();
+		
 		HttpSession session = req.getSession();
-	    long createTime = session.getCreationTime();
-		   
-		// Get last access time of this Webpage.
-		long lastAccessTime = session.getLastAccessedTime();
-		String userIDKey = new String("userID");
-		String userID = new String("ABCD");
-
-		   // Check if this is new comer on your Webpage.
+		Account acc = (Account) session.getAttribute("currAccount");
+		Integer sessionID = (Integer) session.getAttribute("sessionID");
 		
-		String gamesListKey = new String("gamesListKey");
-		ArrayList<Game> games = (ArrayList<Game>)session.getAttribute(gamesListKey);
-		
-		// If first visit: new session id
-		if (session.isNew() ){
-		  //initialize the games list with 3 games
-		  games.add(new Game(1, 1, 14, 2, 3));
-		  games.add(new Game(1, 2, 22, 3, 4));
-		  games.add(new Game(1, 3, 4, 4, 5));
-		  session.setAttribute(gamesListKey, games);
-		  
-		} 
-		if(games == null) {
-			games = new ArrayList<Game>();
-			
-			games.add(new Game(1, 1, 14, 2, 3));
-			games.add(new Game(1, 2, 22, 3, 4));
-			games.add(new Game(1, 3, 4, 4, 5));
-			session.setAttribute(gamesListKey, games);
-		}
-		//Get model and userID from jsp
-		userID = (String)session.getAttribute(userIDKey);
-		games = (ArrayList<Game>)session.getAttribute(gamesListKey);
-		//controller.setModel(model);
-//		if(games != null) {
-//			for(Game g: games) {
-//				System.out.println(g.getLane());
-//			}
-//		}
+        String gamesListKey = new String("gamesListKey");
+		List<Game> games = controller.getGameBySessionID(sessionID);
 		
         
-        //Initialize a Game that will be sent out to other portions of the website (currentGame)
-        Game currentGame = null;
         
-        // Retrieve the value of the button clicked
-        String buttonValue = req.getParameter("gameStatus");
-        
-        // Check which button was clicked
-//        if ("startNewGame".equals(buttonValue)) {
-//        	Game g = new Game(games.size()+1,1);
-//        	games.add(g); //game gets added to the end of the list //dont worry that the gameNumber will repeat.
-//        	//Eventually it won't because it will take database values
-//        	currentGame = g;
-//        	System.out.println(g.getGameNumber());
-//        }
-        
-        Integer laneInput = getIntegerFromParameter(req.getParameter("laneInput"));
-        if(laneInput == null) {
-        	laneInput = 0;
-        }
         String dropDownValue = req.getParameter("gameDropDown");
-      //  Integer selectedIndex = Integer.parseInt(dropdownValue);
-        //Make a new game and add it to game list
+    
+        
         if(req.getParameter("select") != null) {
         	//currentGame = games.get(selectedIndex);
-
-        	currentGame = games.get(Integer.parseInt(dropDownValue));
-           // System.out.println("Game at index: x" +" selected: " + dropDownValue);
+        	System.out.println("You clicked the button");
+        	if(dropDownValue != null || dropDownValue.equals(""))
+        	{
+        		currentGame = games.get(Integer.parseInt(dropDownValue));
+        	}
+        	if(currentGame != invalidGame) {
+        	System.out.println("Selected Game ID: "+currentGame.getGameID()+" lane: " + currentGame.getLane());
         	System.out.println(currentGame.getLane());
         	
-        	req.setAttribute("gameObjArr", games);
-    		session.setAttribute(gamesListKey, games);
+        	session.setAttribute(gamesListKey, games);
     		session.setAttribute("currentGame", currentGame);
-    		req.getRequestDispatcher("/_view/shot.jsp").forward(req, resp);
+    		acc.setCurrentGame((Game)session.getAttribute("currentGame"));
+    		session.setAttribute("currAccount", acc);
+    		
+    	
+        	req.getRequestDispatcher("/_view/shot.jsp").forward(req, resp);
+    		}
+    		else {
+    			errorMessage = "Must select a valid game";
+    		}
 
         }
+       
         if(req.getParameter("new") != null) {
-        	//currentGame = selected game from dropdown
         	
-        	currentGame = games.get(games.size()-1);
-        	
-        	req.setAttribute("gameObjArr", games);
-    		session.setAttribute(gamesListKey, games);
-    		session.setAttribute("currentGame", currentGame);
-    		req.getRequestDispatcher("/_view/shot.jsp").forward(req, resp);
+        	Integer laneInput = getIntegerFromParameter(req.getParameter("laneInput"));
+            if(laneInput == null ) {
+            	
+            	errorMessage = "Enter a lane";
+            }
+    		if(errorMessage == null) {
 
+    			//set current game number to proper value
+    			//get num of games attached to session
+                int gameNumber;
+                if(games == null) {
+                	gameNumber = 1;
+                }
+                else {
+                	gameNumber = games.size();
+                }
+	        	int gameID = controller.insertNewGame(sessionID, laneInput, gameNumber, 0);
+	        	currentGame = new Game(gameID, sessionID, laneInput, gameNumber, 0);
+	        	//Initialize Game with frames
+	    		FrameController fc = new FrameController();
+	    		for(int i = 1; i <= 12; i++) {
+	    			fc.insertNewFrame(currentGame.getGameID(), i);
+	    		}
+	        	
+	    		session.setAttribute(gamesListKey, games);
+	    		session.setAttribute("currentGame", currentGame);
+	    		acc.setCurrentGame((Game)session.getAttribute("currentGame"));
+	    		session.setAttribute("currAccount", acc);
+
+        		req.getRequestDispatcher("/_view/shot.jsp").forward(req, resp);
+    		}
         }
         
-        
+        else {
         req.setAttribute("gameObjArr", games);
-		session.setAttribute(gamesListKey, games);
 		session.setAttribute("currentGame", currentGame);
-		Account acc = (Account)session.getAttribute("currAccount");
 		acc.setCurrentGame((Game)session.getAttribute("currentGame"));
 		session.setAttribute("currAccount", acc);
 
+		//pass error message
+		req.setAttribute("errorMessage", errorMessage);	
+		
 		// call JSP to generate empty form
 		req.getRequestDispatcher("/_view/game.jsp").forward(req, resp);
+		}
 	}
 	
 	private Integer getIntegerFromParameter(String s) {

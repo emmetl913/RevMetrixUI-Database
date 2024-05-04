@@ -9,15 +9,13 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import edu.ycp.cs320.RevMetrix.model.Account;
 import edu.ycp.cs320.RevMetrix.model.Game;
+import edu.ycp.cs320.RevMetrix.model.stat;
+import edu.ycp.cs320.RevMetrix.controller.statController;
 
 public class StatsServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-	
-	
-	//Important information: 
-	//		currentGame is not being used by other functions
-	//		This will be main data to implement into the database
 	
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp)
@@ -29,49 +27,22 @@ public class StatsServlet extends HttpServlet {
 
 		System.out.println("Stat Servlet: doGet");	
 		HttpSession session = req.getSession();
-	    long createTime = session.getCreationTime();
-		   
-		// Get last access time of this Webpage.
-		long lastAccessTime = session.getLastAccessedTime();
-		String userIDKey = new String("userID");
-		String userID = new String("ABCD");
-
-		   // Check if this is new comer on your Webpage.
+		Account acc = (Account) session.getAttribute("currAccount");
+		statController controller = new statController(acc.getAccountId());
 		
-		//String gamesListKey = new String("gamesListKey");
-		//ArrayList<Game> games = (ArrayList<Game>)session.getAttribute(gamesListKey);
+		ArrayList<stat> sessionTable = new ArrayList<stat>();
 		
-		// If first visit: new session id
-		if (session.isNew() ){
-	      session.setAttribute(userIDKey, userID);		  
-		  //initialize the games list with 3 games
-
-	      //session.setAttribute(gamesListKey, games);
-		  
-		} 
-//		if(games == null) {
-//			games = new ArrayList<Game>();
-//			
-//			games.add(new Game(1,14));
-//			games.add(new Game(2,22));
-//			games.add(new Game(3,4));
-//			session.setAttribute(gamesListKey, games);
-//		}
-		//Get model and userID from jsp
-		userID = (String)session.getAttribute(userIDKey);
-		//games = (ArrayList<Game>)session.getAttribute(gamesListKey);
-        
-        //Initialize a Game that will be sent out to other portions of the website (currentGame)
-       
-        
-        // Retrieve the value of the button clicked
-        
-        
-        
+		//String date, String league, String lanes, int games[], int series, int totalGame, double avg
+		
+		for(int i = 1; i <= controller.getSessionsByEvent(2).size(); i++) {
+			sessionTable.add(new stat(controller.getSessionDate(i), controller.getSessionLeague(2), controller.getCurrentGameLane(i), controller.getGameStatsBySession(i),0,0,0.0));
+		}
+	    
 //		req.setAttribute("gameObjArr", games);
 //		session.setAttribute(gamesListKey, games);
 		
 		// call JSP to generate empty form
+		req.setAttribute("sessionTable", sessionTable);
 		req.getRequestDispatcher("/_view/stats.jsp").forward(req, resp);
 	}
 	

@@ -2,7 +2,6 @@ package edu.ycp.cs320.RevMetrix.servlet;
 
 import java.io.IOException;
 
-import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -23,12 +22,12 @@ import edu.ycp.cs320.RevMetrix.model.BallArsenal;
 import edu.ycp.cs320.RevMetrix.model.Game;
 import edu.ycp.cs320.RevMetrix.model.Session;
 
-
 public class ShotServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	
-	private List<String> ballArsenal = new ArrayList<>();
-
+	private int currentScore;
+	private int currentShotNumber;
+	private int currentFrameNumber;
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException {
@@ -38,79 +37,13 @@ public class ShotServlet extends HttpServlet {
         }
 
 		System.out.println("Shot Servlet: doGet");	
-		
-		//getSession = creates information based on the user
-		
 		HttpSession session = req.getSession();
+		
+		//Load frames from gameID
+		FrameController fc = new FrameController();
+		Game currentGame = (Game)session.getAttribute("currentGame");
+		List<Frame> frameList = fc.getFrameByGameID(currentGame.getGameID());
 
-		//int gameNumber = (int) session.getAttribute("gameNumber");
-		Integer frameNumber = (Integer) session.getAttribute("frameNumber");
-		
-		//check is new comer on webpage
-		String shotKey = new String("shotKey");
-		ArrayList<Frame> frames = (ArrayList<Frame>) session.getAttribute("frames");
-		Game game = new Game(1, 1, 1, 1, 0);
-//		
-//		if(session.isNew()) {
-			//session.setAttribute(shotKey, model);
-//			if(frames == null) {
-//				frames = new ArrayList<Frame>();
-//				
-//				frames.add(new Frame(1,1));
-//				session.setAttribute(shotKey, frames);
-//			}
-//		}
-		
-		//creates new game and frame within the game
-		if(session.getAttribute("gameNumber") == null) {
-			session.setAttribute("gameNumber", game.getGameNumber());
-			session.setAttribute("frameNumber", frameNumber);
-		}
-		
-		//get ball arsenal from the session
-		List<Ball> ballArsenal = (List<Ball>) session.getAttribute("ballArsenal");
-		
-		//write null test for ball arsenal...
-		
-		session.setAttribute("gameNumber", game.getGameNumber());
-		
-		if(frameNumber == null) {
-			frameNumber = 1;
-			session.setAttribute("frameNumber", frameNumber);
-		}
-		
-		//initialize the frames ArrayList
-		if(frames == null) {
-			frames = new ArrayList<Frame>();
-			session.setAttribute("frames", frames);
-		}
-		
-		String action = req.getParameter("action");
-		if("nextFameBtn".equals(action)) {
-			if(frameNumber < 10) {
-				frameNumber++;
-			}
-		}else if("previousFrameBtn".equals(action)) {
-			if(frameNumber > 1) {
-				frameNumber--;
-			}
-		}
-		
-		//add new frame object to the arraylist
-		frames.add(new Frame(0, 0, frameNumber));
-		
-		//update frame number in session
-		session.setAttribute("frameNumber", frameNumber);
-		
-		//passes information to the jsp
-		req.setAttribute("ballArsenal", ballArsenal);
-		req.setAttribute("gameNumber", game.getGameNumber());
-		req.setAttribute("frameNumber", frameNumber);	
-		
-		//if the frame is out of range, it sends an error message to the user
-		boolean outOfRange = (frameNumber < 1 || frameNumber > 10);
-		req.setAttribute("outOfRange", outOfRange);
-		
 		Account account = (Account) session.getAttribute("currAccount");
 		
 		BallArsenal model = (BallArsenal)session.getAttribute("ballArsenalKey");
@@ -139,147 +72,161 @@ public class ShotServlet extends HttpServlet {
 		req.getRequestDispatcher("/_view/shot.jsp").forward(req, resp);
 	}
 	
+	
+
 	@Override
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-	    
-		System.out.println("Shot Servlet: doPost");
+
+	    //REACTIVATE WHEN DONE CODING
+//		if(!AccountServlet.validLogin()) {
+//            req.getRequestDispatcher("/_view/logIn.jsp").forward(req, resp);
+//        }
 		
+		System.out.println("Shot Servlet: doPost");
+		String errorMessage = null;
+
 		HttpSession session = req.getSession();
 		Account account = (Account) session.getAttribute("currAccount");
 		
-		String errorMessage = null;
-		Object sessionShot = session.getAttribute("shotKey");
+		//Load frames from gameID
+		FrameController fc = new FrameController();
+		Game currentGame = (Game)session.getAttribute("currentGame");
+		int sessionID = (int)session.getAttribute("sessionID");
 
-		String shotKey = new String("shotKey");
-		ArrayList<Frame> frames = (ArrayList<Frame>) session.getAttribute("frames");
-		Integer frameNumber = (Integer) session.getAttribute("frameNumber");
+		List<Frame> frameList = fc.getFrameByGameID(currentGame.getGameID());
 		
-		   // Check if this is new comer on your Webpage.
-		if (session.isNew() ){
-		  session.setAttribute(shotKey,  new ArrayList<Frame>());
-		} 
+		//add test shot to first frame
+		Shot testShot1 = new Shot(sessionID, currentGame.getGameID(), frameList.get(0).getFrameID(), 1,5, 1, "12345", "");
+		frameList.get(0).setShot1(testShot1);
 		
-		frames = (ArrayList<Frame>)session.getAttribute(shotKey);
+		//Now lets assign existing shots to their frames while we use this frameList
+		assignShotsToFrames(frameList);
+//		for(Frame frame: frameList) {
+//			System.out.println(frame.getFrameID() + "frame# - " +frame.getFrameNumber());
+//			if(frame.getShot1()!=null) {
+//				System.out.println(frame.getShot1().getCount() + " <-- Count should be 5");
+//			}
+//		}
+		setCurrentFrameNumberAndShotNumber(frameList);
 		
-		Game game = new Game(1, 1, 1, 1, 0);
-		//creates a new session
-		Session ses = new Session(0, 0, "","","",0);
 		
-		session.setAttribute("gameNumber", game.getGameNumber());
+		//The value from the shot box right below the 1 pin (will be an int, "X", "/", "F", "-")
+		String shotBox = req.getParameter("shotBox");
+		System.out.println("Shot count: "+ shotBox);
+
+		//ONLY EVER ACCESS INDICIES 1-10
+		int pins[] = returnPinValues(req); 
 		
-		//retrieve or create a Frame object in the session
-		if(frames == null) {
-			frames = new ArrayList<Frame>();
-			session.setAttribute("frames", frames);
+		if(req.getParameter("submitShot") != null) {
+			System.out.println("You have clicked submit shot!");
+			errorMessage = "hi stinky :P";
 		}
 		
-		FrameController frameController = new FrameController();
-		ShotController controller = new ShotController();
 		
-		//handle form submission for next frame action
-		String action = req.getParameter("action");
-		if("nextFrameBtn".equals(action)) {
-			//increment frame number
-			if(frameNumber == null) {
-				frameNumber = 1; //initialize frame number
-			}else if(frameNumber <= 10) {
-				frameNumber++; //increment frame number is not exceeding 10
-			}
-			System.out.println("Frame Number: " +frameNumber);
-			session.setAttribute("frameNumber", frameNumber);
-		}
-		
-		if("previousFrameBtn".equals(action)) {
-			if(frameNumber != null && frameNumber > 1) {
-				frameNumber--;
-				System.out.println("Previous frame number: " +frameNumber);
-				
-				//DB implementation...
-			}
-		}
-		
-		BallArsenalController ballArsenalController = new BallArsenalController();
-		
-		//get ball id from the jsp
-		String selectedBallId = req.getParameter("ballArsenalDropdown");
-		System.out.println("Selected Ball ID: " +selectedBallId);
-		
-		//get ball from ball ID - setCurrentBall(DB ball)
-		int ballId = 0;
-		//ballid ==0 error probably
-		Ball ball = new Ball();
-		
-		if(selectedBallId == null || selectedBallId.isEmpty()) {
-			System.out.println("Ball ID is null or empty");
-		}else {
-			ballId = Integer.parseInt(selectedBallId);
-			System.out.println("Ball ID: " +ballId);
-		}
-		
-		if(ballId != 0) {
-			List<Ball> ballList = ballArsenalController.getBallByBallId(ballId);
-			if(ballList != null && !ballList.isEmpty()) {
-				ball = ballList.get(0);
-				System.out.println("Ball name: " +ball.getName());
-			}else {
-				System.out.println("No ball found with ID: " +ball.getBallId());
-			}
-		}
-		
-		if(ball.getBallId() != 0) {
-			account.setCurrentBall(ball);
-		}
-		
-		BallArsenal model = (BallArsenal)session.getAttribute("ballArsenalKey");
-		if(model == null) {
-			model = new BallArsenal();
-			session.setAttribute("ballArsenalKey",  model);
-		}
-		
-		BallArsenalController arsenal = new BallArsenalController();
-		arsenal.setModel(model);
-		ArrayList<Ball> balls = (ArrayList<Ball>) arsenal.getBallByAccountId(account.getAccountId());
-		arsenal.setBalls(balls);
-		
-		//get first and second shot from the user
-	    String selectedScoreBox = req.getParameter("selectedScoreBox");
-	    System.out.println("Selected Score Box: " +selectedScoreBox);
-	    
-	    if(selectedScoreBox != null) {
-	    	System.out.println("Received shot number: " +selectedScoreBox);
-	    	
-	    	resp.setStatus(HttpServletResponse.SC_OK);
-	    }else {
-	    	System.err.println("No shot number received");
-	    	
-	    	resp.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-	    }
-	    
-	    req.setAttribute("selectedScoreBox", selectedScoreBox);
-		
-	    //total score in frames or games????
-//	    totalScore = controller.calculateScore(session);
-//	    session.setAttribute("totalScore", totalScore);
-	    
-	    req.setAttribute("errorMessage", errorMessage);
-//	    session.setAttribute(shotKey, shot);
-	    
-	    session.setAttribute("currAccount", account);
-	    
-	    String pin1 = req.getParameter("pin1");
-	    String pin2 = req.getParameter("pin2");
-	    String pin3 = req.getParameter("pin3");
-	    String pin4 = req.getParameter("pin4");
-	    String pin5 = req.getParameter("pin5");
-	    String pin6 = req.getParameter("pin6");
-	    String pin7 = req.getParameter("pin7");
-	    String pin8 = req.getParameter("pin8");
-	    String pin9 = req.getParameter("pin9");
-	    String pin0 = req.getParameter("pin0");
-	    
-	    //calculates the total number of pins knocked down
-	    System.out.println("Total pins knocked down: " +controller.calculatePinsKnockedDown(pin1, pin2, pin3, pin4, pin5, pin6, pin7, pin8, pin9, pin0));
-	  
+		session.setAttribute("frameList", frameList);
+		req.setAttribute("errorMessage", errorMessage);
+
 		req.getRequestDispatcher("/_view/shot.jsp").forward(req, resp);
+	}
+
+	private void updateStrikeorSpareFrames(List<Frame> frames) {
+		//for all frameScores == -3 check to see if their score can be finalized
+				for(int i =0; i<10; i++) { //this way frame 10 can access frame 12 with out an out of bounds
+					
+					//we set frameScore to -3 if someone gets a "X" or "/"
+					if(frames.get(i).getScore() == -3) {
+						//check to see if pinsleft is "X" or "/"
+						Shot shot = new Shot(); // = getShotByFrameID(currentFrameID, Shot1)
+						
+						if(shot.getPinsLeft() == "X") {
+							Shot nextShot = new Shot(); //getShotByFrameID(currentFrameID+1, Shot1);
+							//if nextShot == null dont change score because new score doesnt exist yet
+							if(nextShot != null) {
+							//if 2nd shot is strike check next frame for the final shot for a strike case
+								
+								if (nextShot.getPinsLeft() == "X"){
+									//get nextShot from next frame
+									Shot nextnextShot = new Shot(); //= getShotByFrameID(currentFrameID+2, Shot1);
+									if(nextnextShot != null) {
+										//get the score of the next shot we dont care if it is a strike or whatever we just need the numPinsDown aka count
+										int secondShotScore = nextnextShot.getCount();
+										
+										//figure out how to track the currentScore
+										frames.get(i).setScore(currentScore + 10 + 10 + secondShotScore);
+										
+									}
+								}
+								if(nextShot.getPinsLeft() != "X") {
+									//current frameScore = nextFrame total
+									//note shot2 not new frame
+									Shot nextnextShot = new Shot(); //= getShotByFrameID(currentFrameID+1, Shot2);
+									if(nextnextShot != null) {
+										frames.get(i).setScore(currentScore + nextShot.getCount() + nextnextShot.getCount());
+									}
+								}
+							}
+						}
+						shot = new Shot(); // = getShotByFrameID(currentFrameID, Shot2)
+						if(shot.getPinsLeft()=="/" && shot != null) {
+							Shot nextShot = new Shot(); //getShotByFrameID(currentFrameID+1, Shot1)
+							if(nextShot != null) {
+								frames.get(i).setScore(currentScore + 10 + nextShot.getCount());
+							}
+						}
+						
+					}
+				}
+	}
+	private int[] returnPinValues(HttpServletRequest req){ //1 is down 0 is up. Pins[1]-Pins[10] are proper index
+        int[] pins = new int[12]; //silly goose error means have array even bigger than needed
+        for(int i = 1; i <= 10; i++) {
+        	//System.out.println(("pin"+i));
+        	if(req.getParameter("pin"+(i)).equals("down")) {
+        		pins[i] = 1;
+        	}
+        	else {
+        		pins[i] = 0;
+        	}
+        }
+		return pins;
+	} 
+	private void assignShotsToFrames(List<Frame> frames) {
+		ShotController sc = new ShotController();
+		for(Frame frame: frames) {
+			List<Shot> shots = sc.getShotByFrameID(frame.getFrameID());
+			if(shots != null) {
+				if(shots.get(0) != null) {
+					frame.setShot1(shots.get(0));
+				}
+				if(shots.get(1) != null) {
+					frame.setShot2(shots.get(1));
+				}
+			}
+		}
+	}
+	private void setCurrentFrameNumberAndShotNumber(List<Frame> frames) {
+		boolean goNextFrame = true;
+			for(Frame frame: frames) {
+				if(goNextFrame) {
+					Shot shot1 = frame.getShot1();
+					Shot shot2 = frame.getShot2();
+					if(shot1 == null) {
+						//This must be the current shot and frame
+						currentFrameNumber = frame.getFrameNumber();
+						currentShotNumber = 1;
+						goNextFrame = false;
+					}
+					if(shot1 != null && !shot1.getPinsLeft().equals("X")) { 
+						if(shot2 != null){
+							//goNextFrame stays true
+						}
+						else { //shot2 is null and no strike so we play here 
+							currentFrameNumber = frame.getFrameNumber();
+							currentShotNumber = 2;
+							goNextFrame = false;
+						}
+					}
+				}
+			}
 	}
 }

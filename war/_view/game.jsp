@@ -5,9 +5,7 @@
 <%@ page import = "java.io.*,java.util.*"%>
 <%@ page import="javax.servlet.http.HttpSession" %>
 <%
-	ArrayList<Game> games = (ArrayList<Game>)session.getAttribute("gamesListKey");
-	//ArrayList<Ball> games = (model != null) ? model.getBalls() : null;
-
+	List<Game> games = (List<Game>)session.getAttribute("gamesListKey");
 %>
 <html>
 <head>
@@ -16,7 +14,7 @@
     <style>
         body {
             font-family: Arial, sans-serif;
-            background-color: #f4f4f4;
+            background-color: darkgray;
             margin: 0;
             padding: 0;
         }
@@ -39,7 +37,7 @@ button {
             background-color: #fff;
             padding: 20px;
             border-radius: 8px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            box-shadow: 10px 10px 5px black;
         }
 
         label {
@@ -142,6 +140,7 @@ button {
 		  </a>
 	      <a href="${pageContext.servletContext.contextPath}/establishmentReg">Establishment Registration</a>
           <a href="${pageContext.servletContext.contextPath}/ballArsenal">Ball Arsenal</a>
+		  <a href="${pageContext.servletContext.contextPath}/stats">Stats</a>
 		  <a class="dropbtn" href="#" onclick="toggleDropdown(), nextStep(1)">Start Bowling!</a>
 		  <div class="dropdown-content" id="myDropdown">
 		        <a href="${pageContext.servletContext.contextPath}/event">&nbsp&nbsp >Event</a>
@@ -171,7 +170,7 @@ button {
 				&nbsp&nbsp&nbsp|&nbsp&nbsp&nbsp Score: <%=game.getScore()%></option>
 		   <% 
 				 } } else {	%>
-					 <option value="${game.establishment}">No Establishments</option>
+					 <option value="">No Games</option>
 		   <% } %>
 			</select>
 			<p><button id="submitButton" type="submit" id="gameStatus" name="select" value="selectCurrentGame"> Select Current Game</button></p>
@@ -181,7 +180,7 @@ button {
 			</tr>
 				<br> 
 			<tr>
-			  	<button id="submitButton1"type="submit" id="gameStatus" name="new" value="startNewGame"> Start New Game</button>
+			  	<button id="submitButton1" type="submit" id="gameStatus" name="new" value="startNewGame"> Start New Game</button>
 			</tr> 
 		</div>
 		</form>

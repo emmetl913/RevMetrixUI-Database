@@ -3,11 +3,12 @@ package edu.ycp.cs320.RevMetrix.model;
 import java.util.List;
 
 public class Shot{
-	private int pins, sessionID, gameID, frameID, shotNumber, ballID;
-	private String count, pinsLeft;
+	private int pins, sessionID, gameID, frameID, shotNumber, ballID, count;
+	private String leave, pinsLeft;
+	private int shotID;
 	
 	//Constructor
-	public Shot(int sessionID, int gameID, int frameID, int shotNumber, String count, int ballID, String pinsLeft) {
+	public Shot(int sessionID, int gameID, int frameID, int shotNumber, int count, int ballID, String pinsLeft, String leave) {
 		this.sessionID = sessionID;
 		this.gameID = gameID;
 		this.frameID = frameID;
@@ -15,8 +16,14 @@ public class Shot{
 		this.count = count;
 		this.ballID = ballID;
 		this.pinsLeft = pinsLeft;
+
+		this.leave = leave;
 	}
 	
+	public Shot() {
+		// TODO Auto-generated constructor stub
+	}
+
 	//pins
 	public int getPins()
 	{
@@ -62,12 +69,12 @@ public class Shot{
 	{
 		this.shotNumber = num;
 	}
-	//pins knocked over for each shot
-	public String getCount()
+
+	public int getCount()
 	{
 		return this.count;
 	}
-	public void setCount(String count)
+	public void setCount(int count)
 	{
 		this.count = count;
 	}
@@ -89,5 +96,21 @@ public class Shot{
 	public void setPinsLeft(String left)
 	{
 		this.pinsLeft = left;
+	}
+
+	public String getLeave() {
+		return leave;
+	}
+
+	public void setLeave(String leave) {
+		this.leave = leave;
+	}
+
+	public int getShotID() {
+		return shotID;
+	}
+
+	public void setShotID(int shotID) {
+		this.shotID = shotID;
 	}
 }

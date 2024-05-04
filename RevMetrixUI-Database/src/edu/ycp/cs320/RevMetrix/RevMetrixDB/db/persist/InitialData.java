@@ -133,7 +133,7 @@ public class InitialData {
 				int accID = Integer.parseInt(i.next());
 				int estbID = Integer.parseInt(i.next());
 				String name = i.next();
-				int time = Integer.parseInt(i.next());
+				String time = i.next();
 				String type = i.next();
 				int standing = Integer.parseInt(i.next());
 				
@@ -203,11 +203,12 @@ public class InitialData {
 				int gameID = Integer.parseInt(i.next());
 				int frameID = Integer.parseInt(i.next());
 				int shotNumber = Integer.parseInt(i.next());
-				String count = i.next();
+				int count = Integer.parseInt(i.next());
 				int ballID = Integer.parseInt(i.next());
 				String pinsLeft = i.next();
+				String leave = i.next();
 				
-				Shot shot = new Shot(sessionID, gameID, frameID, shotNumber, count, ballID, pinsLeft);
+				Shot shot = new Shot(sessionID, gameID, frameID, shotNumber, count, ballID, pinsLeft, leave);
 				
 				shotList.add(shot);
 			}
@@ -271,7 +272,7 @@ public class InitialData {
 					break;
 				}
 				Iterator<String> i = tuple.iterator();
-
+				System.out.println(tuple);
 				// read author ID from CSV file, but don't use it
 				// it's there for reference purposes, just make sure that it is correct
 				// when setting up the BookAuthors CSV file

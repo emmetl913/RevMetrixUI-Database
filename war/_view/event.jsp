@@ -18,12 +18,12 @@
 
         body {
             font-family: Arial, sans-serif;
-            background-color: #f4f4f4;
+            background-color: darkgray;
             margin: 0;
             padding: 0;
         }
 
-        .ball-section {
+        .event-section {
         border: 1px solid black; /* Add border around each ball section */
         margin-bottom: 10px; /* Add some space between ball sections */
         padding: 10px; /* Add padding inside each ball section */
@@ -124,15 +124,6 @@
   width: 84%; 
   text-align: left;
   }
-
-  .ball-section {
-        border: 1px solid black; /* Add border around each ball section */
-        margin-bottom: 10px; /* Add some space between ball sections */
-        padding: 10px; /* Add padding inside each ball section */
-    }
-  
-
-
     </style>
 </head>
 <body>
@@ -146,6 +137,7 @@
 		  </a>
 	      <a href="${pageContext.servletContext.contextPath}/establishmentReg">Establishment Registration</a>
           <a href="${pageContext.servletContext.contextPath}/ballArsenal">Ball Arsenal</a>
+          <a href="${pageContext.servletContext.contextPath}/stats">Stats</a>
           <a class="dropbtn" href="#" onclick="toggleDropdown(), nextStep(1)">Start Bowling!</a>
 		      <div class="dropdown-content" id="myDropdown">
 	        <a href="${pageContext.servletContext.contextPath}/event">>Event</a>
@@ -164,13 +156,13 @@
       <h2>Pick Existing Event</h2>
         <form action="${pageContext.servletContext.contextPath}/event" method="post">
 
-          <div id="ballsList"> &nbsp				
+          <div id="eventsList"> &nbsp				
             <% 
                    
                 if (events != null) {
                   for (Event event : events) {
            %>
-                 <div class="ball-section">
+                 <div class="event-section" onclick= "selectEvent ('<%= event.getEventID() %>')">
                   <p>Name: <%= event.getEventName() %></p>
                    <p>Establishment Name: <%= event.getEstbID()%></p>
                </div>
@@ -180,9 +172,9 @@
            <% } %>
            
            </div>
-    
+           <input type="hidden" id="selectedEvent" name="selectedEvent">
           <tr>
-            <td><a href="${pageContext.servletContext.contextPath}/session"><input type="Submit" id="sessionType" name="Submit" value="Submit"></a></td>
+            <td><a href="${pageContext.servletContext.contextPath}/session"><input type="Submit" id="SubmitCurrentEvent" name="SubmitCurrentEvent" value="Submit"></a></td>
           </tr>
          </form>
 	 </div>
@@ -192,7 +184,10 @@
     <form action="${pageContext.servletContext.contextPath}/event" method="post">
 
       <label for="eventName">Event Name:</label>
-      <input type="text" name="eventName" size="12" value="${game.eventName}">
+      <input type="text" name="eventName" size="12" value="">
+
+      <label for="eventdate">Event Date:</label>
+      <input type="text" name="eventdate" size="12" value="">
 
       <input type="hidden" id="type" name="newType" value="">
 
@@ -269,10 +264,9 @@
           document.getElementById("type").value = "Leauge";
         }
         
-        function selectBall(ballName) {
-       document.getElementById('selectedBall').value = ballName;
-       document.getElementById('ballArsenalForm').submit();
-   }
+        function selectEvent(event) {
+    document.getElementById('selectedEvent').value = event;
+}
       </script>
 </body>
 </html>

@@ -3,12 +3,8 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
 <%@ page import= "edu.ycp.cs320.RevMetrix.model.Event" %>
-<%@ page import="edu.ycp.cs320.RevMetrix.model.EventArray" %>
-
 <%@ page import= "edu.ycp.cs320.RevMetrix.model.Game" %>
 <%@ page import= "edu.ycp.cs320.RevMetrix.model.Establishment" %>
-<%@ page import="edu.ycp.cs320.RevMetrix.model.EstablishmentArray" %>
-
 <%@ page import = "java.io.*,java.util.*"%>
 
 <html>
@@ -372,6 +368,7 @@
 		  </a>
 	      <a href="${pageContext.servletContext.contextPath}/establishmentReg">Establishment Registration</a>
           <a href="${pageContext.servletContext.contextPath}/ballArsenal">Ball Arsenal</a>
+		  <a href="${pageContext.servletContext.contextPath}/stats">Stats</a>
 		 <a class="dropbtn" href="#" onclick="toggleDropdown(), nextStep(1)">Start Bowling!</a>
 		 <div class="dropdown-content" id="myDropdown">
 	        <a href="${pageContext.servletContext.contextPath}/event">>Event</a>
