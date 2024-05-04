@@ -51,4 +51,8 @@ public interface IDatabase {
 	public Integer insertNewEvent(int accID, int estbID, String name, int time, String type, int standing);
 	public Establishment getEstablishmentByAccountAndEstablishmentID(int accID, int estaID);
 	
+	//Stats
+	public List<Shot> getStrikesFromAccount(int gameID, int sessionID);
+	public List<Shot> getSparesFromAccount(int gameID, int sessionID);
+	public List<Shot> getSecondShotsFromAccount(int gameID, int sessionID);
 }

@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
-<%@ page import= "edu.ycp.cs320.lab02.model.Game" %>
-<%@ page import= "edu.ycp.cs320.lab02.model.Event" %>
+<%@ page import= "edu.ycp.cs320.RevMetrix.model.Game" %>
+<%@ page import= "edu.ycp.cs320.RevMetrix.model.Event" %>
 
 <%@ page import = "java.io.*,java.util.*"%>
 <%@ page import="javax.servlet.http.HttpSession" %>
@@ -23,7 +23,7 @@
             margin: 0;
             padding: 0;
         }
-button {
+		button {
             background-color: #4caf50;
             color: #fff;
             padding: 10px 20px;
@@ -75,46 +75,56 @@ button {
 			color: red;
 		}
 		.sidebar {
-	height: 100%;
-	width: 250px;
-	position: fixed;
-	top: 0;
-	left: 0;
-	background-color: black;
-	padding-top: 20px;
-	}
-	.number-input{
-		width: 100px;
-	}
-	/* Links in the sidebar */
-	.sidebar a {
-	padding: 10px 20px;
-	text-decoration: none;
-	color: white;
-	display: block;
-	}
+			height: 100%;
+			width: 250px;
+			position: fixed;
+			top: 0;
+			left: 0;
+			background-color: black;
+			padding-top: 20px;
+		}
 
-	/* Change color of links on hover */
-	.sidebar a:hover {
-	background-color: #333;
-	}
+		tr{
+			padding: 5 px;
+		}
 
-	/* Style the main content */
-	.main-content {
-	margin-left: 250px; /* Same width as the sidebar */
-	padding: 20px;
-	}
+		.button{
+			margin-right: 15px;
+			margin-left: 15px;
+		}
 
-	/* Responsive layout - when the screen is less than 600px wide, make the sidebar and the main content stack on top of each other */
-	@media screen and (max-width: 600px) {
-	.sidebar {
-		width: 100%;
-		height: auto;
-		position: relative;
-	}
-	.sidebar a {float: left;}
-	div.content {margin-left: 0;}
-	}
+		.number-input{
+			width: 100px;
+		}
+		/* Links in the sidebar */
+		.sidebar a {
+		padding: 10px 20px;
+		text-decoration: none;
+		color: white;
+		display: block;
+		}
+
+		/* Change color of links on hover */
+		.sidebar a:hover {
+		background-color: #333;
+		}
+
+		/* Style the main content */
+		.main-content {
+		margin-left: 250px; /* Same width as the sidebar */
+		padding: 20px;
+		}
+
+		/* Responsive layout - when the screen is less than 600px wide, make the sidebar and the main content stack on top of each other */
+		@media screen and (max-width: 600px) {
+		.sidebar {
+			width: 100%;
+			height: auto;
+			position: relative;
+		}
+		.sidebar a {float: left;}
+		div.content {margin-left: 0;}
+		}
     </style>
 </head>
 <body>
@@ -150,9 +160,10 @@ button {
 			<tr>
 				
 				<!-- All stats that need an event will be displayed below>
-				<!-- First They must choose an event-->
+					First They must choose an event-->
 				
 				<select>
+					<!-- User selects which event they want to see the stats from -->
 				<%
 					if(events!=null) {
 						for(int i = 0; i < events.size();i++) {
@@ -164,12 +175,14 @@ button {
 					}
 				%>
 				</select>
-				<button id="submitButton" type="submit" id="gameStatus" name="dont" value="leagueAverage">Get League Average</button>
-				&nbsp
-			  	<button id="submitButton1"type="submit" id="gameStatus" name="worry" value="startNewGame"> Start New Game</button>
+				<!-- Possibly the type is a button... -->
+				<button class="button" id="strikeButton" type="submit" id="gameStatus" name="be" value="strikePercentage">Strike Percentage</button>
+				<button class="button" id="spareButton" type="submit" id="gameStatus" name="happy" value="sparePercentage">Spare Percentage</button>
+				<button class="button" id="leavePercentage" type="submit" id="gameStatus" name="leave" value="leavePercentage">Leave Percentage</button>
 			</tr> 
 		</div>
 		</form>
 	
+		<!-- java script to make the information show -->
 </body>
 </html>

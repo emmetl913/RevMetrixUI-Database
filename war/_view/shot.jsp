@@ -398,24 +398,11 @@
                 }
 
 
-                console.log("togglePin function called");
-                // const isLeave = pin.classList.toggle('selected');
-                const selectedScoreBox = getSelectedScoreBoxId();
-                // console.log("isLeave: ", isLeave);
-                // console.log("Second Shot initialize: ", secondShotScore);
-
-
-                if(!selectedScoreBox){
-                    console.log("No selected shot box");
-                    return;
-                }
-
-
-                if(selectedScoreBox === 'score-box1'){
-                    document.getElementsByName("shotNumber")[0].value = 1;
-                }else if(selectedScoreBox === 'score-box2'){
-                    document.getElementsByName("shotNumber")[0].value = 2;
-                }
+                // if(selectedScoreBox === 'score-box1'){
+                //     document.getElementsByName("shotNumber")[0].value = 1;
+                // }else if(selectedScoreBox === 'score-box2'){
+                //     document.getElementsByName("shotNumber")[0].value = 2;
+                // }
 
 
                 const isLeave = pin.classList.toggle('selected');
@@ -428,6 +415,15 @@
                 }else{
                     pin.style.backgroundColor = 'black'
                     pin.style.color = 'white';
+                }
+
+                console.log("togglePin function called");
+                const selectedScoreBox = getSelectedScoreBoxId();
+
+
+                if(!selectedScoreBox){
+                    console.log("No selected shot box");
+                    return;
                 }
 
 
@@ -457,41 +453,28 @@
                 document.getElementById("shotForm").submit();
             });
 
-            //selects first and second shot
+            //makes the first shot highlighted when the user loads the page
             // document.addEventListener("DOMContentLoaded", function(){
-            //     var scoreBoxes = document.querySelectorAll(".firstShot, .secondShot");
-
-            //     scoreBoxes.forEach(function(scoreBox){
-            //         scoreBox.addEventListener("click", function(){
-            //             scoreBoxes.forEach(function(box){
-            //                 box.classList.remove("selected");
-            //             });
-
-            //             scoreBox.classList.add("selected");
-
-            //             var scoreBoxId = scoreBox.id;
-
-            //             if(shotNumberInput){
-            //                 sendShotNumberToServlet(scoreBoxId);
-            //             }else{
-            //                 console.error("Score box ID is missing");
-            //             }
-            //         });
-            //     });
+            //     var firstScoreBox = document.getElementById("score-box1");
+            //     if(firstScoreBox){
+            //         highlightScoreBox(firstScoreBox);
+            //     }
             // });
 
-            //makes the first shot highlighted when the user loads the page
+            //allows the user to click the first and second score box
             document.addEventListener("DOMContentLoaded", function(){
                 var firstScoreBox = document.getElementById("score-box1");
                 if(firstScoreBox){
                     highlightScoreBox(firstScoreBox);
                 }
-            });
+                
+                var manualSelection = false;
 
-            //allows the user to click the first and second score box
-            document.addEventListener("DOMContentLoaded", function(){
                 document.querySelectorAll('.score-box-form').forEach(function(scoreBoxForm){
                     scoreBoxForm.addEventListener('click', function(){
+                        //manualSelection is true when the score box is manually selected
+                        manualSelection = true;
+                       
                         var form = this.querySelector('form');  //get the parent form element
                         var formId = form.id;
                         var shotNumber = this.dataset.shot;
@@ -609,37 +592,6 @@
                 scoreBox.style.backgroundColor = 'orange';
                 scoreBox.style.color = 'black';
             }
-
-            // function sendShotNumberToServlet(scoreBoxId) {
-            //     // var form = document.getElementById("shotForm");
-            //     // var selectedScoreBoxInput = form.querySelector('input[name="selectedScoreBox"]');
-
-            //     // if(selectedScoreBoxInput){
-            //     //     selectedScoreBoxInput.value = scoreBoxId;
-            //     //     form.submit();
-            //     // }else{
-            //     //     console.error("Hidden value field for selected score box not found");
-            //     // }
-
-            //     //creates new form element and sets the form's method and action attributes
-            //     var form = document.createElement('form');
-            //     form.setAttribute("method", "post");
-            //     form.setAttribute("action", "${pageContext.servletContext.contextPath}/shot");
-
-            //     var input = document.createElement('input');
-            //     input.setAttribute("type", "hidden");
-            //     input.setAttribute("name", "selectedScoreBoxId");
-            //     input.setAttribute("value", scoreBoxId);
-
-            //     //append input elements from the form
-            //     form.appendChild(input);
-
-            //     //append the form to the document body
-            //     document.body.appendChild(form);
-
-            //     form.submit();
-            // }
-
         </script>
     </body>
 </html>
