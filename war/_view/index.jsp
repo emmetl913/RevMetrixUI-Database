@@ -147,6 +147,7 @@
 		  </a>
 	      <a href="${pageContext.servletContext.contextPath}/establishmentReg">Establishment Registration</a>
           <a href="${pageContext.servletContext.contextPath}/ballArsenal">Ball Arsenal</a>
+          <a href="${pageContext.servletContext.contextPath}/stats">Stats</a>
           <a href="${pageContext.servletContext.contextPath}/event">Start Bowling</a>
 
           <a href="https://github.com/emmetl913/RevMetrixUI-Database"class="bottom-link2">GitHub</a>
@@ -154,16 +155,12 @@
 		  </div>
 		  
 		  <div class="container">
-			<h2>Account Page</h2>
+			<h2>Welcome back <%= acc.getFirstName()%> <%= acc.getLastName()%>!</h2>
 			<form action="${pageContext.servletContext.contextPath}/index" method="post">
 
 				<label>Username: <%= acc.getUsername()%> </label>
 	
 				<label>Email: <%= acc.getEmail()%> </label>
-				
-				<label>First Name: <%= acc.getFirstName()%> </label>
-				
-				<label>Last Name: <%= acc.getLastName()%> </label>
 	
 				<label>Events up soon:</label>
 				<div id="eventList"> &nbsp				

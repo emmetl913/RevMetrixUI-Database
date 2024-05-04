@@ -21,7 +21,7 @@ public class EventController {
 		db = DatabaseProvider.getInstance();	
 		
 		this.acc = acc;
-		events = (ArrayList<Event>)getAllEventsForAccount(acc);
+		events = (ArrayList<Event>)getAllEventsForAccount();
 		
 		// creating DB instance here
 		
@@ -29,31 +29,31 @@ public class EventController {
 	
 	
 	
-	public List<Event> getAllEventsForAccount(int accountId) {
+	public List<Event> getAllEventsForAccount() {
 		
 		List<Event> eventList = new ArrayList<Event>();
 		
 		try
 		{
-			eventList = db.getEventsByAccount(accountId);
+			eventList = db.getEventsByAccount(acc);
 			return eventList;
 		}catch(NullPointerException e) {
 			
 		}
 		if (eventList.isEmpty()) {
-			System.out.println("Establishments for <" + accountId + "> dont exist");
+			System.out.println("Establishments for <" + acc + "> dont exist");
 			return null;
 		}
 		// return Esta for this title
 			return eventList;
 		}
 		
-	public Integer insertNewEvent(int acc_id, int estb_id, String name, String time, String type, int standing) {
+	public Integer insertNewEvent(int estb_id, String name, String time, String type, int standing) {
 					
 			//acc_id, estb_id, name, time, type, standing
 			
 			// get the list of (Author, Book) pairs from DB
-			Integer newEvent = db.insertNewEvent(acc_id, estb_id, name, time, type, standing);
+			Integer newEvent = db.insertNewEvent(acc, estb_id, name, time, type, standing);
 			
 			if (newEvent == null) {
 				System.out.println("Establishments for <" + name + "> dont exist");
@@ -67,7 +67,7 @@ public class EventController {
 		this.event = model;
 	}
 	public ArrayList<Event> getEvents(){
-		events = (ArrayList<Event>)getAllEventsForAccount(acc);
+		events = (ArrayList<Event>)getAllEventsForAccount();
 		return events;
 	}
 	//adds a ball to the arsenal with the name and color

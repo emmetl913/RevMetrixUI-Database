@@ -95,12 +95,30 @@ public class EventServlet extends HttpServlet {
 			try {
 				
 				String newEventName = req.getParameter("eventName");
-				int newStanding = Integer.valueOf(req.getParameter("standing"));
+				String newStanding = req.getParameter("standing");
 				String EstaName = req.getParameter("establishment");
 				String EstaDate = req.getParameter("eventdate");
 		        String type = null;
+		        int standing = -1;
 		        int esstabID = -1;
 				
+		        if(newEventName == null || newEventName.equals(""))
+		        {
+		        	errorMessage = "Please enter an Event Name";
+		        }
+		        if(EstaDate == null || EstaDate.equals(""))
+		        {
+		        	errorMessage = "Please enter an Event Date";
+		        }
+		        if(newStanding == null || newStanding.equals(""))
+		        {
+		        	errorMessage = "Please enter your current position in the event";
+		        } else 
+		        {
+		        	standing = Integer.parseInt(newStanding);
+		        }
+		        
+		        
 				if (req.getParameter("newType").equals("Practice")) {
 					type = "practice";
 				} else if (req.getParameter("newType").equals("Tournament")) {
@@ -108,18 +126,21 @@ public class EventServlet extends HttpServlet {
 				} else if (req.getParameter("newType").equals("Leauge")) {
 					type = "leauge";
 				} else {
-					type = null;
+					errorMessage = "Please enter the event type";
 				}
 				
 				
 				for(Establishment esta : estabs) {
 					if(EstaName.equals(esta.getEstablishmentName()))
 						esstabID = esta.getEstaId();
-				}
-			Integer eventID = controller.addEvent(acc.getAccountId(), esstabID , EstaDate, newEventName,type, newStanding);
-			session.setAttribute("eventID", eventID);	
+				}	
 			
-			controller.addEvent(acc.getAccountId(), esstabID , EstaDate, newEventName,type, newStanding);
+			if (errorMessage == null)
+			{
+				Integer eventID = controller.addEvent(acc.getAccountId(), esstabID , EstaDate, newEventName,type, standing);
+				session.setAttribute("eventID", eventID);	
+			}
+			
 			}catch(NullPointerException e) {
 				errorMessage = "Invalid Input";
 			}
@@ -137,9 +158,9 @@ public class EventServlet extends HttpServlet {
 		req.setAttribute("event", events);
 		req.setAttribute("esta", estabs);
 		
-		if(req.getParameter("Submit") != null || req.getParameter("SubmitCurrentEvent") != null) {
-    		req.getRequestDispatcher("/_view/session.jsp").forward(req, resp);
-    		System.out.print("This is my event ID "+session.getAttribute("eventID"));
+		if(req.getParameter("Submit") != null || req.getParameter("SubmitCurrentEvent") != null && errorMessage == null) {
+    		resp.sendRedirect(req.getContextPath() + "/session");
+    		System.out.println("This is my event ID "+session.getAttribute("eventID"));
         }else {
     		req.getRequestDispatcher("/_view/event.jsp").forward(req, resp);
         }

@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 public class Session {
 	private int sessionID, eventID;
-	private String time, eName;
+	private String time, eName, date;
 	private String opp, oppType;
 	private int score;
 	private ArrayList<Game> games;
@@ -19,7 +19,14 @@ public class Session {
 		this.opp = opp;
 		this.score = score;
 	}
+	public Session() {
+		// TODO Auto-generated constructor stub
+	}
 	// Getters
+	public String getDate()
+	{
+		return this.date;
+	}
 	public String getTime()
 	{
 		return this.time;
@@ -60,6 +67,10 @@ public class Session {
 	
 	
 	// Setters
+	public void setDate(String date)
+	{
+		this.date = date;
+	}
 	public void setTime(String time1)
 	{
 		this.time = time1;

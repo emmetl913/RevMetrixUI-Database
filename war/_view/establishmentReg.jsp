@@ -129,9 +129,6 @@
     </style>
 </head>
 <body>
-    <c:if test="${! empty errorMessage}">
-        <div class="error">${errorMessage}</div>
-    </c:if>
 
     <div class="sidebar">
 		<a href="${pageContext.servletContext.contextPath}/index">
@@ -139,6 +136,7 @@
 		  </a>
 	      <a href="${pageContext.servletContext.contextPath}/establishmentReg">Establishment Registration</a>
           <a href="${pageContext.servletContext.contextPath}/ballArsenal">Ball Arsenal</a>
+          <a href="${pageContext.servletContext.contextPath}/stats">Stats</a>
           <a href="${pageContext.servletContext.contextPath}/event">Start Bowling</a>
 
           <a href="https://github.com/emmetl913/RevMetrixUI-Database"class="bottom-link2">GitHub</a>
@@ -148,6 +146,9 @@
       
     <div class="container">
         <h2>Add Establishment Registration</h2>
+        <c:if test="${! empty errorMessage}">
+			<div class="error">${errorMessage}</div>
+		</c:if>
         <form action="${pageContext.servletContext.contextPath}/establishmentReg" method="post">
             <label>Establishment Name:</label>
             <input type="text" name="establishmentName" size="12">
