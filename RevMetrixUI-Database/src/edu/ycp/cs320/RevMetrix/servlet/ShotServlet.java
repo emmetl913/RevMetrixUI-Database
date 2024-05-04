@@ -14,11 +14,14 @@ import java.util.List;
 import edu.ycp.cs320.RevMetrix.controller.FrameController;
 import edu.ycp.cs320.RevMetrix.controller.ShotController;
 import edu.ycp.cs320.RevMetrix.controller.BallArsenalController;
+import edu.ycp.cs320.RevMetrix.controller.EventController;
 import edu.ycp.cs320.RevMetrix.model.Shot;
 import edu.ycp.cs320.RevMetrix.model.Frame;
 import edu.ycp.cs320.RevMetrix.model.Account;
 import edu.ycp.cs320.RevMetrix.model.Ball;
 import edu.ycp.cs320.RevMetrix.model.BallArsenal;
+import edu.ycp.cs320.RevMetrix.model.Establishment;
+import edu.ycp.cs320.RevMetrix.model.Event;
 import edu.ycp.cs320.RevMetrix.model.Game;
 
 
@@ -35,19 +38,63 @@ public class ShotServlet extends HttpServlet {
 		if(!AccountServlet.validLogin()) {
             req.getRequestDispatcher("/_view/logIn.jsp").forward(req, resp);
         }
-
+		else {
 		System.out.println("Shot Servlet: doGet");	
 		HttpSession session = req.getSession();
 		Account account = (Account) session.getAttribute("currAccount");
 		
+		
+		//load data to display establishment name on shots page
+		EventController ec = new EventController(account.getAccountId());
+		//THIS LINE WILL BREAK WHEN U GET ZACHS CODE: change to ec.getAllEventsForAccount();
+//		List<Event> events = ec.getAllEventsForAccount(account.getAccountId());
+//		
+//		Integer eventID = (Integer)session.getAttribute("eventID");	
+//		for(Event event: events) {
+//			
+//			if(event.getEventID() == eventID) {
+//				Establishment est = event.getEstablishment();
+//				String shotEstablishmentName = est.getEstablishmentName();
+//				session.setAttribute("shotEstablishmentName", shotEstablishmentName);
+//				System.out.println("est name: " + shotEstablishmentName);
+//			}
+//		}
+		
+			//Here we pass the account's ball arsenal into the jsp
+		
+		BallArsenal model = (BallArsenal)session.getAttribute("ballArsenalKey");
+			
+		//Ensure model isn't empty so we can set the controller up
+		if(session.isNew() || model == null) {				
+			model = new BallArsenal();
+			session.setAttribute("ballArsenalKey",  model);
+		}
+				
+		BallArsenalController arsenal = new BallArsenalController();
+		arsenal.setModel(model);
+			
+		//Retrieve ball arsenal from DB
+		ArrayList<Ball> balls = (ArrayList<Ball>) arsenal.getBallByAccountId(account.getAccountId());
+		arsenal.setBalls(balls);
+		
 		//Load frames from gameID
 		FrameController fc = new FrameController();
 		Game currentGame = (Game)session.getAttribute("currentGame");
+		int sessionID = (int)session.getAttribute("sessionID");
+
 		List<Frame> frameList = fc.getFrameByGameID(currentGame.getGameID());
+		Shot testShot1 = new Shot(sessionID, currentGame.getGameID(), frameList.get(0).getFrameID(), 1,69, 1, "12345", "");
+		frameList.get(0).setShot1(testShot1);
+		assignShotsToFrames(frameList);
+		setCurrentFrameNumberAndShotNumber(frameList);
 		
 		
+
+		session.setAttribute("frameList", frameList);
+
 		// call JSP to generate empty form
 		req.getRequestDispatcher("/_view/shot.jsp").forward(req, resp);
+		}
 	}
 	
 	
@@ -69,7 +116,24 @@ public class ShotServlet extends HttpServlet {
 		FrameController fc = new FrameController();
 		Game currentGame = (Game)session.getAttribute("currentGame");
 		int sessionID = (int)session.getAttribute("sessionID");
-
+		
+		
+		int ballID = -1;
+		//BallID fetch from jsp
+		if(req.getParameter("ballArsenalDropdown") != null && !req.getParameter("ballArsenalDropdown").isEmpty()) {
+			ballID = Integer.parseInt(req.getParameter("ballArsenalDropdown"));
+		}
+		if(ballID == -1) {
+			errorMessage = "Please select your ball";
+		}
+		else {
+			BallArsenalController bc = new BallArsenalController();
+			account.setCurrentBall(bc.getBallByBallId(ballID).get(0));
+			session.setAttribute("currAccount", account);
+			System.out.println("Current BallName on account = " + account.getCurrentBall().getName());
+		}
+		
+		
 		List<Frame> frameList = fc.getFrameByGameID(currentGame.getGameID());
 		
 		//add test shot to first frame
@@ -78,14 +142,15 @@ public class ShotServlet extends HttpServlet {
 		
 		//Now lets assign existing shots to their frames while we use this frameList
 		assignShotsToFrames(frameList);
-//		for(Frame frame: frameList) {
-//			System.out.println(frame.getFrameID() + "frame# - " +frame.getFrameNumber());
-//			if(frame.getShot1()!=null) {
-//				System.out.println(frame.getShot1().getCount() + " <-- Count should be 5");
-//			}
-//		}
+		for(Frame frame: frameList) {
+			System.out.println(frame.getFrameID() + "frame# - " +frame.getFrameNumber());
+			if(frame.getShot1()!=null) {
+				System.out.println(frame.getShot1().getCount() + " <-- Count should be 5");
+			}
+		}
 		setCurrentFrameNumberAndShotNumber(frameList);
 		
+		System.out.println("CurrentFrame#: " + currentFrameNumber + "  CurrentShot#: " + currentShotNumber);
 		
 		//The value from the shot box right below the 1 pin (will be an int, "X", "/", "F", "-")
 		String shotBox = req.getParameter("shotBox");
@@ -94,9 +159,11 @@ public class ShotServlet extends HttpServlet {
 		//ONLY EVER ACCESS INDICIES 1-10
 		int pins[] = returnPinValues(req); 
 		
-		if(req.getParameter("submitShot") != null) {
+		
+		
+		if(req.getParameter("submitShot") != null && errorMessage == null) {
 			System.out.println("You have clicked submit shot!");
-			errorMessage = "hi stinky :P";
+			
 		}
 		
 		
@@ -174,7 +241,7 @@ public class ShotServlet extends HttpServlet {
 				if(shots.get(0) != null) {
 					frame.setShot1(shots.get(0));
 				}
-				if(shots.get(1) != null) {
+				if(shots.size() >1 && shots.get(1) != null) {
 					frame.setShot2(shots.get(1));
 				}
 			}

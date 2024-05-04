@@ -5,20 +5,23 @@
 <%@ page import="edu.ycp.cs320.RevMetrix.model.BallArsenal" %>
 <%@ page import="edu.ycp.cs320.RevMetrix.controller.ShotController" %>
 <%@ page import="edu.ycp.cs320.RevMetrix.model.Ball" %>
+<%@ page import="edu.ycp.cs320.RevMetrix.model.Frame" %>
 <%@ page import="java.util.ArrayList" %>
+<%@ page import="java.util.List" %>
+
 
 <%
 // Retrieve ArrayList from session attribute
     BallArsenal model = (BallArsenal) session.getAttribute("ballArsenalKey");
-    ArrayList<Ball>
-    balls = (model != null) ? model.getBalls() : null;
-	//Frame<List> frames = (Frame<List>)session.getAttribute("frameList");
+    ArrayList<Ball> balls = (model != null) ? model.getBalls() : null;
+	List<Frame> frames = (List<Frame>)session.getAttribute("frameList");
+	String establishmentName = (String)session.getAttribute("shotEstablishmentName");
 %>
 <html lang="en">
 	<head>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-		<title>Bowling Ball Arsenal</title>
+		<title>Bowling Page</title>
 		<style type="text/css">
 			.title {
 				font-size: 2.5em;
@@ -309,6 +312,20 @@
             font-size: 28px;
             font-weight: bold;
         }
+		.pin-section{
+		}
+		.dropdown {
+            margin-top: 20px;
+            margin-bottom: 20px;
+            font-size: 16px;
+			float: right;
+			
+        }
+		.dropdown select {
+			padding: 8px;
+			font-size: 14px;
+			border: 1px solid #ccc; /* Add this line to set the border */
+		}
 
 			
 		</style>
@@ -337,29 +354,59 @@
 					<div class="error">${errorMessage}</div>
 				</c:if>
 				<div>
-					Establishment Name &emsp;&emsp; Game# &emsp;&emsp; Frame# <!-- &emsp is a spacer-->
+					<!--<%=establishmentName%> its null for now-->Establishment Name &emsp;&emsp; Game# &emsp;&emsp; Frame# <!-- &emsp is a spacer-->
 				</div>
 				<div id="bowling-frame-display">
 					<div class="bowling-game">
-						<% for (int frameNum = 1; frameNum <= 10; frameNum++) { %>
-							<div class="frame">
+					<% if (frames != null) { %>
 
-								<%if(frameNum == 10){  %>
-									<div class="score-box score-box-10left"><%= frameNum%></div>
-									<div class="score-box score-box-10middle"><%= frameNum%></div>
-									<div class="score-box score-box-10right"><%= frameNum%></div>
+						<%for (Frame frame: frames) { 
+							if(frame.getFrameNumber() != 11 && frame.getFrameNumber() != 12){ %>
+								<div class="frame">
 
-								<% } 
-								else { %>
-									<div class="score-box-left"><%= frameNum + 1%></div>
-									<div class="score-box-right"><%= frameNum + 2%></div>
-								<% } %>
+									<%if(frame.getFrameNumber() == 10){  %>
+										<div class="score-box score-box-10left">1</div>
+										<div class="score-box score-box-10middle">1</div>
+										<div class="score-box score-box-10right">1</div>
+
+									<% } 
+									else { 
+										if (frame.getShot1()!= null){ 
+											String symbol = frame.getShot1().getPinsLeft();
+											if(symbol == "X" || symbol =="F"|| symbol == "-"){ %>
+											 	<div class="score-box-left"><%=frame.getShot1().getPinsLeft()%></div> 
+										  <%}
+											else{ %>
+											 	<div class="score-box-left"><%=frame.getShot1().getCount()%></div> 
+										  <%} 
+										}
+										else{
+											%><div class="score-box-left">=</div> <%
+										}
+										if(frame.getShot2()!=null){ 
+											String symbol = frame.getShot2().getPinsLeft();
+											if(symbol == "/" || symbol =="F"|| symbol == "-"){ %>
+												<div class="score-box-right"><%=frame.getShot2().getPinsLeft()%></div>
+										  <%}
+											else{ %>
+												<div class="score-box-right"><%=frame.getShot2().getCount()%></div>
+										 <%	}
+										}
+										else{
+											%><div class="score-box-left">=</div> <%
+										}
+										
+								  } %>
 								 
-								<!-- framescore goes below-->
-								<%= frameNum %>
-							</div>
+									<!-- framescore goes below-->
+									<%= frame.getScore() %>
+								</div>
 
-						<% } %>
+						<%  }
+						}
+					}	else{%>
+					<p>frames are null <p>
+					<%}%>
 					</div>
 				</div>
 					<br><br>
@@ -396,6 +443,26 @@
 
 						<br>
 					</div>
+					<div class="dropdown">
+					<p style="font-size: 16px; margin-bottom: 5px;">Ball Arsenal</p>
+					<select name="ballArsenalDropdown" style="padding: 8px; font-size: 14px;">
+					    <option value="" disabled selected>Select a ball</option> <!-- Placeholder option -->
+
+                        <%
+                        if (balls != null && !balls.isEmpty()) {
+                        for (Ball ball : balls) { %>
+                        <option value=<%= ball.getBallId()%>> <%= ball.getName() %></option>
+                        <% System.out.println(ball.getName());
+                        }
+                        }else{%>
+                        <p>You must add ball(s) to the Ball Arsenal</p>
+                        <%}
+                        %>
+                        <!-- <option value="add">Add Ball... </option> -->
+                    </select>
+					</div>
+
+				
 				<button text="Submit Shot" name="submitShot" type="submit">Submit Shot</button>
 		  </form>
 
