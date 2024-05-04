@@ -16,6 +16,9 @@
     ArrayList<Ball> balls = (model != null) ? model.getBalls() : null;
 	List<Frame> frames = (List<Frame>)session.getAttribute("frameList");
 	String establishmentName = (String)session.getAttribute("shotEstablishmentName");
+    int selectedBallID = (int) request.getAttribute("selectedBallID");
+	int shotNum = (int)request.getAttribute("currentShotNumber");
+	String prevShot1Pins =(String)request.getAttribute("shot1PinsLeft");
 %>
 <html lang="en">
 	<head>
@@ -124,7 +127,7 @@
 				color: red; 
 	        	font-weight: bold;
 			}
-			.container {
+			.container	 {
 				width: 800px;
 				align-items: center;
 				text-align: center;
@@ -318,13 +321,37 @@
             margin-top: 20px;
             margin-bottom: 20px;
             font-size: 16px;
-			float: right;
+			//float:right;
 			
         }
 		.dropdown select {
 			padding: 8px;
 			font-size: 14px;
 			border: 1px solid #ccc; /* Add this line to set the border */
+		//	float: left;
+		}
+		pinsandarsenal{
+		//	display: flex;
+			align-items: center; /* Align items to the top */
+
+		}
+		.gameScores {
+			display: flex;
+			justify-content: space-around;
+			margin-top: 20px;
+		}
+
+		/* Style for individual game score boxes */
+		.gameScoreBox {
+			width: calc(25% - 20px); /* Adjust as needed */
+			height: 20px;
+			border: 1px solid black;
+			box-sizing: border-box;
+			padding: 10px;
+			background-color: #e0e0e0;
+			display: flex;
+			justify-content: center;
+			align-items: center;
 		}
 
 			
@@ -365,15 +392,15 @@
 								<div class="frame">
 
 									<%if(frame.getFrameNumber() == 10){  %>
-										<div class="score-box score-box-10left">1</div>
-										<div class="score-box score-box-10middle">1</div>
-										<div class="score-box score-box-10right">1</div>
+										<div class="score-box score-box-10left">&nbsp</div>
+										<div class="score-box score-box-10middle">&nbsp</div>
+										<div class="score-box score-box-10right">&nbsp</div>
 
 									<% } 
 									else { 
 										if (frame.getShot1()!= null){ 
 											String symbol = frame.getShot1().getPinsLeft();
-											if(symbol == "X" || symbol =="F"|| symbol == "-"){ %>
+											if(symbol.equals("X") || symbol.equals("F")|| symbol.equals("-")){ %>
 											 	<div class="score-box-left"><%=frame.getShot1().getPinsLeft()%></div> 
 										  <%}
 											else{ %>
@@ -381,11 +408,11 @@
 										  <%} 
 										}
 										else{
-											%><div class="score-box-left">=</div> <%
+											%><div class="score-box-left">&nbsp</div> <%
 										}
 										if(frame.getShot2()!=null){ 
 											String symbol = frame.getShot2().getPinsLeft();
-											if(symbol == "/" || symbol =="F"|| symbol == "-"){ %>
+											if(symbol.equals("/") || symbol.equals("F") || symbol.equals("-")){ %>
 												<div class="score-box-right"><%=frame.getShot2().getPinsLeft()%></div>
 										  <%}
 											else{ %>
@@ -393,7 +420,7 @@
 										 <%	}
 										}
 										else{
-											%><div class="score-box-left">=</div> <%
+											%><div class="score-box-left">&nbsp</div> <%
 										}
 										
 								  } %>
@@ -410,60 +437,70 @@
 					</div>
 				</div>
 					<br><br>
-					<div class="pin-section">
-						<div class="row">
-							<div class="pin" onclick="togglePin(this)"><input type="hidden" name="pin7" value="up"><span>7</span></div>
-							<div class="pin" onclick="togglePin(this)"><input type="hidden" name="pin8" value="up"><span>8</span></div>
-							<div class="pin" onclick="togglePin(this)"><input type="hidden" name="pin9" value="up"><span>9</span></div>
-							<div class="pin" onclick="togglePin(this)"><input type="hidden" name="pin10" value="up"><span>10</span></div>
-							<!--FIxes impossible bug --><input type="hidden" name="pin11" value="up">
+					<div class ="pinsandarsenal">
+						<div class="pin-section">
+							<div class="row">
+								<div class="pin" onclick="togglePin(this)"><input type="hidden" name="pin7" value="up"><span>7</span></div>
+								<div class="pin" onclick="togglePin(this)"><input type="hidden" name="pin8" value="up"><span>8</span></div>
+								<div class="pin" onclick="togglePin(this)"><input type="hidden" name="pin9" value="up"><span>9</span></div>
+								<div class="pin" onclick="togglePin(this)"><input type="hidden" name="pin10" value="up"><span>10</span></div>
+								<!--FIxes impossible bug --><input type="hidden" name="pin11" value="up">
 
-						</div>
-						<div class="row">
-							<div class="pin" onclick="togglePin(this)"><input type="hidden" name="pin4" value="up"><span>4</span></div>
-							<div class="pin" onclick="togglePin(this)"><input type="hidden" name="pin5" value="up"><span>5</span></div>
-							<div class="pin" onclick="togglePin(this)"><input type="hidden" name="pin6" value="up"><span>6</span></div>
-						</div>
-						<div class="row">
-							<div class="pin" onclick="togglePin(this)"><input type="hidden" name="pin2" value="up"><span>2</span></div>
-							<div class="pin" onclick="togglePin(this)"><input type="hidden" name="pin3" value="up"><span>3</span></div>
-						</div>
-						<div class="row">
-							<div class="pin" onclick="togglePin(this)"><input type="hidden" name="pin1" value="up"><span>1</span></div>
-						</div>
-						<div class="row">
-							<div class="shot" name"shotBox" value="0" onClick=""><span>Shot!</span></div>
-						</div>
-						<div class="row">
-							<div class="foul" onclick="setFoul()"><span>F</span></div>
-							<div class="miss" onclick="setGutter()"><span>-</span></div>
-							<div class="strike" onclick="setStrike()"><span>X</span></div>
-							<div class="spare" onclick="setSpare()"><span>/</span></div>
-						</div>
+							</div>
+							<div class="row">
+								<div class="pin" onclick="togglePin(this)"><input type="hidden" name="pin4" value="up"><span>4</span></div>
+								<div class="pin" onclick="togglePin(this)"><input type="hidden" name="pin5" value="up"><span>5</span></div>
+								<div class="pin" onclick="togglePin(this)"><input type="hidden" name="pin6" value="up"><span>6</span></div>
+							</div>
+							<div class="row">
+								<div class="pin" onclick="togglePin(this)"><input type="hidden" name="pin2" value="up"><span>2</span></div>
+								<div class="pin" onclick="togglePin(this)"><input type="hidden" name="pin3" value="up"><span>3</span></div>
+							</div>
+							<div class="row">
+								<div class="pin" onclick="togglePin(this)"><input type="hidden" name="pin1" value="up"><span>1</span></div>
+							</div>
+							<div class="row">
+								<div class="shot"><span>Shot!</span></div>
+								<input type="hidden" value="0" name="shotBox">
 
-						<br>
-					</div>
-					<div class="dropdown">
-					<p style="font-size: 16px; margin-bottom: 5px;">Ball Arsenal</p>
-					<select name="ballArsenalDropdown" style="padding: 8px; font-size: 14px;">
-					    <option value="" disabled selected>Select a ball</option> <!-- Placeholder option -->
+							</div>
+							<div class="row">
+								<div class="strike" onclick="setStrike()"><span>X</span></div>
+								<div class="spare" onclick="setSpare()"><span>/</span></div>
+								<div class="foul" onclick="setFoul()"><span>F</span></div>
+								<div class="miss" onclick="setGutter()"><span>-</span></div>
+							</div>
 
-                        <%
-                        if (balls != null && !balls.isEmpty()) {
-                        for (Ball ball : balls) { %>
-                        <option value=<%= ball.getBallId()%>> <%= ball.getName() %></option>
-                        <% System.out.println(ball.getName());
-                        }
-                        }else{%>
-                        <p>You must add ball(s) to the Ball Arsenal</p>
-                        <%}
-                        %>
-                        <!-- <option value="add">Add Ball... </option> -->
-                    </select>
-					</div>
+							<br>
+						</div>
+						<div class="dropdown">
+							<p style="font-size: 16px; margin-bottom: 5px;">Ball Arsenal</p>
+							<select name="ballArsenalDropdown" style="padding: 8px; font-size: 14px;">
+								<option value="" disabled selected>Select a ball</option> <!-- Placeholder option -->
 
-				
-				<button text="Submit Shot" name="submitShot" type="submit">Submit Shot</button>
+								<%
+								if (balls != null && !balls.isEmpty()) {
+								for (Ball ball : balls) { 
+									String selected = (ball.getBallId() == selectedBallID) ? "selected" : "";%>
+									<option value="<%= ball.getBallId() %>" <%= selected %>><%= ball.getName() %></option>
+								<% System.out.println(ball.getName());
+								}
+								}else{%>
+								<p>You must add ball(s) to the Ball Arsenal</p>
+								<%}
+								%>
+							</select>
+						</div>
+					</div> <!-- this closes pinsandarsenal container div-->
+					<div class="gameScores">
+						<div class="gameScoreBox">Game1 Total: </div>
+						<div class="gameScoreBox">Game2 Total: </div>
+						<div class="gameScoreBox">Game3 Total: </div>
+						<div class="gameScoreBox">Series Total: </div>
+					</div> 
+					<br>
+				<button text="Submit Shot" name="submitShot" type="submit" onclick="updateShotDisplay()">Submit Shot</button>
+			</div>
 		  </form>
 
 		  <script>
@@ -471,9 +508,28 @@
 			const ALL_PINS = 10; 
 
 			let pinCount = NO_PINS;
+			shotNum = 0;
 
 			var shot = document.querySelector('.shot');
+			var shotBox = document.querySelector('input[name="shotBox"]'); // Select the hidden input field
 
+			window.onload =function(){
+				var shotNum = <%= shotNum %>; // Get the value of shotNum from your JSP variable
+
+				var strikeDiv = document.querySelector(".strike");
+				var spareDiv = document.querySelector(".spare");
+
+				if (shotNum === 1) {
+					strikeDiv.style.display = "block";
+					spareDiv.style.display = "none";
+				} else if (shotNum === 2) {
+					strikeDiv.style.display = "none";
+					spareDiv.style.display = "block";
+				}
+
+				updatePins();
+			}
+			
 			function togglePin(pin){
 				pin.classList.toggle("down");
 				var hiddenVal = pin.querySelector('input[type="hidden"]');
@@ -489,9 +545,74 @@
 					pinCount--;
 				}
 				shot.textContent = pinCount;
-				shot.value = pinCount
+				shotBox.value = pinCount;
 
 			}
+			function setAllPinsDown() {
+				var pins = document.querySelectorAll('.pin');
+				pins.forEach(function(pin) {
+					pin.classList.add('down');
+					var hiddenVal = pin.querySelector('input[type="hidden"]');
+					hiddenVal.value = "down";
+				});
+			
+				pinCount = 10;
+				shotBox.value = pinCount;
+				shot.textContent = pinCount;
+			}
+			function setStrike(){
+				setAllPinsDown();
+			}
+			function setSpare(){
+				setAllPinsDown();
+			}
+
+			function updatePins() {
+				const prevShot1Pins = '<%= prevShot1Pins %>'; // Accessing the JSP variable
+				const shotNum = <%= shotNum %>; // Accessing the JSP variable
+
+				// Only update pins if shotNum is 2
+				if (shotNum === 2) {
+					// Convert the string to an array for easier manipulation
+					const pinsArray = prevShot1Pins.split('');
+
+					// Map pin numbers to their corresponding elements
+					const pinMap = {
+						'1': document.querySelector('input[name="pin1"]').parentNode,
+						'2': document.querySelector('input[name="pin2"]').parentNode,
+						'3': document.querySelector('input[name="pin3"]').parentNode,
+						'4': document.querySelector('input[name="pin4"]').parentNode,
+						'5': document.querySelector('input[name="pin5"]').parentNode,
+						'6': document.querySelector('input[name="pin6"]').parentNode,
+						'7': document.querySelector('input[name="pin7"]').parentNode,
+						'8': document.querySelector('input[name="pin8"]').parentNode,
+						'9': document.querySelector('input[name="pin9"]').parentNode,
+						'10': document.querySelector('input[name="pin10"]').parentNode
+					};
+
+					// Loop through each pin element
+					Object.keys(pinMap).forEach(function(pinNum) {
+						const pinElement = pinMap[pinNum];
+						// Check if the pin number is included in the string
+						if (pinNum === '10' && pinsArray.includes('0') || pinsArray.includes(pinNum)) {
+							// Set the pin to up
+							pinElement.classList.remove('down');
+							pinElement.querySelector('input[type="hidden"]').value = "up";
+						} else {
+							// Set the pin to down
+							pinElement.classList.add('down');
+							pinElement.querySelector('input[type="hidden"]').value = "down";
+						}
+					});
+
+					// Update the pin count
+					const pinCount = 10 - pinsArray.length;
+					document.querySelector('.shot').textContent = pinCount;
+					document.querySelector('input[name="shotBox"]').value = pinCount;
+				}
+			}
+
+
 		  </script>
 	</body>
 
