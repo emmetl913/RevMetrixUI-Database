@@ -51,7 +51,7 @@ public class SessionServlet extends HttpServlet{
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp)
 		throws ServletException, IOException
 	{
-		System.out.println("Session Servlet: doGet");
+		System.out.println("Session Servlet: doPost");
 		
 		String errorMessage = null;
 		
@@ -62,7 +62,7 @@ public class SessionServlet extends HttpServlet{
 		Account acc = (Account) session.getAttribute("currAccount");
 		Integer eventID = (Integer) session.getAttribute("eventID"); //(int) session.getAttribute("currEventID");
 		String selectedSession = req.getParameter("selectedSession");
-		
+		System.out.print(selectedSession + " testing this value");
 		model.setEventID(eventID);
 		controller.setModel(model);
 		
@@ -115,8 +115,9 @@ public class SessionServlet extends HttpServlet{
 		    	model.setOppType("self");
 		    }
 			
-			if(errorMessage == null)
+			if(errorMessage != "")
 			{
+				System.out.println("Inserting owo");
 				Integer sessionID = controller.insertNewSession(model.getEventID(), model.getDate(),  model.getOppType(), model.getName(), 0);
 	    		session.setAttribute("sessionID", sessionID);
 			}

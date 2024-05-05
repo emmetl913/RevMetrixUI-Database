@@ -268,7 +268,7 @@
             <a href="https://github.com/emmetl913/RevMetrixUI-Database"class="bottom-link2">GitHub</a>
             <a href="${pageContext.servletContext.contextPath}/logIn"class="bottom-link">Sign Out</a>
 	</div>
-<form id="session1" action="${pageContext.servletContext.contextPath}/session" method="post">
+<form action="${pageContext.servletContext.contextPath}/session" method="post">
 	<div class="container"> 
 		<h2>Pick an existing session</h2>
 		<div id="sessionsList"> &nbsp
@@ -289,11 +289,13 @@
            <% } %>
            
 		</div>
-		 <input type="hidden" id="selectedSession" name="selectedSession">
+		 <input type="hidden" id="selectedSession" name="selectedSession" value="">
 		 <tr>
             <td><a href="${pageContext.servletContext.contextPath}/game"><input type="Submit" id="SubmitCurrentSession" name="SubmitCurrentSession" value="Submit"></a></td>
          </tr>
 	</div>
+	</form>
+	<form action="${pageContext.servletContext.contextPath}/session" method="post">
 	<div class="container">
 		<h2>Start a new session</h2>
 		<div class="active">
@@ -317,7 +319,7 @@
     		<input type="hidden" name="timeType" id="timeType" value="">
 			<table>
 		        <tr>
-		        <th>Opponent</th>
+		        <th>Opponent: </th>
 		        </tr>
 		        <tr>
 		            <td><button type="button" id="teamBtn" value="Team Opponent">Team Opponent</button></td>
@@ -363,7 +365,7 @@
         });
         
         
-        document.getElementById("session1").addEventListener("submit", function(e)
+        document.getElementById("session").addEventListener("submit", function(e)
         		{
         			if (document.getElementById("bowlType").value !== "Solo Bowl")
         				{
@@ -414,9 +416,10 @@
 	            dropdownContent.style.display = "block";
 	        }
 	    }
-		function selectSession(session)
+		function selectSession(sessionItem)
 		{
-			document.getElementById('selectedSession').value = session;
+			document.getElementById('selectedSession').value = sessionItem;
+			console.log("Session ID: "+sessionItem);
 		}
 	    
     </script>

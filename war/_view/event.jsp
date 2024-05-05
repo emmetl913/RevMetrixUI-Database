@@ -176,7 +176,7 @@
            </div>
            <input type="hidden" id="selectedEvent" name="selectedEvent">
           <tr>
-            <td><a href="${pageContext.servletContext.contextPath}/session"><input type="Submit" id="SubmitCurrentEvent" name="SubmitCurrentEvent" value="Submit"></a></td>
+            <td><a href="${pageContext.servletContext.contextPath}/session" method="post"><input type="Submit" id="SubmitCurrentEvent" name="SubmitCurrentEvent" value="Submit"></a></td>
           </tr>
          </form>
 	 </div>
@@ -267,8 +267,8 @@
         }
         
         function selectEvent(event) {
-    document.getElementById('selectedEvent').value = event;
-}
+    		document.getElementById('selectedEvent').value = event;
+		}
       </script>
 </body>
 </html>

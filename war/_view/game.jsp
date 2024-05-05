@@ -186,6 +186,8 @@ button {
             <td><a href="${pageContext.servletContext.contextPath}/shot"><input type="Submit" id="SubmitCurrentGame" name="SubmitCurrentGame" value="Submit"></a></td>
          </tr>
 	</div>
+	</form>
+	<form href="${pageContext.servletContext.contextPath}/game" method="post"> 
 	<div class="container">
 	
 		<h2>Start a new game</h2>
@@ -204,9 +206,9 @@ button {
 	</div>
 </form>
 <script>
-	function selectGame(game)
+	function selectGame(gameItem)
 	{
-		document.getElementById('selectedGame').value = game;
+		document.getElementById('selectedGame').value = gameItem;
 	}
 </script>	
 </body>
