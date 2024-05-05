@@ -91,4 +91,24 @@ public class StatControllerTest {
 		
 		
 	}
+	@Test
+	public void testGetLifetimePinsKnockedDown() {
+		Integer pins = controller.getLifetimePinsKnockedDown(1);
+			System.out.println("Number of pins "+pins);
+		
+		assertTrue(pins == 49);
+		
+		
+	}
+	
+	@Test
+	public void testGetLifetimePinsMissed() {
+		Integer pins = controller.getLifetimePinsMissed(1);
+			System.out.println("Number of pins Missed "+pins);
+		
+		assertTrue(pins == 11);
+		
+		
+	}
 }
+

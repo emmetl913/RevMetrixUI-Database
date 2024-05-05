@@ -38,7 +38,6 @@ public class StatsServlet extends HttpServlet {
 			
 			ArrayList<Event> events = eventController.getEvents();
 			ArrayList<stat> sessionTable = new ArrayList<stat>();
-			
 	    
 		req.setAttribute("formSubmitted", false);
 		req.setAttribute("events", events);
@@ -78,11 +77,11 @@ public class StatsServlet extends HttpServlet {
 			}
 			req.setAttribute("events", events);
 			req.setAttribute("sessionTable", sessionTable);
+	        req.setAttribute("formSubmitted", true);
 		}catch(NullPointerException e) {
 			resp.sendRedirect(req.getContextPath()+ "/logIn");
 		}	
 		// call JSP to generate empty form
-        req.setAttribute("formSubmitted", true);
 		req.getRequestDispatcher("/_view/stats.jsp").forward(req, resp);
 	}
 	

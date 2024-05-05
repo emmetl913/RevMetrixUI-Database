@@ -55,5 +55,7 @@ public interface IDatabase {
 	public ArrayList<Integer> getSessionsByEvent(int eventID);
 	public Integer getSessionScore(int sessionID);
 	public String getSessionDate(int sessionID);
+	public Integer getLifetimePinsKnockedDown(int accountID);
+	public Integer getLifetimePinsMissed(int accountID);
 	
 }
