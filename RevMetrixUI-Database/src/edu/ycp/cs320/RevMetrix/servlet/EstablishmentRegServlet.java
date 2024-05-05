@@ -93,7 +93,21 @@ public class EstablishmentRegServlet extends HttpServlet {
 		
 		if (req.getParameter("submitEstab") != null ) {
 			//System.out.println(model.getBallAtIndex(0).getName());
-			controller.addEstablishment(acc.getAccountId(),newEstablishmentName, newEstablishmentAddress);
+			if(newEstablishmentName == null || newEstablishmentName.equals(""))
+			{
+				errorMessage = "Please enter a name for the establishment";
+			}
+			if(newEstablishmentAddress == null || newEstablishmentAddress.equals(""))
+			{
+				errorMessage = "Please enter an address for the establishment";
+			}
+			
+			if(errorMessage == null)
+			{
+				controller.addEstablishment(acc.getAccountId(),newEstablishmentName, newEstablishmentAddress);
+				errorMessage = "New Establishment: "+newEstablishmentName+" successfully added!";
+			}
+			
 		}
 		
 		if(req.getParameter("submitRemoveEstab") != null) {

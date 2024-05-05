@@ -2,7 +2,10 @@ package edu.ycp.cs320.RevMetrix.servlet;
 
 import java.io.IOException;
 import java.time.LocalTime;
+import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -29,13 +32,15 @@ public class SessionServlet extends HttpServlet{
 		HttpSession session = req.getSession();
 		
 		Account acc = (Account) session.getAttribute("currAccount");
-		
+		Integer eventID = (Integer) session.getAttribute("eventID"); //(int) session.getAttribute("currEventID");
 		
 		Session model = null;
 		SessionController controller = new SessionController();
 		controller.setModel(model);
+		System.out.println("Event ID for this sessions page is: "+eventID);
+		List<Session> sessions = controller.getSessionByEventID(eventID);
 		
-		
+		req.setAttribute("sessions", sessions);
 		
 		req.setAttribute("model", model);
 		
@@ -56,45 +61,66 @@ public class SessionServlet extends HttpServlet{
 		HttpSession session = req.getSession();
 		Account acc = (Account) session.getAttribute("currAccount");
 		Integer eventID = (Integer) session.getAttribute("eventID"); //(int) session.getAttribute("currEventID");
+		String selectedSession = req.getParameter("selectedSession");
 		
 		model.setEventID(eventID);
 		controller.setModel(model);
 		
-		
-		String time = req.getParameter("timeType");
-		System.out.println(time);
-		if ("Current Time".equals(time))
+		if(selectedSession != null)
 		{
-			LocalTime currentTime = LocalTime.now();
-
-	        // Format the time using a DateTimeFormatter
-	        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("hh:mma");
-	        String formattedTime = currentTime.format(formatter);
-	        System.out.println(formattedTime);
-	        
-			model.setTime(formattedTime);
-		} else if ("Other Time".equals(time))
+			Integer sessionID = getIntegerFromParameter(req.getParameter("selectedSession"));
+			System.out.println("Session id for selected session: "+sessionID);
+			session.setAttribute("sessionID", sessionID);
+		} else
 		{
-			model.setTime(req.getParameter("inputTime"));
+			String time = req.getParameter("timeType");
+			System.out.println(time);
+			if ("Current Time".equals(time))
+			{
+				LocalTime currentTime = LocalTime.now();
+				LocalDate currentDate = LocalDate.now();
+		        // Format the time using a DateTimeFormatter
+		        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("hh:mma");
+		        DateTimeFormatter formatter1 = DateTimeFormatter.ofPattern("MMddyyyy");
+		        String formattedDate = currentDate.format(formatter1);
+		        String formattedTime = currentTime.format(formatter);
+		        
+		        System.out.println(formattedTime + " " + formattedDate);
+		        
+				model.setTime(formattedTime);
+				model.setDate(formattedDate);
+			} else if ("Other Time".equals(time))
+			{
+				LocalDate currentDate = LocalDate.now();
+		        DateTimeFormatter formatter1 = DateTimeFormatter.ofPattern("MMddyyyy");
+		        String formattedDate = currentDate.format(formatter1);
+		        model.setDate(formattedDate);
+		        model.setTime(req.getParameter("inputTime"));
+			}
+			
+			
+			String bowlType = req.getParameter("bowlType");
+			System.out.println(bowlType);
+			if ("Team Opponent".equals(bowlType)) {
+		        String opponentName = req.getParameter("opponentName");
+		        model.setName(opponentName);
+		        model.setOppType("team");
+			} else if ("Individual Opponent".equals(bowlType)) {
+		        String opponentName = req.getParameter("opponentName");
+		        model.setName(opponentName);
+		        model.setOppType("individual");
+		    } else if ("Solo Bowl".equals(bowlType)) {
+		    	String opponentName = "solo";
+		    	model.setName(opponentName);
+		    	model.setOppType("self");
+		    }
+			
+			if(errorMessage == null)
+			{
+				Integer sessionID = controller.insertNewSession(model.getEventID(), model.getDate(),  model.getOppType(), model.getName(), 0);
+	    		session.setAttribute("sessionID", sessionID);
+			}
 		}
-		
-		
-		String bowlType = req.getParameter("bowlType");
-		System.out.println(bowlType);
-		if ("Team Opponent".equals(bowlType)) {
-	        String opponentName = req.getParameter("opponentName");
-	        model.setOpp(opponentName);
-	        model.setOppType("team");
-		} else if ("Individual Opponent".equals(bowlType)) {
-	        String opponentName = req.getParameter("opponentName");
-	        model.setOpp(opponentName);
-	        model.setOppType("individual");
-	    } else if ("Solo Bowl".equals(bowlType)) {
-	    	String opponentName = "solo";
-	    	model.setOpp(opponentName);
-	    	model.setOppType("self");
-	    }
-	    
 
 	    
 		
@@ -104,14 +130,19 @@ public class SessionServlet extends HttpServlet{
 		req.setAttribute("errorMessage", errorMessage);
 		req.setAttribute("model", model);
 		
-		if(req.getParameter("submit") != null) {
-			Integer sessionID = controller.insertNewSession(eventID, model.getTime(), model.getOppType(), model.getName(), 0);
-    		session.setAttribute("sessionID", sessionID);
-    		System.out.println("SessionID: "+ sessionID);
-			req.getRequestDispatcher("/_view/game.jsp").forward(req, resp);
+		if(req.getParameter("submit") != null || req.getParameter("SubmitCurrentSession") != null && errorMessage == null) {
+			System.out.println("Submit button is pressed");
+    		resp.sendRedirect(req.getContextPath() + "/game");
         }
-		else {
-		
-		req.getRequestDispatcher("/_view/session.jsp").forward(req, resp);}
+		else {		
+			req.getRequestDispatcher("/_view/session.jsp").forward(req, resp);}
+		}
+	
+	private Integer getIntegerFromParameter(String s) {
+		if (s == null || s.equals("")) {
+			return null;
+		} else {
+			return Integer.parseInt(s);
+		}
 	}
 }

@@ -155,16 +155,12 @@
 		  </div>
 		  
 		  <div class="container">
-			<h2>Account Page</h2>
+			<h2>Welcome back <%= acc.getFirstName()%> <%= acc.getLastName()%>!</h2>
 			<form action="${pageContext.servletContext.contextPath}/index" method="post">
 
 				<label>Username: <%= acc.getUsername()%> </label>
 	
 				<label>Email: <%= acc.getEmail()%> </label>
-				
-				<label>First Name: <%= acc.getFirstName()%> </label>
-				
-				<label>Last Name: <%= acc.getLastName()%> </label>
 	
 				<label>Events up soon:</label>
 				<div id="eventList"> &nbsp				

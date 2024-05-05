@@ -24,7 +24,7 @@ public class StatControllerTest {
 	
 	@Test
 	public void testGetSessionLeague() {
-		String league = controller.getSessionLeague(2);
+		String league = controller.getEventName(2);
 
 		System.out.println(league);
 		assertTrue(league.equals("Bud Light Tournament"));
@@ -69,6 +69,26 @@ public class StatControllerTest {
 		assertTrue(sessions.get(1) == 2);
 		assertTrue(sessions.get(2) == 3);
 
+		
+	}
+	
+	@Test
+	public void testGetSessionScore() {
+		Integer sessionScore = controller.getSessionScore(1);
+			System.out.println(sessionScore);
+		
+		assertTrue(sessionScore == 533);
+		
+		
+	}
+	
+	@Test
+	public void testGetSessionDate() {
+		String sessionScore = controller.getSessionDate(1);
+			System.out.println(sessionScore);
+		
+		assertTrue(sessionScore.equals("5/10/93"));
+		
 		
 	}
 }

@@ -21,11 +21,12 @@ public class statController {
 	
 	public String getSessionDate(int sessionID) {
 		String date = "Nothing";
-				
+		//This is getting time not date at the moment!!!!
+		date = db.getSessionDate(sessionID);
 		return date;
 	}
 	
-	public String getSessionLeague(int eventID) {
+	public String getEventName(int eventID) {
 		String League = "";
 		League = db.getEventNameByAccount(acc, eventID);
 		return League;
@@ -49,10 +50,13 @@ public class statController {
 	
 	public ArrayList<Integer> getSessionsByEvent(int eventID) {
 		ArrayList<Integer> sessionIDs = new ArrayList<Integer>();
-		
 		sessionIDs = db.getSessionsByEvent(eventID);
-		
 		return sessionIDs;
+	}
+	
+	public Integer getSessionScore(int sessionID) {
+		Integer sessionScore = db.getSessionScore(sessionID);
+		return sessionScore;
 	}
 	
 }

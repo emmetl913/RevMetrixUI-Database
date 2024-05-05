@@ -10,8 +10,9 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import edu.ycp.cs320.RevMetrix.model.Account;
-import edu.ycp.cs320.RevMetrix.model.Game;
+import edu.ycp.cs320.RevMetrix.model.Event;
 import edu.ycp.cs320.RevMetrix.model.stat;
+import edu.ycp.cs320.RevMetrix.controller.EventController;
 import edu.ycp.cs320.RevMetrix.controller.statController;
 
 public class StatsServlet extends HttpServlet {
@@ -20,113 +21,69 @@ public class StatsServlet extends HttpServlet {
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException {
+		System.out.println("Stat Servlet: doGet");	
+
 		
 		if(!AccountServlet.validLogin()) {
             req.getRequestDispatcher("/_view/logIn.jsp").forward(req, resp);
         }
-
-		System.out.println("Stat Servlet: doGet");	
-		HttpSession session = req.getSession();
-		Account acc = (Account) session.getAttribute("currAccount");
-		statController controller = new statController(acc.getAccountId());
 		
-		ArrayList<stat> sessionTable = new ArrayList<stat>();
-		
-		//String date, String league, String lanes, int games[], int series, int totalGame, double avg
-		
-		for(int i = 1; i <= controller.getSessionsByEvent(2).size(); i++) {
-			sessionTable.add(new stat(controller.getSessionDate(i), controller.getSessionLeague(2), controller.getCurrentGameLane(i), controller.getGameStatsBySession(i),0,0,0.0));
-		}
+			HttpSession session = req.getSession();
+			Account acc = (Account) session.getAttribute("currAccount");
+			statController controller = new statController(acc.getAccountId());
+			
+			Event eventModel = new Event();
+			EventController eventController = new EventController(acc.getAccountId());
+			eventController.setModel(eventModel);
+			
+			ArrayList<Event> events = eventController.getEvents();
+			ArrayList<stat> sessionTable = new ArrayList<stat>();
+			
 	    
-//		req.setAttribute("gameObjArr", games);
-//		session.setAttribute(gamesListKey, games);
-		
-		// call JSP to generate empty form
+		req.setAttribute("formSubmitted", false);
+		req.setAttribute("events", events);
 		req.setAttribute("sessionTable", sessionTable);
+		// call JSP to generate empty form
 		req.getRequestDispatcher("/_view/stats.jsp").forward(req, resp);
 	}
-	
-	
 	@Override
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException {
 		System.out.println("Stat Servlet: doPost");
 		
-		HttpSession session = req.getSession();
-	    long createTime = session.getCreationTime();
-		   
-		// Get last access time of this Webpage.
-		long lastAccessTime = session.getLastAccessedTime();
-		String userIDKey = new String("userID");
-		String userID = new String("ABCD");
-
-		   // Check if this is new comer on your Webpage.
-		
-		String gamesListKey = new String("gamesListKey");
-		ArrayList<Game> games = new ArrayList<Game>();
-		
-		// If first visit: new session id
-		if (session.isNew() ){
-	      session.setAttribute(userIDKey, userID);		  
-		  //initialize the games list with 3 games
-		  games.add(new Game(1,1,1,1,14));
-		//  games.add(new Game(2,22));
-		  //games.add(new Game(3,4));
-		  session.setAttribute(gamesListKey, games);
-		  
-		} 
-		//Get model and userID from jsp
-		userID = (String)session.getAttribute(userIDKey);
-		games = (ArrayList<Game>)session.getAttribute(gamesListKey);
-		//controller.setModel(model);
-		if(games != null) {
-			for(Game g: games) {
-				System.out.println(g.getLane());
+		try {
+			HttpSession session = req.getSession();
+			Account acc = (Account) session.getAttribute("currAccount");
+			statController controller = new statController(acc.getAccountId());
+			
+			Event eventModel = new Event();
+			EventController eventController = new EventController(acc.getAccountId());
+			eventController.setModel(eventModel);
+			
+			ArrayList<Event> events = eventController.getEvents();
+		    String selectedEvent = req.getParameter("selectedEvent");
+		    int eventID = -1;
+		    
+		    for(Event event:events){
+		    	if (selectedEvent.equals(event.getEventName())) {
+		    	    eventID = event.getEventID();
+		    	}
+		    }
+			
+			ArrayList<stat> sessionTable = new ArrayList<stat>();
+			ArrayList<Integer> sessions = controller.getSessionsByEvent(eventID);
+			
+			for(int i = 1; i <= sessions.size(); i++) {
+				sessionTable.add(new stat(controller.getSessionDate(i), controller.getEventName(eventID), controller.getCurrentGameLane(i*3), controller.getGameStatsBySession(i),controller.getSessionScore(sessions.get(i-1)),i*3,0.0));
 			}
-		}
-		
-        
-        //Initialize a Game that will be sent out to other portions of the website (currentGame)
-        Game currentGame = null;
-        
-        // Retrieve the value of the button clicked
-        String buttonValue = req.getParameter("gameStatus");
-        
-        // Check which button was clicked
-//        if ("startNewGame".equals(buttonValue)) {
-//        	Game g = new Game(games.size()+1,1);
-//        	games.add(g); //game gets added to the end of the list //dont worry that the gameNumber will repeat.
-//        	//Eventually it won't because it will take database values
-//        	currentGame = g;
-//        	System.out.println(g.getGameNumber());
-//        }
-        
-        Integer laneInput = getIntegerFromParameter(req.getParameter("laneInput"));
-        if(laneInput == null) {
-        	laneInput = 0;
-        }
-        //Make a new game and add it to game list
-        if(req.getParameter("select") != null) {
-        	currentGame = games.get(0);
-        }
-        if(req.getParameter("new") != null) {
-        	//currentGame = selected game from dropdown
-        	//games.add(new Game(games.size(),laneInput));
-        	//currentGame = games.get(games.size()-1);
-        }
-		req.setAttribute("gameObjArr", games);
-		session.setAttribute(gamesListKey, games);
-		session.setAttribute("currentGame", currentGame);
+			req.setAttribute("events", events);
+			req.setAttribute("sessionTable", sessionTable);
+		}catch(NullPointerException e) {
+			resp.sendRedirect(req.getContextPath()+ "/logIn");
+		}	
 		// call JSP to generate empty form
+        req.setAttribute("formSubmitted", true);
 		req.getRequestDispatcher("/_view/stats.jsp").forward(req, resp);
-	}
-	
-	private Integer getIntegerFromParameter(String s) {
-		if (s == null || s.equals("")) {
-			return null;
-		} else {
-			return Integer.parseInt(s);
-		}
 	}
 	
 }

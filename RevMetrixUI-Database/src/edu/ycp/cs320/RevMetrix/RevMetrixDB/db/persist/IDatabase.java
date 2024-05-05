@@ -52,6 +52,8 @@ public interface IDatabase {
 	public Integer getCurrentGameLane(int gameID);
 	public Integer[] getGamesBySessions(int sessionID);
 	public ArrayList<Integer> getSessionsByEvent(int eventID);
+	public Integer getSessionScore(int sessionID);
+	public String getSessionDate(int sessionID);
 	
 	//Stats
 	public List<Shot> getStrikesFromAccount(int gameID, int sessionID);

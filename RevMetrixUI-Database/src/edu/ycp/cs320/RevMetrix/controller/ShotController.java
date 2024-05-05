@@ -35,19 +35,18 @@ public class ShotController {
 			return frameList;
 		}
 	}
-
-	public boolean insertNewShot(int sessionID, int gameID, int frameID, int shotNumber, int count, int ballID, String pinsLeft) {
+	public Integer insertNewShot(int sessionID, int gameID, int frameID, int shotNumber, int count, int ballID, String pinsLeft) {
 		
 		// insert new book (and possibly new author) into DB
 		Integer ball_id = db.insertNewShotWithFrameID(sessionID, gameID, frameID, shotNumber, count,ballID, pinsLeft);
 		//check if the insertion succeeded
 		if (ball_id > 0){
-			System.out.println("New shot (shot ID: " + ball_id+") successfully added to shots table");
-			return true;
+			//System.out.println("New shot (shot ID: " + ball_id+") successfully added to shots table");
+			return ball_id;
 		}
 		else{
 			System.out.println("Failed to insert (shot ID: " + ball_id + ") to shots table");
-			return false;
+			return null;
 		}
 	}
 

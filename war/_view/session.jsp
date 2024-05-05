@@ -2,21 +2,16 @@
 
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
-<%@ page import= "edu.ycp.cs320.RevMetrix.model.Event" %>
-<%@ page import= "edu.ycp.cs320.RevMetrix.model.Game" %>
-<%@ page import= "edu.ycp.cs320.RevMetrix.model.Establishment" %>
+<%@ page import= "edu.ycp.cs320.RevMetrix.model.Session" %>
 <%@ page import = "java.io.*,java.util.*"%>
-<%@ page import="javax.servlet.http.HttpSession" %>
+<%@ page import = "java.util.List" %>
 
+<%
+	List<Session> sessions = (List<Session>)request.getAttribute("sessions");
+%>
 
 <html>
-
 <head>
-
-<script 
-	src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"
-	type="text/javascript">
-</script>
     <style>
 	.datetime {
 	  font-size: 16px;
@@ -37,6 +32,15 @@
 	.date {
 	  margin-top: 12px;
 	  font-size: 1.75em;
+	}
+	.session-section{
+		border: 1px solid black;
+		margin-bottom: 10px;
+		padding: 10px;
+		overflow: auto;   
+	}
+	.session-section:hover{
+		background-color: #33B5FF;
 	}
 	.container {
             max-width: 600px;
@@ -264,10 +268,27 @@
             <a href="https://github.com/emmetl913/RevMetrixUI-Database"class="bottom-link2">GitHub</a>
             <a href="${pageContext.servletContext.contextPath}/logIn"class="bottom-link">Sign Out</a>
 	</div>
-<form id="session" action="${pageContext.servletContext.contextPath}/session" method="post">
+<form id="session1" action="${pageContext.servletContext.contextPath}/session" method="post">
 	<div class="container"> 
 		<h2>Pick an existing session</h2>
-		
+		<div id="sessionsList"> &nbsp
+			<% 
+                   
+                if(sessions != null) {
+                  for (Session sessionItem : sessions) {
+           %>
+		           <div class="session-section" onclick= "selectSession ('<%= sessionItem.getSessionID() %>')">
+		                  <p>ID: <%= sessionItem.getSessionID() %></p>
+		                  <p>Time: <%= sessionItem.getTime() %></p>
+		                  <p>Opponent Type: <%= sessionItem.getOppType()%></p>
+		                  <p>Opponent Name: <%= sessionItem.getName()%></p>
+		           </div>
+           <% 
+                 } } else {	%>
+                 <p>No sessions available.</p>
+           <% } %>
+           
+		</div>
 		 <input type="hidden" id="selectedSession" name="selectedSession">
 		 <tr>
             <td><a href="${pageContext.servletContext.contextPath}/game"><input type="Submit" id="SubmitCurrentSession" name="SubmitCurrentSession" value="Submit"></a></td>
@@ -342,7 +363,7 @@
         });
         
         
-        document.getElementById("session").addEventListener("submit", function(e)
+        document.getElementById("session1").addEventListener("submit", function(e)
         		{
         			if (document.getElementById("bowlType").value !== "Solo Bowl")
         				{
@@ -359,8 +380,7 @@
         		})
         
         
-    </script>
-	<script>
+
 		var currentStep = 1;
 		// Display current step
 		function showStep(step)
@@ -394,46 +414,11 @@
 	            dropdownContent.style.display = "block";
 	        }
 	    }
+		function selectSession(session)
+		{
+			document.getElementById('selectedSession').value = session;
+		}
 	    
     </script>
-    <script type="text/javascript">
-    //Initialize button fields for input 
-		$(document).ready(function() {
-			//Pull event name from the submit
-			$("#eventName").click(function() {
-				//call ajax and post information back to the servlet
-				$.ajax({
-					type: 'POST',
-					url: 'lab02/servlet/startBowling',
-					data: { name: $("eventName")},
-				});
-			});
-			//Pull session type from the submit
-			$("#sessionType").click(function() {
-				$.ajax({
-					type: 'POST',
-					url: 'lab02/servlet/startBowling',
-					data: { sType: $("sessionType")},
-				});
-			});
-			//Pull game type from the submit
-			$("#gameStatus").click(function(){
-				$.ajax({
-					type: 'POST',
-					url: 'lab02/servlet/startBowling',
-					data: { gStatus: $("gameStatus")},
-				});
-			});
-			//Pull frame info from the submit
-			$("#nextFrame").click(function(){
-				$.ajax({
-					type: 'POST',
-					url: 'lab02/servlet/startBowling',
-					data: { frame: $("nextFrame")},
-				});
-			});
-			
-		});
-	</script>
 </body>
 </html>

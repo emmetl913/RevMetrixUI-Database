@@ -37,7 +37,7 @@ public class SessionController {
 	}
 	public Integer insertNewSession(int eventID, String time, String oppType, String oppName, int score)
 	{
-		Integer newSession = db.insertNewSession(eventID, time, oppType, oppName, score);
+		Integer newSession = db.insertNewSession(eventID, time,  oppType, oppName, score);
 		
 		if (newSession == null)
 		{
@@ -45,6 +45,7 @@ public class SessionController {
 			return null;
 		} else
 		{
+			System.out.println("Session for event ID: "+eventID+"  and for session ID: "+newSession+"  has succeded");
 			return newSession;
 		}
 	}
