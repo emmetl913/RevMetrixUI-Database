@@ -80,7 +80,6 @@ public class GameServlet extends HttpServlet {
         
         if(req.getParameter("select") != null) {
         	//currentGame = games.get(selectedIndex);
-        	System.out.println("You clicked the button");
         	if(dropDownValue != null || dropDownValue.equals(""))
         	{
         		currentGame = games.get(Integer.parseInt(dropDownValue));
@@ -134,7 +133,9 @@ public class GameServlet extends HttpServlet {
 	    		acc.setCurrentGame((Game)session.getAttribute("currentGame"));
 	    		session.setAttribute("currAccount", acc);
 
-        		req.getRequestDispatcher("/_view/shot.jsp").forward(req, resp);
+        		//req.getRequestDispatcher("/_view/shot.jsp").forward(req, resp);
+        		resp.sendRedirect(req.getContextPath() + "/shot");
+        		return;
     		}
         }
         

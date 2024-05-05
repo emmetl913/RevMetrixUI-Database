@@ -1044,24 +1044,24 @@ public class DerbyDatabase implements IDatabase {
 				// try to find account_id in db
 				try
 				{
-					stmt1 = conn.prepareStatement(
-							"select shot_id from shots"
-							+ " where frame_id = ? "
-					);
-					
-					stmt1.setInt(1, frameID);
-					
-					resultSet1 = stmt1.executeQuery();
-					
-					if(resultSet1.next())
-					{
-						shot_id = resultSet1.getInt(1);
-						System.out.println("Shot <"+ shot_id +"> found with frameID <"+ frameID +">");
-					}
-					else 
-					{
-						System.out.println("Shot <"+ shot_id +"> was not found");
-					}
+//					stmt1 = conn.prepareStatement(
+//							"select shot_id from shots"
+//							+ " where frame_id = ? "
+//					);
+//					
+//					stmt1.setInt(1, frameID);
+//					
+//					resultSet1 = stmt1.executeQuery();
+//					
+//					if(resultSet1.next())
+//					{
+//						shot_id = resultSet1.getInt(1);
+//						System.out.println("Shot <"+ shot_id +"> found with frameID <"+ frameID +">");
+//					}
+//					else 
+//					{
+//						System.out.println("Shot <"+ shot_id +"> was not found");
+//					}
 					if(shot_id <= 0)
 					{
 						stmt2 = conn.prepareStatement(
@@ -1074,6 +1074,7 @@ public class DerbyDatabase implements IDatabase {
 						stmt2.setInt(5, count);
 						stmt2.setInt(6, ballID);
 						stmt2.setString(7, pinsLeft);
+						stmt2.setString(8, "no");
 						
 						stmt2.executeUpdate();
 						
