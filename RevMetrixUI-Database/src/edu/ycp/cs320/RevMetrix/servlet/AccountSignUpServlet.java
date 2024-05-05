@@ -84,7 +84,8 @@ public class AccountSignUpServlet extends HttpServlet {
 		req.setAttribute("password2", req.getParameter("password2"));
 		
 		// check for errors in the form data before using is in a calculation
-		if (username.length() < 5 || password.length()<5 || password2.length() < 5 || username != "" || password != "") {
+		if (username.length() < 5 || password.length()<5 || password2.length() < 5 || username == "" || password == "") {
+			System.out.println("Username attempted: "+username+" and Password attemped: "+password);
 			errorMessage = "Please enter a username and/or password that are both longer than 5 characters";
 		}
 
