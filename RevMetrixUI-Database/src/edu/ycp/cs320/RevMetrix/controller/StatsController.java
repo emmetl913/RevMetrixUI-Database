@@ -41,7 +41,8 @@ public class StatsController{
 		}
 		
 		for(Shot shot : shots) {
-			if(shot.getPinsLeft().equals('X')) {
+			System.out.print(shot);
+			if(shot != null && shot.getPinsLeft().equals('X')) {
 				numberOfStrikes++;
 			}
 		}
@@ -61,8 +62,8 @@ public class StatsController{
 	}
 	
 	public double sparePercentage() {
-		List<Shot> secondShots = getSparesFromAccount();
-		List<Shot> spares = db.getSecondShotsFromAccount(game.getGameID(), session.getSessionID());
+		List<Shot> spares = getSparesFromAccount();
+		List<Shot> secondShots = db.getSecondShotsFromAccount(game.getGameID(), session.getSessionID());
 
 		int numberOfSecondShots = secondShots.size();
 		int numberOfSpares = spares.size();
@@ -74,7 +75,21 @@ public class StatsController{
 		return ((double) numberOfSpares / numberOfSecondShots);
 	}
 	
-	public void leavePercentage() {
+	public int getTotalLeavesFromGameAndSession(int gameID, int sessionID) {
+		List<Shot> leaves = db.getLeavesFromGameAndSession(gameID, sessionID);
+		return leaves.size();
+	}
+	
+	public double leavePercentage() {
+		List<Shot> spares = db.getSparesFromAccount(game.getGameID(), session.getSessionID());
+		int totalSpares = spares.size();
 		
+		int numOfLeaves = getTotalLeavesFromGameAndSession(game.getGameID(), session.getSessionID());
+		
+		if(numOfLeaves == 0) {
+			return 0.0;
+		}
+		
+		return ((double) totalSpares / numOfLeaves) * 100;
 	}
 }

@@ -1504,7 +1504,7 @@ public class DerbyDatabase implements IDatabase {
 				try {
 					stmt = conn.prepareStatement(
 							"select * from shots " +
-							"where game_id = ? and session_id = ? and pins_left = 'X'"
+							"where game_id = ? and session_id = ? and leave = 'X'"
 					);
 					
 					stmt.setInt(1, gameID);
@@ -1518,15 +1518,7 @@ public class DerbyDatabase implements IDatabase {
 					while(resultSet.next()) {
 						found = true;
 						
-						Shot shot = new Shot(
-							resultSet.getInt("frame_id"),
-							resultSet.getInt("game_id"),
-							resultSet.getInt("session_id"),
-							resultSet.getInt("shot_number"),
-							resultSet.getString("count"),
-							resultSet.getInt("ball_id"),
-							resultSet.getString("pins_left")
-						);
+						Shot shot = new Shot();
 						
 						result.add(shot);
 					}
@@ -1551,7 +1543,7 @@ public class DerbyDatabase implements IDatabase {
 				try {
 					stmt = conn.prepareStatement(
 							"select * from shots " +
-							"where game_id = ? and session_id = ? and pins_left = '/'"
+							"where game_id = ? and session_id = ? and leave = '/'"
 					);
 					
 					stmt.setInt(1, gameID);
@@ -1565,15 +1557,7 @@ public class DerbyDatabase implements IDatabase {
 					while(resultSet.next()) {
 						found = true;
 						
-						Shot shot = new Shot(
-							resultSet.getInt("frame_id"),
-							resultSet.getInt("game_id"),
-							resultSet.getInt("session_id"),
-							resultSet.getInt("shot_number"),
-							resultSet.getString("count"),
-							resultSet.getInt("ball_id"),
-							resultSet.getString("pins_left")
-						);
+						Shot shot = new Shot();
 						
 						result.add(shot);
 					}
@@ -1613,15 +1597,7 @@ public class DerbyDatabase implements IDatabase {
 					while(resultSet.next()) {
 						found = true;
 						
-						Shot shot = new Shot(
-							resultSet.getInt("frame_id"),
-							resultSet.getInt("game_id"),
-							resultSet.getInt("session_id"),
-							resultSet.getInt("shot_number"),
-							resultSet.getString("count"),
-							resultSet.getInt("ball_id"),
-							resultSet.getString("pins_left")
-						);
+						Shot shot = new Shot();
 						
 						result.add(shot);
 					}
@@ -1635,44 +1611,32 @@ public class DerbyDatabase implements IDatabase {
 		});
 	}
 	
-	public List<Shot> getLeavesFromAccount(int gameID, int sessionID){
+	public List<Shot> getLeavesFromGameAndSession(int gameID, int sessionID){
 		return executeTransaction(new Transaction<List<Shot>>() {
 			@Override
 			public List<Shot> execute(Connection conn) throws SQLException{
 				PreparedStatement stmt = null;
-				ResultSet resultSet = null;
+				ResultSet resultSet = stmt.executeQuery();
+				int count = 0;
 				
 				try {
 					stmt = conn.prepareStatement(
 							"select * from shots " +
-							"where game_id = ? and session_id = ? and shot_number = 2"
+							"where game_id = ? and session_id = ? and (leave = 'X' or leave = '/' or leave = '-' or leave = 'F')"
 					);
 					
 					stmt.setInt(1, gameID);
 					stmt.setInt(2, sessionID);
 					
-					List<Shot> result = new ArrayList<Shot>();
 					resultSet = stmt.executeQuery();
 					
-					Boolean found = false;
-					
+					List<Shot> leaves = new ArrayList<>();
 					while(resultSet.next()) {
-						found = true;
-						
-						Shot shot = new Shot(
-							resultSet.getInt("frame_id"),
-							resultSet.getInt("game_id"),
-							resultSet.getInt("session_id"),
-							resultSet.getInt("shot_number"),
-							resultSet.getString("count"),
-							resultSet.getInt("ball_id"),
-							resultSet.getString("pins_left")
-						);
-						
-						result.add(shot);
+						Shot shot = new Shot();
+						leaves.add(shot);
 					}
 					
-					return result;
+					return leaves;
 				}finally {
 					DBUtil.closeQuietly(resultSet);
 					DBUtil.closeQuietly(stmt);

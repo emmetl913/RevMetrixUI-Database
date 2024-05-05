@@ -57,4 +57,5 @@ public interface IDatabase {
 	public List<Shot> getStrikesFromAccount(int gameID, int sessionID);
 	public List<Shot> getSparesFromAccount(int gameID, int sessionID);
 	public List<Shot> getSecondShotsFromAccount(int gameID, int sessionID);
+	public List<Shot> getLeavesFromGameAndSession(int gameID, int sessionID);
 }
