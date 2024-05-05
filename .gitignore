@@ -5,3 +5,5 @@ bowlingBall.jpg
 derby.log
 /bin/
 derby.log
+*.log
+derby.log
