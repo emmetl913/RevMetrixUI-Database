@@ -270,6 +270,92 @@ public class DerbyDatabase implements IDatabase {
 	}
 	
 	@Override
+	public Integer getSessionScore(int sessionID) {
+		return executeTransaction(new Transaction<Integer>() {
+			@Override
+			public Integer execute(Connection conn) throws SQLException {
+				PreparedStatement stmt = null;
+				ResultSet resultSet = null;
+				
+				try {
+					stmt = conn.prepareStatement(
+							"select * from sessions "+
+							"where session_id = ?"
+					);
+					stmt.setInt(1, sessionID);
+					
+					Integer result = null;
+					resultSet = stmt.executeQuery();
+					
+					// for testing that a result was returned
+					Boolean found = false;
+					
+					while (resultSet.next()) {
+						found = true;
+						Session session = new Session();
+						loadSession(session, resultSet, 1);
+						
+						result = session.getScore();
+					}
+					
+					// check if any authors were found
+					if (!found) {
+						System.out.println("No Events were found in the database");
+					}
+					
+					return result;
+				} finally {
+					DBUtil.closeQuietly(resultSet);
+					DBUtil.closeQuietly(stmt);
+				}
+			}
+		});
+	}
+	
+	@Override
+	public String getSessionDate(int sessionID) {
+		return executeTransaction(new Transaction<String>() {
+			@Override
+			public String execute(Connection conn) throws SQLException {
+				PreparedStatement stmt = null;
+				ResultSet resultSet = null;
+				
+				try {
+					stmt = conn.prepareStatement(
+							"select * from sessions "+
+							"where session_id = ?"
+					);
+					stmt.setInt(1, sessionID);
+					
+					String result = null;
+					resultSet = stmt.executeQuery();
+					
+					// for testing that a result was returned
+					Boolean found = false;
+					
+					while (resultSet.next()) {
+						found = true;
+						Session session = new Session();
+						loadSession(session, resultSet, 1);
+						
+						result = session.getTime();
+					}
+					
+					// check if any authors were found
+					if (!found) {
+						System.out.println("No Events were found in the database");
+					}
+					
+					return result;
+				} finally {
+					DBUtil.closeQuietly(resultSet);
+					DBUtil.closeQuietly(stmt);
+				}
+			}
+		});
+	}
+	
+	@Override
 	public Integer getCurrentGameLane(int gameID) {
 		return executeTransaction(new Transaction<Integer>() {
 			@Override

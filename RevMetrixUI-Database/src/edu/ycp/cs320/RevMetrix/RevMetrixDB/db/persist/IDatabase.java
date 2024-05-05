@@ -53,5 +53,7 @@ public interface IDatabase {
 	public Integer[] getGamesBySessions(int sessionID);
 	public Game getGameByGameID(int gameID);
 	public ArrayList<Integer> getSessionsByEvent(int eventID);
+	public Integer getSessionScore(int sessionID);
+	public String getSessionDate(int sessionID);
 	
 }

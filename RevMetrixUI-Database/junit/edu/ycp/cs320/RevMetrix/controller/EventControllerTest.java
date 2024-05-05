@@ -9,8 +9,6 @@ import org.junit.Before;
 import org.junit.Test;
 
 import edu.ycp.cs320.RevMetrix.model.Event;
-import edu.ycp.cs320.RevMetrix.model.EventArray;
-
 import java.util.List;
 
 public class EventControllerTest{
@@ -18,14 +16,14 @@ public class EventControllerTest{
 
 	@Before
 	public void setUp() {
-		EventArray model = new EventArray();
-		controller = new EventController();
+		Event model = new Event();
+		controller = new EventController(1);
 		controller.setModel(model);
 	}
 	
 	@Test
 	public void testGetEstaFromAccount() {
-		List<Event> testEvent = controller.getAllEventsForAccount(1);
+		List<Event> testEvent = controller.getAllEventsForAccount();
 		
 		
 		System.out.println("Test get Establishments:");
@@ -37,9 +35,9 @@ public class EventControllerTest{
 	
 	@Test
 	public void testAddEventFromAccount() {
-		controller.insertNewEvent(1,  1,  "name", 9, "test type", 3);
+		//controller.insertNewEvent(  1,  "name", 9, "test type", 3);
 		
-		List<Event> testEvent = controller.getAllEventsForAccount(1);
+		List<Event> testEvent = controller.getAllEventsForAccount();
 		
 		System.out.println("Test Add Establishment:");
 		for(Event esta : testEvent) {

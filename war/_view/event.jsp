@@ -157,7 +157,6 @@
     <div class="container">
       <h2>Pick Existing Event</h2>
         <form action="${pageContext.servletContext.contextPath}/event" method="post">
-
           <div id="eventsList"> &nbsp				
             <% 
                    
