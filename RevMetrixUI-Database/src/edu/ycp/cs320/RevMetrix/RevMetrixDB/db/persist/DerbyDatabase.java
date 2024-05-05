@@ -1780,7 +1780,7 @@ public class DerbyDatabase implements IDatabase {
 		session.setEventID(resultSet.getInt(index++));
 		session.setTime(resultSet.getString(index++));
 		session.setOppType(resultSet.getString(index++));
-		session.setOpp(resultSet.getString(index++));
+		session.setName(resultSet.getString(index++));
 		session.setScore(resultSet.getInt(index++));
 
 	}
@@ -2136,7 +2136,7 @@ public class DerbyDatabase implements IDatabase {
 						insertSession.setInt(1, session.getEventID());
 						insertSession.setString(2, session.getTime());
 						insertSession.setString(3, session.getOppType());
-						insertSession.setString(4, session.getOpponent());
+						insertSession.setString(4, session.getName());
 						insertSession.setInt(5, session.getScore());
 						insertSession.addBatch();
 					}

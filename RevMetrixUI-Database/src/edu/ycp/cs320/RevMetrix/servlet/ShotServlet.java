@@ -80,10 +80,13 @@ public class ShotServlet extends HttpServlet {
 		
 		//Load frames from gameID
 		FrameController fc = new FrameController();
+		Integer gameID = (Integer)session.getAttribute("gameID");
 		Game currentGame = (Game)session.getAttribute("currentGame");
-		int sessionID = (int)session.getAttribute("sessionID");
+		System.out.println("Current game info: "+currentGame.getGameID());
+		System.out.println("Current gameID info: "+gameID);
+		Integer sessionID = (int)session.getAttribute("sessionID");
 
-		List<Frame> frameList = fc.getFrameByGameID(currentGame.getGameID());
+		List<Frame> frameList = fc.getFrameByGameID(gameID);
 		//Shot testShot1 = new Shot(sessionID, currentGame.getGameID(), frameList.get(0).getFrameID(), 1,69, 1, "12345", "");
 		//frameList.get(0).setShot1(testShot1);
 		assignShotsToFrames(frameList);

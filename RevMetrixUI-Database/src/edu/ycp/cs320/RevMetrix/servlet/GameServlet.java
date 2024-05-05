@@ -80,28 +80,37 @@ public class GameServlet extends HttpServlet {
         	currentGame = controller.getGameByGameID(gameID);
         } else 
         {
-	        Integer laneInput = getIntegerFromParameter(req.getParameter("startingLane"));
+        	System.out.println("We've made it to the game creation");
+	        Integer laneInput = getIntegerFromParameter(req.getParameter("inputLane"));
 	        int gameNumber;
             if(games == null) {
             	gameNumber = 1;
+            	System.out.println("This is the first game");
             }
             else {
                 gameNumber = games.size();
+                System.out.println("Game number set to: "+gameNumber);
             }
-	        	
+	        
 	        if(laneInput == null ) {
 	            errorMessage = "Enter a lane";
+	            System.out.println("uh oh! bad lane");
 	        }
 	        	
 	    	if(errorMessage == null) {
 		        Integer gameID = controller.insertNewGame(sessionID, laneInput, gameNumber, 0);
+		        System.out.println("Game ID for successful insert: "+gameID);
 		        currentGame = new Game(gameID, sessionID, laneInput, gameNumber, 0);
 	        	//Initialize Game with frames
 	    		FrameController fc = new FrameController();
 	    		for(int i = 1; i <= 12; i++) {
 	    			fc.insertNewFrame(currentGame.getGameID(), i);
 	    		}
+	    		
+	    		session.setAttribute("currentGame", currentGame);
 		        session.setAttribute("gameID", gameID);
+		        acc.setCurrentGame((Game)session.getAttribute("currentGame"));
+		        
 	    	}
         }
         

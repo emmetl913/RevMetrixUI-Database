@@ -19,7 +19,7 @@
             margin: 0;
             padding: 0;
         }
-button {
+		button {
             background-color: #4caf50;
             color: #fff;
             padding: 10px 20px;
@@ -27,11 +27,16 @@ button {
             border-radius: 4px;
             cursor: pointer;
         }
+        .gamesList
+        {
+        	width: 590px;
+			height: 400px;
+			overflow: scroll;
+        }
 		.game-section{
 			border: 1px solid black;
 			margin-bottom: 10px;
 			padding: 10px;
-			overflow: auto; 
 		}
 		.game-section:hover{
 			background-color: #33B5FF;
@@ -79,61 +84,61 @@ button {
 			color: red;
 		}
 		.sidebar {
-	height: 100%;
-	width: 250px;
-	position: fixed;
-	top: 0;
-	left: 0;
-	background: linear-gradient(to bottom, rgba( 243, 0, 178, 1 ), rgba( 28, 144, 243, 1 ) 95%, rgba( 255, 255, 0, 1 ));
-	padding-top: 20px;
-	}
-	.number-input{
-		width: 100px;
-	}
-	/* Links in the sidebar */
-	.sidebar a {
-	padding: 10px 20px;
-	text-decoration: none;
-	color: white;
-	display: block;
-	}
-
-	/* Change color of links on hover */
-	.sidebar a:hover {
-	background-color: #333;
-	}
-
-	/* Style the main content */
-	.main-content {
-	margin-left: 250px; /* Same width as the sidebar */
-	padding: 20px;
-	}
-
-	/* Responsive layout - when the screen is less than 600px wide, make the sidebar and the main content stack on top of each other */
-	@media screen and (max-width: 600px) {
-	.sidebar {
-		width: 100%;
-		height: auto;
-		position: relative;
-	}
-	.sidebar a {float: left;}
-	div.content {margin-left: 0;}
-	}
-	.bottom-link {
-  position: absolute;
-  bottom: 20px; /* Adjust this value to raise or lower the link */
-  left: 0;
-  width: 84%; 
-  text-align: left;
-  }
-
-  .bottom-link2 {
-  position: absolute;
-  bottom: 60px; /* Adjust this value to raise or lower the link */
-  left: 0;
-  width: 84%; 
-  text-align: left;
-  }
+			height: 100%;
+			width: 250px;
+			position: fixed;
+			top: 0;
+			left: 0;
+			background: linear-gradient(to bottom, rgba( 243, 0, 178, 1 ), rgba( 28, 144, 243, 1 ) 95%, rgba( 255, 255, 0, 1 ));
+			padding-top: 20px;
+		}
+		.number-input{
+			width: 100px;
+		}
+		/* Links in the sidebar */
+		.sidebar a {
+			padding: 10px 20px;
+			text-decoration: none;
+			color: white;
+			display: block;
+		}
+	
+		/* Change color of links on hover */
+		.sidebar a:hover {
+			background-color: #333;
+		}
+	
+		/* Style the main content */
+		.main-content {
+			margin-left: 250px; /* Same width as the sidebar */
+			padding: 20px;
+		}
+	
+		/* Responsive layout - when the screen is less than 600px wide, make the sidebar and the main content stack on top of each other */
+		@media screen and (max-width: 600px) {
+			.sidebar {
+				width: 100%;
+				height: auto;
+				position: relative;
+			}
+			.sidebar a {float: left;}
+			div.content {margin-left: 0;}
+		}
+		.bottom-link {
+		 	position: absolute;
+		 	bottom: 20px; /* Adjust this value to raise or lower the link */
+		 	left: 0;
+		 	width: 84%; 
+		 	text-align: left;
+		}
+	
+	  	.bottom-link2 {
+	  		position: absolute;
+	  		bottom: 60px; /* Adjust this value to raise or lower the link */
+	  		left: 0;
+	  		width: 84%; 
+	  		text-align: left;
+	  	}
     </style>
 </head>
 <body>
@@ -163,17 +168,15 @@ button {
 	<form id = "gameForm" action="${pageContext.servletContext.contextPath}/game" method="post">
 	<div class="container">
 		<h1>Pick an existing game</h1>
-		<div id="gamesList"> &nbsp
+		<div id="gamesList" class="gamesList"> &nbsp
 			<% 
                    
                 if(games != null) {
                   for (Game gameItem : games) {
            %>
 		           <div class="game-section" onclick= "selectGame ('<%= gameItem.getGameID() %>')">
-		                  <p>ID: <%= gameItem.getGameID() %></p>
-		                  <p>Lane: <%= gameItem.getLane() %></p>
-		                  <p>Game Number: <%= gameItem.getGameNumber()%></p>
-		                  <p>Current Score: <%= gameItem.getScore()%></p>
+		                  <p>ID: <%= gameItem.getGameID() %> &nbsp Lane: <%= gameItem.getLane() %></p>
+		                  <p>Game Number: <%= gameItem.getGameNumber()%> &nbsp Current Score: <%= gameItem.getScore()%></p>
 		           </div>
            <% 
                  } } else {	%>
@@ -187,7 +190,7 @@ button {
          </tr>
 	</div>
 	</form>
-	<form href="${pageContext.servletContext.contextPath}/game" method="post"> 
+	<form action="${pageContext.servletContext.contextPath}/game" method="post"> 
 	<div class="container">
 	
 		<h2>Start a new game</h2>

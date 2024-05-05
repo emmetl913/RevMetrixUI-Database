@@ -16,7 +16,7 @@ public class Session {
 		this.eventID = eventID;
 		this.time = time;
 		this.oppType = oppType;
-		this.opp = opp;
+		this.eName = opp;
 		this.score = score;
 	}
 	public Session() {

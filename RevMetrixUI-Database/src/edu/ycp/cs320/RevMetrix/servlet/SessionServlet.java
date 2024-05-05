@@ -62,7 +62,7 @@ public class SessionServlet extends HttpServlet{
 		Account acc = (Account) session.getAttribute("currAccount");
 		Integer eventID = (Integer) session.getAttribute("eventID"); //(int) session.getAttribute("currEventID");
 		String selectedSession = req.getParameter("selectedSession");
-		System.out.print(selectedSession + " testing this value");
+		System.out.println(selectedSession + " testing this value");
 		model.setEventID(eventID);
 		controller.setModel(model);
 		
@@ -73,30 +73,10 @@ public class SessionServlet extends HttpServlet{
 			session.setAttribute("sessionID", sessionID);
 		} else
 		{
-			String time = req.getParameter("timeType");
-			System.out.println(time);
-			if ("Current Time".equals(time))
-			{
-				LocalTime currentTime = LocalTime.now();
-				LocalDate currentDate = LocalDate.now();
-		        // Format the time using a DateTimeFormatter
-		        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("hh:mma");
-		        DateTimeFormatter formatter1 = DateTimeFormatter.ofPattern("MMddyyyy");
-		        String formattedDate = currentDate.format(formatter1);
-		        String formattedTime = currentTime.format(formatter);
-		        
-		        System.out.println(formattedTime + " " + formattedDate);
-		        
-				model.setTime(formattedTime);
-				model.setDate(formattedDate);
-			} else if ("Other Time".equals(time))
-			{
-				LocalDate currentDate = LocalDate.now();
-		        DateTimeFormatter formatter1 = DateTimeFormatter.ofPattern("MMddyyyy");
-		        String formattedDate = currentDate.format(formatter1);
-		        model.setDate(formattedDate);
-		        model.setTime(req.getParameter("inputTime"));
-			}
+			String inputDate = (String) req.getParameter("sessionDate");
+			model.setDate(inputDate);
+			System.out.println("Date entered: "+inputDate);
+			
 			
 			
 			String bowlType = req.getParameter("bowlType");

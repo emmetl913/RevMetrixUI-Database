@@ -33,11 +33,16 @@
 	  margin-top: 12px;
 	  font-size: 1.75em;
 	}
+	.sessionsList
+	{
+		width: 590px;
+    	height: 400px;
+		overflow: scroll;
+	}
 	.session-section{
 		border: 1px solid black;
 		margin-bottom: 10px;
 		padding: 10px;
-		overflow: auto;   
 	}
 	.session-section:hover{
 		background-color: #33B5FF;
@@ -271,17 +276,15 @@
 <form action="${pageContext.servletContext.contextPath}/session" method="post">
 	<div class="container"> 
 		<h2>Pick an existing session</h2>
-		<div id="sessionsList"> &nbsp
+		<div id="sessionsList" class="sessionsList"> &nbsp
 			<% 
                    
                 if(sessions != null) {
                   for (Session sessionItem : sessions) {
            %>
 		           <div class="session-section" onclick= "selectSession ('<%= sessionItem.getSessionID() %>')">
-		                  <p>ID: <%= sessionItem.getSessionID() %></p>
-		                  <p>Time: <%= sessionItem.getTime() %></p>
-		                  <p>Opponent Type: <%= sessionItem.getOppType()%></p>
-		                  <p>Opponent Name: <%= sessionItem.getName()%></p>
+		                  <p>ID: <%= sessionItem.getSessionID() %> &nbsp Time: <%= sessionItem.getTime() %></p>
+		                  <p>Opponent Type: <%= sessionItem.getOppType()%> &nbsp Opponent Name: <%= sessionItem.getName()%></p>
 		           </div>
            <% 
                  } } else {	%>
@@ -303,23 +306,19 @@
 			<th>Total Score: </th>
 			<table>
 		        <tr>
-		        <th>Time: </th>
-		        </tr>
-		        <tr>
-		            <td><button type="button" id="otherTime">Enter a Session Time</button></td>
-		            <td>
-		            	<button type="button" id="currentTime" value="Current Time">Use Current Time</button>
-		            	
-		            </td>
+		        <th>Session Time: </th>
 		        </tr>
 		        <tr id="inputTime">
-		            <td colspan="3"><input type="text" id="inputTime" name="inputTime" placeholder="Enter time of Session"></td>
+		            <td colspan="3"><!-- <input type="text" id="inputTime" name="inputTime" placeholder="Enter time of Session"> -->
+  						<input type="date" id="inputTime" name="sessionDate" value="">
+  						<!-- <input type="submit" value="Submit"> -->
+		            </td>
 		        </tr>
     		</table>
     		<input type="hidden" name="timeType" id="timeType" value="">
 			<table>
 		        <tr>
-		        <th>Opponent: </th>
+		        <th>Session Opponent: </th>
 		        </tr>
 		        <tr>
 		            <td><button type="button" id="teamBtn" value="Team Opponent">Team Opponent</button></td>
@@ -355,14 +354,7 @@
         });
         
         
-        document.getElementById("otherTime").addEventListener("click", function() {
-            document.getElementById("timeType").value = "Other Time";
-        	document.getElementById("inputTime").style.display = "table-row";
-        });
-        document.getElementById("currentTime").addEventListener("click", function() {
-        	document.getElementById("timeType").value = "Current Time";
-        	document.getElementById("inputTime").style.display = "none";
-        });
+        
         
         
         document.getElementById("session").addEventListener("submit", function(e)
