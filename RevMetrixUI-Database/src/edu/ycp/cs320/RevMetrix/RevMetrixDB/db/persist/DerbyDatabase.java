@@ -730,6 +730,48 @@ public class DerbyDatabase implements IDatabase {
 			}
 		});
 	}
+	@Override public Game getGameByGameID(int gameID)
+	{
+		return executeTransaction(new Transaction<Game>() {
+			@Override
+			public Game execute(Connection conn) throws SQLException
+			{
+				PreparedStatement stmt1 = null;
+				
+				ResultSet resultSet1 = null;
+				
+				try
+				{
+					stmt1 = conn.prepareStatement(
+							"select * from games"
+							+" where game_id = ?"
+					);
+					stmt1.setInt(1, gameID);
+					
+					Game result = new Game();
+					
+					resultSet1 = stmt1.executeQuery();
+					
+					Boolean found = false;
+					
+					while(resultSet1.next())
+					{
+						found = true;
+						Game game = new Game(0, 0, 0, 0, 0);
+						loadGame(game, resultSet1, 1);
+						System.out.println("Game found with ID: "+ game.getGameID());
+						result = game;
+					}
+					
+					return result;
+				} finally
+				{
+					DBUtil.closeQuietly(stmt1);
+					DBUtil.closeQuietly(resultSet1);
+				}
+			}
+		});
+	}
 	
 	@Override
 	public List<Game> getGameBySessionID(int sessionID) {
@@ -760,7 +802,7 @@ public class DerbyDatabase implements IDatabase {
 						found = true;
 						Game game = new Game(0, 0, 0, 0, 0);
 						loadGame(game, resultSet1, 1);
-						//System.out.println("SKREET" + ball.getName());
+						System.out.println("Game found with ID: "+ game.getGameID());
 						result.add(game);
 					}
 					

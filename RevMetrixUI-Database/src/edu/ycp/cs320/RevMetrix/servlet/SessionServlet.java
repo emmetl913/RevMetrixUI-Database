@@ -131,7 +131,7 @@ public class SessionServlet extends HttpServlet{
 		req.setAttribute("model", model);
 		
 		if(req.getParameter("submit") != null || req.getParameter("SubmitCurrentSession") != null && errorMessage == null) {
-			System.out.println("Submit button is pressed");
+			System.out.println("Session submit button is pressed");
     		resp.sendRedirect(req.getContextPath() + "/game");
         }
 		else {		

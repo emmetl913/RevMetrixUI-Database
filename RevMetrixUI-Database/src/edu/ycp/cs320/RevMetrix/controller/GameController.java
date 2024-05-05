@@ -39,6 +39,19 @@ public class GameController{
 			return newGame;
 		}
 	}
+	public Game getGameByGameID(int gameID)
+	{
+		Game result = db.getGameByGameID(gameID);
+		if(result == null)
+		{
+			System.out.println("Games for gameID: <"+gameID+"> not found");
+			return null;
+		} else 
+		{
+			System.out.println("Games for gameID: <"+gameID+"> found successfully");
+			return result;
+		}
+	}
 	public List<Game> getGameBySessionID(int sessionID)
 	{
 		List<Game> resultList = db.getGameBySessionID(sessionID);
@@ -49,6 +62,7 @@ public class GameController{
 			return null;
 		} else 
 		{
+			System.out.println("Games for sessionID: <"+sessionID+"> found successfully");
 			return resultList;
 		}
 	}

@@ -51,6 +51,7 @@ public interface IDatabase {
 	public String getEventNameByAccount(int accID, int eventID);
 	public Integer getCurrentGameLane(int gameID);
 	public Integer[] getGamesBySessions(int sessionID);
+	public Game getGameByGameID(int gameID);
 	public ArrayList<Integer> getSessionsByEvent(int eventID);
 	
 }

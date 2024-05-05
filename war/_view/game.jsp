@@ -4,8 +4,9 @@
 <%@ page import= "edu.ycp.cs320.RevMetrix.model.Game" %>
 <%@ page import = "java.io.*,java.util.*"%>
 <%@ page import="javax.servlet.http.HttpSession" %>
+<%@ page import = "java.util.List" %>
 <%
-	List<Game> games = (List<Game>)session.getAttribute("gamesListKey");
+	List<Game> games = (List<Game>)request.getAttribute("games");
 %>
 <html>
 <head>
@@ -26,7 +27,15 @@ button {
             border-radius: 4px;
             cursor: pointer;
         }
-
+		.game-section{
+			border: 1px solid black;
+			margin-bottom: 10px;
+			padding: 10px;
+			overflow: auto; 
+		}
+		.game-section:hover{
+			background-color: #33B5FF;
+		}
         button:hover {
             background-color: #45a049;
         }
@@ -153,37 +162,52 @@ button {
 	</div>
 	<form id = "gameForm" action="${pageContext.servletContext.contextPath}/game" method="post">
 	<div class="container">
-	
-		<!-- Game Page -->
-			<h1>Game Page!</h1>
-			<p> Select game by index: </p>
-
-			<select name="gameDropDown" id="establishment">
-			<%
-				if (games != null) {
-				  for (int i =0; i < games.size(); i++) {
-					  Game game = games.get(i);
-					  
-					  String is = ""+i;
-			%>
-			<option value=<%=is%>><%= game.getGameNumber() %> &nbsp&nbsp&nbsp|&nbsp&nbsp&nbsp Lane: <%=game.getLane()%>  
-				&nbsp&nbsp&nbsp|&nbsp&nbsp&nbsp Score: <%=game.getScore()%></option>
-		   <% 
-				 } } else {	%>
-					 <option value="">No Games</option>
-		   <% } %>
-			</select>
-			<p><button id="submitButton" type="submit" id="gameStatus" name="select" value="selectCurrentGame"> Select Current Game</button></p>
-			<tr>
-				Enter Lane for a new game: <br> 
-				<input type="text" id="laneInput" name="laneInput" class="number-input">
-			</tr>
-				<br> 
-			<tr>
-			  	<button id="submitButton1" type="submit" id="gameStatus" name="new" value="startNewGame"> Start New Game</button>
-			</tr> 
+		<h1>Pick an existing game</h1>
+		<div id="gamesList"> &nbsp
+			<% 
+                   
+                if(games != null) {
+                  for (Game gameItem : games) {
+           %>
+		           <div class="game-section" onclick= "selectGame ('<%= gameItem.getGameID() %>')">
+		                  <p>ID: <%= gameItem.getGameID() %></p>
+		                  <p>Lane: <%= gameItem.getLane() %></p>
+		                  <p>Game Number: <%= gameItem.getGameNumber()%></p>
+		                  <p>Current Score: <%= gameItem.getScore()%></p>
+		           </div>
+           <% 
+                 } } else {	%>
+                 <p>No games available.</p>
+           <% } %>
+           
 		</div>
-		</form>
-		
+		 <input type="hidden" id="selectedGame" name="selectedGame">
+		 <tr>
+            <td><a href="${pageContext.servletContext.contextPath}/shot"><input type="Submit" id="SubmitCurrentGame" name="SubmitCurrentGame" value="Submit"></a></td>
+         </tr>
+	</div>
+	<div class="container">
+	
+		<h2>Start a new game</h2>
+		<table>
+			<tr>
+		        <th>Enter the starting Lane for the new game: </th>
+		        <tr id="inputLane">
+		            <td colspan="3"><input type="text" id="inputLane" name="inputLane" placeholder="Enter the starting lane!"></td>
+		        </tr>
+		    </tr>
+		</table>
+		<input type="hidden" name="startingLane" id="startingLane" value="">
+		<tr>
+			<td><input type="Submit" name="submit" value="Submit Page"><a href="${pageContext.servletContext.contextPath}/shot"></a></td>
+		</tr>
+	</div>
+</form>
+<script>
+	function selectGame(game)
+	{
+		document.getElementById('selectedGame').value = game;
+	}
+</script>	
 </body>
 </html>
