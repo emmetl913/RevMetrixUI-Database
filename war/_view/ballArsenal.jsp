@@ -211,6 +211,7 @@ button:hover {
 		  </a>
 	      <a href="${pageContext.servletContext.contextPath}/establishmentReg">Establishment Registration</a>
           <a href="${pageContext.servletContext.contextPath}/ballArsenal">Ball Arsenal</a>
+          <a href="${pageContext.servletContext.contextPath}/stats">Stats</a>
           <a href="${pageContext.servletContext.contextPath}/event">Start Bowling</a>
 
           <a href="https://github.com/emmetl913/RevMetrixUI-Database"class="bottom-link2">GitHub</a>
