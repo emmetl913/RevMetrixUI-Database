@@ -36,6 +36,7 @@ public class ShotServlet extends HttpServlet {
 	private int currentShotNumber;
 	private int currentFrameNumber;
 	private int pinsDownCount;
+	private boolean gameOver = false;
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException {
@@ -133,9 +134,9 @@ public class ShotServlet extends HttpServlet {
 	@Override
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 	    //REACTIVATE WHEN DONE CODING
-//		if(!AccountServlet.validLogin()) {
-//            req.getRequestDispatcher("/_view/logIn.jsp").forward(req, resp);
-//        }
+		if(!AccountServlet.validLogin()) {
+            req.getRequestDispatcher("/_view/logIn.jsp").forward(req, resp);
+        }
 		
 		System.out.println("Shot Servlet: doPost");
 		String errorMessage = null;
@@ -346,8 +347,8 @@ public class ShotServlet extends HttpServlet {
 		
 		frameList = fc.getFrameByGameID(currentGame.getGameID());
 		assignShotsToFrames(frameList);
-
-
+		updateGameOver(frameList);
+		req.setAttribute("gameOver", gameOver);
 		for(Frame frame: frameList) {
 			System.out.print("frame# - " +frame.getFrameNumber() + ", score: "+frame.getScore());
 			if(frame.getShot1()!= null) {
@@ -359,7 +360,7 @@ public class ShotServlet extends HttpServlet {
 			System.out.println(""); //linebreak
 		}
 		
-		
+		System.out.println("GameOver = " + gameOver);
 		req.getRequestDispatcher("/_view/shot.jsp").forward(req, resp);
 	}
 
@@ -406,21 +407,27 @@ public class ShotServlet extends HttpServlet {
 		}
 		if(shot1 != null) {
 			if(shot1.getPinsLeft().equals("X")) {
-				Shot nextShot = frameList.get(currFrameNum).getShot1();
-				if(nextShot != null) {
-					if(nextShot.getPinsLeft().equals("X")) {
-						Shot nextNextShot = frameList.get(currFrameNum+1).getShot1();
-						if(nextNextShot != null) {
-							frameScore = prevFrameScore + 10 + 10 + nextNextShot.getCount();
+				if(currFrameNum!=12) {
+					Shot nextShot = frameList.get(currFrameNum).getShot1();
+					if(nextShot != null) {
+						if(nextShot.getPinsLeft().equals("X")) {
+							if(currFrameNum != 12 && currFrameNum != 11) {
+								Shot nextNextShot = frameList.get(currFrameNum+1).getShot1();
+								if(nextNextShot != null) {
+									frameScore = prevFrameScore + 10 + 10 + nextNextShot.getCount();
+								}
+							}
+							
 						}
-					}
-					else { //nextShot != "X"
-						Shot nextNextShot = frameList.get(currFrameNum).getShot2();
-						if(nextNextShot != null) {
-							frameScore = prevFrameScore + 10 +nextShot.getCount() + nextNextShot.getCount();
+						else { //nextShot != "X"
+							Shot nextNextShot = frameList.get(currFrameNum).getShot2();
+							if(nextNextShot != null) {
+								frameScore = prevFrameScore + 10 + nextShot.getCount() + nextNextShot.getCount();
+							}
 						}
 					}
 				}
+
 			}
 			if(shot2 != null) {
 				if(shot2.getPinsLeft().equals("/")) {
@@ -431,9 +438,7 @@ public class ShotServlet extends HttpServlet {
 				}
 			}
 		}
-//		if(shot1 == null || shot2 == null) {
-//			frameScore = -1;
-//		}
+
 		return frameScore;
 	}
 
@@ -528,6 +533,32 @@ public class ShotServlet extends HttpServlet {
 		System.out.println("Pinsleft: " + pinsLeft);
 		pinsDownCount = count;
 		return pinsLeft;
+	}
+	
+	private void updateGameOver(List<Frame> frameList) {
+		//get f10s2
+		Shot f10s2 = frameList.get(9).getShot2(); 
+		//get f11s1
+		Shot f11s1 = frameList.get(10).getShot1();
+		//get f12s1
+		Shot f12s1 = frameList.get(11).getShot1();
+		int count = 0;
+		if(f10s2 != null && !f10s2.getPinsLeft().equals("/")) {
+		
+			count++;
+		}
+		if(f11s1 != null && !f11s1.getPinsLeft().equals("X")) {
+			count++;
+		}
+		if(f12s1 != null && !f12s1.getPinsLeft().equals("")) {
+			count++;
+		}
+		if(count > 0) {
+			gameOver = true;
+		}
+		else {
+			gameOver = false;
+		}
 	}
 	
 }
