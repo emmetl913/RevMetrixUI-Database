@@ -189,6 +189,9 @@
 				font-size: 20px;
 				text-decoration: underline;
 			}
+			form button{
+				margin-bottom: 15px;
+			}
 		</style>
 	</head>
 
@@ -247,9 +250,7 @@
 					<!-- submits the event ID -->
 					<input type="hidden" name="selectedEventID" id="selectedEventID" value="">
 					<button name="submitEvent" type="submit" id="submitEvent">Submit Event</button>
-					<!-- <button name="submitShotData" type="submit" id="submitShotData">Get Shot Data</button>	 -->
 				</form>
-				</br>
 
 				<form action="${pageContext.servletContext.contextPath}/stats" method="post">
 					<select name="sessionID" id="sessionID">
@@ -267,17 +268,7 @@
 	
 					<input type="hidden" name="selectedSessionID" id="selectedSessionID" value="">
 					<button name="submitSession" type="submit" id="submitSession">Submit Session</button>
-	
 				</form>
-				
-				 
-				<!-- <script>
-					function updateSelectedSession(){
-						var selectedSession = document.getElementById("sessionSelected").value;
-						document.getElementById("selectedSessionID").value = selectedSession;
-					}
-				</script>  -->
-				</br>
 
 				<form action="${pageContext.servletContext.contextPath}/stats" method="post">
 					<select name="gameID" id="gameID">
@@ -294,7 +285,7 @@
 					</select>
 					<button name="submitShotData" type="submit" id="submitShotData">Get Shot Data</button>	
 				</form>
-    </div>
+    	</div>
     </div>
     <c:if test="${requestScope.formSubmitted}">
             <div class="container" id="hiddenContent">
@@ -349,8 +340,8 @@
 	<c:if test="${requestScope.shotFormSubmitted}">
 			<div class="container" id="hiddenContent">
 				<h3>Stats Data:</h3>
-				<h4>Lifetime pins knocked down: </h4>
-				<h4>Pin Strike: </h4>
+				<h4>Lifetime pins knocked down: .<%= request.getAttribute("LifetimeKnocked") %></h4>
+				<h4>Pin Strike: .<%= request.getAttribute("LifetimeMissed") %></h4>
 				<h4>Strike Percentage: <%= request.getAttribute("strike") %> %</h4>
 				<h4>Spare Percentage: <%= request.getAttribute("spare") %> %</h4>
 				<h4>Leave Percentage: <%= request.getAttribute("leave") %> %</h4>

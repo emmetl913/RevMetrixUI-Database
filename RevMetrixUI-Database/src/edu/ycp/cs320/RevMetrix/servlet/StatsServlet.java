@@ -102,6 +102,7 @@ public class StatsServlet extends HttpServlet {
 		try {
 			HttpSession session = req.getSession();
 			Account acc = (Account) session.getAttribute("currAccount");
+			statController controller = new statController(acc.getAccountId());
 			
 			Event eventModel = new Event();
 			EventController eventController = new EventController(acc.getAccountId());
@@ -117,9 +118,6 @@ public class StatsServlet extends HttpServlet {
 		    	}else {
 		    		session.setAttribute("persistEventID", eventID);
 		    	}
-//		    	if (selectedEvent.equals(event.getEventName())) {
-//		    	    eventID = event.getEventID();
-//		    	}
 		    }
 		    
 		    String selectedEventID = req.getParameter("eventSelected");
@@ -153,6 +151,9 @@ public class StatsServlet extends HttpServlet {
 		    	
 		    	StatsController statsController = new StatsController();
 		    	
+		    	req.setAttribute("LifetimeKnocked", controller.getLifetimePinsKnockedDown(acc.getAccountId()));
+		    	req.setAttribute("LifetimeMissed", controller.getLifetimePinsMissed(acc.getAccountId()));
+		    	
 		    	req.setAttribute("strike", statsController.strikesPercentage(gameID, sessionID));
 		    	req.setAttribute("spare", statsController.sparePercentage(gameID, sessionID));
 		    	req.setAttribute("leave", statsController.getTotalLeavesFromGameAndSession(gameID, sessionID));
@@ -174,16 +175,8 @@ public class StatsServlet extends HttpServlet {
 		}else {
 				req.setAttribute("shotFormSubmitted", true);
 				req.setAttribute("formSubmitted", false);
-
-//				req.setAttribute("strike", statsController.strikesPercentage(1, 1));
-//		    	req.setAttribute("spare", statsController.getSparesFromAccount(1, 1));
-//		    	req.setAttribute("leave", statsController.getTotalLeavesFromGameAndSession(1, 1));
 		}
-		
-		req.setAttribute("hasEvent", hasEvent);
-		req.setAttribute("hasSession", hasSession);
-		req.setAttribute("hasGame", hasGame);
-		
+
 		req.getRequestDispatcher("/_view/stats.jsp").forward(req, resp);
 	}
 	
