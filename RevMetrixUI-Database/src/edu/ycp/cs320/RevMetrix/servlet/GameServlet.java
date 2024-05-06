@@ -88,8 +88,12 @@ public class GameServlet extends HttpServlet {
             	System.out.println("This is the first game");
             }
             else {
-                gameNumber = games.size();
+                gameNumber = games.size()+1;
                 System.out.println("Game number set to: "+gameNumber);
+                if(gameNumber >= 4)
+                {
+                	errorMessage = "Too many games in current Session";
+                }
             }
 	        
 	        if(laneInput == null ) {

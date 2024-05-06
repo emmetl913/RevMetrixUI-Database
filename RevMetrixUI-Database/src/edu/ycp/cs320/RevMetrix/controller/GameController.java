@@ -39,6 +39,7 @@ public class GameController{
 			return newGame;
 		}
 	}
+	
 	public Game getGameByGameID(int gameID)
 	{
 		Game result = db.getGameByGameID(gameID);
@@ -51,6 +52,11 @@ public class GameController{
 			System.out.println("Games for gameID: <"+gameID+"> found successfully");
 			return result;
 		}
+	}
+	public void updateGameByGameID(int gameID, int newScore)
+	{
+		Integer boggas = db.updateGameByGameID(gameID, newScore);
+		System.out.println("Boggas: "+ boggas);
 	}
 	public List<Game> getGameBySessionID(int sessionID)
 	{

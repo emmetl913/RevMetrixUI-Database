@@ -27,7 +27,19 @@ public class EventController {
 		
 	}
 	
-	
+	public Event getEventByEventID(int eventID)
+	{
+		Event result = new Event();
+		result = db.getEventByEventID(eventID);
+		if(result != null)
+		{
+			return result;
+		}
+		else
+		{
+			return null;
+		}
+	}
 	
 	public List<Event> getAllEventsForAccount() {
 		
