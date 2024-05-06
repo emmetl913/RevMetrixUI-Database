@@ -11,7 +11,7 @@ public class ShotTest{
 	
 	@Before
 	public void SetUp() {
-		shot = new Shot(0, 1, 1, 1, "", 1, "");
+		shot = new Shot(0, 1, 1, 1, 1, 1, "", "");
 	}
 	
 	@Test
@@ -57,8 +57,8 @@ public class ShotTest{
 	
 	@Test
 	public void testCount() {
-		shot.setCount("2");
-		assertEquals("2", shot.getCount());
+		shot.setCount(2);
+		assertEquals(2, shot.getCount());
 	}
 	
 	@Test

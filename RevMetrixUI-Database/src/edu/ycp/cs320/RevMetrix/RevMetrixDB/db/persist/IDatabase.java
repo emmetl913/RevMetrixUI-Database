@@ -29,6 +29,7 @@ public interface IDatabase {
 	List<Ball> getBallByBallID(int ballID);
 	List<Ball> getBallByName(String name);
 
+	
 	public Integer removeBall(int accID, String name);
 
 	List<Game> getGameBySessionID(int sessionID);
@@ -38,6 +39,7 @@ public interface IDatabase {
 	// Shot Level Methods
 	public Integer insertNewFrame(int gameID, int score, int frameNumber);
 	List<Frame> getFrameByGameID(int gameID);
+	public boolean updateFrameByFrameID(int frameID, int newScore);
 
 	List<Shot> getShotByFrameID(int frameID);
 	public Integer insertNewShotWithFrameID(int sessionID, int gameID, int frameID, int shotNumber, int count, int ballID, String pinsLeft);
@@ -51,9 +53,12 @@ public interface IDatabase {
 	public String getEventNameByAccount(int accID, int eventID);
 	public Integer getCurrentGameLane(int gameID);
 	public Integer[] getGamesBySessions(int sessionID);
+	public Game getGameByGameID(int gameID);
 	public ArrayList<Integer> getSessionsByEvent(int eventID);
 	public Integer getSessionScore(int sessionID);
 	public String getSessionDate(int sessionID);
+	public Integer getLifetimePinsKnockedDown(int accountID);
+	public Integer getLifetimePinsMissed(int accountID);
 	
 	//Stats
 	public List<String> getStrikesFromAccount(int gameID, int sessionID);

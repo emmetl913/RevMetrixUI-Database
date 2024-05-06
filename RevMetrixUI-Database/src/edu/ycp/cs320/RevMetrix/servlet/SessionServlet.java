@@ -51,7 +51,7 @@ public class SessionServlet extends HttpServlet{
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp)
 		throws ServletException, IOException
 	{
-		System.out.println("Session Servlet: doGet");
+		System.out.println("Session Servlet: doPost");
 		
 		String errorMessage = null;
 		
@@ -62,7 +62,7 @@ public class SessionServlet extends HttpServlet{
 		Account acc = (Account) session.getAttribute("currAccount");
 		Integer eventID = (Integer) session.getAttribute("eventID"); //(int) session.getAttribute("currEventID");
 		String selectedSession = req.getParameter("selectedSession");
-		
+		System.out.println(selectedSession + " testing this value");
 		model.setEventID(eventID);
 		controller.setModel(model);
 		
@@ -73,30 +73,10 @@ public class SessionServlet extends HttpServlet{
 			session.setAttribute("sessionID", sessionID);
 		} else
 		{
-			String time = req.getParameter("timeType");
-			System.out.println(time);
-			if ("Current Time".equals(time))
-			{
-				LocalTime currentTime = LocalTime.now();
-				LocalDate currentDate = LocalDate.now();
-		        // Format the time using a DateTimeFormatter
-		        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("hh:mma");
-		        DateTimeFormatter formatter1 = DateTimeFormatter.ofPattern("MMddyyyy");
-		        String formattedDate = currentDate.format(formatter1);
-		        String formattedTime = currentTime.format(formatter);
-		        
-		        System.out.println(formattedTime + " " + formattedDate);
-		        
-				model.setTime(formattedTime);
-				model.setDate(formattedDate);
-			} else if ("Other Time".equals(time))
-			{
-				LocalDate currentDate = LocalDate.now();
-		        DateTimeFormatter formatter1 = DateTimeFormatter.ofPattern("MMddyyyy");
-		        String formattedDate = currentDate.format(formatter1);
-		        model.setDate(formattedDate);
-		        model.setTime(req.getParameter("inputTime"));
-			}
+			String inputDate = (String) req.getParameter("sessionDate");
+			model.setDate(inputDate);
+			System.out.println("Date entered: "+inputDate);
+			
 			
 			
 			String bowlType = req.getParameter("bowlType");
@@ -115,8 +95,9 @@ public class SessionServlet extends HttpServlet{
 		    	model.setOppType("self");
 		    }
 			
-			if(errorMessage == null)
+			if(errorMessage != "")
 			{
+				System.out.println("Inserting owo");
 				Integer sessionID = controller.insertNewSession(model.getEventID(), model.getDate(),  model.getOppType(), model.getName(), 0);
 	    		session.setAttribute("sessionID", sessionID);
 			}
@@ -131,7 +112,7 @@ public class SessionServlet extends HttpServlet{
 		req.setAttribute("model", model);
 		
 		if(req.getParameter("submit") != null || req.getParameter("SubmitCurrentSession") != null && errorMessage == null) {
-			System.out.println("Submit button is pressed");
+			System.out.println("Session submit button is pressed");
     		resp.sendRedirect(req.getContextPath() + "/game");
         }
 		else {		

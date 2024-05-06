@@ -5,12 +5,15 @@
 <html>
   <style>
         body {
+        	 background-image: url("${pageContext.request.contextPath}/_view/coolbowling.jpg");
+    		background-repeat: no-repeat;
+    		background-attachment: fixed;
+    		background-size: cover; 
+    		/* background-color: darkgrey; */
             font-family: Arial, sans-serif;
-            background-color: darkgray;
             margin: 0;
             padding: 0;
         }
-
         .container {
             max-width: 600px;
             margin: 50px auto;

@@ -12,7 +12,7 @@ public class AccountTest {
 	
 	@Before
 	public void setUp() {
-		model = new Account("u","p","e");
+		model = new Account("", "", "", "", "");
 	}
 	
 	@Test

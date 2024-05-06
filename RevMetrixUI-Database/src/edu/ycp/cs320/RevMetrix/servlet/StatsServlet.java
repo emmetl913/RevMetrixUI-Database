@@ -46,9 +46,12 @@ public class StatsServlet extends HttpServlet {
 			EventController eventController = new EventController(acc.getAccountId());
 			eventController.setModel(eventModel);
 			
+			String selectedEvent = req.getParameter("eventSelected");
+		    session.setAttribute("eventSelected", selectedEvent);
+			
 			ArrayList<Event> events = (ArrayList<Event>) eventController.getEvents();
 			ArrayList<stat> sessionTable = new ArrayList<stat>();
-		
+	    
 		req.setAttribute("formSubmitted", false);
 		req.setAttribute("shotFormSubmitted", false);
 		req.setAttribute("events", events);
@@ -73,6 +76,8 @@ public class StatsServlet extends HttpServlet {
 			
 			ArrayList<Event> events = eventController.getEvents();
 		    String selectedEvent = req.getParameter("selectedEvent");
+		    session.setAttribute("eventSelected", selectedEvent);
+
 		    int eventID = -1;
 		    
 		    for(Event event:events){
@@ -90,52 +95,121 @@ public class StatsServlet extends HttpServlet {
 			}
 			req.setAttribute("events", events);
 			req.setAttribute("sessionTable", sessionTable);
-			
+	        req.setAttribute("formSubmitted", true);
 		}catch(NullPointerException e) {
 //			resp.sendRedirect(req.getContextPath()+ "/logIn");
 		}	
 		
-//		try {
-//			HttpSession session = req.getSession();
-//			Account acc = (Account) session.getAttribute("currAccount");
-//			
-//			Event eventModel = new Event();
-//			EventController eventController = new EventController(acc.getAccountId());
-//			eventController.setModel(eventModel);
-//			
-//			ArrayList<Event> events = eventController.getEvents();
-//		    String selectedEvent = req.getParameter("eventSelected");
-//		    int eventID = -1;
-//		    
-//		    for(Event event:events){
+		try {
+			HttpSession session = req.getSession();
+			Account acc = (Account) session.getAttribute("currAccount");
+			
+			Event eventModel = new Event();
+			EventController eventController = new EventController(acc.getAccountId());
+			eventController.setModel(eventModel);
+			
+			ArrayList<Event> events = eventController.getEvents();
+		    String selectedEvent = req.getParameter("eventSelected");
+		    int eventID = -1;
+		    
+		    for(Event event:events){
+		    	if(selectedEvent == null) {
+		    		eventID = (int) session.getAttribute("persistEventID");
+		    	}else {
+		    		session.setAttribute("persistEventID", eventID);
+		    	}
 //		    	if (selectedEvent.equals(event.getEventName())) {
 //		    	    eventID = event.getEventID();
 //		    	}
-//		    }
-//		    
-//		    String selectedEventID = req.getParameter("eventSelected");
+		    }
+		    
+		    String selectedEventID = req.getParameter("eventSelected");
+		    String selectedSessionID = req.getParameter("sessionID");
+		    String selectedGameID = req.getParameter("gameID");
+		    
+		    if(selectedEventID != null && !selectedEventID.isEmpty()) {
+		    	eventID = Integer.parseInt(selectedEventID);
+		    	
+		    	SessionController sessionController = new SessionController();
+		    	List<Session> eventSessions = sessionController.getSessionByEventID(eventID);
+		    	
+		    	req.setAttribute("eventSessions", eventSessions);
+		    }
+		    
+		    if(selectedSessionID != null) {
+		    	int sessionID = Integer.parseInt(selectedSessionID);
+		    	session.setAttribute("bubblesSession", sessionID);
+		    	System.out.println("Session ID: " +sessionID);
+		    	
+		    	GameController gameController = new GameController();
+		    	List<Game> sessionGames = gameController.getGameBySessionID(sessionID);
+		    	
+		    	req.setAttribute("sessionGames", sessionGames);
+		    }		    
+			
+		    if(selectedGameID != null) {
+		    	int sessionID = (int) session.getAttribute("bubblesSession");
+		    			
+		    	int gameID = Integer.parseInt(selectedGameID);
+		    	
+		    	StatsController statsController = new StatsController();
+		    	
+		    	req.setAttribute("strike", statsController.strikesPercentage(gameID, sessionID));
+		    	req.setAttribute("spare", statsController.getSparesFromAccount(gameID, sessionID));
+		    	req.setAttribute("leave", statsController.getTotalLeavesFromGameAndSession(gameID, sessionID));
+		    }
+		}catch(Exception e) {
+			e.printStackTrace();
+		}
+		
+//		HttpSession session = req.getSession();
+//		Account acc = (Account) session.getAttribute("currAccount");
+//		
+//		Event eventModel = new Event();
+//		EventController eventController = new EventController(acc.getAccountId());
+//		eventController.setModel(eventModel);
+//		
+//		ArrayList<Event> events = eventController.getEvents();
+//	    int eventID = -1;
+//	    if(session.getAttribute(selectedEvent) == null) {
+//	    	selectedEvent = req.getParameter("eventSelected");
+//		    session.setAttribute("eventSelected", selectedEvent);
+//	    }
+//	    else {
+//	    	String selectedEventID = req.getParameter("eventSelected");
 //		    String selectedSessionID = req.getParameter("sessionID");
 //		    String selectedGameID = req.getParameter("gameID");
 //		    
 //		    if(selectedEventID != null && !selectedEventID.isEmpty()) {
+//		    	hasEvent = true;
 //		    	eventID = Integer.parseInt(selectedEventID);
 //		    	
 //		    	SessionController sessionController = new SessionController();
 //		    	List<Session> eventSessions = sessionController.getSessionByEventID(eventID);
 //		    	
+//		    	for(Session s : eventSessions) {
+//		    		System.out.println("Session ID: " +s.getSessionID());
+//		    	}
+//		    	
 //		    	req.setAttribute("eventSessions", eventSessions);
 //		    }
 //		    
 //		    if(selectedSessionID != null && !selectedSessionID.isEmpty()) {
+//		    	hasSession = true;
 //		    	int sessionID = Integer.parseInt(selectedSessionID);
 //		    	
-//		    	SessionController sessionController = new SessionController();
-//		    	List<Session> sessionGames = sessionController.getSessionByEventID(sessionID);
+//		    	GameController gameController = new GameController();
+//		    	List<Game> sessionGames = gameController.getGameBySessionID(sessionID);
+//		    	
+//		    	for(Game s : sessionGames) {
+//		    		System.out.println("Game ID: " +s.getGameID());
+//		    	}
 //		    	
 //		    	req.setAttribute("sessionGames", sessionGames);
 //		    }
 //			
 //		    if(selectedSessionID != null && !selectedSessionID.isEmpty() && selectedGameID != null && !selectedGameID.isEmpty()) {
+//		    	hasGame = true;
 //		    	int sessionID = Integer.parseInt(selectedSessionID);
 //		    	int gameID = Integer.parseInt(selectedGameID);
 //		    	
@@ -145,67 +219,60 @@ public class StatsServlet extends HttpServlet {
 //		    	req.setAttribute("spare", statsController.getSparesFromAccount(gameID, sessionID));
 //		    	req.setAttribute("leave", statsController.getTotalLeavesFromGameAndSession(gameID, sessionID));
 //		    }
-//		}catch(Exception e) {
-//			e.printStackTrace();
-//		}
-		
-		HttpSession session = req.getSession();
-		Account acc = (Account) session.getAttribute("currAccount");
-		
-		Event eventModel = new Event();
-		EventController eventController = new EventController(acc.getAccountId());
-		eventController.setModel(eventModel);
-		
-		ArrayList<Event> events = eventController.getEvents();
-	    String selectedEvent = req.getParameter("eventSelected");
-	    int eventID = -1;
+//	    }
+//	    
+//	    System.out.println("Selected Event: " +selectedEvent);
+//	    
+//	    for(Event event:events){
+//	    	if (selectedEvent.equals(event.getEventID())) {
+//	    		System.out.println("Event ID: " +event.getEventID());
+//	    	    eventID = event.getEventID();
+//	    	}
+//	    }
 	    
-	    for(Event event:events){
-	    	if (selectedEvent.equals(event.getEventName())) {
-	    	    eventID = event.getEventID();
-	    	}
-	    }
-	    
-	    String selectedEventID = req.getParameter("eventSelected");
-	    String selectedSessionID = req.getParameter("sessionID");
-	    String selectedGameID = req.getParameter("gameID");
-	    
-	    if(selectedEventID != null && !selectedEventID.isEmpty()) {
-	    	eventID = Integer.parseInt(selectedEventID);
-	    	
-	    	SessionController sessionController = new SessionController();
-	    	List<Session> eventSessions = sessionController.getSessionByEventID(eventID);
-	    	
-	    	for(Session s : eventSessions) {
-	    		System.out.println("Session ID: " +s.getSessionID());
-	    	}
-	    	
-	    	req.setAttribute("eventSessions", eventSessions);
-	    }
-	    
-	    if(selectedSessionID != null && !selectedSessionID.isEmpty()) {
-	    	int sessionID = Integer.parseInt(selectedSessionID);
-	    	
-	    	GameController gameController = new GameController();
-	    	List<Game> sessionGames = gameController.getGameBySessionID(sessionID);
-	    	
-	    	for(Game s : sessionGames) {
-	    		System.out.println("Game ID: " +s.getGameID());
-	    	}
-	    	
-	    	req.setAttribute("sessionGames", sessionGames);
-	    }
-		
-	    if(selectedSessionID != null && !selectedSessionID.isEmpty() && selectedGameID != null && !selectedGameID.isEmpty()) {
-	    	int sessionID = Integer.parseInt(selectedSessionID);
-	    	int gameID = Integer.parseInt(selectedGameID);
-	    	
-	    	StatsController statsController = new StatsController();
-	    	
-	    	req.setAttribute("strike", statsController.strikesPercentage(gameID, sessionID));
-	    	req.setAttribute("spare", statsController.getSparesFromAccount(gameID, sessionID));
-	    	req.setAttribute("leave", statsController.getTotalLeavesFromGameAndSession(gameID, sessionID));
-	    }
+//	    String selectedEventID = req.getParameter("eventSelected");
+//	    String selectedSessionID = req.getParameter("sessionID");
+//	    String selectedGameID = req.getParameter("gameID");
+//	    
+//	    if(selectedEventID != null && !selectedEventID.isEmpty()) {
+//	    	hasEvent = true;
+//	    	eventID = Integer.parseInt(selectedEventID);
+//	    	
+//	    	SessionController sessionController = new SessionController();
+//	    	List<Session> eventSessions = sessionController.getSessionByEventID(eventID);
+//	    	
+//	    	for(Session s : eventSessions) {
+//	    		System.out.println("Session ID: " +s.getSessionID());
+//	    	}
+//	    	
+//	    	req.setAttribute("eventSessions", eventSessions);
+//	    }
+//	    
+//	    if(selectedSessionID != null && !selectedSessionID.isEmpty()) {
+//	    	hasSession = true;
+//	    	int sessionID = Integer.parseInt(selectedSessionID);
+//	    	
+//	    	GameController gameController = new GameController();
+//	    	List<Game> sessionGames = gameController.getGameBySessionID(sessionID);
+//	    	
+//	    	for(Game s : sessionGames) {
+//	    		System.out.println("Game ID: " +s.getGameID());
+//	    	}
+//	    	
+//	    	req.setAttribute("sessionGames", sessionGames);
+//	    }
+//		
+//	    if(selectedSessionID != null && !selectedSessionID.isEmpty() && selectedGameID != null && !selectedGameID.isEmpty()) {
+//	    	hasGame = true;
+//	    	int sessionID = Integer.parseInt(selectedSessionID);
+//	    	int gameID = Integer.parseInt(selectedGameID);
+//	    	
+//	    	StatsController statsController = new StatsController();
+//	    	
+//	    	req.setAttribute("strike", statsController.strikesPercentage(gameID, sessionID));
+//	    	req.setAttribute("spare", statsController.getSparesFromAccount(gameID, sessionID));
+//	    	req.setAttribute("leave", statsController.getTotalLeavesFromGameAndSession(gameID, sessionID));
+//	    }
 		
 		// call JSP to generate empty form
 		//if-else statement for when the user submits a form
@@ -220,6 +287,10 @@ public class StatsServlet extends HttpServlet {
 				req.setAttribute("formSubmitted", false);
 
 		}
+		
+		req.setAttribute("hasEvent", hasEvent);
+		req.setAttribute("hasSession", hasSession);
+		req.setAttribute("hasGame", hasGame);
 		
 		req.getRequestDispatcher("/_view/stats.jsp").forward(req, resp);
 	}

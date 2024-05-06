@@ -22,11 +22,18 @@
             margin: 0;
             padding: 0;
         }
-
-        .event-section {
+		.eventsList
+		{
+			width: 590px;
+    		height: 400px;
+			overflow: scroll;
+		}
+        .event-section 
+        {
 	        border: 1px solid black; /* Add border around each ball section */
 	        margin-bottom: 10px; /* Add some space between ball sections */
 	        padding: 10px; /* Add padding inside each ball section */
+    		
     	}
 		.event-section:hover {
        		background-color: #33B5FF;
@@ -157,7 +164,7 @@
     <div class="container">
       <h2>Pick Existing Event</h2>
         <form action="${pageContext.servletContext.contextPath}/event" method="post">
-          <div id="eventsList"> &nbsp				
+          <div id="eventsList" class="eventsList"> &nbsp				
             <% 
                    
                 if (events != null) {
@@ -175,7 +182,7 @@
            </div>
            <input type="hidden" id="selectedEvent" name="selectedEvent">
           <tr>
-            <td><a href="${pageContext.servletContext.contextPath}/session"><input type="Submit" id="SubmitCurrentEvent" name="SubmitCurrentEvent" value="Submit"></a></td>
+            <td><a href="${pageContext.servletContext.contextPath}/session" method="post"><input type="Submit" id="SubmitCurrentEvent" name="SubmitCurrentEvent" value="Submit"></a></td>
           </tr>
          </form>
 	 </div>
@@ -188,7 +195,8 @@
       <input type="text" name="eventName" size="12" value="">
 
       <label for="eventdate">Event Date:</label>
-      <input type="text" name="eventdate" size="12" value="">
+      <!-- <input type="text" name="eventdate" size="12" value=""> -->
+  	  <input type="date" id="inputTime" name="eventdate" value="">
 
       <input type="hidden" id="type" name="newType" value="">
 
@@ -266,8 +274,8 @@
         }
         
         function selectEvent(event) {
-    document.getElementById('selectedEvent').value = event;
-}
+    		document.getElementById('selectedEvent').value = event;
+		}
       </script>
 </body>
 </html>
