@@ -2145,15 +2145,6 @@ public class DerbyDatabase implements IDatabase {
 										
 					tablesCreated += "Establishments, ";
 					
-					stmt9 = conn.prepareStatement(
-							"create table eventSessions ("
-								+" event_id integer constraint event_id references events,"
-								+ " session_id integer constraint session_id references sessions"
-								+ ")"
-					);
-					
-					stmt9.executeUpdate();
-					tablesCreated += "eventSessions, ";
 					
 					System.out.println(tablesCreated);
 					

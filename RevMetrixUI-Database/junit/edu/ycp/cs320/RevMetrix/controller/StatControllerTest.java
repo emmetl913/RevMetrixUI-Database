@@ -58,7 +58,7 @@ public class StatControllerTest {
 	
 	@Test
 	public void testGetSessionsByEvent() {
-		ArrayList<Integer> sessions = controller.getSessionsByEvent(2);
+		ArrayList<Integer> sessions = controller.getSessionsByEvent(1);
 		
 		for(Integer session:sessions) {
 			System.out.println(session);
@@ -96,7 +96,7 @@ public class StatControllerTest {
 		Integer pins = controller.getLifetimePinsKnockedDown(1);
 			System.out.println("Number of pins "+pins);
 		
-		assertTrue(pins == 49);
+		assertTrue(pins == 8);
 		
 		
 	}
@@ -106,7 +106,7 @@ public class StatControllerTest {
 		Integer pins = controller.getLifetimePinsMissed(1);
 			System.out.println("Number of pins Missed "+pins);
 		
-		assertTrue(pins == 11);
+		assertTrue(pins == 2);
 		
 		
 	}

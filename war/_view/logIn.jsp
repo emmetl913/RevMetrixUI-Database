@@ -4,10 +4,11 @@
 
 <style>
 	body {
-            background-image: url('https://api.deepai.org/job-view-file/c7bba96b-2be0-43af-b605-a5deaf46b3c0/outputs/output.jpg');
+            background-image: url("${pageContext.request.contextPath}/_view/coolbowling.jpg");
     		background-repeat: no-repeat;
     		background-attachment: fixed;
-    		background-size: cover;
+    		background-size: cover; 
+    		/* background-color: darkgrey; */
     		font-family: Arial, sans-serif;
             margin: 0;
             padding: 0;

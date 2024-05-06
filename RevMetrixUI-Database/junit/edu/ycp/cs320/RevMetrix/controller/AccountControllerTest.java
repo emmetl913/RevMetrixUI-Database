@@ -16,7 +16,7 @@ public class AccountControllerTest {
 	
 	@Before
 	public void setUp() {
-		model = new Account(null,null,null);
+		model = new Account(null,null,null, null, null);
 		controller = new AccountController();
 		controller.setModel(model);
 		controller.signUp("Kevin","Kevin1","KevinsGmail@gmail.com");
@@ -35,14 +35,14 @@ public class AccountControllerTest {
 	
 	@Test
 	public void testValidLogin() {
-		controller.signUp("Kevin","Kevin1","KevinsGmail@gmail.com");
+		controller.insertAccount("KevinsGmail@gmail.com","Kevin1","Kevin", "Kevin", "Smith");
 
 		boolean testSuccess = controller.getValidLogin("Kevin","Kevin1");
 		assertTrue(testSuccess == true);
 	}
 	@Test
 	public void testInsertAccount() {
-		controller.insertAccountinDB("BrandonEmail", "password", "username");
+		controller.insertAccount("BrandonEmail", "password", "username", "Brandon", "Woodward");
 		List<Account> accountList = controller.getAccountByEmail("BrandonEmail");
 		assertTrue(accountList.get(0).getEmail().equals("BrandonEmail"));
 	}
