@@ -77,16 +77,26 @@ public class stat {
 	}
 	
 	public int getGames1() {
-		return games[0];
+		if(games[0] != null) {
+			return games[0];
+		}
+		return 0;
+
 	}
 	
 	public int getGames2() {
-		return games[1];
+		if(games[1] != null) {
+			return games[1];
+		}
+		return 0;
 
 	}
 	
 	public int getGames3() {
-		return games[2];
+		if(games[2] != null) {
+			return games[2];
+		}
+		return 0;
 
 	}
 	

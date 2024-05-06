@@ -407,7 +407,7 @@ public class ShotServlet extends HttpServlet {
 		}
 		if(shot1 != null) {
 			if(shot1.getPinsLeft().equals("X")) {
-				if(currFrameNum!=12) {
+				if(currFrameNum != 12 && currFrameNum != 11) {
 					Shot nextShot = frameList.get(currFrameNum).getShot1();
 					if(nextShot != null) {
 						if(nextShot.getPinsLeft().equals("X")) {

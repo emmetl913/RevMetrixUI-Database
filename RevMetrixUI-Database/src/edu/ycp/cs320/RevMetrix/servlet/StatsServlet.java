@@ -26,8 +26,7 @@ public class StatsServlet extends HttpServlet {
 		
 		if(!AccountServlet.validLogin()) {
             req.getRequestDispatcher("/_view/logIn.jsp").forward(req, resp);
-        }
-		
+        }		
 			HttpSession session = req.getSession();
 			Account acc = (Account) session.getAttribute("currAccount");
 			statController controller = new statController(acc.getAccountId());
@@ -73,7 +72,7 @@ public class StatsServlet extends HttpServlet {
 			ArrayList<Integer> sessions = controller.getSessionsByEvent(eventID);
 			
 			for(int i = 1; i <= sessions.size(); i++) {
-				sessionTable.add(new stat(controller.getSessionDate(i), controller.getEventName(eventID), controller.getCurrentGameLane(i*3), controller.getGameStatsBySession(i),controller.getSessionScore(sessions.get(i-1)),i*3,0.0));
+				sessionTable.add(new stat(controller.getSessionDate(sessions.get(i-1)), controller.getEventName(eventID), controller.getCurrentGameLane(i*3), controller.getGameStatsBySession(sessions.get(i-1)),controller.getSessionScore(sessions.get(i-1)),i*3,0.0));
 			}
 			req.setAttribute("events", events);
 			req.setAttribute("sessionTable", sessionTable);
