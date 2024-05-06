@@ -47,7 +47,8 @@ public class ShotServlet extends HttpServlet {
 		System.out.println("Shot Servlet: doGet");	
 		HttpSession session = req.getSession();
 		
-		
+		Account account = (Account) session.getAttribute("currAccount");
+
 		//load data to display establishment name on shots page
 		EventController ec = new EventController(account.getAccountId());
 		//THIS LINE WILL BREAK WHEN U GET ZACHS CODE: change to ec.getAllEventsForAccount();
