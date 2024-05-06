@@ -5,6 +5,7 @@ import java.util.List;
 import edu.ycp.cs320.RevMetrix.RevMetrixDB.db.persist.DatabaseProvider;
 import edu.ycp.cs320.RevMetrix.RevMetrixDB.db.persist.DerbyDatabase;
 import edu.ycp.cs320.RevMetrix.RevMetrixDB.db.persist.IDatabase;
+import edu.ycp.cs320.RevMetrix.model.Game;
 import edu.ycp.cs320.RevMetrix.model.Session;
 
 public class SessionController {
@@ -21,7 +22,19 @@ public class SessionController {
 	{
 		this.model = model;
 	}
-	
+	public Session getSessionByGameID(int gameID)
+	{
+		return db.getSessionByGameID(gameID);
+	}
+	public List<Game> getGamesForSession(int sessionID)
+	{
+		return db.getGamesForSession(sessionID);
+	}
+	public void updateSessionBySessionID(int sessionID, int newScore)
+	{
+		Boolean boggas = db.updateSessionBySessionID(sessionID, newScore);
+		System.out.println("Boggas: "+ boggas);
+	}
 	public List<Session> getSessionByEventID(int eventID)
 	{
 		List<Session> resultList = db.getSessionByEventID(eventID);

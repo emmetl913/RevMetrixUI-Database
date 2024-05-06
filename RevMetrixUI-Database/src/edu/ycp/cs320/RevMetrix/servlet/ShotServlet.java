@@ -12,7 +12,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import edu.ycp.cs320.RevMetrix.controller.FrameController;
+import edu.ycp.cs320.RevMetrix.controller.GameController;
+import edu.ycp.cs320.RevMetrix.controller.SessionController;
 import edu.ycp.cs320.RevMetrix.controller.ShotController;
+import edu.ycp.cs320.RevMetrix.controller.statController;
 import edu.ycp.cs320.RevMetrix.controller.BallArsenalController;
 import edu.ycp.cs320.RevMetrix.controller.EventController;
 import edu.ycp.cs320.RevMetrix.model.Shot;
@@ -23,6 +26,7 @@ import edu.ycp.cs320.RevMetrix.model.BallArsenal;
 import edu.ycp.cs320.RevMetrix.model.Establishment;
 import edu.ycp.cs320.RevMetrix.model.Event;
 import edu.ycp.cs320.RevMetrix.model.Game;
+import edu.ycp.cs320.RevMetrix.model.Session;
 
 
 public class ShotServlet extends HttpServlet {
@@ -79,13 +83,18 @@ public class ShotServlet extends HttpServlet {
 		arsenal.setBalls(balls);
 		
 		//Load frames from gameID
+		Integer currentGame1Score = 0;
+		Integer currentGame2Score = 0;
+		Integer currentGame3Score = 0;
 		FrameController fc = new FrameController();
+		Integer eventID = (Integer)session.getAttribute("eventID");
 		Integer gameID = (Integer)session.getAttribute("gameID");
 		Game currentGame = (Game)session.getAttribute("currentGame");
-		System.out.println("Current game info: "+currentGame.getGameID());
+		System.out.println("Current game number: "+currentGame.getGameNumber());
 		System.out.println("Current gameID info: "+gameID);
 		Integer sessionID = (int)session.getAttribute("sessionID");
-
+		String currentEventName = ec.getEventByEventID(eventID).getEventName();
+		System.out.println("Current event for shot: "+currentEventName);
 		List<Frame> frameList = fc.getFrameByGameID(gameID);
 		//Shot testShot1 = new Shot(sessionID, currentGame.getGameID(), frameList.get(0).getFrameID(), 1,69, 1, "12345", "");
 		//frameList.get(0).setShot1(testShot1);
@@ -96,7 +105,14 @@ public class ShotServlet extends HttpServlet {
 		req.setAttribute("selectedBallID", 0);
 		req.setAttribute("currentShotNumber", currentShotNumber);
 		req.setAttribute("currentFrameNumber", currentFrameNumber);
+		req.setAttribute("currentGame1Score", currentGame1Score);
+		req.setAttribute("currentGame2Score", currentGame2Score);
+		req.setAttribute("currentGame3Score", currentGame3Score);
+		req.setAttribute("currentGameNumber", (int)currentGame.getGameNumber());
+		req.setAttribute("currentLaneNumber", (int)currentGame.getLane());
+		req.setAttribute("shotEstablishmentName", currentEventName);
 		session.setAttribute("frameList", frameList);
+		
 		
 		//used to get previous pins layout for shot2
 		String pinsLeftShot1="";
@@ -126,11 +142,19 @@ public class ShotServlet extends HttpServlet {
 
 		HttpSession session = req.getSession();
 		Account account = (Account) session.getAttribute("currAccount");
-		
+		Integer eventID = (Integer)session.getAttribute("eventID");
 		//Load frames from gameID
+		Integer currentGame1Score = 0;
+		Integer currentGame2Score = 0;
+		Integer currentGame3Score = 0;
+		statController statc = new statController(account.getAccountId());
 		FrameController fc = new FrameController();
+		GameController gc = new GameController();
+		SessionController sec = new SessionController();
+		EventController ec = new EventController(account.getAccountId());
+		String currentEventName = ec.getEventByEventID(eventID).getEventName();
 		Game currentGame = (Game)session.getAttribute("currentGame");
-		int sessionID = (int)session.getAttribute("sessionID");
+		int sessionID = (int)session  .getAttribute("sessionID");
 		
 		
 		int ballID = -1;
@@ -155,8 +179,8 @@ public class ShotServlet extends HttpServlet {
 		//The value from the shot box right below the 1 pin (will be an int, "X", "/", "F", "-")
 		String shotBox = req.getParameter("shotBox");
 		System.out.println("Shot box: "+ shotBox);
-
-
+		
+		
 		
 		if(req.getParameter("submitShot") != null && errorMessage == null) {
 			System.out.println("You have clicked submit shot!");
@@ -179,6 +203,111 @@ public class ShotServlet extends HttpServlet {
 			//leave is not designed into the function yet
 			sc.insertNewShot(sessionID, currentGame.getGameID(), frameList.get(currentFrameNumber-1).getFrameID(),
 							currentShotNumber, pinsDownCount, ballID, pinsLeft);
+			int frameScoreSum = 0;
+			for(Frame frameItem : frameList)
+			{
+				if(frameItem.getScore() != -1)
+				{
+					frameScoreSum = frameItem.getScore();
+				}
+			}
+			currentGame.setScore(frameScoreSum);
+			
+			int temp = currentGame.getGameNumber();
+			List<Game> gameList = new ArrayList<Game>();
+			List<Integer> gameIDs = new ArrayList<Integer>();
+			
+			if(temp == 1)
+			{
+				currentGame1Score = currentGame.getScore();
+				System.out.println(sessionID);
+				
+				gameIDs = statc.getGameIDSBySessions(sessionID);
+				
+				for(int i = 0; i <gameIDs.size(); i ++)
+				{
+					System.out.println(gameIDs.get(i));
+				    Game game = statc.getGameByGameID(gameIDs.get(i));
+				    if (game != null) {
+				        gameList.add(game);
+				    } else {
+				        System.out.println("Game with ID " + gameIDs.get(i) + " not found.");
+				    }
+				}
+				if(gameList.size() < 3 && gameList.size() != 1)
+				{
+					currentGame2Score = gameList.get(1).getScore();
+				}
+				if(gameList.size() < 4 && gameList.size() != 1)
+				{
+					currentGame2Score = gameList.get(1).getScore();
+					currentGame3Score = gameList.get(2).getScore();
+				}
+				
+				
+			}
+			else if (temp == 2)
+			{
+				currentGame2Score = currentGame.getScore();
+				gameIDs = statc.getGameIDSBySessions(sessionID);
+				
+				for(int i = 0; i <gameIDs.size(); i ++)
+				{
+					System.out.println(gameIDs.get(i));
+				    Game game = statc.getGameByGameID(gameIDs.get(i));
+				    if (game != null) {
+				        gameList.add(game);
+				    } else {
+				        System.out.println("Game with ID " + gameIDs.get(i) + " not found.");
+				    }
+				}
+				
+				if(gameList.size() == 2)
+				{
+					
+					currentGame1Score = gameList.get(0).getScore();
+					//currentGame3Score = gameList.get(2).getScore();
+				} 
+				else
+				{
+					currentGame1Score = gameList.get(0).getScore();
+					currentGame3Score = gameList.get(2).getScore();
+				}
+				
+			}
+			else 
+			{
+				currentGame3Score = currentGame.getScore();
+				gameIDs = statc.getGameIDSBySessions(sessionID);
+				
+				for(int i = 0; i <gameIDs.size(); i ++)
+				{
+					System.out.println(gameIDs.get(i));
+				    Game game = statc.getGameByGameID(gameIDs.get(i));
+				    if (game != null) {
+				        gameList.add(game);
+				    } else {
+				        System.out.println("Game with ID " + gameIDs.get(i) + " not found.");
+				    }
+				}
+				if(gameList.size() < 3 && gameList.size() != 1)
+				{
+					currentGame2Score = gameList.get(0).getScore();
+				}
+				if(gameList.size() < 4 && gameList.size() != 1)
+				{
+					currentGame2Score = gameList.get(0).getScore();
+					currentGame3Score = gameList.get(1).getScore();
+				}
+				
+				
+				
+			}
+			
+			
+			gc.updateGameByGameID(currentGame.getGameID(), frameScoreSum);
+			sec.updateSessionBySessionID(sessionID, currentGame1Score+currentGame2Score+currentGame3Score);
+			
 		}
 		//Now lets assign existing shots to their frames while we use this frameList
 		assignShotsToFrames(frameList);
@@ -197,6 +326,12 @@ public class ShotServlet extends HttpServlet {
 
 		System.out.println("Frame#: " + currentFrameNumber + " Shot#: " +currentShotNumber);
 		session.setAttribute("frameList", frameList);
+		req.setAttribute("currentGame1Score", currentGame1Score);
+		req.setAttribute("currentGame2Score", currentGame2Score);
+		req.setAttribute("currentGame3Score", currentGame3Score);
+		req.setAttribute("currentGameNumber", (int)currentGame.getGameNumber());
+		req.setAttribute("currentLaneNumber", (int)currentGame.getLane());
+		req.setAttribute("shotEstablishmentName", currentEventName);
 		req.setAttribute("errorMessage", errorMessage);
 		req.setAttribute("selectedBallID", ballID);
 		req.setAttribute("currentShotNumber", currentShotNumber);

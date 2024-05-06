@@ -17,11 +17,16 @@
     BallArsenal model = (BallArsenal) session.getAttribute("ballArsenalKey");
     ArrayList<Ball> balls = (model != null) ? model.getBalls() : null;
 	List<Frame> frames = (List<Frame>)session.getAttribute("frameList");
-	String establishmentName = (String)session.getAttribute("shotEstablishmentName");
+	String establishmentName = (String)request.getAttribute("shotEstablishmentName");
     int selectedBallID = (int) request.getAttribute("selectedBallID");
+    int currentLaneNumber = (int) request.getAttribute("currentLaneNumber");
 	int shotNum = (int)request.getAttribute("currentShotNumber");
 	int frameNum = (int)request.getAttribute("currentFrameNumber");
 	String prevShot1Pins =(String)request.getAttribute("shot1PinsLeft");
+	int gameNum = (int)request.getAttribute("currentGameNumber");
+	Integer currGame1Score = (Integer)request.getAttribute("currentGame1Score");
+	Integer currGame2Score = (Integer)request.getAttribute("currentGame2Score");
+	Integer currGame3Score = (Integer)request.getAttribute("currentGame3Score");
 %>
 <html lang="en">
 	<head>
@@ -385,7 +390,7 @@
 					<div class="error">${errorMessage}</div>
 				</c:if>
 				<div>
-					<!--<%=establishmentName%> its null for now-->Establishment Name &emsp;&emsp; Game# &emsp;&emsp; Frame#: <%=frameNum%> <!-- &emsp is a spacer-->
+					<!-- its null for now-->Current Lane: <%=currentLaneNumber%> &emsp; Establishment Name: <%=establishmentName%> &emsp; Game#: <%=gameNum %> &emsp;  Frame#: <%=frameNum%> <!-- &emsp is a spacer-->
 				</div>
 				<div id="bowling-frame-display">
 					<div class="bowling-game">
@@ -572,10 +577,10 @@
 						</div>
 					</div> <!-- this closes pinsandarsenal container div-->
 					<div class="gameScores">
-						<div class="gameScoreBox">Game1 Total: </div>
-						<div class="gameScoreBox">Game2 Total: </div>
-						<div class="gameScoreBox">Game3 Total: </div>
-						<div class="gameScoreBox">Series Total: </div>
+						<div class="gameScoreBox">Game1 Total: <%=currGame1Score %></div>
+						<div class="gameScoreBox">Game2 Total: <%=currGame2Score %></div>
+						<div class="gameScoreBox">Game3 Total: <%=currGame3Score %></div>
+						<div class="gameScoreBox">Series Total: <%=currGame1Score+currGame2Score+currGame3Score %></div>
 					</div> 
 					<br>
 				<button text="Submit Shot" name="submitShot" type="submit" onclick="">Submit Shot</button>

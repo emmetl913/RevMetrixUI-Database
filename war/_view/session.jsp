@@ -283,7 +283,7 @@
                   for (Session sessionItem : sessions) {
            %>
 		           <div class="session-section" onclick= "selectSession ('<%= sessionItem.getSessionID() %>')">
-		                  <p>ID: <%= sessionItem.getSessionID() %> &nbsp Time: <%= sessionItem.getTime() %></p>
+		                  <p>ID: <%= sessionItem.getSessionID() %> &nbsp Time: <%= sessionItem.getTime() %> &nbsp Score: <%= sessionItem.getScore() %></p>
 		                  <p>Opponent Type: <%= sessionItem.getOppType()%> &nbsp Opponent Name: <%= sessionItem.getName()%></p>
 		           </div>
            <% 
