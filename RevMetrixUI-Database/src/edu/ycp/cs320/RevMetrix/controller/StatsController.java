@@ -28,6 +28,7 @@ public class StatsController{
 		
 		//retrieves the strikes from the database
 		ArrayList<String> shots = (ArrayList<String>) getStrikesFromAccount(gameID, sessionID);
+		System.out.println(shots);
 		
 		if(shots == null) {
 			System.err.println("List of shots is null");
@@ -66,7 +67,8 @@ public class StatsController{
 			return 0.0;
 		}
 		
-		return ((double) numberOfSpares / numberOfSecondShots);
+		double sparePercentage = ((double) numberOfSpares / numberOfSecondShots) * 100.0;
+		return sparePercentage;
 	}
 	
 	public int getTotalLeavesFromGameAndSession(int gameID, int sessionID) {

@@ -247,7 +247,7 @@
 					<!-- submits the event ID -->
 					<input type="hidden" name="selectedEventID" id="selectedEventID" value="">
 					<button name="submitEvent" type="submit" id="submitEvent">Submit Event</button>
-	
+					<!-- <button name="submitShotData" type="submit" id="submitShotData">Get Shot Data</button>	 -->
 				</form>
 				</br>
 
@@ -270,13 +270,13 @@
 	
 				</form>
 				
-				<!-- 
-				<script>
+				 
+				<!-- <script>
 					function updateSelectedSession(){
 						var selectedSession = document.getElementById("sessionSelected").value;
 						document.getElementById("selectedSessionID").value = selectedSession;
 					}
-				</script> -->
+				</script>  -->
 				</br>
 
 				<form action="${pageContext.servletContext.contextPath}/stats" method="post">
@@ -296,24 +296,6 @@
 				</form>
     </div>
     </div>
-    <form id="statsForm" action="${pageContext.servletContext.contextPath}/stats" method="post">
-        <div class="container">
-            <h1>Stats Page!</h1>
-            <select name="selectedEvent" id="selectedEvent">
-                <% ArrayList<Event> events = (ArrayList<Event>) request.getAttribute("events");
-                        if (events != null) {
-                        for (Event event : events) {
-                        %>
-                        <option value="<%= event.getEventName()%>">
-                            <%= event.getEventName()%>
-                        </option>
-                        <% } } else { %>
-                            <option>No Events</option>
-                            <% } %>
-            </select>
-            <button id="submitButton" type="submit" id="submitButtonLeagueChart">Get League Chart</button>
-        </div>
-    </form>
     <c:if test="${requestScope.formSubmitted}">
             <div class="container" id="hiddenContent">
             <table>

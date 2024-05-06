@@ -2189,7 +2189,7 @@ public class DerbyDatabase implements IDatabase {
 					stmt.setInt(1, gameID);
 					stmt.setInt(2, sessionID);
 					
-					List<String> result = null;
+					List<String> result = new ArrayList<>();
 					resultSet = stmt.executeQuery();
 					
 					Boolean found = false;
