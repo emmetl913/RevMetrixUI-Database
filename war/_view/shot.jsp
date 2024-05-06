@@ -18,11 +18,20 @@
     BallArsenal model = (BallArsenal) session.getAttribute("ballArsenalKey");
     ArrayList<Ball> balls = (model != null) ? model.getBalls() : null;
 	List<Frame> frames = (List<Frame>)session.getAttribute("frameList");
-	String establishmentName = (String)session.getAttribute("shotEstablishmentName");
+	String establishmentName = (String)request.getAttribute("shotEstablishmentName");
     int selectedBallID = (int) request.getAttribute("selectedBallID");
+    int currentLaneNumber = (int) request.getAttribute("currentLaneNumber");
 	int shotNum = (int)request.getAttribute("currentShotNumber");
 	int frameNum = (int)request.getAttribute("currentFrameNumber");
 	String prevShot1Pins =(String)request.getAttribute("shot1PinsLeft");
+
+	Boolean gameOver = (Boolean)request.getAttribute("gameOver");
+
+	int gameNum = (int)request.getAttribute("currentGameNumber");
+	Integer currGame1Score = (Integer)request.getAttribute("currentGame1Score");
+	Integer currGame2Score = (Integer)request.getAttribute("currentGame2Score");
+	Integer currGame3Score = (Integer)request.getAttribute("currentGame3Score");
+
 %>
 <html lang="en">
 	<head>
@@ -384,7 +393,7 @@
 					<div class="error">${errorMessage}</div>
 				</c:if>
 				<div>
-					<!--<%=establishmentName%> its null for now-->Establishment Name &emsp;&emsp; Game# &emsp;&emsp; Frame#: <%=frameNum%> <!-- &emsp is a spacer-->
+					<!-- its null for now-->Current Lane: <%=currentLaneNumber%> &emsp; Establishment Name: <%=establishmentName%> &emsp; Game#: <%=gameNum %> &emsp;  Frame#: <%=frameNum%> <!-- &emsp is a spacer-->
 				</div>
 				<div id="bowling-frame-display">
 					<div class="bowling-game">
@@ -395,11 +404,12 @@
 								<div class="frame">
 
 									<%if(frame.getFrameNumber() == 10){  
+										//left scorebox (frame 10)
 										if (frame.getShot1() != null){ 
 											String symbol = frame.getShot1().getPinsLeft();
 											if(symbol.equals("X") || symbol.equals("F")){ %>
 											 	<div class="score-box-10left"><%=symbol%></div> 
-										  <%}
+										    <%}
 											else{
 												String symbol2 = "";
 												if(frame.getShot1().getCount() == 0){
@@ -415,9 +425,12 @@
 										else{
 											%><div class="score-box-10left">&nbsp</div> <%
 										}
-										if(frames.get(9).getShot1()!=null){
-											if(!frames.get(9).getShot1().getPinsLeft().equals("X")){
-												if(frame.getShot2()!=null){ 
+										//SEPARATION OF FIRST and 2nd SCORE BOX
+
+										
+										if(frames.get(9).getShot1()!=null){ //if frame10shot1 exists
+											if(!frames.get(9).getShot1().getPinsLeft().equals("X")){ //if its not a strike do normal code
+												if(frame.getShot2()!=null){ //if frame10 has a second shot we display it 
 													String symbol = frame.getShot2().getPinsLeft();
 													if(symbol.equals("/") || symbol.equals("F")){ %>
 														<div class="score-box-10middle"><%=frame.getShot2().getPinsLeft()%></div>
@@ -431,32 +444,88 @@
 													 <%	}
 													}
 												 }
+												 else{
+													 %><div class="score-box-10middle">&nbsp</div><%
+												 }
 											}
-										}
-										else{
-											Shot frame11shot1 = frames.get(10).getShot1();
-											if(frame11shot1 != null){
-													String symbol = frame11shot1.getPinsLeft();
-													if(symbol.equals("/") || symbol.equals("F")){ %>
-															<div class="score-box-10middle"><%=frame11shot1.getPinsLeft()%></div>
-													<%}
-													else{
-														if(frame11shot1.getCount() == 0){
-															%> <div class="score-box-10middle">-</div> <%
+											else{ //if it is a strike get frame11shot1 and display as middle
+												Shot frame11shot1 = frames.get(10).getShot1();
+												if(frame11shot1 != null){ // if frame11shot1 exists
+														String symbol = frame11shot1.getPinsLeft();
+														if(symbol.equals("X") || symbol.equals("F")){ %>
+																<div class="score-box-10middle"><%=frame11shot1.getPinsLeft()%></div>
+														<%}
+														else{
+															if(frame11shot1.getCount() == 0){
+																%> <div class="score-box-10middle">-</div> <%
+															}
+															else{%>
+																	<div class="score-box-10middle"><%=frame11shot1.getCount()%></div>
+															<%}
 														}
-													else{%>
-															<div class="score-box-10middle"><%=frame11shot1.getCount()%></div>
-												  <%}
 												}
-												
+												else{//if there is not yet a frame11shot1 dispkay empty
+													%><div class="score-box-10middle">&nbsp</div><%
+												}
 											}
-										
+										}
 										else{
-											%><div class="score-box-10middle">&nbsp</div> <%
+											//frame10shot1 is empty so middlebox would be empty as well. third box will also be empty: write later;
+											%><div class="score-box-10middle">&nbsp</div><%
+										}
+
+										//start of 3rd SCOREBOX
+										if(frames.get(9).getShot2() != null || frames.get(10).getShot1()!=null){//frame10shot2 and is a spare then we use the third box or frame11shot1 exists then we use the third box
+											if(frames.get(9).getShot2() != null){
+												if(frames.get(9).getShot2().getPinsLeft().equals("/")){//frame10shot2 is a spare
+													//check frame11shot1 for null
+													Shot frame11shot1 = frames.get(10).getShot1();
+													if(frame11shot1!=null){ 
+														//displayframe11shot1
+														String symbol = frame11shot1.getPinsLeft();
+														if(symbol.equals("/") || symbol.equals("F")){ %>
+															<div class="score-box-10right"><%=frame11shot1.getPinsLeft()%></div>
+													  <%}
+														else{
+															if(frame.getShot2().getCount() == 0){
+																%> <div class="score-box-10right">-</div> <%
+															}
+															else{%>
+																<div class="score-box-10right"><%=frame11shot1.getCount()%></div>
+														 <%	}
+														}
+													 }
+												}
+											}
+
+											else if(frames.get(10).getShot1() != null) {
+												//check for f12s1
+												Shot frame12shot1 = frames.get(11).getShot1();
+												if(frame12shot1 != null){
+													String symbol = frame12shot1.getPinsLeft();
+													if(symbol.equals("X") || symbol.equals("F")){ %>
+														<div class="score-box-10right"><%=frame12shot1.getPinsLeft()%></div>
+												  <%}
+													else{
+														if(frame12shot1.getCount() == 0){
+															%> <div class="score-box-10right">-</div> <%
+														}
+														else{%>
+															<div class="score-box-10right"><%=frame12shot1.getCount()%></div>
+													 <%	}
+													}
+												}
+											}
+											else{
+												%><div class="score-box-10right">&nbsp</div><%
+											}
 										}
 										
-									 } 
+										else{
+											%><div class="score-box-10right">&nbsp</div><%
+										}
 									}
+									//FRAMES 1-9
 									else { 
 										if (frame.getShot1()!= null){ 
 											String symbol = frame.getShot1().getPinsLeft();
@@ -571,13 +640,13 @@
 						</div>
 					</div> <!-- this closes pinsandarsenal container div-->
 					<div class="gameScores">
-						<div class="gameScoreBox">Game1 Total: </div>
-						<div class="gameScoreBox">Game2 Total: </div>
-						<div class="gameScoreBox">Game3 Total: </div>
-						<div class="gameScoreBox">Series Total: </div>
+						<div class="gameScoreBox">Game1 Total: <%=currGame1Score %></div>
+						<div class="gameScoreBox">Game2 Total: <%=currGame2Score %></div>
+						<div class="gameScoreBox">Game3 Total: <%=currGame3Score %></div>
+						<div class="gameScoreBox">Series Total: <%=currGame1Score+currGame2Score+currGame3Score %></div>
 					</div> 
 					<br>
-				<button text="Submit Shot" name="submitShot" type="submit" onclick="">Submit Shot</button>
+				<button text="Submit Shot" name="submitShot" type="submit" onclick="" id="submitBtn">Submit Shot</button>
 			</div>
 		  </form>
 
@@ -605,11 +674,21 @@
 					spareDiv.style.display = "block";
 				}
 
+				const gameOver = <%= gameOver %>; // Accessing the JSP variable
+				const submitBtn = document.getElementById('submitBtn');
+
+				// Disable the submit button if gameOver is true
+				if (gameOver) {
+					
+					alert("The game is over. You cannot submit further.");
+					submitBtn.disabled = true;
+				}
 				updatePins();
 			}
 			
 			function togglePin(pin){
-				 if (!pin.classList.contains("locked")) {
+				//if(!gameOver){
+					 if (!pin.classList.contains("locked")) {
 					pin.classList.toggle("down");
 					var hiddenVal = pin.querySelector('input[type="hidden"]');
 
@@ -626,6 +705,8 @@
 					shot.textContent = pinCount;
 					shotBox.value = pinCount;
 				 }
+				//}
+				
 			}
 			function setAllPinsDown() {
 				var pins = document.querySelectorAll('.pin');

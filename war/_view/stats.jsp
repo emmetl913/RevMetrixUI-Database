@@ -210,7 +210,7 @@
 			<a href="${pageContext.servletContext.contextPath}/event">Start Bowling</a>
 
 			<a href="https://github.com/emmetl913/RevMetrixUI-Database" class="bottom-link2">GitHub</a>
-			<a href="${pageContext.servletContext.contextPath}/logIn" class="bottom-link">Sign Out</a>
+        	<a href="${pageContext.servletContext.contextPath}/logIn" class="bottom-link">Sign Out</a>
 		</div>
 		</div>
 		<form id="statsForm" action="${pageContext.servletContext.contextPath}/stats" method="post">
@@ -294,67 +294,77 @@
 					</select>
 					<button name="submitShotData" type="submit" id="submitShotData">Get Shot Data</button>	
 				</form>
-
-			</div>
-		</form>
-		<c:if test="${requestScope.formSubmitted}">
-			<div class="container" id="hiddenContent">
-				<table>
-					<thead>
-						<tr>
-							<th>DATE</th>
-							<th>LGE (League)</th>
-							<th>LANES</th>
-							<th>1</th>
-							<th>2</th>
-							<th>3</th>
-							<th>SERIES</th>
-							<th>TOTAL GAMES</th>
-							<th>AVERAGE</th>
-						</tr>
-					</thead>
-					<tbody>
-						<% ArrayList<stat> sessionTable = (ArrayList<stat>
-							)request.getAttribute("sessionTable");
-							for (stat s : sessionTable) { %>
-							<tr>
-								<td>
-									<%= s.getDate() %>
-								</td>
-								<td>
-									<%= s.getLeague() %>
-								</td>
-								<td>
-									<%= s.getLanes() %>
-								</td>
-								<td>
-									<%= s.getGames1() %>
-								</td>
-								<td>
-									<%= s.getGames2() %>
-								</td>
-								<td>
-									<%= s.getGames3() %>
-								</td>
-								<td>
-									<%= s.getSeries() %>
-								</td>
-								<td>
-									<%= s.getTotalGame() %>
-								</td>
-								<td>
-									<%= s.getAvg() %>
-								</td>
-							</tr>
-						<% } %>
-					</tbody>
-				</table>
-			</div>
-		</c:if>
-		
-		<!-- Add my stuff down here... -->
-
-		<c:if test="${requestScope.shotFormSubmitted}">
+    </div>
+    </div>
+    <form id="statsForm" action="${pageContext.servletContext.contextPath}/stats" method="post">
+        <div class="container">
+            <h1>Stats Page!</h1>
+            <select name="selectedEvent" id="selectedEvent">
+                <% ArrayList<Event> events = (ArrayList<Event>) request.getAttribute("events");
+                        if (events != null) {
+                        for (Event event : events) {
+                        %>
+                        <option value="<%= event.getEventName()%>">
+                            <%= event.getEventName()%>
+                        </option>
+                        <% } } else { %>
+                            <option>No Events</option>
+                            <% } %>
+            </select>
+            <button id="submitButton" type="submit" id="submitButtonLeagueChart">Get League Chart</button>
+        </div>
+    </form>
+    <c:if test="${requestScope.formSubmitted}">
+            <div class="container" id="hiddenContent">
+            <table>
+                <thead>
+                    <tr>
+                        <th>DATE</th>
+                        <th>LGE (League)</th>
+                        <th>LANES</th>
+                        <th>1</th>
+                        <th>2</th>
+                        <th>3</th>
+                        <th>SERIES</th>
+                        <th>TOTAL GAMES</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <% ArrayList<stat> sessionTable = (ArrayList<stat>
+                            )request.getAttribute("sessionTable");
+                            for (stat s : sessionTable) { %>
+                            <tr>
+                                <td>
+                                    <%= s.getDate() %>
+                                </td>
+                                <td>
+                                    <%= s.getLeague() %>
+                                </td>
+                                <td>
+                                    <%= s.getLanes() %>
+                                </td>
+                                <td>
+                                    <%= s.getGames1() %>
+                                </td>
+                                <td>
+                                    <%= s.getGames2() %>
+                                </td>
+                                <td>
+                                    <%= s.getGames3() %>
+                                </td>
+                                <td>
+                                    <%= s.getSeries() %>
+                                </td>
+                                <td>
+                                    <%= s.getTotalGame() %>
+                                </td>
+                            </tr>
+                            <% } %>
+                </tbody>
+            </table>
+        </div>
+    </c:if>
+	<c:if test="${requestScope.shotFormSubmitted}">
 			<div class="container" id="hiddenContent">
 				<h3>Stats Data:</h3>
 				<h4>Lifetime pins knocked down: </h4>
@@ -364,5 +374,5 @@
 				<h4>Leave Percentage: <%= request.getAttribute("leave") %> %</h4>
 			</div>
 		</c:if>
-	</body>
+</body>
 </html>
