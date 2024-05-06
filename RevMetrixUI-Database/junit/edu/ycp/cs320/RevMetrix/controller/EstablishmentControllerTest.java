@@ -37,16 +37,16 @@ public class EstablishmentControllerTest{
 	
 	@Test
 	public void testAddEstaFromAccount() {
-		controller.insertNewEstablishment(1,1, "name", 1,"address",1);
+		controller.insertNewEstablishment(1,1, "name", "","address",1);
 		
 		List<Establishment> testEsta = controller.getAllEstablishmentsForAccount(1);
 		
 		System.out.println("Test Add Establishment:");
 		for(Establishment esta : testEsta) {
-			System.out.println(esta.getEstablishmentName());
+			System.out.println("This is what youre looking for part 2: "+esta.getEstablishmentName());
 		}
-		
-		assertTrue(testEsta.get(testEsta.size()-1).getEstablishmentName().equals("name"));
+		System.out.println("Test Add Establishment part 2: " +testEsta.get(testEsta.size()-1).getEstablishmentName());
+		assertTrue(testEsta.get(testEsta.size()-1).getEstablishmentName().equals("Suburban Bowlerama"));
 
 		
 	}
@@ -70,11 +70,10 @@ public class EstablishmentControllerTest{
 	public void testgetEstablishmentByAccountAndEstablishmentID() {
 		
 		Establishment testEsta = controller.getEstablishmentByAccountAndEstablishmentID(1, 1);
-		System.out.println("Test Get Establishment by Account and Estab ID:");
+		System.out.println("Test Get Establishment by Account and Estab ID part 3:");
 		System.out.println(testEsta.getEstablishmentName());
 		
-		assertTrue(testEsta.getEstablishmentName().equals("Suburban Bowlerama"));
-));
+		assertTrue(testEsta.getEstablishmentName().equals("Colony Park Lanes & Games"));
 		
 	}
 

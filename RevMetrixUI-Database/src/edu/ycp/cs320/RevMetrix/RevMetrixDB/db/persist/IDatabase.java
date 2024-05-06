@@ -53,8 +53,11 @@ public interface IDatabase {
 	public String getEventNameByAccount(int accID, int eventID);
 	public Integer getCurrentGameLane(int gameID);
 	public Integer[] getGamesBySessions(int sessionID);
+	public Game getGameByGameID(int gameID);
 	public ArrayList<Integer> getSessionsByEvent(int eventID);
 	public Integer getSessionScore(int sessionID);
 	public String getSessionDate(int sessionID);
+	public Integer getLifetimePinsKnockedDown(int accountID);
+	public Integer getLifetimePinsMissed(int accountID);
 	
 }

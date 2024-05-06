@@ -9,13 +9,12 @@ import edu.ycp.cs320.RevMetrix.model.Establishment;
 
 public class EventTest {
 	private Event model;
-	private Establishment estab = new Establishment("Name","Address");
-	private Establishment Newestab = new Establishment("NewName","NewAddress");
+	private Establishment Newestab = new Establishment(1, 1, "NewName","NewAddress");
 
 	
 	@Before
 	public void setUp() {
-		model = new Event("name","type",1, estab);
+		model = new Event(1, 1, 1, "name", "time", "type", 1);
 	}
 	
 	@Test

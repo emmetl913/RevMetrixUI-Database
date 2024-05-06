@@ -4,8 +4,9 @@
 <%@ page import= "edu.ycp.cs320.RevMetrix.model.Game" %>
 <%@ page import = "java.io.*,java.util.*"%>
 <%@ page import="javax.servlet.http.HttpSession" %>
+<%@ page import = "java.util.List" %>
 <%
-	List<Game> games = (List<Game>)session.getAttribute("gamesListKey");
+	List<Game> games = (List<Game>)request.getAttribute("games");
 %>
 <html>
 <head>
@@ -18,7 +19,7 @@
             margin: 0;
             padding: 0;
         }
-button {
+		button {
             background-color: #4caf50;
             color: #fff;
             padding: 10px 20px;
@@ -26,7 +27,20 @@ button {
             border-radius: 4px;
             cursor: pointer;
         }
-
+        .gamesList
+        {
+        	width: 590px;
+			height: 400px;
+			overflow: scroll;
+        }
+		.game-section{
+			border: 1px solid black;
+			margin-bottom: 10px;
+			padding: 10px;
+		}
+		.game-section:hover{
+			background-color: #33B5FF;
+		}
         button:hover {
             background-color: #45a049;
         }
@@ -70,61 +84,61 @@ button {
 			color: red;
 		}
 		.sidebar {
-	height: 100%;
-	width: 250px;
-	position: fixed;
-	top: 0;
-	left: 0;
-	background: linear-gradient(to bottom, rgba( 243, 0, 178, 1 ), rgba( 28, 144, 243, 1 ) 95%, rgba( 255, 255, 0, 1 ));
-	padding-top: 20px;
-	}
-	.number-input{
-		width: 100px;
-	}
-	/* Links in the sidebar */
-	.sidebar a {
-	padding: 10px 20px;
-	text-decoration: none;
-	color: white;
-	display: block;
-	}
-
-	/* Change color of links on hover */
-	.sidebar a:hover {
-	background-color: #333;
-	}
-
-	/* Style the main content */
-	.main-content {
-	margin-left: 250px; /* Same width as the sidebar */
-	padding: 20px;
-	}
-
-	/* Responsive layout - when the screen is less than 600px wide, make the sidebar and the main content stack on top of each other */
-	@media screen and (max-width: 600px) {
-	.sidebar {
-		width: 100%;
-		height: auto;
-		position: relative;
-	}
-	.sidebar a {float: left;}
-	div.content {margin-left: 0;}
-	}
-	.bottom-link {
-  position: absolute;
-  bottom: 20px; /* Adjust this value to raise or lower the link */
-  left: 0;
-  width: 84%; 
-  text-align: left;
-  }
-
-  .bottom-link2 {
-  position: absolute;
-  bottom: 60px; /* Adjust this value to raise or lower the link */
-  left: 0;
-  width: 84%; 
-  text-align: left;
-  }
+			height: 100%;
+			width: 250px;
+			position: fixed;
+			top: 0;
+			left: 0;
+			background: linear-gradient(to bottom, rgba( 243, 0, 178, 1 ), rgba( 28, 144, 243, 1 ) 95%, rgba( 255, 255, 0, 1 ));
+			padding-top: 20px;
+		}
+		.number-input{
+			width: 100px;
+		}
+		/* Links in the sidebar */
+		.sidebar a {
+			padding: 10px 20px;
+			text-decoration: none;
+			color: white;
+			display: block;
+		}
+	
+		/* Change color of links on hover */
+		.sidebar a:hover {
+			background-color: #333;
+		}
+	
+		/* Style the main content */
+		.main-content {
+			margin-left: 250px; /* Same width as the sidebar */
+			padding: 20px;
+		}
+	
+		/* Responsive layout - when the screen is less than 600px wide, make the sidebar and the main content stack on top of each other */
+		@media screen and (max-width: 600px) {
+			.sidebar {
+				width: 100%;
+				height: auto;
+				position: relative;
+			}
+			.sidebar a {float: left;}
+			div.content {margin-left: 0;}
+		}
+		.bottom-link {
+		 	position: absolute;
+		 	bottom: 20px; /* Adjust this value to raise or lower the link */
+		 	left: 0;
+		 	width: 84%; 
+		 	text-align: left;
+		}
+	
+	  	.bottom-link2 {
+	  		position: absolute;
+	  		bottom: 60px; /* Adjust this value to raise or lower the link */
+	  		left: 0;
+	  		width: 84%; 
+	  		text-align: left;
+	  	}
     </style>
 </head>
 <body>
@@ -153,37 +167,52 @@ button {
 	</div>
 	<form id = "gameForm" action="${pageContext.servletContext.contextPath}/game" method="post">
 	<div class="container">
-	
-		<!-- Game Page -->
-			<h1>Game Page!</h1>
-			<p> Select game by index: </p>
-
-			<select name="gameDropDown" id="establishment">
-			<%
-				if (games != null) {
-				  for (int i =0; i < games.size(); i++) {
-					  Game game = games.get(i);
-					  
-					  String is = ""+i;
-			%>
-			<option value=<%=is%>><%= game.getGameNumber() %> &nbsp&nbsp&nbsp|&nbsp&nbsp&nbsp Lane: <%=game.getLane()%>  
-				&nbsp&nbsp&nbsp|&nbsp&nbsp&nbsp Score: <%=game.getScore()%></option>
-		   <% 
-				 } } else {	%>
-					 <option value="">No Games</option>
-		   <% } %>
-			</select>
-			<p><button id="submitButton" type="submit" id="gameStatus" name="select" value="selectCurrentGame"> Select Current Game</button></p>
-			<tr>
-				Enter Lane for a new game: <br> 
-				<input type="text" id="laneInput" name="laneInput" class="number-input">
-			</tr>
-				<br> 
-			<tr>
-			  	<button id="submitButton1" type="submit" id="gameStatus" name="new" value="startNewGame"> Start New Game</button>
-			</tr> 
+		<h1>Pick an existing game</h1>
+		<div id="gamesList" class="gamesList"> &nbsp
+			<% 
+                   
+                if(games != null) {
+                  for (Game gameItem : games) {
+           %>
+		           <div class="game-section" onclick= "selectGame ('<%= gameItem.getGameID() %>')">
+		                  <p>ID: <%= gameItem.getGameID() %> &nbsp Lane: <%= gameItem.getLane() %></p>
+		                  <p>Game Number: <%= gameItem.getGameNumber()%> &nbsp Current Score: <%= gameItem.getScore()%></p>
+		           </div>
+           <% 
+                 } } else {	%>
+                 <p>No games available.</p>
+           <% } %>
+           
 		</div>
-		</form>
-		
+		 <input type="hidden" id="selectedGame" name="selectedGame">
+		 <tr>
+            <td><a href="${pageContext.servletContext.contextPath}/shot"><input type="Submit" id="SubmitCurrentGame" name="SubmitCurrentGame" value="Submit"></a></td>
+         </tr>
+	</div>
+	</form>
+	<form action="${pageContext.servletContext.contextPath}/game" method="post"> 
+	<div class="container">
+	
+		<h2>Start a new game</h2>
+		<table>
+			<tr>
+		        <th>Enter the starting Lane for the new game: </th>
+		        <tr id="inputLane">
+		            <td colspan="3"><input type="text" id="inputLane" name="inputLane" placeholder="Enter the starting lane!"></td>
+		        </tr>
+		    </tr>
+		</table>
+		<input type="hidden" name="startingLane" id="startingLane" value="">
+		<tr>
+			<td><input type="Submit" name="submit" value="Submit Page"><a href="${pageContext.servletContext.contextPath}/shot"></a></td>
+		</tr>
+	</div>
+</form>
+<script>
+	function selectGame(gameItem)
+	{
+		document.getElementById('selectedGame').value = gameItem;
+	}
+</script>	
 </body>
 </html>

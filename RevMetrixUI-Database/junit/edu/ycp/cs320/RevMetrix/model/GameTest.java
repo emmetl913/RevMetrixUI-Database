@@ -10,7 +10,7 @@ public class GameTest {
 	
 	@Before
 	public void setUp() {
-		model = new Game(0,0);
+		model = new Game(0, 0, 0, 0, 0);
 	}
 	
 	@Test
@@ -28,10 +28,6 @@ public class GameTest {
 		model.setScore(100);
 		assertTrue(model.getScore() == 100);
 	}
-	@Test
-	public void testSetFrameCount() {
-		model.setFrameCount(4);
-		assertTrue(model.getFrameCount() == 4);
-	}
+	
 	
 }

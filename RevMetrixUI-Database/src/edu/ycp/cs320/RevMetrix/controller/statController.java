@@ -59,4 +59,14 @@ public class statController {
 		return sessionScore;
 	}
 	
+	public Integer getLifetimePinsKnockedDown(int accID) {
+		Integer pins = db.getLifetimePinsKnockedDown(accID);
+		return pins;
+	}
+	
+	public Integer getLifetimePinsMissed(int accID) {
+		Integer pins = db.getLifetimePinsMissed(accID);
+		return pins;
+	}
+	
 }

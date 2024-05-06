@@ -94,8 +94,7 @@ public class DerbyDatabase implements IDatabase {
 			@Override
 			public ArrayList<Integer> execute(Connection conn) throws SQLException {
 				PreparedStatement stmt = null;
-				ResultSet resultSet = null;
-				
+				ResultSet resultSet = null;	
 				try {
 					stmt = conn.prepareStatement(
 							"select * from sessions "+
@@ -129,6 +128,178 @@ public class DerbyDatabase implements IDatabase {
 				} finally {
 					DBUtil.closeQuietly(resultSet);
 					DBUtil.closeQuietly(stmt);
+				}
+			}
+		});
+	}
+	
+	@Override
+	public Integer getLifetimePinsKnockedDown(int accountID) {
+		return executeTransaction(new Transaction<Integer>() {
+			@Override
+			public Integer execute(Connection conn) throws SQLException {
+				PreparedStatement stmt1 = null;
+				PreparedStatement stmt2 = null;
+				ResultSet resultSetEvents = null;
+				ResultSet resultSetShots = null;
+				
+				//Find all events for the account
+				try {
+					stmt1 = conn.prepareStatement(
+							"select * from events "+
+							"where acc_id = ?"
+					);
+					stmt1.setInt(1, accountID);
+					
+					
+					ArrayList<Integer> events = new ArrayList<Integer>();
+					resultSetEvents = stmt1.executeQuery();
+					
+					// for testing that a result was returned
+					Boolean found = false;
+					int count = 0;
+
+					while (resultSetEvents.next()) {
+						found = true;
+						Event event = new Event();
+						loadEvent(event, resultSetEvents, 1);
+//						count++;
+//						System.out.print(" Event: "+count);
+						
+						events.add(event.getEventID());
+					}
+					// check if any authors were found
+					if (!found) {
+						System.out.println("No Events were found in the database");
+					}
+					
+					Integer result = 0;
+					
+					for(int i = 1; i <= events.size(); i++) {
+						ArrayList<Integer> sessions = getSessionsByEvent(events.get(i-1));
+						for(int j = 1; j <= sessions.size(); j++) {
+							try {
+								stmt2 = conn.prepareStatement(
+										"select * from shots "+
+										"where session_id = ?"
+								);
+								stmt2.setInt(1, sessions.get(j-1));
+								resultSetShots = stmt2.executeQuery();
+								
+								// for testing that a result was returned
+								found = false;
+								
+								count = 0;
+								while (resultSetShots.next()) {
+//									count++;
+//									System.out.print(" Shot: "+count+" Session : "+ sessions.get(j-1));
+									found = true;
+									Shot shot = new Shot();
+									loadShot(shot, resultSetShots, 1);
+//									System.out.print("Event: "+count);
+									
+									result += shot.getCount();
+								}
+								// check if any authors were found
+								if (!found) {
+									System.out.println("No Shots were found in the database");
+								}
+							}finally {
+								DBUtil.closeQuietly(stmt2);
+								DBUtil.closeQuietly(resultSetShots);
+							}
+						}
+					}
+					return result;
+				} finally {
+					DBUtil.closeQuietly(resultSetEvents);
+					DBUtil.closeQuietly(stmt1);
+				}
+			}
+		});
+	}
+	
+	@Override
+	public Integer getLifetimePinsMissed(int accountID) {
+		return executeTransaction(new Transaction<Integer>() {
+			@Override
+			public Integer execute(Connection conn) throws SQLException {
+				PreparedStatement stmt1 = null;
+				PreparedStatement stmt2 = null;
+				ResultSet resultSetEvents = null;
+				ResultSet resultSetShots = null;
+				
+				//Find all events for the account
+				try {
+					stmt1 = conn.prepareStatement(
+							"select * from events "+
+							"where acc_id = ?"
+					);
+					stmt1.setInt(1, accountID);
+					
+					
+					ArrayList<Integer> events = new ArrayList<Integer>();
+					resultSetEvents = stmt1.executeQuery();
+					
+					// for testing that a result was returned
+					Boolean found = false;
+					int count = 0;
+
+					while (resultSetEvents.next()) {
+						found = true;
+						Event event = new Event();
+						loadEvent(event, resultSetEvents, 1);
+//						count++;
+//						System.out.print(" Event: "+count);
+						
+						events.add(event.getEventID());
+					}
+					// check if any authors were found
+					if (!found) {
+						System.out.println("No Events were found in the database");
+					}
+					
+					Integer result = 0;
+					
+					for(int i = 1; i <= events.size(); i++) {
+						ArrayList<Integer> sessions = getSessionsByEvent(events.get(i-1));
+						for(int j = 1; j <= sessions.size(); j++) {
+							try {
+								stmt2 = conn.prepareStatement(
+										"select * from shots "+
+										"where session_id = ?"
+								);
+								stmt2.setInt(1, sessions.get(j-1));
+								resultSetShots = stmt2.executeQuery();
+								
+								// for testing that a result was returned
+								found = false;
+								
+								count = 0;
+								while (resultSetShots.next()) {
+//									count++;
+//									System.out.print(" Shot: "+count+" Session : "+ sessions.get(j-1));
+									found = true;
+									Shot shot = new Shot();
+									loadShot(shot, resultSetShots, 1);
+//									System.out.print("Event: "+count);
+									
+									result += (10 - shot.getCount());
+								}
+								// check if any authors were found
+								if (!found) {
+									System.out.println("No Shots were found in the database");
+								}
+							}finally {
+								DBUtil.closeQuietly(stmt2);
+								DBUtil.closeQuietly(resultSetShots);
+							}
+						}
+					}
+					return result;
+				} finally {
+					DBUtil.closeQuietly(resultSetEvents);
+					DBUtil.closeQuietly(stmt1);
 				}
 			}
 		});
@@ -611,6 +782,16 @@ public class DerbyDatabase implements IDatabase {
 		shot.setLeave(resultSet.getString(index++));
 	}
 	
+//	+ " shot_id integer primary key"
+//	+ " generated always as identity (start with 1, increment by 1),"
+//	+ " frame_id integer,"
+//	+ " game_id integer,"
+//	+ " session_id integer,"
+//	+ " shot_number integer,"
+//	+ " count integer,"
+//	+ " ball_id integer,"
+//	+ " pins_left varchar(10),"
+//	+ " leave varchar(2)"
 	
 	
 	@Override
@@ -816,6 +997,48 @@ public class DerbyDatabase implements IDatabase {
 			}
 		});
 	}
+	@Override public Game getGameByGameID(int gameID)
+	{
+		return executeTransaction(new Transaction<Game>() {
+			@Override
+			public Game execute(Connection conn) throws SQLException
+			{
+				PreparedStatement stmt1 = null;
+				
+				ResultSet resultSet1 = null;
+				
+				try
+				{
+					stmt1 = conn.prepareStatement(
+							"select * from games"
+							+" where game_id = ?"
+					);
+					stmt1.setInt(1, gameID);
+					
+					Game result = new Game();
+					
+					resultSet1 = stmt1.executeQuery();
+					
+					Boolean found = false;
+					
+					while(resultSet1.next())
+					{
+						found = true;
+						Game game = new Game(0, 0, 0, 0, 0);
+						loadGame(game, resultSet1, 1);
+						System.out.println("Game found with ID: "+ game.getGameID());
+						result = game;
+					}
+					
+					return result;
+				} finally
+				{
+					DBUtil.closeQuietly(stmt1);
+					DBUtil.closeQuietly(resultSet1);
+				}
+			}
+		});
+	}
 	
 	@Override
 	public List<Game> getGameBySessionID(int sessionID) {
@@ -846,7 +1069,7 @@ public class DerbyDatabase implements IDatabase {
 						found = true;
 						Game game = new Game(0, 0, 0, 0, 0);
 						loadGame(game, resultSet1, 1);
-						//System.out.println("SKREET" + ball.getName());
+						System.out.println("Game found with ID: "+ game.getGameID());
 						result.add(game);
 					}
 					
@@ -1760,7 +1983,7 @@ public class DerbyDatabase implements IDatabase {
 		session.setEventID(resultSet.getInt(index++));
 		session.setTime(resultSet.getString(index++));
 		session.setOppType(resultSet.getString(index++));
-		session.setOpp(resultSet.getString(index++));
+		session.setName(resultSet.getString(index++));
 		session.setScore(resultSet.getInt(index++));
 
 	}
@@ -1944,15 +2167,6 @@ public class DerbyDatabase implements IDatabase {
 										
 					tablesCreated += "Establishments, ";
 					
-					stmt9 = conn.prepareStatement(
-							"create table eventSessions ("
-								+" event_id integer constraint event_id references events,"
-								+ " session_id integer constraint session_id references sessions"
-								+ ")"
-					);
-					
-					stmt9.executeUpdate();
-					tablesCreated += "eventSessions, ";
 					
 					System.out.println(tablesCreated);
 					
@@ -2116,7 +2330,7 @@ public class DerbyDatabase implements IDatabase {
 						insertSession.setInt(1, session.getEventID());
 						insertSession.setString(2, session.getTime());
 						insertSession.setString(3, session.getOppType());
-						insertSession.setString(4, session.getOpponent());
+						insertSession.setString(4, session.getName());
 						insertSession.setInt(5, session.getScore());
 						insertSession.addBatch();
 					}
