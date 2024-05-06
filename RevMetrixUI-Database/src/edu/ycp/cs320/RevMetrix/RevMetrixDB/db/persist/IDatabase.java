@@ -28,7 +28,8 @@ public interface IDatabase {
 	List<Ball> getBallsByAccountID(int accountId);
 	List<Ball> getBallByBallID(int ballID);
 	List<Ball> getBallByName(String name);
-
+	public Event getEventByEventID(int eventID);
+	
 	public Integer removeBall(int accID, String name);
 
 	List<Game> getGameBySessionID(int sessionID);
@@ -36,9 +37,15 @@ public interface IDatabase {
 
 
 	// Shot Level Methods
+	public Session getSessionByGameID(int gameID);
+	public List<Game> getGamesForSession(int sessionID);
 	public Integer insertNewFrame(int gameID, int score, int frameNumber);
 	List<Frame> getFrameByGameID(int gameID);
-
+	public boolean updateFrameByFrameID(int frameID, int newScore);
+	public Integer updateGameByGameID(int gameID, int newScore);
+	public boolean updateSessionBySessionID(int sessionID, int newScore);
+	public boolean updateEventByEventID(int eventID, int newScore);
+	
 	List<Shot> getShotByFrameID(int frameID);
 	public Integer insertNewShotWithFrameID(int sessionID, int gameID, int frameID, int shotNumber, int count, int ballID, String pinsLeft);
 	
@@ -51,10 +58,12 @@ public interface IDatabase {
 	public String getEventNameByAccount(int accID, int eventID);
 	public Integer getCurrentGameLane(int gameID);
 	public Integer[] getGamesBySessions(int sessionID);
+	public Game getGameByGameID(int gameID);
 	public ArrayList<Integer> getSessionsByEvent(int eventID);
 	public Integer getSessionScore(int sessionID);
 	public String getSessionDate(int sessionID);
 	public Integer getLifetimePinsKnockedDown(int accountID);
 	public Integer getLifetimePinsMissed(int accountID);
+	public List<Integer> getGameIDSBySessions(int sessionID);
 	
 }

@@ -37,7 +37,10 @@ public Integer insertNewFrame(int game_id, int frameNumber) {
 	}
 
 //THis function will only be here until it is used in GameCOntroller instead
-
+public boolean updateFrameByFrameID(int frameID, int newScore) {
+	boolean success = db.updateFrameByFrameID(frameID, newScore);
+	return success;
+}
 	
 public List<Frame> getFrameByGameID(int gameID){
 	List<Frame> frameList = db.getFrameByGameID(gameID);

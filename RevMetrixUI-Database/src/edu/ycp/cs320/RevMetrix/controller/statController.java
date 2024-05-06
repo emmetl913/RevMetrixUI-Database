@@ -6,6 +6,7 @@ import javax.servlet.http.HttpSession;
 import edu.ycp.cs320.RevMetrix.RevMetrixDB.db.persist.DatabaseProvider;
 import edu.ycp.cs320.RevMetrix.RevMetrixDB.db.persist.DerbyDatabase;
 import edu.ycp.cs320.RevMetrix.RevMetrixDB.db.persist.IDatabase;
+import edu.ycp.cs320.RevMetrix.model.Game;
 
 public class statController {
 	
@@ -40,11 +41,23 @@ public class statController {
 		
 		return lanes;
 	}
-	
+	public Game getGameByGameID(int gameID)
+	{
+		Game result = db.getGameByGameID(gameID);
+		if(result == null)
+		{
+			System.out.println("Games for gameID: <"+gameID+"> not found");
+			return null;
+		} else 
+		{
+			System.out.println("Games for gameID: <"+gameID+"> found successfully");
+			return result;
+		}
+	}
 	public Integer[] getGameStatsBySession(int sessionID) {
 		Integer gameScore[] = new Integer[3];
 		gameScore = db.getGamesBySessions(sessionID);
-		
+		System.out.println("Games: "+gameScore[0]);
 		return gameScore;
 	}
 	
@@ -67,6 +80,12 @@ public class statController {
 	public Integer getLifetimePinsMissed(int accID) {
 		Integer pins = db.getLifetimePinsMissed(accID);
 		return pins;
+	}
+	
+	public List<Integer> getGameIDSBySessions(int sessionID) {
+		List<Integer> gameScore =  db.getGameIDSBySessions(sessionID);
+		System.out.println("Games: "+gameScore.get(0));
+		return gameScore;
 	}
 	
 }

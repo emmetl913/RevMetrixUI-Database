@@ -36,14 +36,12 @@ public class GameServlet extends HttpServlet {
 		Game model = null;
 		GameController controller = new GameController();
 		controller.setModel(model);
-		
+		List<Game> resultList = new ArrayList<>();
 		Integer sessionID = (Integer) session.getAttribute("sessionID");
-		List<Game> resultList = controller.getGameBySessionID(sessionID);
+		System.out.println("Session ID for this games page is: "+sessionID);
+		List<Game> games = controller.getGameBySessionID(sessionID);
 		
-		String gameListKey = "gameListKey";
-		
-//		req.setAttribute("gameObjArr", resultList);
-		session.setAttribute(gameListKey, resultList);
+		req.setAttribute("games", games);
 		req.setAttribute("game", model);
 		
 		// call JSP to generate empty form
@@ -69,88 +67,70 @@ public class GameServlet extends HttpServlet {
 		HttpSession session = req.getSession();
 		Account acc = (Account) session.getAttribute("currAccount");
 		Integer sessionID = (Integer) session.getAttribute("sessionID");
+		String selectedGame = req.getParameter("selectedGame");
 		
-        String gamesListKey = new String("gamesListKey");
 		List<Game> games = controller.getGameBySessionID(sessionID);
 		
         
-        
-        String dropDownValue = req.getParameter("gameDropDown");
-    
-        
-        if(req.getParameter("select") != null) {
-        	//currentGame = games.get(selectedIndex);
-        	if(dropDownValue != null || dropDownValue.equals(""))
-        	{
-        		currentGame = games.get(Integer.parseInt(dropDownValue));
-        	}
-        	if(currentGame != invalidGame) {
-        	System.out.println("Selected Game ID: "+currentGame.getGameID()+" lane: " + currentGame.getLane());
-        	System.out.println(currentGame.getLane());
-        	
-        	session.setAttribute(gamesListKey, games);
-    		session.setAttribute("currentGame", currentGame);
-    		acc.setCurrentGame((Game)session.getAttribute("currentGame"));
-    		session.setAttribute("currAccount", acc);
-    		
-    	
-        	req.getRequestDispatcher("/_view/shot.jsp").forward(req, resp);
-    		}
-    		else {
-    			errorMessage = "Must select a valid game";
-    		}
-
-        }
-       
-        if(req.getParameter("new") != null) {
-        	
-        	Integer laneInput = getIntegerFromParameter(req.getParameter("laneInput"));
-            if(laneInput == null ) {
-            	
-            	errorMessage = "Enter a lane";
+        if(selectedGame != null)
+        {
+        	Integer gameID = getIntegerFromParameter(req.getParameter("selectedGame"));
+        	System.out.println("Game id for selected game: "+gameID);
+        	session.setAttribute("gameID", gameID);
+        	currentGame = controller.getGameByGameID(gameID);
+        } else 
+        {
+        	System.out.println("We've made it to the game creation");
+	        Integer laneInput = getIntegerFromParameter(req.getParameter("inputLane"));
+	        int gameNumber;
+            if(games == null) {
+            	gameNumber = 1;
+            	System.out.println("This is the first game");
             }
-    		if(errorMessage == null) {
-
-    			//set current game number to proper value
-    			//get num of games attached to session
-                int gameNumber;
-                if(games == null) {
-                	gameNumber = 1;
+            else {
+                gameNumber = games.size()+1;
+                System.out.println("Game number set to: "+gameNumber);
+                if(gameNumber >= 4)
+                {
+                	errorMessage = "Too many games in current Session";
                 }
-                else {
-                	gameNumber = games.size();
-                }
-	        	int gameID = controller.insertNewGame(sessionID, laneInput, gameNumber, 0);
-	        	currentGame = new Game(gameID, sessionID, laneInput, gameNumber, 0);
+            }
+	        
+	        if(laneInput == null ) {
+	            errorMessage = "Enter a lane";
+	            System.out.println("uh oh! bad lane");
+	        }
+	        	
+	    	if(errorMessage == null) {
+		        Integer gameID = controller.insertNewGame(sessionID, laneInput, gameNumber, 0);
+		        System.out.println("Game ID for successful insert: "+gameID);
+		        currentGame = new Game(gameID, sessionID, laneInput, gameNumber, 0);
 	        	//Initialize Game with frames
 	    		FrameController fc = new FrameController();
 	    		for(int i = 1; i <= 12; i++) {
 	    			fc.insertNewFrame(currentGame.getGameID(), i);
 	    		}
-	        	
-	    		session.setAttribute(gamesListKey, games);
+	    		
 	    		session.setAttribute("currentGame", currentGame);
-	    		acc.setCurrentGame((Game)session.getAttribute("currentGame"));
-	    		session.setAttribute("currAccount", acc);
-
-        		//req.getRequestDispatcher("/_view/shot.jsp").forward(req, resp);
-        		resp.sendRedirect(req.getContextPath() + "/shot");
-        		return;
-    		}
+		        session.setAttribute("gameID", gameID);
+		        acc.setCurrentGame((Game)session.getAttribute("currentGame"));
+		        
+	    	}
         }
         
-        else {
-        req.setAttribute("gameObjArr", games);
-		session.setAttribute("currentGame", currentGame);
-		acc.setCurrentGame((Game)session.getAttribute("currentGame"));
-		session.setAttribute("currAccount", acc);
-
-		//pass error message
-		req.setAttribute("errorMessage", errorMessage);	
-		
-		// call JSP to generate empty form
-		req.getRequestDispatcher("/_view/game.jsp").forward(req, resp);
+        req.setAttribute("errorMessage", errorMessage);
+        session.setAttribute("currentGame", currentGame);
+        
+        if(req.getParameter("submit") != null || req.getParameter("SubmitCurrentGame") != null && errorMessage == null)
+		{
+			System.out.println("Game submit button is pressed");
+    		resp.sendRedirect(req.getContextPath() + "/shot");
 		}
+		else
+		{
+			System.out.println("Game submit failure");
+			req.getRequestDispatcher("/_view/game.jsp").forward(req, resp);
+		}	
 	}
 	
 	private Integer getIntegerFromParameter(String s) {

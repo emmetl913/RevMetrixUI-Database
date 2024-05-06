@@ -6,6 +6,8 @@
 <%@ page import="edu.ycp.cs320.RevMetrix.controller.ShotController" %>
 <%@ page import="edu.ycp.cs320.RevMetrix.model.Ball" %>
 <%@ page import="edu.ycp.cs320.RevMetrix.model.Frame" %>
+<%@ page import="edu.ycp.cs320.RevMetrix.model.Shot" %>
+
 <%@ page import="java.util.ArrayList" %>
 <%@ page import="java.util.List" %>
 
@@ -15,10 +17,16 @@
     BallArsenal model = (BallArsenal) session.getAttribute("ballArsenalKey");
     ArrayList<Ball> balls = (model != null) ? model.getBalls() : null;
 	List<Frame> frames = (List<Frame>)session.getAttribute("frameList");
-	String establishmentName = (String)session.getAttribute("shotEstablishmentName");
+	String establishmentName = (String)request.getAttribute("shotEstablishmentName");
     int selectedBallID = (int) request.getAttribute("selectedBallID");
+    int currentLaneNumber = (int) request.getAttribute("currentLaneNumber");
 	int shotNum = (int)request.getAttribute("currentShotNumber");
+	int frameNum = (int)request.getAttribute("currentFrameNumber");
 	String prevShot1Pins =(String)request.getAttribute("shot1PinsLeft");
+	int gameNum = (int)request.getAttribute("currentGameNumber");
+	Integer currGame1Score = (Integer)request.getAttribute("currentGame1Score");
+	Integer currGame2Score = (Integer)request.getAttribute("currentGame2Score");
+	Integer currGame3Score = (Integer)request.getAttribute("currentGame3Score");
 %>
 <html lang="en">
 	<head>
@@ -382,7 +390,7 @@
 					<div class="error">${errorMessage}</div>
 				</c:if>
 				<div>
-					<!--<%=establishmentName%> its null for now-->Establishment Name &emsp;&emsp; Game# &emsp;&emsp; Frame# <!-- &emsp is a spacer-->
+					<!-- its null for now-->Current Lane: <%=currentLaneNumber%> &emsp; Establishment Name: <%=establishmentName%> &emsp; Game#: <%=gameNum %> &emsp;  Frame#: <%=frameNum%> <!-- &emsp is a spacer-->
 				</div>
 				<div id="bowling-frame-display">
 					<div class="bowling-game">
@@ -392,42 +400,116 @@
 							if(frame.getFrameNumber() != 11 && frame.getFrameNumber() != 12){ %>
 								<div class="frame">
 
-									<%if(frame.getFrameNumber() == 10){  %>
-										<div class="score-box score-box-10left">&nbsp</div>
-										<div class="score-box score-box-10middle">&nbsp</div>
-										<div class="score-box score-box-10right">&nbsp</div>
-
-									<% } 
+									<%if(frame.getFrameNumber() == 10){  
+										if (frame.getShot1() != null){ 
+											String symbol = frame.getShot1().getPinsLeft();
+											if(symbol.equals("X") || symbol.equals("F")){ %>
+											 	<div class="score-box-10left"><%=symbol%></div> 
+										  <%}
+											else{
+												String symbol2 = "";
+												if(frame.getShot1().getCount() == 0){
+													symbol2 = "-";%>
+											 		<div class="score-box-10left"><%=symbol2%></div> <%
+												}
+												else{%>
+											 		<div class="score-box-10left"><%=frame.getShot1().getCount()%></div> <%
+												}
+											} 
+										
+										}
+										else{
+											%><div class="score-box-10left">&nbsp</div> <%
+										}
+										if(frames.get(9).getShot1()!=null){
+											if(!frames.get(9).getShot1().getPinsLeft().equals("X")){
+												if(frame.getShot2()!=null){ 
+													String symbol = frame.getShot2().getPinsLeft();
+													if(symbol.equals("/") || symbol.equals("F")){ %>
+														<div class="score-box-10middle"><%=frame.getShot2().getPinsLeft()%></div>
+												  <%}
+													else{
+														if(frame.getShot2().getCount() == 0){
+															%> <div class="score-box-10middle">-</div> <%
+														}
+														else{%>
+															<div class="score-box-10middle"><%=frame.getShot2().getCount()%></div>
+													 <%	}
+													}
+												 }
+											}
+										}
+										else{
+											Shot frame11shot1 = frames.get(10).getShot1();
+											if(frame11shot1 != null){
+													String symbol = frame11shot1.getPinsLeft();
+													if(symbol.equals("/") || symbol.equals("F")){ %>
+															<div class="score-box-10middle"><%=frame11shot1.getPinsLeft()%></div>
+													<%}
+													else{
+														if(frame11shot1.getCount() == 0){
+															%> <div class="score-box-10middle">-</div> <%
+														}
+													else{%>
+															<div class="score-box-10middle"><%=frame11shot1.getCount()%></div>
+												  <%}
+												}
+												
+											}
+										
+										else{
+											%><div class="score-box-10middle">&nbsp</div> <%
+										}
+										
+									 } 
+									}
 									else { 
 										if (frame.getShot1()!= null){ 
 											String symbol = frame.getShot1().getPinsLeft();
-											if(symbol.equals("X") || symbol.equals("F")|| symbol.equals("-")){ %>
-											 	<div class="score-box-left"><%=frame.getShot1().getPinsLeft()%></div> 
+											if(symbol.equals("X") || symbol.equals("F")){ %>
+											 	<div class="score-box-left"><%=symbol%></div> 
 										  <%}
-											else{ %>
-											 	<div class="score-box-left"><%=frame.getShot1().getCount()%></div> 
-										  <%} 
+											else{
+												String symbol2 = "";
+												if(frame.getShot1().getCount() == 0){
+													symbol2 = "-";%>
+											 		<div class="score-box-left"><%=symbol2%></div> <%
+												}
+												else{%>
+											 		<div class="score-box-left"><%=frame.getShot1().getCount()%></div> <%
+												}
+											} 
 										}
 										else{
 											%><div class="score-box-left">&nbsp</div> <%
 										}
 										if(frame.getShot2()!=null){ 
 											String symbol = frame.getShot2().getPinsLeft();
-											if(symbol.equals("/") || symbol.equals("F") || symbol.equals("-")){ %>
+											if(symbol.equals("/") || symbol.equals("F")){ %>
 												<div class="score-box-right"><%=frame.getShot2().getPinsLeft()%></div>
 										  <%}
-											else{ %>
-												<div class="score-box-right"><%=frame.getShot2().getCount()%></div>
-										 <%	}
+											else{
+												if(frame.getShot2().getCount() == 0){
+													%> <div class="score-box-right">-</div> <%
+												}
+												else{%>
+													<div class="score-box-right"><%=frame.getShot2().getCount()%></div>
+											 <%	}
+											}
 										}
 										else{
-											%><div class="score-box-left">&nbsp</div> <%
+											%><div class="score-box-right">&nbsp</div> <%
 										}
 										
 								  } %>
 								 
 									<!-- framescore goes below-->
-									<%= frame.getScore() %>
+									<% 
+									if(frame.getScore() != -1){
+										%> <%= frame.getScore() %> <%
+									}
+									%>
+
 								</div>
 
 						<%  }
@@ -445,7 +527,8 @@
 								<div class="pin" onclick="togglePin(this)"><input type="hidden" name="pin8" value="up"><span>8</span></div>
 								<div class="pin" onclick="togglePin(this)"><input type="hidden" name="pin9" value="up"><span>9</span></div>
 								<div class="pin" onclick="togglePin(this)"><input type="hidden" name="pin10" value="up"><span>10</span></div>
-								<!--FIxes impossible bug --><input type="hidden" name="pin11" value="up">
+								<!--FIxes impossible bugs --><input type="hidden" name="pin11" value="up">
+								<input type = "hidden" name="spareFixplus1" value="0">
 
 							</div>
 							<div class="row">
@@ -494,13 +577,13 @@
 						</div>
 					</div> <!-- this closes pinsandarsenal container div-->
 					<div class="gameScores">
-						<div class="gameScoreBox">Game1 Total: </div>
-						<div class="gameScoreBox">Game2 Total: </div>
-						<div class="gameScoreBox">Game3 Total: </div>
-						<div class="gameScoreBox">Series Total: </div>
+						<div class="gameScoreBox">Game1 Total: <%=currGame1Score %></div>
+						<div class="gameScoreBox">Game2 Total: <%=currGame2Score %></div>
+						<div class="gameScoreBox">Game3 Total: <%=currGame3Score %></div>
+						<div class="gameScoreBox">Series Total: <%=currGame1Score+currGame2Score+currGame3Score %></div>
 					</div> 
 					<br>
-				<button text="Submit Shot" name="submitShot" type="submit" onclick="updateShotDisplay()">Submit Shot</button>
+				<button text="Submit Shot" name="submitShot" type="submit" onclick="">Submit Shot</button>
 			</div>
 		  </form>
 
@@ -532,46 +615,89 @@
 			}
 			
 			function togglePin(pin){
-				pin.classList.toggle("down");
-				var hiddenVal = pin.querySelector('input[type="hidden"]');
+				 if (!pin.classList.contains("locked")) {
+					pin.classList.toggle("down");
+					var hiddenVal = pin.querySelector('input[type="hidden"]');
 
-				if (pin.classList.contains("down")) {
-					// If it has the "down" class, set the pin value to "down"
-					hiddenVal.value = "down";
-					pinCount++;
-				} 
-				else {
-					// If it doesn't have the "down" class, set the pin value to "up"
-					hiddenVal.value = "up";
-					pinCount--;
-				}
-				shot.textContent = pinCount;
-				shotBox.value = pinCount;
-
+					if (pin.classList.contains("down")) {
+						// If it has the "down" class, set the pin value to "down"
+						hiddenVal.value = "down";
+						pinCount++;
+					} 
+					else {
+						// If it doesn't have the "down" class, set the pin value to "up"
+						hiddenVal.value = "up";
+						pinCount--;
+					}
+					shot.textContent = pinCount;
+					shotBox.value = pinCount;
+				 }
 			}
 			function setAllPinsDown() {
 				var pins = document.querySelectorAll('.pin');
+
+				let lockedPins = 0;
+
+				// Count the number of locked pins
+				pins.forEach(function(pin) {
+					if (pin.classList.contains('locked')) {
+						lockedPins++;
+					}
+				});
+
+				// Calculate the number of remaining pins
+				const remainingPins = 10 - lockedPins;
 				pins.forEach(function(pin) {
 					pin.classList.add('down');
 					var hiddenVal = pin.querySelector('input[type="hidden"]');
 					hiddenVal.value = "down";
 				});
 			
-				pinCount = 10;
+				pinCount = remainingPins;
 				shotBox.value = pinCount;
 				shot.textContent = pinCount;
+			}
+			function resetUnlockedPinsToUp() {
+				const pins = document.querySelectorAll('.pin');
+    
+				// Loop through each pin element
+				pins.forEach(function(pin) {
+					if (!pin.classList.contains('locked') && pin.classList.contains('down')) {
+						const hiddenVal = pin.querySelector('input[type="hidden"]');
+						hiddenVal.value = "up";
+						pin.classList.remove('down');
+					}
+				});
 			}
 			function setStrike(){
 				setAllPinsDown();
 			}
 			function setSpare(){
 				setAllPinsDown();
+			    document.querySelector('input[name="spareFixplus1"]').value = "1";
 			}
+			function setFoul() {
+				var shotbox = document.getElementById("shotbox");
+				shot.textContent = "F";
+				shotBox.value = "F";
+				resetUnlockedPinsToUp();
+				pinCount = 0;
+			}
+			function setGutter(){
+				shot.textContent = "-";
+				const shotNum = <%= shotNum %>; 
+				resetUnlockedPinsToUp();
+				shotBox.value = "0";
+				if(shotNum == 1)
+				pinCount = 0;
+
+			}
+
 
 			function updatePins() {
 				const prevShot1Pins = '<%= prevShot1Pins %>'; // Accessing the JSP variable
 				const shotNum = <%= shotNum %>; // Accessing the JSP variable
-
+				const pinCount = 0;
 				// Only update pins if shotNum is 2
 				if (shotNum === 2) {
 					// Convert the string to an array for easier manipulation
@@ -591,24 +717,37 @@
 						'10': document.querySelector('input[name="pin10"]').parentNode
 					};
 
-					// Loop through each pin element
-					Object.keys(pinMap).forEach(function(pinNum) {
-						const pinElement = pinMap[pinNum];
-						// Check if the pin number is included in the string
-						if (pinNum === '10' && pinsArray.includes('0') || pinsArray.includes(pinNum)) {
-							// Set the pin to up
+					// Check if prevShot1Pins is "F", then load all pins as up
+					if (prevShot1Pins === "F") {
+						Object.keys(pinMap).forEach(function(pinNum) {
+							const pinElement = pinMap[pinNum];
 							pinElement.classList.remove('down');
+							pinElement.classList.remove('locked');
 							pinElement.querySelector('input[type="hidden"]').value = "up";
-						} else {
-							// Set the pin to down
-							pinElement.classList.add('down');
-							pinElement.classList.add('locked');
-							pinElement.querySelector('input[type="hidden"]').value = "down";
-						}
-					});
+						});
+						pinCount = 0;
+					}else 
+					{
+						// Loop through each pin element
+						Object.keys(pinMap).forEach(function(pinNum) {
+							const pinElement = pinMap[pinNum];
+							// Check if the pin number is included in the string
+							if (pinNum === '10' && pinsArray.includes('0') || pinsArray.includes(pinNum)) {
+								// Set the pin to up
+								pinElement.classList.remove('down');
+								pinElement.querySelector('input[type="hidden"]').value = "up";
+							} else {
+								// Set the pin to down
+								pinElement.classList.add('down');
+								pinElement.classList.add('locked');
+								pinElement.querySelector('input[type="hidden"]').value = "down";
+							}
+						});
+						// Update the pin count
+						pinCount = 10 - pinsArray.length;
+					}
 
-					// Update the pin count
-					const pinCount = 10 - pinsArray.length;
+					
 					document.querySelector('.shot').textContent = pinCount;
 					document.querySelector('input[name="shotBox"]').value = pinCount;
 				}

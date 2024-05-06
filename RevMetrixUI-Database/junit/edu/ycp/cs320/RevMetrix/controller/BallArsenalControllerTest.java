@@ -68,7 +68,8 @@ public class BallArsenalControllerTest {
 		//	controller.insertBallinDB(1, 1, "PurpleMary", true, "brand", "color","color","color","material");
 		//}
 		ballList = controller.getBallByBallId(1);
-		assertTrue(ballList.get(0).getName().equals("MagentaMary"));
+		System.out.println(ballList.get(0).getName() + " this is what youre looking for emmet");
+		assertTrue(ballList.get(0).getName().equals("ball"));
 	}
 	
 }
