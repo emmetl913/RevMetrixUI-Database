@@ -4,6 +4,7 @@
 <%@ page import="edu.ycp.cs320.RevMetrix.model.stat" %>
 <%@ page import="edu.ycp.cs320.RevMetrix.model.Event" %>
 <%@ page import="edu.ycp.cs320.RevMetrix.model.Session" %>
+<%@ page import="edu.ycp.cs320.RevMetrix.model.Game" %>
 <%@ page import="javax.servlet.http.HttpSession" %>
 <%@ page import="java.io.*,java.util.*" %>
 
@@ -252,10 +253,16 @@
 
 				<form action="${pageContext.servletContext.contextPath}/stats" method="post">
 					<select name="sessionID" id="sessionID">
-						<option value="">Select Sessions</option>
-						<c:forEach var="session" items="${eventSessions}">
-							<option value="${session.sessionID}">${session.name}</option>
-						</c:forEach>
+						<%ArrayList<Session> eventSessions = (ArrayList<Session>) request.getAttribute("eventSessions");
+							if(eventSessions != null){
+								for(Session sessionItem : eventSessions){
+									%>
+									<option value="<%= sessionItem.getSessionID()%>">
+										<%= sessionItem.getTime() %>
+									</option>
+								<% } } else { %>
+									<option>No Sessions</option>
+							<% } %>
 					</select>
 	
 					<input type="hidden" name="selectedSessionID" id="selectedSessionID" value="">
@@ -274,10 +281,16 @@
 
 				<form action="${pageContext.servletContext.contextPath}/stats" method="post">
 					<select name="gameID" id="gameID">
-						<option value="">Select Game</option>
-						<c:forEach var="game" items="${sessionGames}">
-							<option value="${game.gameID}">${game.gameName}</option>
-						</c:forEach>
+						<%ArrayList<Game> sessionGames = (ArrayList<Game>) request.getAttribute("sessionGames");
+							if(sessionGames != null){
+								for(Game game : sessionGames){
+									%>
+									<option value="<%= game.getGameID()%>">
+										<%= game.getGameID() %>
+									</option>
+								<% } } else { %>
+									<option>No Games</option>
+							<% } %>
 					</select>
 					<button name="submitShotData" type="submit" id="submitShotData">Get Shot Data</button>	
 				</form>
