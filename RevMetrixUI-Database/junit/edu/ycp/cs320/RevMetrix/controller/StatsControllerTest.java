@@ -36,8 +36,28 @@ public class StatsControllerTest{
 		game.setGameID(1);
 		session.setSessionID(1);
 		
-		double percentage = controller.strikesPercentage();
+		double percentage = controller.strikesPercentage(game.getGameID(), session.getSessionID());
 		System.out.println("Strike Percentage: " + percentage);
+		assertEquals(20.0, percentage, 0.001);
+	}
+	
+	@Test
+	public void testSparesPercentage() {
+		game.setGameID(1);
+		session.setSessionID(1);
+		
+		double percentage = controller.sparePercentage(game.getGameID(), session.getSessionID());
+		System.out.println("Spare Percentage: " + percentage);
+		assertEquals(1.0, percentage, 0.001);
+	}
+	
+	@Test
+	public void testLeavePercentage() {
+		game.setGameID(1);
+		session.setSessionID(1);
+		
+		double percentage = controller.leavePercentage(game.getGameID(), session.getSessionID());
+		System.out.println("Leave Percentage: " + percentage);
 		assertEquals(50.0, percentage, 0.001);
 	}
 }

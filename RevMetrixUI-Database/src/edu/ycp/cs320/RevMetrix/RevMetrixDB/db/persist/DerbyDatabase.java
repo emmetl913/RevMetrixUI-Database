@@ -1674,10 +1674,10 @@ public class DerbyDatabase implements IDatabase {
 	
 	//get strikes from the account
 	@Override
-	public List<Shot> getStrikesFromAccount(int gameID, int sessionID){
-		return executeTransaction(new Transaction<List<Shot>>() {
+	public List<String> getStrikesFromAccount(int gameID, int sessionID){
+		return executeTransaction(new Transaction<List<String>>() {
 			@Override
-			public List<Shot> execute(Connection conn) throws SQLException{
+			public List<String> execute(Connection conn) throws SQLException{
 				PreparedStatement stmt = null;
 				ResultSet resultSet = null;
 				
@@ -1690,7 +1690,7 @@ public class DerbyDatabase implements IDatabase {
 					stmt.setInt(1, gameID);
 					stmt.setInt(2, sessionID);
 					
-					List<Shot> result = new ArrayList<Shot>();
+					List<String> result = null;
 					resultSet = stmt.executeQuery();
 					
 					Boolean found = false;
@@ -1700,7 +1700,9 @@ public class DerbyDatabase implements IDatabase {
 						
 						Shot shot = new Shot();
 						
-						result.add(shot);
+						loadShot(shot, resultSet, 1);
+						
+						result.add(shot.getLeave());
 					}
 					
 					return result;
@@ -1738,6 +1740,8 @@ public class DerbyDatabase implements IDatabase {
 						found = true;
 						
 						Shot shot = new Shot();
+						
+						loadShot(shot, resultSet, 1);
 						
 						result.add(shot);
 					}
@@ -1779,6 +1783,8 @@ public class DerbyDatabase implements IDatabase {
 						
 						Shot shot = new Shot();
 						
+						loadShot(shot, resultSet, 1);
+						
 						result.add(shot);
 					}
 					
@@ -1793,10 +1799,11 @@ public class DerbyDatabase implements IDatabase {
 	
 	public List<Shot> getLeavesFromGameAndSession(int gameID, int sessionID){
 		return executeTransaction(new Transaction<List<Shot>>() {
+			@SuppressWarnings("resource")
 			@Override
 			public List<Shot> execute(Connection conn) throws SQLException{
 				PreparedStatement stmt = null;
-				ResultSet resultSet = stmt.executeQuery();
+				ResultSet resultSet = null;
 				int count = 0;
 				
 				try {
@@ -1813,6 +1820,7 @@ public class DerbyDatabase implements IDatabase {
 					List<Shot> leaves = new ArrayList<>();
 					while(resultSet.next()) {
 						Shot shot = new Shot();
+						loadShot(shot, resultSet, 1);
 						leaves.add(shot);
 					}
 					

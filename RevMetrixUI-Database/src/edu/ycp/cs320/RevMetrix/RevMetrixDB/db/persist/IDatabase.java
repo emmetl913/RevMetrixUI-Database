@@ -56,7 +56,7 @@ public interface IDatabase {
 	public String getSessionDate(int sessionID);
 	
 	//Stats
-	public List<Shot> getStrikesFromAccount(int gameID, int sessionID);
+	public List<String> getStrikesFromAccount(int gameID, int sessionID);
 	public List<Shot> getSparesFromAccount(int gameID, int sessionID);
 	public List<Shot> getSecondShotsFromAccount(int gameID, int sessionID);
 	public List<Shot> getLeavesFromGameAndSession(int gameID, int sessionID);

@@ -11,38 +11,32 @@ import edu.ycp.cs320.RevMetrix.model.Session;
 import edu.ycp.cs320.RevMetrix.model.Shot;
 
 public class StatsController{
-//	private Shot shot;
-	private Game game;
-	private Session session;
 	private IDatabase db = null;
 	
 	public StatsController() {
 		DatabaseProvider.setInstance(new DerbyDatabase());
 		db = DatabaseProvider.getInstance();
-		
-		game = new Game(1, 0, 0, 0, 0);
-		session = new Session(1, 0, null, null, null, 0);
 	}
 	
-	public List<Shot> getStrikesFromAccount(){
-		return db.getStrikesFromAccount(game.getGameID(), session.getSessionID());
+	public List<String> getStrikesFromAccount(int gameID, int sessionID){
+		return db.getStrikesFromAccount(gameID, sessionID);
 	}
 	
-	public double strikesPercentage() {
+	public double strikesPercentage(int gameID, int sessionID) {
 		int totalNumberOfFrames = 10;
 		int numberOfStrikes = 0;
 		
 		//retrieves the strikes from the database
-		List<Shot> shots = getStrikesFromAccount();
+		ArrayList<String> shots = (ArrayList<String>) getStrikesFromAccount(gameID, sessionID);
 		
 		if(shots == null) {
 			System.err.println("List of shots is null");
 			return 0.0;
 		}
 		
-		for(Shot shot : shots) {
-			System.out.print(shot);
-			if(shot != null && shot.getPinsLeft().equals('X')) {
+		for(String shot : shots) {
+			System.out.println(shot);
+			if(shot != null) {
 				numberOfStrikes++;
 			}
 		}
@@ -57,13 +51,13 @@ public class StatsController{
 		return ((double) numberOfStrikes / totalNumberOfFrames)*100;
 	}
 	
-	public List<Shot> getSparesFromAccount(){
-		return db.getSparesFromAccount(game.getGameID(), session.getSessionID());
+	public List<Shot> getSparesFromAccount(int gameID, int sessionID){
+		return db.getSparesFromAccount(gameID, sessionID);
 	}
 	
-	public double sparePercentage() {
-		List<Shot> spares = getSparesFromAccount();
-		List<Shot> secondShots = db.getSecondShotsFromAccount(game.getGameID(), session.getSessionID());
+	public double sparePercentage(int gameID, int sessionID) {
+		List<Shot> spares = getSparesFromAccount(gameID, sessionID);
+		List<Shot> secondShots = db.getSecondShotsFromAccount(gameID, sessionID);
 
 		int numberOfSecondShots = secondShots.size();
 		int numberOfSpares = spares.size();
@@ -80,11 +74,11 @@ public class StatsController{
 		return leaves.size();
 	}
 	
-	public double leavePercentage() {
-		List<Shot> spares = db.getSparesFromAccount(game.getGameID(), session.getSessionID());
+	public double leavePercentage(int gameID, int sessionID) {
+		List<Shot> spares = db.getSparesFromAccount(gameID, sessionID);
 		int totalSpares = spares.size();
 		
-		int numOfLeaves = getTotalLeavesFromGameAndSession(game.getGameID(), session.getSessionID());
+		int numOfLeaves = getTotalLeavesFromGameAndSession(gameID, sessionID);
 		
 		if(numOfLeaves == 0) {
 			return 0.0;
