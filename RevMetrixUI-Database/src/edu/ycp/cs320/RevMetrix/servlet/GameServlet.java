@@ -36,10 +36,16 @@ public class GameServlet extends HttpServlet {
 		Game model = null;
 		GameController controller = new GameController();
 		controller.setModel(model);
-		
+		List<Game> resultList = new ArrayList<>();
 		Integer sessionID = (Integer) session.getAttribute("sessionID");
-		List<Game> resultList = controller.getGameBySessionID(sessionID);
-		
+		if(controller.getGameBySessionID(sessionID) != null) {
+			resultList = controller.getGameBySessionID(sessionID);
+
+		}
+		if(resultList == null) {
+			Game g = new Game(0, sessionID, 1,0, 100);
+			resultList.add(g);
+		}
 		String gameListKey = "gameListKey";
 		
 //		req.setAttribute("gameObjArr", resultList);

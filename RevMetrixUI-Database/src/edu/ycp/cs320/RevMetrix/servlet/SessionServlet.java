@@ -132,11 +132,15 @@ public class SessionServlet extends HttpServlet{
 		
 		if(req.getParameter("submit") != null || req.getParameter("SubmitCurrentSession") != null && errorMessage == null) {
 			System.out.println("Submit button is pressed");
-    		resp.sendRedirect(req.getContextPath() + "/game");
+    		//resp.sendRedirect(req.getContextPath() + "/game");
+    		//temp fix
+			req.getRequestDispatcher("/_view/game.jsp").forward(req, resp);}
+
+    		
         }
-		else {		
-			req.getRequestDispatcher("/_view/session.jsp").forward(req, resp);}
-		}
+//		else {		
+//			req.getRequestDispatcher("/_view/session.jsp").forward(req, resp);}
+//		}
 	
 	private Integer getIntegerFromParameter(String s) {
 		if (s == null || s.equals("")) {

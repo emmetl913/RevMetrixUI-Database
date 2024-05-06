@@ -1196,7 +1196,29 @@ public class DerbyDatabase implements IDatabase {
 			}
 		});
 	}
-	
+	@Override
+	public boolean updateFrameByFrameID(int frameID, int newScore) {
+	    return executeTransaction(new Transaction<Boolean>() {
+	        @Override
+	        public Boolean execute(Connection conn) throws SQLException {
+	            PreparedStatement stmt = null;
+	            try {
+	                stmt = conn.prepareStatement(
+	                        "update frames set score = ? where frame_id = ?"
+	                );
+	                stmt.setInt(1, newScore);
+	                stmt.setInt(2, frameID);
+
+	                int rowsAffected = stmt.executeUpdate();
+
+	                // If one or more rows were affected, return true
+	                return rowsAffected > 0;
+	            } finally {
+	                DBUtil.closeQuietly(stmt);
+	            }
+	        }
+	    });
+	}
 	@Override
 	public Integer insertNewFrame(int gameID, int score, int frameNumber) {
 		return executeTransaction(new Transaction<Integer>() {
@@ -1348,24 +1370,24 @@ public class DerbyDatabase implements IDatabase {
 				// try to find account_id in db
 				try
 				{
-					stmt1 = conn.prepareStatement(
-							"select game_id from games"
-							+ " where session_id = ?"
-					);
-					
-					stmt1.setInt(1, sessionID);
-					
-					resultSet1 = stmt1.executeQuery();
-					
-					if(resultSet1.next())
-					{
-						game_id = resultSet1.getInt(1);
-						System.out.println("Game <"+ game_id +"> found with sessionID <"+ sessionID +">");
-					}
-					else 
-					{
-						System.out.println("game <"+ game_id +"> was not found");
-					}
+//					stmt1 = conn.prepareStatement(
+//							"select game_id from games"
+//							+ " where session_id = ?"
+//					);
+//					
+//					stmt1.setInt(1, sessionID);
+//					
+//					resultSet1 = stmt1.executeQuery();
+//					
+//					if(resultSet1.next())
+//					{
+//						game_id = resultSet1.getInt(1);
+//						System.out.println("Game <"+ game_id +"> found with sessionID <"+ sessionID +">");
+//					}
+//					else 
+//					{
+//						System.out.println("game <"+ game_id +"> was not found");
+//					}
 					if(game_id <= 0)
 					{
 						stmt2 = conn.prepareStatement(

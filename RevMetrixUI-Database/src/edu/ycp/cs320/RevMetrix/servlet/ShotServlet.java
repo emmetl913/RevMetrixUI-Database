@@ -88,10 +88,11 @@ public class ShotServlet extends HttpServlet {
 		//frameList.get(0).setShot1(testShot1);
 		assignShotsToFrames(frameList);
 		setCurrentFrameNumberAndShotNumber(frameList);
-		
+		updateFrameScores(frameList);
 		
 		req.setAttribute("selectedBallID", 0);
 		req.setAttribute("currentShotNumber", currentShotNumber);
+		req.setAttribute("currentFrameNumber", currentFrameNumber);
 		session.setAttribute("frameList", frameList);
 		
 		//used to get previous pins layout for shot2
@@ -166,6 +167,9 @@ public class ShotServlet extends HttpServlet {
 			//if shot# = 2, count = 10 - pinsleft.length() - prevShot count
 			if(currentShotNumber == 2) {
 				pinsDownCount = 10 - pinsLeft.length() - frameList.get(currentFrameNumber-1).getShot1().getCount();
+				if(req.getParameter("spareFixplus1").equals("1")) {
+					pinsDownCount+= 1;
+				}
 			}
 			//insert shot
 			ShotController sc = new ShotController();
@@ -175,8 +179,39 @@ public class ShotServlet extends HttpServlet {
 		}
 		//Now lets assign existing shots to their frames while we use this frameList
 		assignShotsToFrames(frameList);
+	
+
+		//Here we ensure that we have the correct frame and shot numbers so we know where to input a shot
+		setCurrentFrameNumberAndShotNumber(frameList);
+		frameList = fc.getFrameByGameID(currentGame.getGameID());
+		assignShotsToFrames(frameList);
+
+
+		updateFrameScores(frameList);
+		frameList = fc.getFrameByGameID(currentGame.getGameID());
+		assignShotsToFrames(frameList);
+
+
+		System.out.println("Frame#: " + currentFrameNumber + " Shot#: " +currentShotNumber);
+		session.setAttribute("frameList", frameList);
+		req.setAttribute("errorMessage", errorMessage);
+		req.setAttribute("selectedBallID", ballID);
+		req.setAttribute("currentShotNumber", currentShotNumber);
+		req.setAttribute("currentFrameNumber", currentFrameNumber);
+
+		//used to get previous pins layout for shot2
+		String pinsLeftShot1="";
+		if(frameList.get(currentFrameNumber-1).getShot1() != null) {
+			pinsLeftShot1=frameList.get(currentFrameNumber-1).getShot1().getPinsLeft();
+		}
+		req.setAttribute("shot1PinsLeft", pinsLeftShot1);
+		
+		frameList = fc.getFrameByGameID(currentGame.getGameID());
+		assignShotsToFrames(frameList);
+
+
 		for(Frame frame: frameList) {
-			System.out.print("frame# - " +frame.getFrameNumber());
+			System.out.print("frame# - " +frame.getFrameNumber() + ", score: "+frame.getScore());
 			if(frame.getShot1()!= null) {
 				System.out.print(" shot1 pinsLeft: " + frame.getShot1().getPinsLeft() + " count:"+ frame.getShot1().getCount());
 			}
@@ -185,72 +220,86 @@ public class ShotServlet extends HttpServlet {
 			}
 			System.out.println(""); //linebreak
 		}
-
-		//Here we ensure that we have the correct frame and shot numbers so we know where to input a shot
-		setCurrentFrameNumberAndShotNumber(frameList);
-		System.out.println("Frame#: " + currentFrameNumber + " Shot#: " +currentShotNumber);
-		session.setAttribute("frameList", frameList);
-		req.setAttribute("errorMessage", errorMessage);
-		req.setAttribute("selectedBallID", ballID);
-		req.setAttribute("currentShotNumber", currentShotNumber);
 		
-		//used to get previous pins layout for shot2
-		String pinsLeftShot1="";
-		if(frameList.get(currentFrameNumber-1).getShot1() != null) {
-			pinsLeftShot1=frameList.get(currentFrameNumber-1).getShot1().getPinsLeft();
-		}
-		req.setAttribute("shot1PinsLeft", pinsLeftShot1);
+		
 		req.getRequestDispatcher("/_view/shot.jsp").forward(req, resp);
 	}
 
-	private void updateStrikeorSpareFrames(List<Frame> frames) {
-		//for all frameScores == -3 check to see if their score can be finalized
-				for(int i =0; i<10; i++) { //this way frame 10 can access frame 12 with out an out of bounds
-					
-					//we set frameScore to -3 if someone gets a "X" or "/"
-					if(frames.get(i).getScore() == -3) {
-						//check to see if pinsleft is "X" or "/"
-						Shot shot = new Shot(); // = getShotByFrameID(currentFrameID, Shot1)
-						
-						if(shot.getPinsLeft() == "X") {
-							Shot nextShot = new Shot(); //getShotByFrameID(currentFrameID+1, Shot1);
-							//if nextShot == null dont change score because new score doesnt exist yet
-							if(nextShot != null) {
-							//if 2nd shot is strike check next frame for the final shot for a strike case
-								
-								if (nextShot.getPinsLeft() == "X"){
-									//get nextShot from next frame
-									Shot nextnextShot = new Shot(); //= getShotByFrameID(currentFrameID+2, Shot1);
-									if(nextnextShot != null) {
-										//get the score of the next shot we dont care if it is a strike or whatever we just need the numPinsDown aka count
-										int secondShotScore = nextnextShot.getCount();
-										
-										//figure out how to track the currentScore
-										frames.get(i).setScore(currentScore + 10 + 10 + secondShotScore);
-										
-									}
-								}
-								if(nextShot.getPinsLeft() != "X") {
-									//current frameScore = nextFrame total
-									//note shot2 not new frame
-									Shot nextnextShot = new Shot(); //= getShotByFrameID(currentFrameID+1, Shot2);
-									if(nextnextShot != null) {
-										frames.get(i).setScore(currentScore + nextShot.getCount() + nextnextShot.getCount());
-									}
-								}
-							}
+	private void updateFrameScores(List<Frame> frameList) {
+	    FrameController fc = new FrameController(); // Instantiate the controller outside the loop
+
+	    for (Frame frame : frameList) {
+	        int frameID = frame.getFrameID();
+	        int frameNumber = frame.getFrameNumber();
+
+	        // Calculate the frame score
+	        System.out.println("FrameNUMBER LOOK--------------------: "+frameNumber);
+	        int frameScore;
+	        if (frameNumber == 1) {
+	            frameScore = setFrameScore(frameList, frameNumber, 0);
+	        } else {
+	            int prevFrameScore = frameList.get(frameNumber - 2).getScore();
+	            frameScore = setFrameScore(frameList, frameNumber, prevFrameScore);
+	        }
+
+	        // Update the frame's score in the database
+	        boolean success = fc.updateFrameByFrameID(frameID, frameScore);
+	        
+	        // Log the update operation
+	        if (success) {
+	            System.out.println("Frame score updated successfully for frame ID: " + frameID);
+	        } else {
+	            System.out.println("Failed to update frame score for frame ID: " + frameID);
+	        }
+	        
+	        // Update the frame object with the new score
+	        frame.setScore(frameScore);
+	    }
+	}
+	private int setFrameScore(List<Frame> frameList, int currFrameNum, int prevFrameScore) {
+		int frameScore = -1; //frameList index by frame# = frame#-1
+		Shot shot1=  frameList.get(currFrameNum-1).getShot1();
+		Shot shot2=  frameList.get(currFrameNum-1).getShot2();
+		if(shot1 != null & shot2 != null) {
+			System.out.println("shot1ID: "+ shot1.getShotID());
+			if(shot1.getPinsLeft() != "X" && shot2.getPinsLeft() != "/") {
+				frameScore = prevFrameScore + shot1.getCount() + shot2.getCount(); 
+			}
+		}
+		if(shot1 != null) {
+			if(shot1.getPinsLeft().equals("X")) {
+				Shot nextShot = frameList.get(currFrameNum).getShot1();
+				if(nextShot != null) {
+					if(nextShot.getPinsLeft().equals("X")) {
+						Shot nextNextShot = frameList.get(currFrameNum+1).getShot1();
+						if(nextNextShot != null) {
+							frameScore = prevFrameScore + 10 + 10 + nextNextShot.getCount();
 						}
-						shot = new Shot(); // = getShotByFrameID(currentFrameID, Shot2)
-						if(shot.getPinsLeft()=="/" && shot != null) {
-							Shot nextShot = new Shot(); //getShotByFrameID(currentFrameID+1, Shot1)
-							if(nextShot != null) {
-								frames.get(i).setScore(currentScore + 10 + nextShot.getCount());
-							}
+					}
+					else { //nextShot != "X"
+						Shot nextNextShot = frameList.get(currFrameNum).getShot2();
+						if(nextNextShot != null) {
+							frameScore = prevFrameScore + 10 +nextShot.getCount() + nextNextShot.getCount();
 						}
-						
 					}
 				}
+			}
+			if(shot2 != null) {
+				if(shot2.getPinsLeft().equals("/")) {
+					Shot nextShot = frameList.get(currFrameNum).getShot1();
+					if(nextShot != null) {
+						frameScore = prevFrameScore + 10 + nextShot.getCount();
+					}
+				}
+			}
+		}
+//		if(shot1 == null || shot2 == null) {
+//			frameScore = -1;
+//		}
+		return frameScore;
 	}
+
+		
 	private int[] returnPinValues(HttpServletRequest req){ //1 is down 0 is up. Pins[1]-Pins[10] are proper index
 		int[] pins = new int[12]; //silly goose error means have array even bigger than needed
         for(int i = 1; i <= 10; i++) {
@@ -328,13 +377,16 @@ public class ShotServlet extends HttpServlet {
 		else if(count == 10 && currentShotNumber == 2) {
 			System.out.println("/");
 			pinsLeft = "/";
+			String tocount = req.getParameter("shotBox");
+			count = Integer.parseInt(tocount);
+			pinsDownCount = count;
 		}
-		else if(count == 0) {
-			pinsLeft = "-";
+		else if(count == 0 && currentShotNumber == 1) {
+			pinsLeft = "1234567890";
 		}
-//		else if(req.getParameter("shotBox").equals("F")) {
-//			pinsLeft = "F";
-//		}
+		if(req.getParameter("shotBox").equals("F")) {
+			pinsLeft = "F";
+		}
 		System.out.println("Pinsleft: " + pinsLeft);
 		pinsDownCount = count;
 		return pinsLeft;
