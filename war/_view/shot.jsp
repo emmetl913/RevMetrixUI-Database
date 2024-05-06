@@ -688,7 +688,7 @@
 			}
 			
 			function togglePin(pin){
-				if(!gameOver){
+				//if(!gameOver){
 					 if (!pin.classList.contains("locked")) {
 					pin.classList.toggle("down");
 					var hiddenVal = pin.querySelector('input[type="hidden"]');
@@ -706,7 +706,7 @@
 					shot.textContent = pinCount;
 					shotBox.value = pinCount;
 				 }
-				}
+				//}
 				
 			}
 			function setAllPinsDown() {

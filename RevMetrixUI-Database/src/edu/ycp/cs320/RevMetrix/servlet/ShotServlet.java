@@ -360,7 +360,7 @@ public class ShotServlet extends HttpServlet {
 			System.out.println(""); //linebreak
 		}
 		
-		
+		System.out.println("GameOver = " + gameOver);
 		req.getRequestDispatcher("/_view/shot.jsp").forward(req, resp);
 	}
 
@@ -544,6 +544,7 @@ public class ShotServlet extends HttpServlet {
 		Shot f12s1 = frameList.get(11).getShot1();
 		int count = 0;
 		if(f10s2 != null && !f10s2.getPinsLeft().equals("/")) {
+		
 			count++;
 		}
 		if(f11s1 != null && !f11s1.getPinsLeft().equals("X")) {
