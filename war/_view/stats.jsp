@@ -227,7 +227,6 @@
                         <th>3</th>
                         <th>SERIES</th>
                         <th>TOTAL GAMES</th>
-                        <th>AVERAGE</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -258,9 +257,6 @@
                                 </td>
                                 <td>
                                     <%= s.getTotalGame() %>
-                                </td>
-                                <td>
-                                    <%= s.getAvg() %>
                                 </td>
                             </tr>
                             <% } %>

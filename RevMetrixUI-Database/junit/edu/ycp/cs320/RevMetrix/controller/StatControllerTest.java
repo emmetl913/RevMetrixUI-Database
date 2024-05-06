@@ -100,7 +100,6 @@ public class StatControllerTest {
 		
 		
 	}
-	
 	@Test
 	public void testGetLifetimePinsMissed() {
 		Integer pins = controller.getLifetimePinsMissed(1);
